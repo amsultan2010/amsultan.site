@@ -1485,12 +1485,12 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
   const T = {
     particlesStart: 200,
     bubblesIn:      600,
-    bubblesOrbit:   1400,
-    converge:       3000,
-    titleIn:        3700,
-    finalHold:      4800,
-    fadeOut:        5200,
-    done:           5900,
+    bubblesOrbit:   3800,
+    converge:       5200,
+    titleIn:        5900,
+    finalHold:      7200,
+    fadeOut:        7700,
+    done:           8400,
   };
 
   useEffect(() => {
@@ -1595,7 +1595,7 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
             border: `2px solid ${bubble.color}`,
             color: bubble.color,
             fontFamily: "'Inter', sans-serif",
-            fontSize: 20,
+            fontSize: 36,
             fontWeight: 800,
             letterSpacing: '0.07em',
             whiteSpace: 'nowrap',
