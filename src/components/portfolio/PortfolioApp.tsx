@@ -130,7 +130,7 @@ const ASCII_LINE_H = 1.02;
 // The actual value is ≈0.58; the tiny residual is corrected by scaleX below.
 const CHAR_W_RATIO = 0.58;
 
-const REVEAL_RADIUS = 198;
+const REVEAL_RADIUS = 320;
 
 /** Returns container pixel dims that preserve the photo aspect ratio. */
 function calcDims(vw: number, vh: number) {
