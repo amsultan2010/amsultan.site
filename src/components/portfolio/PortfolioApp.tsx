@@ -263,7 +263,7 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
         border: '2px solid rgba(255,255,255,0.18)',
         boxShadow: '0 6px 28px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
       }}>
-        <img src="/images/claude-logo.svg" alt="" style={{ width: 26, height: 26, filter: 'brightness(0) invert(1)' }} />
+        <img src="/images/claude-logo.svg" alt="" style={{ width: 26, height: 26 }} />
         CLAUDE'S #1 USER
       </div>
 
@@ -1637,7 +1637,7 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
           animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none',
           transformOrigin: 'bottom center',
         }}>
-          <img src="/images/claude-crab.svg" alt="" style={{ width: 110, height: 80, imageRendering: 'pixelated' }} />
+          <img src="/images/claude-crab.svg" alt="" style={{ width: 110, height: 110, imageRendering: 'pixelated' }} />
         </div>
         <div style={{
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
