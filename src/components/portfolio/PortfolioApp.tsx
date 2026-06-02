@@ -116,8 +116,10 @@ const SOCIALS = [
   { label: 'email', href: 'mailto:abdullahmsultan1@gmail.com' },
 ];
 
+const REVEAL_RADIUS = 110;
+
 function MainPhotoBackdrop({ dark }: { dark: boolean }) {
-  const [hovered, setHovered] = useState(false);
+  const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
   const [ascii, setAscii] = useState('');
   const [size, setSize] = useState({ width: 960, height: 820, mobile: false });
 
@@ -161,33 +163,24 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
     return { fontSize: Math.max(clamped, 0.45) };
   }, [ascii, size]);
 
+  // CSS mask that punches a soft-edged circle hole at the cursor position,
+  // revealing the ASCII art layer below. No hole when cursor is absent.
+  const photoMask = cursor
+    ? `radial-gradient(circle ${REVEAL_RADIUS}px at ${cursor.x}px ${cursor.y}px, transparent 0%, transparent ${Math.round(REVEAL_RADIUS * 0.65)}px, black ${REVEAL_RADIUS}px)`
+    : undefined;
+
   return (
     <div
       className={`rg-ascii-backdrop${size.mobile ? ' rg-ascii-backdrop-mobile' : ''}`}
       aria-hidden="true"
-      style={{ pointerEvents: 'auto' }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      style={{ pointerEvents: 'auto', cursor: 'none' }}
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      }}
+      onMouseLeave={() => setCursor(null)}
     >
-      {/* Photo — shown by default */}
-      <img
-        src="/images/myimage.png"
-        alt=""
-        draggable={false}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center top',
-          userSelect: 'none',
-          pointerEvents: 'none',
-          opacity: hovered ? 0 : 1,
-          transition: 'opacity 0.25s ease',
-        }}
-      />
-      {/* ASCII art — shown on hover */}
+      {/* ASCII art — always rendered beneath the photo, visible through the hole */}
       <div
         style={{
           position: 'absolute',
@@ -196,8 +189,6 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
           alignItems: 'center',
           justifyContent: 'flex-end',
           overflow: 'hidden',
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.25s ease',
           pointerEvents: 'none',
         }}
       >
@@ -224,6 +215,24 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
           {ascii}
         </pre>
       </div>
+      {/* Photo — on top, with a mask hole punched at the cursor position */}
+      <img
+        src="/images/myimage.png"
+        alt=""
+        draggable={false}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center top',
+          userSelect: 'none',
+          pointerEvents: 'none',
+          WebkitMaskImage: photoMask,
+          maskImage: photoMask,
+        }}
+      />
     </div>
   );
 }
