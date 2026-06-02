@@ -134,19 +134,20 @@ const REVEAL_RADIUS = 198;
 
 /** Returns container pixel dims that preserve the photo aspect ratio. */
 function calcDims(vw: number, vh: number) {
-  // Intentionally > 100 vh on desktop so the bottom bleeds off-screen
-  const maxH = vw <= 500 ? vh * 0.55 : vh * 1.27;
-  const maxW = vw <= 500 ? vw * 0.85 : vw * 0.85;
+  const mobile = vw <= 500;
+  if (mobile) return { w: vw, h: vh * 0.5, mobile: true };
+  const maxH = vh * 1.27;
+  const maxW = vw * 0.85;
   const fromH = { w: maxH * PHOTO_RATIO, h: maxH };
-  // If that overflows maxW, constrain by width instead
-  return fromH.w <= maxW ? fromH : { w: maxW, h: maxW / PHOTO_RATIO };
+  const base = fromH.w <= maxW ? fromH : { w: maxW, h: maxW / PHOTO_RATIO };
+  return { ...base, mobile: false };
 }
 
 function MainPhotoBackdrop({ dark }: { dark: boolean }) {
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
   const [ascii, setAscii] = useState('');
-  const [dims, setDims] = useState<{ w: number; h: number }>(() =>
-    typeof window === 'undefined' ? { w: 440, h: 661 } : calcDims(window.innerWidth, window.innerHeight)
+  const [dims, setDims] = useState<{ w: number; h: number; mobile: boolean }>(() =>
+    typeof window === 'undefined' ? { w: 440, h: 661, mobile: false } : calcDims(window.innerWidth, window.innerHeight)
   );
 
   useEffect(() => {
@@ -164,6 +165,50 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // ── Mobile: subtle ASCII-only bottom backdrop, no photo, no hover ──────────
+  if (dims.mobile) {
+    // Size characters so the art spans ~1.8 × viewport width (overflows,
+    // giving visible ~9 px glyphs on a typical phone).
+    const mFontSize = (dims.w * 1.8) / (ASCII_COLS * CHAR_W_RATIO);
+    return (
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '50vh',
+          overflow: 'hidden',
+          zIndex: 0,
+          pointerEvents: 'none',
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+        }}
+      >
+        <pre
+          style={{
+            margin: 0,
+            color: dark ? '#f5f5f4' : '#1c1917',
+            opacity: dark ? 0.20 : 0.15,
+            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
+            fontWeight: 900,
+            fontSize: `${mFontSize}px`,
+            lineHeight: ASCII_LINE_H,
+            letterSpacing: 0,
+            whiteSpace: 'pre',
+            flexShrink: 0,
+            WebkitFontSmoothing: 'antialiased' as const,
+          }}
+        >
+          {ascii}
+        </pre>
+      </div>
+    );
+  }
+
+  // ── Desktop / tablet ─────────────────────────────────────────────────────
   // Font size that fills the container height exactly (120 rows × lineHeight).
   const fontSize = dims.h / (ASCII_ROWS * ASCII_LINE_H);
   // scaleX stretches the pre horizontally so 145 columns fill dims.w exactly.
@@ -484,7 +529,7 @@ function Inner() {
           <li className="rg-item rg-item-nested" style={{ marginTop: 8 }}>
             <div className="rg-diamond" style={{ background: t.diamond }} />
             <span className="rg-section-label" style={{ color: t.text }}>what i've been building:</span>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 6, width: '100%' }}>
+            <div className="rg-build-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 6, width: '100%' }}>
               {BUILDING.map((b, i) => (
                 <a key={i} href={b.href} target="_blank" rel="noopener noreferrer" className="rg-build-card" style={{
                   background: t.cardBg,
@@ -1164,17 +1209,13 @@ function Inner() {
           .rg-container {
             max-width: min(680px, calc(100vw - clamp(20px, 3vw, 48px) - 32px));
           }
-          .rg-ascii-backdrop {
-            opacity: 0.55;
-            width: 42vw;
-          }
         }
 
         @media (max-width: 500px) {
           .rg-container {
             margin-left: clamp(16px, 4vw, 24px);
             max-width: calc(100vw - clamp(16px, 4vw, 24px) - 16px);
-            padding: 40px 16px 100px 0;
+            padding: 40px 16px 120px 0;
           }
           .rg-header {
             align-items: flex-start;
@@ -1186,19 +1227,8 @@ function Inner() {
           }
           .rg-list { font-size: 19px; }
           .rg-build-card { padding: 16px; }
-          .rg-ascii-backdrop {
-            top: auto;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100vw;
-            height: 50vh;
-            opacity: 1;
-            align-items: center;
-          }
-          .rg-ascii-backdrop-mobile {
-            justify-content: flex-end;
-          }
+          .rg-build-grid { grid-template-columns: 1fr !important; }
+          .menacing-aura { display: none !important; }
         }
       `}</style>
     </div>
