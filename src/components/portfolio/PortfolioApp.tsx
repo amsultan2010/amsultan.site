@@ -165,48 +165,8 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  // ── Mobile: subtle ASCII-only bottom backdrop, no photo, no hover ──────────
-  if (dims.mobile) {
-    // Size characters so the art spans ~1.8 × viewport width (overflows,
-    // giving visible ~9 px glyphs on a typical phone).
-    const mFontSize = (dims.w * 1.8) / (ASCII_COLS * CHAR_W_RATIO);
-    return (
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '50vh',
-          overflow: 'hidden',
-          zIndex: 0,
-          pointerEvents: 'none',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-        }}
-      >
-        <pre
-          style={{
-            margin: 0,
-            color: dark ? '#f5f5f4' : '#1c1917',
-            opacity: dark ? 0.20 : 0.15,
-            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
-            fontWeight: 900,
-            fontSize: `${mFontSize}px`,
-            lineHeight: ASCII_LINE_H,
-            letterSpacing: 0,
-            whiteSpace: 'pre',
-            flexShrink: 0,
-            WebkitFontSmoothing: 'antialiased' as const,
-          }}
-        >
-          {ascii}
-        </pre>
-      </div>
-    );
-  }
+  // ── Mobile: rendered inline at bottom via MobilePhotoSection ───────────────
+  if (dims.mobile) return null;
 
   // ── Desktop / tablet ─────────────────────────────────────────────────────
   // Font size that fills the container height exactly (120 rows × lineHeight).
@@ -494,6 +454,85 @@ function ResumeEntry({ title, date, color, children }: {
 /* ══════════════════════════════════════════════════════════
    Main app
    ══════════════════════════════════════════════════════════ */
+
+function MobilePhotoSection({ dark }: { dark: boolean }) {
+  const [ascii, setAscii] = useState('');
+  const [panelW, setPanelW] = useState(187);
+
+  useEffect(() => {
+    fetch('/images/myascii.txt')
+      .then(r => r.text())
+      .then(t => setAscii(t.trimEnd()))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    const update = () => setPanelW(Math.round(window.innerWidth * 0.5));
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const panelH = Math.round(panelW / PHOTO_RATIO);
+  const fontSize = panelH / (ASCII_ROWS * ASCII_LINE_H);
+  const scaleX = panelW / (ASCII_COLS * fontSize * CHAR_W_RATIO);
+
+  return (
+    <div style={{ width: '100%', marginTop: 32, paddingBottom: 0 }}>
+      {/* Badge */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '8px 16px', borderRadius: 10,
+          background: '#111', color: '#fff',
+          fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 800,
+          letterSpacing: '0.05em', whiteSpace: 'nowrap',
+          border: '2px solid rgba(255,255,255,0.18)',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+        }}>
+          <img src="/images/claude-logo.svg" alt="" style={{ width: 16, height: 16 }} />
+          CLAUDE'S #1 USER
+        </div>
+      </div>
+
+      {/* Photo | ASCII row */}
+      <div style={{ display: 'flex', width: '100%', height: panelH, overflow: 'hidden' }}>
+        {/* Left — photo */}
+        <div style={{ width: '50%', flexShrink: 0, overflow: 'hidden' }}>
+          <img
+            src="/images/myimage.png"
+            alt="Abdullah Sultan"
+            draggable={false}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
+          />
+        </div>
+        {/* Right — ASCII */}
+        <div style={{
+          width: '50%', flexShrink: 0,
+          position: 'relative', overflow: 'hidden',
+          background: dark ? 'rgba(0,0,0,0.45)' : 'rgba(245,245,244,0.6)',
+        }}>
+          <pre aria-hidden="true" style={{
+            position: 'absolute', top: 0, left: 0, margin: 0,
+            color: dark ? '#f5f5f4' : '#1c1917',
+            opacity: 0.88,
+            fontFamily: "'SF Mono', 'Menlo', monospace",
+            fontWeight: 900,
+            fontSize: `${fontSize}px`,
+            lineHeight: ASCII_LINE_H,
+            letterSpacing: 0,
+            whiteSpace: 'pre',
+            transform: `scaleX(${scaleX})`,
+            transformOrigin: 'left top',
+            WebkitFontSmoothing: 'antialiased' as const,
+          }}>
+            {ascii}
+          </pre>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Inner() {
   const { dark, toggle } = useContext(ThemeCtx);
@@ -829,6 +868,11 @@ function Inner() {
             <span className="rg-copyright-made"> — made with Cursor (Opus 4.7 Extra High and GPT-5.5 Medium)</span>
           </p>
         </footer>
+
+        {/* ── Mobile only: photo + ASCII at bottom ── */}
+        <div className="rg-mobile-bottom">
+          <MobilePhotoSection dark={dark} />
+        </div>
       </div>
 
       {/* Content viewer modal */}
@@ -1389,11 +1433,15 @@ function Inner() {
           }
         }
 
+        .rg-mobile-bottom { display: none; }
+
         @media (max-width: 500px) {
+          .rg-mobile-bottom { display: block; }
+          .menacing-aura { display: none !important; }
           .rg-container {
             margin-left: 16px;
             max-width: calc(100vw - 32px);
-            padding: 32px 16px 160px 0;
+            padding: 32px 16px 24px 0;
           }
           .rg-header {
             align-items: flex-start;
