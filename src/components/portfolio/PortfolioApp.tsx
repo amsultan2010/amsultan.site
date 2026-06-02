@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, createContext, useContext, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext, lazy, Suspense } from 'react';
 
 import ContentViewer from './ContentViewer';
 import type { ContentViewData } from './ContentViewer';
@@ -116,42 +116,114 @@ const SOCIALS = [
   { label: 'email', href: 'mailto:abdullahmsultan1@gmail.com' },
 ];
 
-function MainAsciiBackdrop({ dark }: { dark: boolean }) {
+function MainPhotoBackdrop({ dark }: { dark: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  const [ascii, setAscii] = useState('');
   const [size, setSize] = useState({ width: 960, height: 820, mobile: false });
 
   useEffect(() => {
-    const setViewportSize = () => {
+    let cancelled = false;
+    fetch('/images/myascii.txt')
+      .then(r => r.text())
+      .then(text => { if (!cancelled) setAscii(text.trimEnd()); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    const update = () => {
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const mobile = vw <= 500;
       const tablet = vw <= 900 && !mobile;
-      const asciiFraction = tablet ? 0.42 : 0.5;
+      const frac = tablet ? 0.42 : 0.5;
       setSize({
-        /* Mobile uses desktop-scale dimensions so the art overflows and crops
-           (like desktop) instead of shrinking the entire piece into a corner. */
-        width: mobile ? Math.max(960, Math.round(vw * 2.5)) : Math.max(480, Math.round(vw * asciiFraction)),
+        width: mobile ? Math.max(960, Math.round(vw * 2.5)) : Math.max(480, Math.round(vw * frac)),
         height: mobile ? Math.max(vh, 1000) : Math.max(600, vh),
         mobile,
       });
     };
-
-    setViewportSize();
-    window.addEventListener('resize', setViewportSize);
-    return () => window.removeEventListener('resize', setViewportSize);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
   }, []);
 
+  const asciiMetrics = useMemo(() => {
+    if (!ascii) return { fontSize: 1 };
+    const lineHeight = 1.02;
+    const lines = ascii.split('\n');
+    const maxCols = Math.max(1, ...lines.map(l => l.length));
+    const lineCount = Math.max(1, lines.length);
+    const byWidth = size.width / (maxCols * 0.58);
+    const byHeight = size.height / (lineCount * lineHeight);
+    const base = Math.min(byWidth, byHeight);
+    const clamped = Math.min(base * 1.1, byWidth);
+    return { fontSize: Math.max(clamped, 0.45) };
+  }, [ascii, size]);
+
   return (
-    <div className={`rg-ascii-backdrop${size.mobile ? ' rg-ascii-backdrop-mobile' : ''}`} aria-hidden="true">
-      <AbdullahAsciiLogo
-        width={size.width}
-        height={size.height}
-        color={dark ? '#f5f5f4' : '#1c1917'}
-        opacity={dark ? (size.mobile ? 0.28 : 0.36) : (size.mobile ? 0.22 : 0.32)}
-        fontWeight={900}
-        scale={1.1}
-        lineHeight={1.02}
-        align="right"
+    <div
+      className={`rg-ascii-backdrop${size.mobile ? ' rg-ascii-backdrop-mobile' : ''}`}
+      aria-hidden="true"
+      style={{ pointerEvents: 'auto' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      {/* Photo — shown by default */}
+      <img
+        src="/images/myimage.png"
+        alt=""
+        draggable={false}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center top',
+          userSelect: 'none',
+          pointerEvents: 'none',
+          opacity: hovered ? 0 : 1,
+          transition: 'opacity 0.25s ease',
+        }}
       />
+      {/* ASCII art — shown on hover */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          overflow: 'hidden',
+          opacity: hovered ? 1 : 0,
+          transition: 'opacity 0.25s ease',
+          pointerEvents: 'none',
+        }}
+      >
+        <pre
+          style={{
+            margin: 0,
+            color: dark ? '#f5f5f4' : '#1c1917',
+            opacity: dark ? (size.mobile ? 0.28 : 0.36) : (size.mobile ? 0.22 : 0.32),
+            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
+            fontWeight: 900,
+            fontSize: `${asciiMetrics.fontSize}px`,
+            lineHeight: 1.02,
+            letterSpacing: 0,
+            whiteSpace: 'pre',
+            textAlign: 'left',
+            transform: 'translateZ(0)',
+            WebkitFontSmoothing: 'antialiased' as const,
+            width: size.width,
+            height: size.height,
+            overflow: 'hidden',
+            flexShrink: 0,
+          }}
+        >
+          {ascii}
+        </pre>
+      </div>
     </div>
   );
 }
@@ -340,7 +412,7 @@ function Inner() {
 
   return (
     <div className="rg-root" style={{ background: t.bg, color: t.text }}>
-      <MainAsciiBackdrop dark={dark} />
+      <MainPhotoBackdrop dark={dark} />
       <MenacingAura dark={dark} />
       <PokemonWalkers zIndex={50} />
       <div className="rg-container">
