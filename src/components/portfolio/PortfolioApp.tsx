@@ -116,12 +116,39 @@ const SOCIALS = [
   { label: 'email', href: 'mailto:abdullahmsultan1@gmail.com' },
 ];
 
-const REVEAL_RADIUS = 110;
+// Photo intrinsic dimensions (1023×1537) — used to size the container to the
+// exact same aspect ratio so object-fit:fill and the ASCII grid both map 1:1.
+const PHOTO_W = 1023;
+const PHOTO_H = 1537;
+const PHOTO_RATIO = PHOTO_W / PHOTO_H; // ≈ 0.6656
+
+// ASCII grid dimensions (from myascii.txt)
+const ASCII_COLS = 145;
+const ASCII_ROWS = 120;
+const ASCII_LINE_H = 1.02;
+// Monospace char width-to-height ratio for SF Mono / Menlo at small sizes.
+// The actual value is ≈0.58; the tiny residual is corrected by scaleX below.
+const CHAR_W_RATIO = 0.58;
+
+const REVEAL_RADIUS = 180;
+
+/** Returns container pixel dims that preserve the photo aspect ratio. */
+function calcDims(vw: number, vh: number) {
+  // Max height: 72 % of viewport on desktop, 48 % on mobile
+  const maxH = vw <= 500 ? vh * 0.48 : vh * 0.72;
+  // Max width: 46 % on desktop (keeps it noticeably smaller than before)
+  const maxW = vw <= 500 ? vw * 0.85 : vw * 0.46;
+  const fromH = { w: maxH * PHOTO_RATIO, h: maxH };
+  // If that overflows maxW, constrain by width instead
+  return fromH.w <= maxW ? fromH : { w: maxW, h: maxW / PHOTO_RATIO };
+}
 
 function MainPhotoBackdrop({ dark }: { dark: boolean }) {
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
   const [ascii, setAscii] = useState('');
-  const [size, setSize] = useState({ width: 960, height: 820, mobile: false });
+  const [dims, setDims] = useState<{ w: number; h: number }>(() =>
+    typeof window === 'undefined' ? { w: 440, h: 661 } : calcDims(window.innerWidth, window.innerHeight)
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -133,89 +160,69 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
   }, []);
 
   useEffect(() => {
-    const update = () => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const mobile = vw <= 500;
-      const tablet = vw <= 900 && !mobile;
-      const frac = tablet ? 0.42 : 0.5;
-      setSize({
-        width: mobile ? Math.max(960, Math.round(vw * 2.5)) : Math.max(480, Math.round(vw * frac)),
-        height: mobile ? Math.max(vh, 1000) : Math.max(600, vh),
-        mobile,
-      });
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    const onResize = () => setDims(calcDims(window.innerWidth, window.innerHeight));
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const asciiMetrics = useMemo(() => {
-    if (!ascii) return { fontSize: 1 };
-    const lineHeight = 1.02;
-    const lines = ascii.split('\n');
-    const maxCols = Math.max(1, ...lines.map(l => l.length));
-    const lineCount = Math.max(1, lines.length);
-    const byWidth = size.width / (maxCols * 0.58);
-    const byHeight = size.height / (lineCount * lineHeight);
-    const base = Math.min(byWidth, byHeight);
-    const clamped = Math.min(base * 1.1, byWidth);
-    return { fontSize: Math.max(clamped, 0.45) };
-  }, [ascii, size]);
+  // Font size that fills the container height exactly (120 rows × lineHeight).
+  const fontSize = dims.h / (ASCII_ROWS * ASCII_LINE_H);
+  // scaleX stretches the pre horizontally so 145 columns fill dims.w exactly.
+  // This corrects the ≈3 % mismatch between the font's actual char width and
+  // CHAR_W_RATIO, ensuring the ASCII grid overlays the photo pixel-perfectly.
+  const scaleX = dims.w / (ASCII_COLS * fontSize * CHAR_W_RATIO);
 
-  // CSS mask that punches a soft-edged circle hole at the cursor position,
-  // revealing the ASCII art layer below. No hole when cursor is absent.
   const photoMask = cursor
-    ? `radial-gradient(circle ${REVEAL_RADIUS}px at ${cursor.x}px ${cursor.y}px, transparent 0%, transparent ${Math.round(REVEAL_RADIUS * 0.65)}px, black ${REVEAL_RADIUS}px)`
+    ? `radial-gradient(circle ${REVEAL_RADIUS}px at ${cursor.x}px ${cursor.y}px, transparent 0%, transparent ${Math.round(REVEAL_RADIUS * 0.5)}px, black ${REVEAL_RADIUS}px)`
     : undefined;
 
   return (
     <div
-      className={`rg-ascii-backdrop${size.mobile ? ' rg-ascii-backdrop-mobile' : ''}`}
       aria-hidden="true"
-      style={{ pointerEvents: 'auto', cursor: 'none' }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        width: Math.round(dims.w),
+        height: Math.round(dims.h),
+        overflow: 'hidden',
+        zIndex: 0,
+        pointerEvents: 'auto',
+        cursor: cursor ? 'none' : 'default',
+      }}
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         setCursor({ x: e.clientX - rect.left, y: e.clientY - rect.top });
       }}
       onMouseLeave={() => setCursor(null)}
     >
-      {/* ASCII art — always rendered beneath the photo, visible through the hole */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          overflow: 'hidden',
-          pointerEvents: 'none',
-        }}
-      >
+      {/* ASCII art — anchored top-right, scaled to fill container exactly */}
+      <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         <pre
           style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
             margin: 0,
             color: dark ? '#f5f5f4' : '#1c1917',
-            opacity: dark ? (size.mobile ? 0.28 : 0.36) : (size.mobile ? 0.22 : 0.32),
+            opacity: 0.85,
             fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
             fontWeight: 900,
-            fontSize: `${asciiMetrics.fontSize}px`,
-            lineHeight: 1.02,
+            fontSize: `${fontSize}px`,
+            lineHeight: ASCII_LINE_H,
             letterSpacing: 0,
             whiteSpace: 'pre',
-            textAlign: 'left',
-            transform: 'translateZ(0)',
+            // scaleX anchored at the right edge so both layers share the same
+            // right boundary; any residual sub-pixel diff is clipped by parent overflow:hidden
+            transform: `scaleX(${scaleX})`,
+            transformOrigin: 'right top',
             WebkitFontSmoothing: 'antialiased' as const,
-            width: size.width,
-            height: size.height,
-            overflow: 'hidden',
-            flexShrink: 0,
           }}
         >
           {ascii}
         </pre>
       </div>
-      {/* Photo — on top, with a mask hole punched at the cursor position */}
+      {/* Photo — fills container 1:1 via object-fit:fill (no crop offset) */}
       <img
         src="/images/myimage.png"
         alt=""
@@ -225,8 +232,7 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
           inset: 0,
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
-          objectPosition: 'center top',
+          objectFit: 'fill',
           userSelect: 'none',
           pointerEvents: 'none',
           WebkitMaskImage: photoMask,
