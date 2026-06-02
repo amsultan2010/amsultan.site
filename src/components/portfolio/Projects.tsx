@@ -50,7 +50,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
   const projects = [
     {
       id: 0,
-      title: "abdullahos",
+      title: "abdullahOS",
       description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
       coverImage: "/readme/portfolio-desktop.jpg",
@@ -58,7 +58,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       detail: {
         type: 'project' as const,
         id: 0,
-        title: "abdullahos",
+        title: "abdullahOS",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/readme/portfolio-desktop.jpg",
         liveUrl: "/desktop",

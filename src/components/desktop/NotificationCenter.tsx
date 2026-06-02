@@ -7,7 +7,7 @@ interface NotificationCenterProps {
 }
 
 const activityItems = [
-  { title: 'abdullahos', detail: 'desktop shell, static apps, project workspace' },
+  { title: 'abdullahOS', detail: 'desktop shell, static apps, project workspace' },
   { title: 'vertical ai', detail: 'automation, enterprise software, productivity, education' },
   { title: 'build queue', detail: 'robotics, tutoringbyabdullah, creative engineering' },
 ];
@@ -208,7 +208,7 @@ function ActivityList({ city }: { city: string }) {
         padding: '0 4px',
         textShadow: '0 1px 4px rgba(0,0,0,0.3)',
       }}>
-        abdullahos
+        abdullahOS
       </div>
 
       {[{ title: city.toLowerCase(), detail: 'startup + school base' }, ...activityItems].map((item, i) => (

@@ -19,6 +19,7 @@ export default function AppWindow({ windowState, children, darkMode, titleBarBg,
   const windowRef = useRef<HTMLDivElement>(null);
   const [entering, setEntering] = useState(true);
   const [trafficHover, setTrafficHover] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const isFocused = state.focusedWindowId === windowState.id;
 
@@ -39,6 +40,8 @@ export default function AppWindow({ windowState, children, darkMode, titleBarBg,
       winY: windowState.position.y,
     };
 
+    setIsDragging(true);
+
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragRef.current) return;
       const dx = e.clientX - dragRef.current.startX;
@@ -50,6 +53,7 @@ export default function AppWindow({ windowState, children, darkMode, titleBarBg,
 
     const handleMouseUp = () => {
       dragRef.current = null;
+      setIsDragging(false);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
@@ -147,7 +151,9 @@ export default function AppWindow({ windowState, children, darkMode, titleBarBg,
           : '0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06), inset 0 0.5px 0 rgba(255,255,255,0.4)',
         opacity: entering ? 0 : 1,
         transform: entering ? 'scale(0.92)' : 'scale(1)',
-        transition: 'opacity 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.2s ease, border-color 0.2s ease, border-radius 0.2s ease, left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease',
+        transition: isDragging
+          ? 'opacity 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.2s ease, border-color 0.2s ease'
+          : 'opacity 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.2s ease, border-color 0.2s ease, border-radius 0.2s ease, width 0.25s ease, height 0.25s ease',
         willChange: 'transform',
       }}
     >

@@ -23,7 +23,7 @@ const SECTION_LABELS: Record<NonNullable<SectionId>, string> = {
 
 const MOBILE_PROJECTS = [
   {
-    title: 'abdullahos',
+    title: 'abdullahOS',
     desc: 'Desktop-style portfolio with draggable windows and static apps.',
     coverImage: '/readme/portfolio-desktop.jpg',
     gradient: 'linear-gradient(145deg, #0f172a 0%, #1e293b 55%, #020617 100%)',

@@ -33,7 +33,7 @@ export default function DesktopDock() {
     { id: 'terminal', label: 'terminal', icon: <DockImage src="/usethisTERMIANL.png" alt="terminal" cropScale={1.15} /> },
     { id: 'education', label: 'about', icon: <DockImage src="/icons/folder.png" alt="about" /> },
     { id: 'projects', label: 'vscode', icon: <DockImage src="/vscode.png" alt="vscode" cropScale={1} contain /> },
-    { id: 'blog', label: 'abdullahos', icon: <DockAsciiLogo /> },
+    { id: 'blog', label: 'abdullahOS', icon: <DockAsciiLogo /> },
     { id: 'photos', label: 'photos', icon: <DockImage src="/icons/photos.png" alt="photos" /> },
     { id: 'email' as any, label: 'gmail', icon: <DockImage src="/images/logosicons/gmail.png" alt="gmail" cropScale={1} contain /> },
     { id: 'watchlist', label: 'watchlist', icon: <DockImage src="/images/logosicons/netflix.png" alt="watchlist" cropScale={1} contain /> },

@@ -80,7 +80,7 @@ function getTechColor(tech: string): { bg: string; text: string; border: string 
 const projects = [
   {
     id: 0,
-    title: "abdullahos",
+    title: "abdullahOS",
     description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
     coverImage: "/readme/portfolio-desktop.jpg",
@@ -90,7 +90,7 @@ const projects = [
       detail: {
         type: 'project' as const,
         id: 0,
-        title: "abdullahos",
+        title: "abdullahOS",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/readme/portfolio-desktop.jpg",
         liveUrl: "/desktop",
@@ -107,7 +107,7 @@ const projects = [
         techStack: ["Astro","React","TypeScript"],
         repoUrl: "/desktop",
         sections: [
-          { title: "projects", content: "abdullahos, tutoringbyabdullah, robotics shells, and quant tools in one workspace." },
+          { title: "projects", content: "abdullahOS, tutoringbyabdullah, robotics shells, and quant tools in one workspace." },
           { title: "startup", content: "long-term direction: build toward x-combinator from ais-r, with vertical ai that actually saves people time." },
           { title: "robotics", content: "automation, sensors, prototypes, and creative engineering experiments." },
           { title: "education", content: "tutoringbyabdullah plus school activity around teaching, clubs, and technical self-study." },

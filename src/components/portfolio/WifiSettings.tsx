@@ -83,11 +83,20 @@ function ResultCard({ icon, label, value, unit }: { icon: React.ReactNode; label
   );
 }
 
+const LOCATIONS = [
+  { city: 'Riyadh', region: 'Saudi Arabia', flag: '🇸🇦' },
+  { city: 'Short Hills', region: 'NJ', flag: '🇺🇸' },
+  { city: 'Dhahran', region: 'Saudi Arabia', flag: '🇸🇦' },
+  { city: 'Manhattan', region: 'NY', flag: '🇺🇸' },
+  { city: 'San Francisco', region: 'CA', flag: '🇺🇸' },
+];
+
 export default function WifiSettings() {
   const [phase, setPhase] = useState<TestPhase>('idle');
   const [results, setResults] = useState<SpeedResults | null>(null);
   const [gaugeValue, setGaugeValue] = useState(0);
   const [gaugeLabel, setGaugeLabel] = useState('Ready to test');
+  const [activeLocation, setActiveLocation] = useState(0);
 
   // Animate gauge smoothly toward target
   const animateGauge = useCallback((target: number, duration: number) => {
@@ -150,7 +159,7 @@ export default function WifiSettings() {
           <div>
             <div style={{ fontSize: '16px', fontWeight: 700, color: '#fff' }}>Wi-Fi</div>
             <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', fontWeight: 500 }}>
-              Connected to Abdullah's Network
+              {LOCATIONS[activeLocation].flag} {LOCATIONS[activeLocation].city}, {LOCATIONS[activeLocation].region}
             </div>
           </div>
           <div style={{ marginLeft: 'auto' }}>
@@ -162,6 +171,37 @@ export default function WifiSettings() {
               }} />
             </div>
           </div>
+        </div>
+
+        {/* Known Networks */}
+        <div style={{ marginTop: '16px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '8px' }}>
+            Known Networks
+          </div>
+          {LOCATIONS.map((loc, i) => (
+            <button
+              key={i}
+              onClick={() => setActiveLocation(i)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '10px', width: '100%',
+                padding: '8px 10px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                background: activeLocation === i ? 'rgba(0,122,255,0.18)' : 'transparent',
+                transition: 'background 0.15s',
+                marginBottom: '2px',
+              }}
+            >
+              <span style={{ fontSize: '20px', lineHeight: 1 }}>{loc.flag}</span>
+              <div style={{ flex: 1, textAlign: 'left' }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#fff' }}>{loc.city}</div>
+                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.45)' }}>{loc.region}</div>
+              </div>
+              {activeLocation === i && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#007aff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </button>
+          ))}
         </div>
       </div>
 

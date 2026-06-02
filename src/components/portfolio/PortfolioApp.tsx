@@ -38,7 +38,7 @@ function ThemeProvider({ children, siteReady = false }: { children: React.ReactN
 
 const BUILDING = [
   {
-    label: 'abdullahos',
+    label: 'abdullahOS',
     href: '/desktop',
     cover: '/readme/portfolio-desktop.jpg',
     desc: 'desktop-style portfolio w/ draggable windows and static apps.',
@@ -54,7 +54,7 @@ const BUILDING = [
 ];
 
 const PREVIOUSLY = [
-  { role: 'vertical ai for automation, enterprise software, productivity, education', company: 'projects', icon: '/icons/folder.png', href: '/projects' },
+  { role: 'agentic ai for automation, enterprise software, productivity, education', company: 'projects', icon: '/icons/folder.png', href: '/projects' },
   { role: 'robotics + automation systems, with quant as technical proof', company: 'builds', icon: '/icons/folder.png', href: '/projects' },
 ];
 
@@ -240,6 +240,38 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
       }}
       onMouseLeave={() => setCursor(null)}
     >
+      {/* CLAUDE'S #1 USER badge */}
+      <div style={{
+        position: 'absolute',
+        top: 14,
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 4,
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 7,
+        padding: '6px 14px',
+        borderRadius: 999,
+        background: '#CF5200',
+        color: '#fff',
+        fontFamily: "'SF Mono', 'Menlo', monospace",
+        fontSize: 11,
+        fontWeight: 700,
+        letterSpacing: '0.08em',
+        whiteSpace: 'nowrap',
+        pointerEvents: 'none',
+        boxShadow: '0 2px 12px rgba(207,82,0,0.45)',
+      }}>
+        <svg width="14" height="14" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <circle cx="14" cy="14" r="12" fill="rgba(255,255,255,0.25)" />
+          <ellipse cx="14" cy="12" rx="5" ry="6" fill="#fff" opacity="0.9" />
+          <ellipse cx="9" cy="10" rx="2.5" ry="3" fill="#fff" opacity="0.7" transform="rotate(-20 9 10)" />
+          <ellipse cx="19" cy="10" rx="2.5" ry="3" fill="#fff" opacity="0.7" transform="rotate(20 19 10)" />
+          <ellipse cx="14" cy="19" rx="6" ry="3.5" fill="#fff" opacity="0.6" />
+        </svg>
+        CLAUDE'S #1 USER
+      </div>
+
       {/* ASCII art — anchored top-right, scaled to fill container exactly */}
       <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
         <pre
@@ -430,6 +462,41 @@ function SLink({
 }
 
 /* ══════════════════════════════════════════════════════════
+   Resume helpers
+   ══════════════════════════════════════════════════════════ */
+
+function ResumeSection({ label, dark, border, textMuted, children }: {
+  label: string; dark: boolean; border: string; textMuted: string; children: React.ReactNode;
+}) {
+  return (
+    <div style={{ marginTop: 14 }}>
+      <div style={{
+        fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase',
+        color: textMuted, borderBottom: `1px solid ${border}`, paddingBottom: 3, marginBottom: 8,
+        fontFamily: "'SF Mono', 'Menlo', monospace",
+      }}>
+        {label}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function ResumeEntry({ title, date, color, children }: {
+  title: string; date: string; color: string; children: React.ReactNode;
+}) {
+  return (
+    <div style={{ marginBottom: 8 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8 }}>
+        <span style={{ fontWeight: 700, fontSize: 13, color }}>{title}</span>
+        {date && <span style={{ fontSize: 11, whiteSpace: 'nowrap', opacity: 0.6 }}>{date}</span>}
+      </div>
+      <div style={{ fontSize: 12.5, marginTop: 2 }}>{children}</div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
    Main app
    ══════════════════════════════════════════════════════════ */
 
@@ -500,7 +567,7 @@ function Inner() {
                   href="/desktop"
                   icon="/icons/folder.png"
                 >
-                  abdullahos
+                  abdullahOS
                 </SLink>
               </span>
             </span>
@@ -512,7 +579,7 @@ function Inner() {
               <span className="rg-inline-link-group">
                 <SLink href="/projects" icon="/icons/folder.png">startups</SLink>
                 {' + '}
-                <SLink href="/projects" icon="/icons/folder.png">vertical ai</SLink>
+                <SLink href="/projects" icon="/icons/folder.png">agentic ai</SLink>
                 {' + '}
                 <SLink href="/projects" icon="/icons/folder.png">robotics</SLink>
               </span>
@@ -607,7 +674,7 @@ function Inner() {
             <div className="rg-diamond" style={{ background: t.diamond }} />
             <span className="rg-section-label" style={{ color: t.text }}>exploring:</span>
             <ul className="rg-sublist">
-               
+
               {PREVIOUSLY.map((p, i) => (
                 <li key={i} className="rg-subitem">
                   <span className="rg-arrow" style={{ color: t.textMuted }}>↳</span>
@@ -620,6 +687,122 @@ function Inner() {
                 </li>
               ))}
             </ul>
+          </li>
+
+          {/* Resume */}
+          <li className="rg-item rg-item-nested" style={{ marginTop: 8 }}>
+            <div className="rg-diamond" style={{ background: t.diamond }} />
+            <span className="rg-section-label" style={{ color: t.text }}>resume:</span>
+            <div style={{
+              width: '100%',
+              border: `1px solid ${t.border}`,
+              borderRadius: 10,
+              overflow: 'hidden',
+              background: dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+              marginTop: 4,
+            }}>
+              {/* Header row */}
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '10px 16px',
+                borderBottom: `1px solid ${t.border}`,
+              }}>
+                <span style={{ fontSize: 13, color: t.textMuted, fontFamily: "'SF Mono', monospace" }}>
+                  Abdullah_Sultan_Resume.docx
+                </span>
+                <a
+                  href="/resume.docx"
+                  download
+                  style={{
+                    fontSize: 12, color: t.textMuted, textDecoration: 'none',
+                    padding: '4px 10px', borderRadius: 6,
+                    border: `1px solid ${t.border}`,
+                    transition: 'color 0.2s, border-color 0.2s',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = t.textStrong;
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = t.textStrong;
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.color = t.textMuted;
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = t.border;
+                  }}
+                >
+                  ↓ download
+                </a>
+              </div>
+              {/* Resume content */}
+              <div style={{
+                padding: '20px 22px',
+                fontSize: 13,
+                lineHeight: 1.6,
+                color: t.text,
+                fontFamily: 'Georgia, Times, serif',
+                maxHeight: 520,
+                overflowY: 'auto',
+              }}>
+                <p style={{ margin: '0 0 2px', textAlign: 'center', fontSize: 15, fontWeight: 700, color: t.textStrong }}>Abdullah Muhammad Sultan <span style={{ fontSize: 13, fontWeight: 400 }}>(10th Grade)</span></p>
+                <p style={{ margin: '0 0 12px', textAlign: 'center', fontSize: 12, fontStyle: 'italic', color: t.textMuted }}>
+                  Riyadh, KSA · abdullahmsultan1@gmail.com · abdullahmsultan.me · linkedin.com/in/amsultan2010
+                </p>
+
+                <ResumeSection label="SUMMARY" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <ul style={{ margin: '4px 0 0', paddingLeft: 18 }}>
+                    <li>Advanced mathematics student with strong interest in AI and robotics.</li>
+                    <li>Pursuing shadowing/unpaid internship opportunities at tech startups this summer.</li>
+                    <li>Aspiring future tech startup cofounder, leveraging math and CS skills to make a meaningful impact.</li>
+                  </ul>
+                </ResumeSection>
+
+                <ResumeSection label="EDUCATION" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <ResumeEntry title="American International School, Riyadh" date="8/2025 – Present" color={t.textStrong}>
+                    Analysis & Approaches SL (highest math), AP CS A, AP Psychology, AP Precalculus (self-study); GPA: N/A-UW
+                  </ResumeEntry>
+                  <ResumeEntry title="The Pingry School, Basking Ridge, NJ" date="9/2021 – 6/2025" color={t.textStrong}>
+                    Advanced Algebra & Trig Honors, Spanish III, AP CS Principles (5/5, self-study); GPA: 3.86-W
+                  </ResumeEntry>
+                </ResumeSection>
+
+                <ResumeSection label="PROJECTS & EXTRACURRICULARS" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <ResumeEntry title="Independent Quantitative Finance Projects" date="3/2026 – 5/2026" color={t.textStrong}>
+                    <ul style={{ margin: '2px 0 0', paddingLeft: 18 }}>
+                      <li>Shipped a three-project Python quant suite deployed as Flask/Plotly web apps on Vercel.</li>
+                      <li>Engineered SMA-crossover backtesting engine, multi-asset portfolio backtester, and Black-Scholes options pricer.</li>
+                    </ul>
+                  </ResumeEntry>
+                  <ResumeEntry title="The Downforce Blog — Founder & Writer" date="9/2025 – Present" color={t.textStrong}>
+                    Formula One sports blog covering race strategy, driver analysis, and team dynamics.
+                  </ResumeEntry>
+                </ResumeSection>
+
+                <ResumeSection label="LEADERSHIP & VOLUNTEERING" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <ResumeEntry title="X-Combinator — Founder" date="5/2026 – Present" color={t.textStrong}>
+                    Founded AIS-R's first student-run startup incubator modeled on Y Combinator; cohorts of 12–15 students pitch, build, and launch real software products each semester with a school-wide Demo Day.
+                  </ResumeEntry>
+                  <ResumeEntry title="Aspiring Doctors' Club — Leader" date="12/2025 – Present" color={t.textStrong}>
+                    Partnered with King Faisal University to educate 60+ students on diabetes care; pioneered a tech-in-medicine track covering AlphaFold and TRIBEv2.
+                  </ResumeEntry>
+                  <ResumeEntry title="Peer Tutoring — Founder (tutoringbyabdullah.xyz)" date="4/2026 – Present" color={t.textStrong}>
+                    Hybrid for-profit/non-profit tutoring raising student grades by avg 2.03 pts on IB 7-point scale; 9th–10th grade math and science.
+                  </ResumeEntry>
+                </ResumeSection>
+
+                <ResumeSection label="AWARDS" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <ResumeEntry title="Pingry Public Forum Debate" date="" color={t.textStrong}>
+                    1st place at Horace Mann Invitational with 5–0 undefeated record.
+                  </ResumeEntry>
+                  <ResumeEntry title="Pingry Boys' Swim Team" date="" color={t.textStrong}>
+                    1st place (exhibition 50m freestyle) at Lawrenceville State Championships.
+                  </ResumeEntry>
+                </ResumeSection>
+
+                <ResumeSection label="SKILLS" dark={dark} border={t.border} textMuted={t.textMuted}>
+                  <p style={{ margin: '4px 0 2px' }}><strong>Programming:</strong> Python (pandas, NumPy, matplotlib), Java; Claude Code, Cursor, Vercel, Supabase.</p>
+                  <p style={{ margin: '2px 0' }}><strong>Languages:</strong> English, Urdu/Hindi (fluent); Spanish (conversational).</p>
+                  <p style={{ margin: '2px 0' }}><strong>Interests:</strong> neural networks, AI-augmentation in robotics, AI enterprise applications, education.</p>
+                </ResumeSection>
+              </div>
+            </div>
           </li>
         </ul>
 
@@ -1293,55 +1476,114 @@ function BulletItem({ diamond, children }: { diamond: string; children: React.Re
 
 type AppPhase = 'loading' | 'site' | 'peeling' | 'desktop';
 
+const INTRO_BUBBLES = ['YC', 'AI B2B-SAAS', 'ABG CMO', 'OMOGGLE'];
+
 function SiteLoader({ onDone }: { onDone: () => void }) {
-  const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<'loading' | 'fade' | 'done'>('loading');
+  const [phase, setPhase] = useState<'black' | 'bubbles' | 'converge' | 'title' | 'fade' | 'done'>('black');
 
   useEffect(() => {
-    let p = 0;
-    const interval = setInterval(() => {
-      const speed = Math.max(0.6, 3.5 * (1 - p / 100));
-      p = Math.min(100, p + speed);
-      setProgress(p);
-      if (p >= 100) clearInterval(interval);
-    }, 25);
-
-    const t1 = setTimeout(() => setPhase('fade'), 2200);
-    const t2 = setTimeout(() => {
-      setPhase('done');
-      onDone();
-    }, 2800);
-
-    return () => { clearInterval(interval); clearTimeout(t1); clearTimeout(t2); };
+    const timers = [
+      setTimeout(() => setPhase('bubbles'), 500),
+      setTimeout(() => setPhase('converge'), 1300),
+      setTimeout(() => setPhase('title'), 1900),
+      setTimeout(() => setPhase('fade'), 2600),
+      setTimeout(() => { setPhase('done'); onDone(); }, 3200),
+    ];
+    return () => timers.forEach(clearTimeout);
   }, [onDone]);
 
   if (phase === 'done') return null;
 
+  const bubblePositions = [
+    { x: '15%', y: '20%' },
+    { x: '70%', y: '15%' },
+    { x: '10%', y: '65%' },
+    { x: '72%', y: '62%' },
+  ];
+
+  const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
+  const showTitle = phase === 'title' || phase === 'fade';
+
   return (
     <div style={{
-      position: 'fixed', inset: 0, zIndex: 10001, background: '#f5f5f4',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      position: 'fixed', inset: 0, zIndex: 10001, background: '#000',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      overflow: 'hidden',
       opacity: phase === 'fade' ? 0 : 1,
-      transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+      transition: phase === 'fade' ? 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
     }}>
-      <div style={{ width: 56, height: 56, animation: 'siteLoad 0.6s ease-out' }}>
-        <AbdullahAsciiLogo width={56} height={56} color="#57534e" opacity={0.95} />
-      </div>
+      {/* Word bubbles */}
+      {INTRO_BUBBLES.map((word, i) => {
+        const pos = bubblePositions[i];
+        return (
+          <div
+            key={word}
+            style={{
+              position: 'absolute',
+              left: isConverging ? '50%' : pos.x,
+              top: isConverging ? '50%' : pos.y,
+              transform: isConverging ? 'translate(-50%, -50%) scale(0)' : 'translate(-50%, -50%) scale(1)',
+              opacity: phase === 'black' ? 0 : isConverging ? 0 : 1,
+              transition: phase === 'black'
+                ? 'none'
+                : isConverging
+                  ? `left 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, top 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, transform 0.4s ease ${i * 0.04}s, opacity 0.3s ease`
+                  : `opacity 0.35s ease ${i * 0.1}s`,
+              padding: '10px 18px',
+              borderRadius: 999,
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(8px)',
+              color: '#fff',
+              fontFamily: "'SF Mono', 'Menlo', monospace",
+              fontSize: 14,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              whiteSpace: 'nowrap',
+              pointerEvents: 'none',
+            }}
+          >
+            {word}
+          </div>
+        );
+      })}
+
+      {/* Title + crab */}
       <div style={{
-        marginTop: 24, width: 180, height: 3, borderRadius: 2,
-        background: 'rgba(0,0,0,0.08)', overflow: 'hidden',
-        animation: 'siteLoad 0.6s ease-out',
+        position: 'absolute',
+        top: '50%', left: '50%',
+        transform: 'translate(-50%, -50%)',
+        textAlign: 'center',
+        opacity: showTitle ? 1 : 0,
+        transition: 'opacity 0.5s ease',
+        pointerEvents: 'none',
       }}>
+        {/* Claude crab waving */}
         <div style={{
-          height: '100%', width: `${progress}%`,
-          background: '#57534e', borderRadius: 2,
-          transition: 'width 0.08s linear',
-        }} />
+          fontSize: 42,
+          marginBottom: 12,
+          display: 'inline-block',
+          animation: showTitle ? 'crabWave 0.6s ease-in-out infinite alternate' : 'none',
+          transformOrigin: 'bottom center',
+        }}>
+          🦀
+        </div>
+        <div style={{
+          fontFamily: "'SF Mono', 'JetBrains Mono', 'Menlo', 'Monaco', monospace",
+          fontSize: 'clamp(22px, 4vw, 36px)',
+          fontWeight: 700,
+          letterSpacing: '0.18em',
+          color: '#fff',
+          textTransform: 'uppercase' as const,
+        }}>
+          ABDULLAH SULTAN
+        </div>
       </div>
+
       <style>{`
-        @keyframes siteLoad {
-          from { opacity: 0; transform: scale(0.92) translateY(8px); }
-          to { opacity: 1; transform: scale(1) translateY(0); }
+        @keyframes crabWave {
+          from { transform: rotate(-15deg) translateY(0px); }
+          to   { transform: rotate(15deg) translateY(-6px); }
         }
       `}</style>
     </div>
@@ -1448,7 +1690,7 @@ export default function PortfolioApp() {
             role="button"
             aria-label="Open AbdullahOS"
           >
-            <span className="page-curl-chip">abdullahos →</span>
+            <span className="page-curl-chip">abdullahOS →</span>
           </div>
           <div
             className={`peek-hint ${expanded ? 'curl-hidden' : ''}`}
@@ -1456,7 +1698,7 @@ export default function PortfolioApp() {
             role="button"
             aria-label="Open AbdullahOS"
           >
-            <span className="peek-hint-text">open abdullahos</span>
+            <span className="peek-hint-text">open abdullahOS</span>
             <span className="peek-hint-arrow" aria-hidden="true">↗</span>
           </div>
         </div>
@@ -1512,14 +1754,14 @@ export default function PortfolioApp() {
           z-index: 1002;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          padding: 8px 14px;
+          gap: 12px;
+          padding: 18px 32px;
           border-radius: 999px;
           background: rgba(20, 20, 20, 0.82);
           color: #f5f5f4;
           font-family: 'SF Mono', 'Menlo', monospace;
-          font-size: 12px;
-          letter-spacing: 0.02em;
+          font-size: 18px;
+          letter-spacing: 0.03em;
           backdrop-filter: blur(14px);
           -webkit-backdrop-filter: blur(14px);
           box-shadow: 0 8px 22px rgba(0,0,0,0.22), inset 0 0 0 0.5px rgba(255,255,255,0.08);

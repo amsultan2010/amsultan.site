@@ -17,7 +17,7 @@ const Blog = ({ onContentClick }: BlogProps) => {
   const blogPosts = [
     {
       slug: "abdullahos-overview",
-      title: "abdullahos overview",
+      title: "abdullahOS overview",
       summary: "desktop-style portfolio w/ draggable windows, app interactions, photos, projects, and static links.",
       tags: ["Astro", "React"],
       readingTime: 2,
@@ -26,7 +26,7 @@ const Blog = ({ onContentClick }: BlogProps) => {
     {
       slug: "abdullahos-parts",
       title: "app map",
-      summary: "about, projects, photos, contact, github, youtube music, terminal, and abdullahos.",
+      summary: "about, projects, photos, contact, github, youtube music, terminal, and abdullahOS.",
       tags: ["desktop", "apps"],
       readingTime: 2,
       publishedAt: "2026-01-02"

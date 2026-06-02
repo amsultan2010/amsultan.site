@@ -59,7 +59,7 @@ export const WINDOW_DEFAULTS: Record<WindowId, { title: string; width: number; h
   education:       { title: 'education — Finder',           width: 880, height: 780, x: 120, y: 50 },
   experience:      { title: 'experience — Finder',          width: 960, height: 820, x: 160, y: 40 },
   projects:        { title: 'projects — Visual Studio Code', width: 960, height: 680, x: 80, y: 35 },
-  blog:            { title: 'abdullahos',                   width: 900, height: 620, x: 110, y: 60 },
+  blog:            { title: 'abdullahOS',                   width: 900, height: 620, x: 110, y: 60 },
   email:           { title: 'new message',                   width: 640, height: 520, x: 180, y: 80 },
   photos:          { title: 'photos',                        width: 900, height: 640, x: 100, y: 50 },
   watchlist:       { title: 'watchlist — Netflix',          width: 1040, height: 680, x: 90, y: 40 },

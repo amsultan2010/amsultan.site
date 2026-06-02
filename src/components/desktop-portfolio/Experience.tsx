@@ -27,7 +27,7 @@ const Experience = ({ onCardClick, windowMode }: ExperienceProps) => {
   const experiences = [
     {
       id: 0,
-      company: "abdullahos",
+      company: "abdullahOS",
       role: "featured project",
       date: "Current",
       location: "Riyadh, Saudi Arabia",
@@ -36,15 +36,15 @@ const Experience = ({ onCardClick, windowMode }: ExperienceProps) => {
       detail: {
         type: 'experience' as const,
         id: 0,
-        company: "abdullahos",
+        company: "abdullahOS",
         role: "featured project",
         date: "Current",
         location: "Riyadh, Saudi Arabia",
         logo: "/terminal.png",
         timeline: [
-          { month: "Stage 1", description: "Static abdullahos future shell. Final project details will be added later." }
+          { month: "Stage 1", description: "Static abdullahOS future shell. Final project details will be added later." }
         ],
-        reflection: "abdullahos is the main custom project app for Abdullah Sultan's portfolio.",
+        reflection: "abdullahOS is the main custom project app for Abdullah Sultan's portfolio.",
         skillsLearned: ["AI", "Desktop UI", "Creative hardware", "Product thinking"],
         techStack: ["Astro", "React", "TypeScript"]
       } satisfies ExperienceDetail

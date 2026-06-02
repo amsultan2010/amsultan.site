@@ -3,7 +3,7 @@ import PageShell, { useTheme, themeColors } from './PageShell';
 
 const PROJECTS = [
   {
-    title: 'abdullahos',
+    title: 'abdullahOS',
     cover: '/readme/portfolio-desktop.jpg',
     repo: '/desktop',
     demo: '/desktop',

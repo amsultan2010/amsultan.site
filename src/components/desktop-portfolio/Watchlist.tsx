@@ -21,6 +21,7 @@ const WATCHLIST: Media[] = [
   { kind: 'movie', title: 'F1',                                 meta: '2025 · Drama',       cover: '/images/watchlist/movies/f1.jpg' },
   { kind: 'movie', title: 'The Message',                        meta: '1976 · Epic',        cover: '/images/watchlist/movies/the-message.jpg' },
   { kind: 'movie', title: 'Whiplash',                           meta: '2014 · Drama',       cover: '/images/watchlist/movies/whiplash.jpg' },
+  { kind: 'movie', title: 'Gladiator',                          meta: '2000 · Epic',        cover: '/images/watchlist/movies/gladiator.jpg' },
   { kind: 'show',  title: 'Invincible',                         meta: '2021– · Animated',   cover: '/images/watchlist/shows/invincible.jpg' },
   { kind: 'show',  title: 'Suits',                              meta: '2011–2019 · Legal',  cover: '/images/watchlist/shows/suits.jpg' },
   { kind: 'show',  title: 'The Pitt',                           meta: '2025– · Medical',    cover: '/images/watchlist/shows/the-pitt.jpg' },

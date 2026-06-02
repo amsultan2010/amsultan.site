@@ -45,10 +45,10 @@ I build systems that think, design that feels, and code that connects ideas to i
         : lower === 'about'
           ? 'Abdullah Sultan — student builder interested in startups, vertical ai, robotics, education, and automation.'
           : lower === 'projects'
-            ? 'projects: abdullahos, tutoringbyabdullah, quantbacktesterpy, quantportfoliopy, quantoptionspy.'
+            ? 'projects: abdullahOS, tutoringbyabdullah, quantbacktesterpy, quantportfoliopy, quantoptionspy.'
             : lower === 'contact'
               ? 'Email: abdullahmsultan1@gmail.com'
-              : 'static abdullahos terminal. type help for commands.';
+              : 'static abdullahOS terminal. type help for commands.';
     setLines((prev) => [...prev, response]);
   };
 

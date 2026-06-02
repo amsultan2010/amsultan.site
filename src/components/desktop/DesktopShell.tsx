@@ -67,7 +67,7 @@ interface TerminalLine {
 const COMMANDS: Record<string, { window: WindowId; desc: string }> = {
   'about':         { window: 'education',      desc: 'About Abdullah' },
   'projects':      { window: 'projects',        desc: 'projects & builds' },
-  'abdullahos':    { window: 'blog',            desc: 'open abdullahos' },
+  'abdullahOS':    { window: 'blog',            desc: 'open abdullahOS' },
   'contact':       { window: 'email',           desc: 'Static contact window' },
   'photos':        { window: 'photos',          desc: 'Local photo gallery' },
   'terminal':      { window: 'terminal',        desc: 'Terminal home' },
@@ -78,7 +78,7 @@ const COMMANDS: Record<string, { window: WindowId; desc: string }> = {
 const SMART_COMMANDS: Record<string, { window: WindowId; output: string }> = {
   'npm run about':         { window: 'education',     output: '> abdullah@1.0.0 about\n> Loading static profile shell...' },
   'git log --projects':    { window: 'projects',      output: 'commit a1b2c3d (HEAD -> main)\nopening abdullah projects...' },
-  'open abdullahos.app':   { window: 'blog',          output: 'Opening AbdullahOS.app...' },
+  'open abdullahOS.app':   { window: 'blog',          output: 'Opening AbdullahOS.app...' },
   'open contact.app':      { window: 'email',         output: 'Opening static contact window...' },
   'open watchlist.app':    { window: 'watchlist',     output: 'Opening Watchlist...' },
 };
@@ -493,7 +493,7 @@ function useScrambleText(target: string, trigger: number) {
 const QUICK_NAV = [
   { label: 'about', cmd: 'npm run about', color: '#60a5fa', icon: '/icons/folder.png' },
   { label: 'projects', cmd: 'git log --projects', color: '#4ade80', icon: '/vscode.png' },
-  { label: 'abdullahos', cmd: 'open abdullahos.app', color: '#fbbf24', icon: '/terminal.png' },
+  { label: 'abdullahOS', cmd: 'open abdullahOS.app', color: '#fbbf24', icon: '/terminal.png' },
   { label: 'contact', cmd: 'open contact.app', color: '#22d3ee', icon: '/usethismailicon.png' },
   { label: 'photos', cmd: 'photos', color: '#c084fc', icon: '/icons/photos.png' },
   { label: 'watchlist', cmd: 'watchlist', color: '#e50914', icon: '/images/logosicons/netflix.png' },
@@ -536,7 +536,7 @@ function AnimatedExplore({ runCommand }: { runCommand: (cmd: string, source?: 'u
   const commands = [
     { short: 'about', cmd: 'about' },
     { short: 'code', cmd: 'projects' },
-    { short: 'os', cmd: 'abdullahos' },
+    { short: 'os', cmd: 'abdullahOS' },
     { short: 'mail', cmd: 'contact' },
     { short: 'pics', cmd: 'photos' },
   ];
@@ -1052,7 +1052,7 @@ interface NewsItem { title: string; source: string; url: string; pubDate: string
 
 function BloombergNewsFeed() {
   const [news] = useState<NewsItem[]>([
-    { title: 'static update: abdullahos project shell', source: 'Local', url: '#', pubDate: new Date().toISOString() },
+    { title: 'static update: abdullahOS project shell', source: 'Local', url: '#', pubDate: new Date().toISOString() },
     { title: 'robotics automation ideas', source: 'Local', url: '#', pubDate: new Date().toISOString() },
     { title: 'quant finance tools are local-only', source: 'Local', url: '#', pubDate: new Date().toISOString() },
   ]);
@@ -2208,7 +2208,7 @@ function BloombergBackButton({ onClick }: { onClick: () => void }) {
 const SITE_GUIDE = [
   { label: 'About', desc: 'Static Abdullah profile shell', cmd: 'npm run about', icon: '👋' },
   { label: 'Projects', desc: 'projects & builds', cmd: 'git log --projects', icon: '🔨' },
-  { label: 'abdullahos', desc: 'custom desktop project', cmd: 'open abdullahos.app', icon: '▣' },
+  { label: 'abdullahOS', desc: 'custom desktop project', cmd: 'open abdullahOS.app', icon: '▣' },
   { label: 'Contact', desc: 'Static contact window', cmd: 'open contact.app', icon: '✉' },
   { label: 'Photos', desc: 'Local photo gallery', cmd: 'photos', icon: '◈' },
 ];
@@ -4744,7 +4744,7 @@ function SectorDetailView({ sectorName, onBack, onStockClick }: { sectorName: st
 // ── Bloomberg Option 1: Scrolling News Tape ──
 function ScrollingNewsTape() {
   const [news] = useState<{ title: string; source: string; url: string }[]>([
-    { title: 'abdullahos local feed', source: 'Local', url: '#' },
+    { title: 'abdullahOS local feed', source: 'Local', url: '#' },
     { title: 'robotics automation ideas', source: 'Local', url: '#' },
   ]);
 
@@ -5382,14 +5382,14 @@ function TerminalContent() {
 
   const cmdColors: Record<string, string> = {
     about: '#60a5fa', experience: '#c084fc', projects: '#4ade80',
-    abdullahos: '#fbbf24', contact: '#22d3ee', photos: '#c084fc',
+    abdullahOS: '#fbbf24', contact: '#22d3ee', photos: '#c084fc',
     help: '#94a3b8', clear: '#94a3b8',
   };
 
   const commandLinks = [
     { cmd: 'about', emoji: '👋', label: 'About', color: '#60a5fa' },
     { cmd: 'projects', emoji: '⚡', label: 'Projects', color: '#4ade80' },
-    { cmd: 'abdullahos', emoji: '▣', label: 'AbdullahOS', color: '#fbbf24' },
+    { cmd: 'abdullahOS', emoji: '▣', label: 'AbdullahOS', color: '#fbbf24' },
     { cmd: 'contact', emoji: '✉', label: 'Contact', color: '#22d3ee' },
     { cmd: 'photos', emoji: '◈', label: 'Photos', color: '#c084fc' },
   ];
@@ -5397,7 +5397,7 @@ function TerminalContent() {
   const smartCommandLinks = [
     { cmd: 'npm run about', color: '#60a5fa' },
     { cmd: 'git log --projects', color: '#4ade80' },
-    { cmd: 'open abdullahos.app', color: '#fbbf24' },
+    { cmd: 'open abdullahOS.app', color: '#fbbf24' },
     { cmd: 'open contact.app', color: '#22d3ee' },
   ];
 
@@ -5705,7 +5705,7 @@ function TerminalContent() {
                   {/* Software */}
                   <div style={sHead}>SOFTWARE</div>
                   <div style={sPara}>
-                    abdullahos is the main desktop-style portfolio project.
+                    abdullahOS is the main desktop-style portfolio project.
                   </div>
                   <div style={{ ...sPara, marginTop: '6px' }}>
                     tutoringbyabdullah is the first education product; quant tools sit underneath as technical proof.
@@ -5733,7 +5733,7 @@ function TerminalContent() {
                       <div style={sHead}>CURRENT FOCUS</div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                         {[
-                          'abdullahos interface',
+                          'abdullahOS interface',
                           'vertical ai for education and productivity',
                           'robotics, automation, and quant tools',
                         ].map((item, i) => (

@@ -18,7 +18,7 @@ const SECTIONS = [
   { id: 'education' as const, label: 'education', icon: <HiAcademicCap size={20} />, color: '#667eea' },
   { id: 'experience' as const, label: 'Experience', icon: <BsBriefcaseFill size={18} />, color: '#f5576c' },
   { id: 'projects' as const, label: 'Projects', icon: <FaCode size={18} />, color: '#4facfe' },
-  { id: 'blog' as const, label: 'abdullahos', icon: <HiPencilSquare size={18} />, color: '#fa709a' },
+  { id: 'blog' as const, label: 'abdullahOS', icon: <HiPencilSquare size={18} />, color: '#fa709a' },
 ];
 
 export default function MobileShell() {
