@@ -134,10 +134,10 @@ const REVEAL_RADIUS = 180;
 
 /** Returns container pixel dims that preserve the photo aspect ratio. */
 function calcDims(vw: number, vh: number) {
-  // Max height: 72 % of viewport on desktop, 48 % on mobile
-  const maxH = vw <= 500 ? vh * 0.48 : vh * 0.72;
-  // Max width: 46 % on desktop (keeps it noticeably smaller than before)
-  const maxW = vw <= 500 ? vw * 0.85 : vw * 0.46;
+  // Max height: 92 % of viewport on desktop, 48 % on mobile
+  const maxH = vw <= 500 ? vh * 0.48 : vh * 0.92;
+  // Max width: generous cap so portrait aspect ratio drives the size
+  const maxW = vw <= 500 ? vw * 0.85 : vw * 0.52;
   const fromH = { w: maxH * PHOTO_RATIO, h: maxH };
   // If that overflows maxW, constrain by width instead
   return fromH.w <= maxW ? fromH : { w: maxW, h: maxW / PHOTO_RATIO };
