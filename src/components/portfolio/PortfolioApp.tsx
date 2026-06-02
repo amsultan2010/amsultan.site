@@ -243,32 +243,26 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
       {/* CLAUDE'S #1 USER badge */}
       <div style={{
         position: 'absolute',
-        top: 14,
+        top: 18,
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 4,
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 7,
-        padding: '6px 14px',
+        gap: 10,
+        padding: '11px 22px',
         borderRadius: 999,
         background: '#CF5200',
         color: '#fff',
-        fontFamily: "'SF Mono', 'Menlo', monospace",
-        fontSize: 11,
+        fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
+        fontSize: 16,
         fontWeight: 700,
-        letterSpacing: '0.08em',
+        letterSpacing: '0.06em',
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
-        boxShadow: '0 2px 12px rgba(207,82,0,0.45)',
+        boxShadow: '0 4px 20px rgba(207,82,0,0.55)',
       }}>
-        <svg width="14" height="14" viewBox="0 0 28 28" fill="none" aria-hidden="true">
-          <circle cx="14" cy="14" r="12" fill="rgba(255,255,255,0.25)" />
-          <ellipse cx="14" cy="12" rx="5" ry="6" fill="#fff" opacity="0.9" />
-          <ellipse cx="9" cy="10" rx="2.5" ry="3" fill="#fff" opacity="0.7" transform="rotate(-20 9 10)" />
-          <ellipse cx="19" cy="10" rx="2.5" ry="3" fill="#fff" opacity="0.7" transform="rotate(20 19 10)" />
-          <ellipse cx="14" cy="19" rx="6" ry="3.5" fill="#fff" opacity="0.6" />
-        </svg>
+        <img src="/images/claude-logo.svg" alt="" style={{ width: 22, height: 22 }} />
         CLAUDE'S #1 USER
       </div>
 
@@ -931,7 +925,7 @@ function Inner() {
           display: flex;
           justify-content: flex-start;
           align-items: flex-start;
-          font-family: 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          font-family: 'Inter', 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 300;
           line-height: 1.6;
           overflow: hidden;
@@ -1476,7 +1470,12 @@ function BulletItem({ diamond, children }: { diamond: string; children: React.Re
 
 type AppPhase = 'loading' | 'site' | 'peeling' | 'desktop';
 
-const INTRO_BUBBLES = ['YC', 'AI B2B-SAAS', 'ABG CMO', 'OMOGGLE'];
+const INTRO_BUBBLES = [
+  { text: 'YC',          color: '#3B82F6' },
+  { text: 'AI B2B-SAAS', color: '#10B981' },
+  { text: 'ABG CMO',     color: '#EF4444' },
+  { text: 'OMOGGLE',     color: '#F59E0B' },
+];
 
 function SiteLoader({ onDone }: { onDone: () => void }) {
   const [phase, setPhase] = useState<'black' | 'bubbles' | 'converge' | 'title' | 'fade' | 'done'>('black');
@@ -1513,11 +1512,11 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
       transition: phase === 'fade' ? 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
     }}>
       {/* Word bubbles */}
-      {INTRO_BUBBLES.map((word, i) => {
+      {INTRO_BUBBLES.map((bubble, i) => {
         const pos = bubblePositions[i];
         return (
           <div
-            key={word}
+            key={bubble.text}
             style={{
               position: 'absolute',
               left: isConverging ? '50%' : pos.x,
@@ -1529,21 +1528,21 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
                 : isConverging
                   ? `left 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, top 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, transform 0.4s ease ${i * 0.04}s, opacity 0.3s ease`
                   : `opacity 0.35s ease ${i * 0.1}s`,
-              padding: '10px 18px',
+              padding: '14px 26px',
               borderRadius: 999,
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              backdropFilter: 'blur(8px)',
-              color: '#fff',
-              fontFamily: "'SF Mono', 'Menlo', monospace",
-              fontSize: 14,
+              background: `${bubble.color}22`,
+              border: `2px solid ${bubble.color}`,
+              color: bubble.color,
+              fontFamily: "'Inter', 'SF Mono', monospace",
+              fontSize: 22,
               fontWeight: 700,
               letterSpacing: '0.06em',
               whiteSpace: 'nowrap',
               pointerEvents: 'none',
+              boxShadow: `0 0 24px ${bubble.color}44`,
             }}
           >
-            {word}
+            {bubble.text}
           </div>
         );
       })}
@@ -1560,19 +1559,18 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
       }}>
         {/* Claude crab waving */}
         <div style={{
-          fontSize: 42,
-          marginBottom: 12,
+          marginBottom: 18,
           display: 'inline-block',
           animation: showTitle ? 'crabWave 0.6s ease-in-out infinite alternate' : 'none',
           transformOrigin: 'bottom center',
         }}>
-          🦀
+          <img src="/images/claude-crab.svg" alt="" style={{ width: 96, height: 96, imageRendering: 'pixelated' }} />
         </div>
         <div style={{
-          fontFamily: "'SF Mono', 'JetBrains Mono', 'Menlo', 'Monaco', monospace",
-          fontSize: 'clamp(22px, 4vw, 36px)',
+          fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
+          fontSize: 'clamp(40px, 7vw, 72px)',
           fontWeight: 700,
-          letterSpacing: '0.18em',
+          letterSpacing: '0.14em',
           color: '#fff',
           textTransform: 'uppercase' as const,
         }}>

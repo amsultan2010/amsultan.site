@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
 @layer base {
   :root {
     /* Terminal theme color palette */
