@@ -727,7 +727,7 @@ function Inner() {
                 </a>
               </div>
               {/* Resume content */}
-              <div style={{
+              <div className="rg-resume-body" style={{
                 padding: '20px 22px',
                 fontSize: 13,
                 lineHeight: 1.6,
@@ -921,7 +921,7 @@ function Inner() {
 
         .rg-root {
           position: relative;
-          min-height: 100vh;
+          min-height: 100svh;
           width: 100%;
           display: flex;
           justify-content: flex-start;
@@ -1391,9 +1391,9 @@ function Inner() {
 
         @media (max-width: 500px) {
           .rg-container {
-            margin-left: clamp(16px, 4vw, 24px);
-            max-width: calc(100vw - clamp(16px, 4vw, 24px) - 16px);
-            padding: 40px 16px 120px 0;
+            margin-left: 16px;
+            max-width: calc(100vw - 32px);
+            padding: 32px 16px 160px 0;
           }
           .rg-header {
             align-items: flex-start;
@@ -1403,10 +1403,14 @@ function Inner() {
             gap: 12px;
             flex-wrap: wrap;
           }
-          .rg-list { font-size: 19px; }
+          .rg-list { font-size: 17px; }
+          .rg-name { font-size: 20px; }
+          .rg-nav-link { font-size: 15px; }
+          .rg-item { gap: 12px; }
           .rg-build-card { padding: 16px; }
           .rg-build-grid { grid-template-columns: 1fr !important; }
           .menacing-aura { display: none !important; }
+          .rg-resume-body { max-height: 320px; font-size: 12px; }
         }
       `}</style>
     </div>
@@ -1488,6 +1492,7 @@ const INTRO_BUBBLES = [
 
 function SiteLoader({ onDone }: { onDone: () => void }) {
   const [tick, setTick] = useState(0);
+  const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 600;
 
   // 6-second timeline in ms
   const T = {
@@ -1578,8 +1583,9 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
 
         // While orbiting, spin around center
         const orbitAngle = (bubble.angle + baseAngle * (i % 2 === 0 ? 1 : -0.7)) * (Math.PI / 180);
-        const orbitX = 50 + Math.cos(orbitAngle) * bubble.dist;
-        const orbitY = 50 + Math.sin(orbitAngle) * bubble.dist;
+        const effectiveDist = isMobileScreen ? bubble.dist * 0.6 : bubble.dist;
+        const orbitX = 50 + Math.cos(orbitAngle) * effectiveDist;
+        const orbitY = 50 + Math.sin(orbitAngle) * effectiveDist;
 
         const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
         const cx = isConverging ? 50 + (orbitX - 50) * (1 - convProgress) : orbitX;
@@ -1589,7 +1595,7 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
           <div key={bubble.text} style={{
             position: 'absolute',
             left: isIn ? `${cx}%` : `${orbitX}%`,
-            top:  isIn ? `${cy}%` : `${orbitY}%`,
+            top: isIn ? `${cy}%` : `${orbitY}%`,
             transform: `translate(-50%,-50%) scale(${isConverging ? Math.max(0, 1 - convProgress) : 1})`,
             opacity: !isIn ? 0 : isConverging ? Math.max(0, 1 - convProgress * 1.5) : 1,
             transition: isIn && !isConverging
@@ -1603,7 +1609,7 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
             border: `2px solid ${bubble.color}`,
             color: bubble.color,
             fontFamily: "'Inter', sans-serif",
-            fontSize: 36,
+            fontSize: isMobileScreen ? 18 : 36,
             fontWeight: 800,
             letterSpacing: '0.07em',
             whiteSpace: 'nowrap',
@@ -1645,11 +1651,11 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
           animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none',
           transformOrigin: 'bottom center',
         }}>
-          <img src="/images/claude-crab.svg" alt="" style={{ width: 110, height: 110, imageRendering: 'pixelated' }} />
+          <img src="/images/claude-crab.svg" alt="" style={{ width: isMobileScreen ? 64 : 110, height: isMobileScreen ? 64 : 110, imageRendering: 'pixelated' }} />
         </div>
         <div style={{
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-          fontSize: 'clamp(42px, 7vw, 78px)',
+          fontSize: isMobileScreen ? 'clamp(28px, 7vw, 72px)' : 'clamp(42px, 7vw, 78px)',
           fontWeight: 800,
           letterSpacing: '0.16em',
           color: '#fff',
