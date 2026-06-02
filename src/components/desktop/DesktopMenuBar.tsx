@@ -358,11 +358,11 @@ function WifiPanel({ location }: { location: LocationData | null }) {
       </div>
 
       {[
-        { name: 'New York City', flag: '🗽' },
-        { name: 'Palo Alto', flag: '🌉' },
-        { name: 'Dubai', flag: '🇦🇪' },
-        { name: 'Mumbai, India', flag: '🇮🇳' },
-        { name: 'United Kingdom', flag: '🇬🇧' },
+        { name: 'Riyadh, Saudi Arabia',  flag: '🇸🇦' },
+        { name: 'Short Hills, NJ',       flag: '🇺🇸' },
+        { name: 'Dhahran, Saudi Arabia', flag: '🇸🇦' },
+        { name: 'Manhattan, NY',         flag: '🇺🇸' },
+        { name: 'San Francisco, CA',     flag: '🇺🇸' },
       ].map((place) => (
         <div key={place.name} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '3px 14px' }}>
           <span style={{ fontSize: '14px', width: '20px', textAlign: 'center' }}>{place.flag}</span>

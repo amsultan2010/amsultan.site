@@ -243,26 +243,27 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
       {/* CLAUDE'S #1 USER badge */}
       <div style={{
         position: 'absolute',
-        top: 18,
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: 28,
+        left: '30%',
+        transform: 'translateX(-50%) rotate(-12deg)',
         zIndex: 4,
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 10,
-        padding: '11px 22px',
-        borderRadius: 999,
-        background: '#CF5200',
+        gap: 11,
+        padding: '14px 26px 14px 20px',
+        borderRadius: 14,
+        background: '#111',
         color: '#fff',
         fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-        fontSize: 16,
-        fontWeight: 700,
-        letterSpacing: '0.06em',
+        fontSize: 18,
+        fontWeight: 800,
+        letterSpacing: '0.05em',
         whiteSpace: 'nowrap',
         pointerEvents: 'none',
-        boxShadow: '0 4px 20px rgba(207,82,0,0.55)',
+        border: '2px solid rgba(255,255,255,0.18)',
+        boxShadow: '0 6px 28px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1)',
       }}>
-        <img src="/images/claude-logo.svg" alt="" style={{ width: 22, height: 22 }} />
+        <img src="/images/claude-logo.svg" alt="" style={{ width: 26, height: 26, filter: 'brightness(0) invert(1)' }} />
         CLAUDE'S #1 USER
       </div>
 
@@ -1471,117 +1472,207 @@ function BulletItem({ diamond, children }: { diamond: string; children: React.Re
 type AppPhase = 'loading' | 'site' | 'peeling' | 'desktop';
 
 const INTRO_BUBBLES = [
-  { text: 'YC',          color: '#3B82F6' },
-  { text: 'AI B2B-SAAS', color: '#10B981' },
-  { text: 'ABG CMO',     color: '#EF4444' },
-  { text: 'OMOGGLE',     color: '#F59E0B' },
+  { text: 'YC',          color: '#3B82F6', angle: -25, dist: 38 },
+  { text: 'AI B2B-SAAS', color: '#10B981', angle:  55, dist: 42 },
+  { text: 'ABG CMO',     color: '#EF4444', angle: 200, dist: 40 },
+  { text: 'OMOGGLE',     color: '#F59E0B', angle: 130, dist: 36 },
 ];
 
 function SiteLoader({ onDone }: { onDone: () => void }) {
-  const [phase, setPhase] = useState<'black' | 'bubbles' | 'converge' | 'title' | 'fade' | 'done'>('black');
+  const [tick, setTick] = useState(0);
+
+  // 6-second timeline in ms
+  const T = {
+    particlesStart: 200,
+    bubblesIn:      600,
+    bubblesOrbit:   1400,
+    converge:       3000,
+    titleIn:        3700,
+    finalHold:      4800,
+    fadeOut:        5200,
+    done:           5900,
+  };
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => setPhase('bubbles'), 500),
-      setTimeout(() => setPhase('converge'), 1300),
-      setTimeout(() => setPhase('title'), 1900),
-      setTimeout(() => setPhase('fade'), 2600),
-      setTimeout(() => { setPhase('done'); onDone(); }, 3200),
-    ];
-    return () => timers.forEach(clearTimeout);
+    const id = setInterval(() => setTick(t => t + 1), 50);
+    return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    const t = setTimeout(() => onDone(), T.done);
+    return () => clearTimeout(t);
   }, [onDone]);
 
-  if (phase === 'done') return null;
+  const now = tick * 50;
+  const phase = now < T.bubblesIn ? 'particles'
+    : now < T.converge           ? 'orbit'
+    : now < T.titleIn            ? 'converge'
+    : now < T.finalHold          ? 'title'
+    : now < T.fadeOut            ? 'title'
+    : 'fade';
 
-  const bubblePositions = [
-    { x: '15%', y: '20%' },
-    { x: '70%', y: '15%' },
-    { x: '10%', y: '65%' },
-    { x: '72%', y: '62%' },
-  ];
+  if (now >= T.done) return null;
 
-  const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
+  // Orbit angle progresses over time
+  const orbitProgress = Math.max(0, (now - T.bubblesOrbit) / (T.converge - T.bubblesOrbit));
+  const baseAngle = orbitProgress * 360;
+
   const showTitle = phase === 'title' || phase === 'fade';
+  const isFading = phase === 'fade';
 
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 10001, background: '#000',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden',
-      opacity: phase === 'fade' ? 0 : 1,
-      transition: phase === 'fade' ? 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+      opacity: isFading ? 0 : 1,
+      transition: isFading ? 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none',
     }}>
+
+      {/* Particle field */}
+      {phase !== 'fade' && Array.from({ length: 28 }).map((_, i) => {
+        const a = (i / 28) * 360 + now * 0.04;
+        const r = 28 + (i % 5) * 9;
+        const x = 50 + Math.cos(a * Math.PI / 180) * r;
+        const y = 50 + Math.sin(a * Math.PI / 180) * r;
+        const visible = now > T.particlesStart + i * 40;
+        return (
+          <div key={i} style={{
+            position: 'absolute',
+            left: `${x}%`, top: `${y}%`,
+            width: i % 3 === 0 ? 3 : 2,
+            height: i % 3 === 0 ? 3 : 2,
+            borderRadius: '50%',
+            background: ['#3B82F6','#10B981','#EF4444','#F59E0B','#8B5CF6'][i % 5],
+            opacity: visible ? (phase === 'converge' ? Math.max(0, 1 - orbitProgress * 2) : 0.55) : 0,
+            transition: 'opacity 0.4s ease',
+            transform: 'translate(-50%,-50%)',
+            pointerEvents: 'none',
+          }} />
+        );
+      })}
+
+      {/* Scanning line */}
+      {(phase === 'particles' || phase === 'orbit') && (
+        <div style={{
+          position: 'absolute', left: 0, right: 0,
+          height: 1,
+          background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.6) 40%, rgba(16,185,129,0.6) 60%, transparent 100%)',
+          top: `${50 + Math.sin(now * 0.002) * 30}%`,
+          transition: 'top 0.1s linear',
+          pointerEvents: 'none',
+        }} />
+      )}
+
       {/* Word bubbles */}
       {INTRO_BUBBLES.map((bubble, i) => {
-        const pos = bubblePositions[i];
+        const isIn = now > T.bubblesIn + i * 180;
+        const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
+
+        // While orbiting, spin around center
+        const orbitAngle = (bubble.angle + baseAngle * (i % 2 === 0 ? 1 : -0.7)) * (Math.PI / 180);
+        const orbitX = 50 + Math.cos(orbitAngle) * bubble.dist;
+        const orbitY = 50 + Math.sin(orbitAngle) * bubble.dist;
+
+        const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
+        const cx = isConverging ? 50 + (orbitX - 50) * (1 - convProgress) : orbitX;
+        const cy = isConverging ? 50 + (orbitY - 50) * (1 - convProgress) : orbitY;
+
         return (
-          <div
-            key={bubble.text}
-            style={{
-              position: 'absolute',
-              left: isConverging ? '50%' : pos.x,
-              top: isConverging ? '50%' : pos.y,
-              transform: isConverging ? 'translate(-50%, -50%) scale(0)' : 'translate(-50%, -50%) scale(1)',
-              opacity: phase === 'black' ? 0 : isConverging ? 0 : 1,
-              transition: phase === 'black'
-                ? 'none'
-                : isConverging
-                  ? `left 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, top 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${i * 0.04}s, transform 0.4s ease ${i * 0.04}s, opacity 0.3s ease`
-                  : `opacity 0.35s ease ${i * 0.1}s`,
-              padding: '14px 26px',
-              borderRadius: 999,
-              background: `${bubble.color}22`,
-              border: `2px solid ${bubble.color}`,
-              color: bubble.color,
-              fontFamily: "'Inter', 'SF Mono', monospace",
-              fontSize: 22,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              boxShadow: `0 0 24px ${bubble.color}44`,
-            }}
-          >
+          <div key={bubble.text} style={{
+            position: 'absolute',
+            left: isIn ? `${cx}%` : `${orbitX}%`,
+            top:  isIn ? `${cy}%` : `${orbitY}%`,
+            transform: `translate(-50%,-50%) scale(${isConverging ? Math.max(0, 1 - convProgress) : 1})`,
+            opacity: !isIn ? 0 : isConverging ? Math.max(0, 1 - convProgress * 1.5) : 1,
+            transition: isIn && !isConverging
+              ? 'left 0.1s linear, top 0.1s linear, opacity 0.5s ease'
+              : isConverging
+              ? `left 0.5s ease, top 0.5s ease, opacity 0.35s ease, transform 0.45s ease`
+              : 'opacity 0.5s ease',
+            padding: '12px 24px',
+            borderRadius: 999,
+            background: `${bubble.color}18`,
+            border: `2px solid ${bubble.color}`,
+            color: bubble.color,
+            fontFamily: "'Inter', sans-serif",
+            fontSize: 20,
+            fontWeight: 800,
+            letterSpacing: '0.07em',
+            whiteSpace: 'nowrap',
+            pointerEvents: 'none',
+            boxShadow: `0 0 20px ${bubble.color}55, 0 0 60px ${bubble.color}22`,
+            textShadow: `0 0 12px ${bubble.color}88`,
+          }}>
             {bubble.text}
           </div>
         );
       })}
 
+      {/* Central flash burst on converge */}
+      {phase === 'converge' && (
+        <div style={{
+          position: 'absolute', left: '50%', top: '50%',
+          transform: 'translate(-50%,-50%)',
+          width: `${Math.min(600, orbitProgress * 600)}px`,
+          height: `${Math.min(600, orbitProgress * 600)}px`,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+          transition: 'width 0.1s, height 0.1s',
+        }} />
+      )}
+
       {/* Title + crab */}
       <div style={{
-        position: 'absolute',
-        top: '50%', left: '50%',
+        position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%)',
         textAlign: 'center',
         opacity: showTitle ? 1 : 0,
-        transition: 'opacity 0.5s ease',
+        transition: 'opacity 0.6s cubic-bezier(0.22,1,0.36,1)',
         pointerEvents: 'none',
       }}>
-        {/* Claude crab waving */}
         <div style={{
-          marginBottom: 18,
+          marginBottom: 20,
           display: 'inline-block',
-          animation: showTitle ? 'crabWave 0.6s ease-in-out infinite alternate' : 'none',
+          animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none',
           transformOrigin: 'bottom center',
         }}>
-          <img src="/images/claude-crab.svg" alt="" style={{ width: 96, height: 96, imageRendering: 'pixelated' }} />
+          <img src="/images/claude-crab.svg" alt="" style={{ width: 110, height: 80, imageRendering: 'pixelated' }} />
         </div>
         <div style={{
           fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-          fontSize: 'clamp(40px, 7vw, 72px)',
-          fontWeight: 700,
-          letterSpacing: '0.14em',
+          fontSize: 'clamp(42px, 7vw, 78px)',
+          fontWeight: 800,
+          letterSpacing: '0.16em',
           color: '#fff',
           textTransform: 'uppercase' as const,
+          textShadow: '0 0 60px rgba(255,255,255,0.25)',
+          animation: showTitle ? 'titleReveal 0.7s cubic-bezier(0.22,1,0.36,1) both' : 'none',
         }}>
           ABDULLAH SULTAN
+        </div>
+        <div style={{
+          marginTop: 12,
+          fontFamily: "'Inter', sans-serif",
+          fontSize: 13,
+          fontWeight: 500,
+          letterSpacing: '0.3em',
+          color: 'rgba(255,255,255,0.35)',
+          textTransform: 'uppercase' as const,
+          animation: showTitle ? 'titleReveal 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s both' : 'none',
+        }}>
+          student builder · riyadh
         </div>
       </div>
 
       <style>{`
         @keyframes crabWave {
-          from { transform: rotate(-15deg) translateY(0px); }
-          to   { transform: rotate(15deg) translateY(-6px); }
+          from { transform: rotate(-14deg) translateY(0px); }
+          to   { transform: rotate(14deg) translateY(-8px); }
+        }
+        @keyframes titleReveal {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>
