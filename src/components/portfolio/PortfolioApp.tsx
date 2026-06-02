@@ -1472,10 +1472,18 @@ function BulletItem({ diamond, children }: { diamond: string; children: React.Re
 type AppPhase = 'loading' | 'site' | 'peeling' | 'desktop';
 
 const INTRO_BUBBLES = [
-  { text: 'YC',          color: '#3B82F6', angle: -25, dist: 38 },
-  { text: 'AI B2B-SAAS', color: '#10B981', angle:  55, dist: 42 },
-  { text: 'ABG CMO',     color: '#EF4444', angle: 200, dist: 40 },
-  { text: 'OMOGGLE',     color: '#F59E0B', angle: 130, dist: 36 },
+  { text: 'YC',              color: '#3B82F6', angle:   0, dist: 34 },
+  { text: 'AGENTIC AI',      color: '#10B981', angle:  30, dist: 38 },
+  { text: 'OPENCLAW',        color: '#EC4899', angle:  60, dist: 32 },
+  { text: 'CLAUDE CODE',     color: '#06B6D4', angle:  90, dist: 36 },
+  { text: 'ROBOTICS',        color: '#F97316', angle: 120, dist: 34 },
+  { text: 'STARTUPS',        color: '#84CC16', angle: 150, dist: 38 },
+  { text: 'AI B2B-SAAS',     color: '#EF4444', angle: 180, dist: 32 },
+  { text: 'MATH',            color: '#F43F5E', angle: 210, dist: 30 },
+  { text: 'NEURAL NETWORKS', color: '#8B5CF6', angle: 240, dist: 40 },
+  { text: 'TALENT',          color: '#14B8A6', angle: 270, dist: 33 },
+  { text: 'ABG CMO',         color: '#F59E0B', angle: 300, dist: 36 },
+  { text: 'OMOGGLE',         color: '#7C3AED', angle: 330, dist: 34 },
 ];
 
 function SiteLoader({ onDone }: { onDone: () => void }) {
