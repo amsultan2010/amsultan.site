@@ -255,7 +255,7 @@ function MainPhotoBackdrop({ dark }: { dark: boolean }) {
       </div>
       {/* Photo — fills container 1:1 via object-fit:fill (no crop offset) */}
       <img
-        src="/images/myimage.png"
+        src="/images/myimage.jpg"
         alt=""
         draggable={false}
         style={{
@@ -341,12 +341,12 @@ function MenacingAura({ dark }: { dark: boolean }) {
         /* Mobile: ascii art sits at the bottom of the viewport, so move
            the aura to the top-left edge of that lower-half region. */
         @media (max-width: 500px) {
-          .menacing-aura { top: 42vh; left: 12px; gap: 3px; }
-          .menacing-ch-1 { font-size: 56px; }
-          .menacing-ch-2 { font-size: 48px; }
-          .menacing-ch-3 { font-size: 66px; }
-          .menacing-ch-4 { font-size: 40px; }
-          .menacing-ch-5 { font-size: 50px; }
+          .menacing-aura { top: auto; bottom: 32px; left: 8px; gap: 1px; }
+          .menacing-ch-1 { font-size: 32px; }
+          .menacing-ch-2 { font-size: 28px; }
+          .menacing-ch-3 { font-size: 38px; }
+          .menacing-ch-4 { font-size: 24px; }
+          .menacing-ch-5 { font-size: 30px; }
         }
       `}</style>
     </div>
@@ -457,7 +457,8 @@ function ResumeEntry({ title, date, color, children }: {
 
 function MobilePhotoSection({ dark }: { dark: boolean }) {
   const [ascii, setAscii] = useState('');
-  const [w, setW] = useState(375);
+  const [w, setW] = useState(343);
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch('/images/myascii.txt')
@@ -466,11 +467,17 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
       .catch(() => {});
   }, []);
 
+  // Use ResizeObserver to get the exact rendered container width — this is
+  // what makes the ASCII scale match the photo pixel-for-pixel.
   useEffect(() => {
-    const update = () => setW(window.innerWidth);
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    const el = wrapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(entries => {
+      const width = entries[0].contentRect.width;
+      if (width > 0) setW(Math.round(width));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
   // Size container to exact photo aspect ratio so object-fit:fill aligns 1:1
@@ -499,11 +506,11 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
 
       {/* Pixel-perfect overlay split: both layers at identical scale,
           photo clipped to left 50%, ASCII clipped to right 50% */}
-      <div style={{ position: 'relative', width: '100%', height: h, overflow: 'hidden' }}>
+      <div ref={wrapRef} style={{ position: 'relative', width: '100%', height: h, overflow: 'hidden' }}>
 
         {/* Photo — full container, clipped to left half */}
         <img
-          src="/images/myimage.png"
+          src="/images/myimage.jpg"
           alt=""
           draggable={false}
           style={{
