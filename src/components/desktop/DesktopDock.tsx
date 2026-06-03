@@ -31,7 +31,7 @@ export default function DesktopDock() {
 
   const windowItems: DockItem[] = [
     { id: 'terminal', label: 'terminal', icon: <DockImage src="/usethisTERMIANL.png" alt="terminal" cropScale={1.15} /> },
-    { id: 'education', label: 'about', icon: <DockImage src="/icons/folder.png" alt="about" /> },
+    { id: 'education', label: 'about', icon: <AboutIcon /> },
     { id: 'projects', label: 'vscode', icon: <DockImage src="/vscode.png" alt="vscode" cropScale={1} contain /> },
     { id: 'blog', label: 'abdullahOS', icon: <DockAsciiLogo /> },
     { id: 'photos', label: 'photos', icon: <DockImage src="/icons/photos.png" alt="photos" /> },
@@ -326,6 +326,22 @@ function DockAsciiLogo() {
       boxShadow: '0 2px 8px rgba(0,0,0,0.35), 0 0 0 0.5px rgba(255,255,255,0.1) inset',
     }}>
       <AbdullahAsciiLogo width={s - 6} height={s - 6} color="#fff" opacity={0.9} />
+    </div>
+  );
+}
+
+function AboutIcon() {
+  const s = BASE_SIZE - 6;
+  return (
+    <div style={{
+      width: `${s}px`, height: `${s}px`, borderRadius: '22px',
+      background: 'linear-gradient(145deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.4), inset 0 0.5px 0 rgba(255,255,255,0.1)',
+      overflow: 'hidden', position: 'relative',
+    }}>
+      <img src="/images/myimage.jpg" alt="about"
+        style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', borderRadius: '22px' }} />
     </div>
   );
 }

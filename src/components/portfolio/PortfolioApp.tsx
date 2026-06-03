@@ -1598,6 +1598,26 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
   const showTitle = phase === 'title' || phase === 'fade';
   const isFading = phase === 'fade';
 
+  // Matrix rain characters
+  const MATRIX_CHARS = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ';
+  const matrixCols = isMobileScreen ? 12 : 28;
+
+  // Bubble positions for SVG network lines
+  const bubblePositions = INTRO_BUBBLES.map((bubble, i) => {
+    const isIn = now > T.bubblesIn + i * 180;
+    const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
+    const orbitAngle = (bubble.angle + baseAngle * (i % 2 === 0 ? 1 : -0.7)) * (Math.PI / 180);
+    const effectiveDist = isMobileScreen ? bubble.dist * 0.6 : bubble.dist;
+    const orbitX = 50 + Math.cos(orbitAngle) * effectiveDist;
+    const orbitY = 50 + Math.sin(orbitAngle) * effectiveDist;
+    const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
+    const cx = isConverging ? 50 + (orbitX - 50) * (1 - convProgress) : orbitX;
+    const cy = isConverging ? 50 + (orbitY - 50) * (1 - convProgress) : orbitY;
+    return { x: isIn ? cx : orbitX, y: isIn ? cy : orbitY, isIn, color: bubble.color };
+  });
+
+  const titleChars = 'ABDULLAH SULTAN'.split('');
+
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 10001, background: '#000',
@@ -1605,6 +1625,28 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
       opacity: isFading ? 0 : 1,
       transition: isFading ? 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none',
     }}>
+
+      {/* CRT scanlines overlay */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20,
+        background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+      }} />
+
+      {/* Matrix rain */}
+      {(phase === 'particles' || phase === 'orbit') && Array.from({ length: matrixCols }).map((_, col) => {
+        const colPct = (col / matrixCols) * 100;
+        const speed = 1.2 + (col % 4) * 0.4;
+        const offset = (col * 137) % 100;
+        const charIdx = Math.floor((now * speed * 0.01 + offset) % MATRIX_CHARS.length);
+        const charIdx2 = Math.floor((now * speed * 0.008 + offset + 5) % MATRIX_CHARS.length);
+        const top = ((now * speed * 0.015 + col * 23) % 120) - 20;
+        return (
+          <div key={col} style={{ position: 'absolute', left: `${colPct}%`, top: `${top}%`, pointerEvents: 'none', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontFamily: "'SF Mono',monospace", fontSize: isMobileScreen ? 10 : 14, color: '#00ff41', opacity: 0.7, lineHeight: 1 }}>{MATRIX_CHARS[charIdx]}</span>
+            <span style={{ fontFamily: "'SF Mono',monospace", fontSize: isMobileScreen ? 10 : 14, color: '#00ff41', opacity: 0.3, lineHeight: 1 }}>{MATRIX_CHARS[charIdx2]}</span>
+          </div>
+        );
+      })}
 
       {/* Particle field */}
       {phase !== 'fade' && Array.from({ length: 28 }).map((_, i) => {
@@ -1615,60 +1657,68 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
         const visible = now > T.particlesStart + i * 40;
         return (
           <div key={i} style={{
-            position: 'absolute',
-            left: `${x}%`, top: `${y}%`,
-            width: i % 3 === 0 ? 3 : 2,
-            height: i % 3 === 0 ? 3 : 2,
+            position: 'absolute', left: `${x}%`, top: `${y}%`,
+            width: i % 3 === 0 ? 3 : 2, height: i % 3 === 0 ? 3 : 2,
             borderRadius: '50%',
             background: ['#3B82F6','#10B981','#EF4444','#F59E0B','#8B5CF6'][i % 5],
             opacity: visible ? (phase === 'converge' ? Math.max(0, 1 - orbitProgress * 2) : 0.55) : 0,
-            transition: 'opacity 0.4s ease',
+            transition: 'opacity 0.4s ease', transform: 'translate(-50%,-50%)', pointerEvents: 'none',
+          }} />
+        );
+      })}
+
+      {/* Network lines between orbiting bubbles (SVG) */}
+      {phase === 'orbit' && (
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: Math.min(1, (now - T.bubblesOrbit) / 800) }}>
+          {bubblePositions.filter(b => b.isIn).map((b, i) => {
+            const next = bubblePositions[(i + 1) % bubblePositions.length];
+            if (!next.isIn) return null;
+            return (
+              <line key={i}
+                x1={`${b.x}%`} y1={`${b.y}%`}
+                x2={`${next.x}%`} y2={`${next.y}%`}
+                stroke={b.color} strokeWidth="0.5" strokeOpacity="0.25"
+              />
+            );
+          })}
+        </svg>
+      )}
+
+      {/* Dual scanning lines */}
+      {(phase === 'particles' || phase === 'orbit') && (<>
+        <div style={{ position: 'absolute', left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(59,130,246,0.6) 40%,rgba(16,185,129,0.6) 60%,transparent)', top: `${50 + Math.sin(now * 0.002) * 30}%`, pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(139,92,246,0.4) 40%,rgba(236,72,153,0.4) 60%,transparent)', top: `${50 + Math.sin(now * 0.003 + 2) * 20}%`, pointerEvents: 'none' }} />
+      </>)}
+
+      {/* Pulsing concentric rings during orbit */}
+      {phase === 'orbit' && [0,1,2].map(r => {
+        const ringProgress = ((now * 0.0004 + r * 0.33) % 1);
+        const size = ringProgress * (isMobileScreen ? 80 : 120);
+        return (
+          <div key={r} style={{
+            position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%,-50%)',
+            width: `${size}vw`, height: `${size}vw`,
+            borderRadius: '50%',
+            border: '1px solid rgba(255,255,255,0.06)',
+            opacity: (1 - ringProgress) * 0.5,
             pointerEvents: 'none',
           }} />
         );
       })}
 
-      {/* Scanning line */}
-      {(phase === 'particles' || phase === 'orbit') && (
-        <div style={{
-          position: 'absolute', left: 0, right: 0,
-          height: 1,
-          background: 'linear-gradient(90deg, transparent 0%, rgba(59,130,246,0.6) 40%, rgba(16,185,129,0.6) 60%, transparent 100%)',
-          top: `${50 + Math.sin(now * 0.002) * 30}%`,
-          transition: 'top 0.1s linear',
-          pointerEvents: 'none',
-        }} />
-      )}
-
       {/* Word bubbles */}
       {INTRO_BUBBLES.map((bubble, i) => {
-        const isIn = now > T.bubblesIn + i * 180;
+        const { x: cx, y: cy, isIn } = bubblePositions[i];
         const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
-
-        // While orbiting, spin around center
-        const orbitAngle = (bubble.angle + baseAngle * (i % 2 === 0 ? 1 : -0.7)) * (Math.PI / 180);
-        const effectiveDist = isMobileScreen ? bubble.dist * 0.6 : bubble.dist;
-        const orbitX = 50 + Math.cos(orbitAngle) * effectiveDist;
-        const orbitY = 50 + Math.sin(orbitAngle) * effectiveDist;
-
         const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
-        const cx = isConverging ? 50 + (orbitX - 50) * (1 - convProgress) : orbitX;
-        const cy = isConverging ? 50 + (orbitY - 50) * (1 - convProgress) : orbitY;
-
         return (
           <div key={bubble.text} style={{
-            position: 'absolute',
-            left: isIn ? `${cx}%` : `${orbitX}%`,
-            top: isIn ? `${cy}%` : `${orbitY}%`,
+            position: 'absolute', left: `${cx}%`, top: `${cy}%`,
             transform: `translate(-50%,-50%) scale(${isConverging ? Math.max(0, 1 - convProgress) : 1})`,
             opacity: !isIn ? 0 : isConverging ? Math.max(0, 1 - convProgress * 1.5) : 1,
-            transition: isIn && !isConverging
-              ? 'left 0.1s linear, top 0.1s linear, opacity 0.5s ease'
-              : isConverging
-              ? `left 0.5s ease, top 0.5s ease, opacity 0.35s ease, transform 0.45s ease`
-              : 'opacity 0.5s ease',
-            padding: '12px 24px',
+            transition: isIn && !isConverging ? 'left 0.1s linear, top 0.1s linear, opacity 0.5s ease' : isConverging ? 'left 0.5s ease, top 0.5s ease, opacity 0.35s ease, transform 0.45s ease' : 'opacity 0.5s ease',
+            padding: isMobileScreen ? '8px 14px' : '12px 24px',
             borderRadius: 999,
             background: `${bubble.color}18`,
             border: `2px solid ${bubble.color}`,
@@ -1687,19 +1737,20 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
         );
       })}
 
-      {/* Central flash burst on converge */}
-      {phase === 'converge' && (
-        <div style={{
+      {/* Multi-ring converge burst */}
+      {phase === 'converge' && [0,1,2,3].map(r => (
+        <div key={r} style={{
           position: 'absolute', left: '50%', top: '50%',
           transform: 'translate(-50%,-50%)',
-          width: `${Math.min(600, orbitProgress * 600)}px`,
-          height: `${Math.min(600, orbitProgress * 600)}px`,
+          width: `${Math.min(100, orbitProgress * (60 + r * 15))}vw`,
+          height: `${Math.min(100, orbitProgress * (60 + r * 15))}vw`,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
+          border: `1px solid rgba(255,255,255,${0.12 - r * 0.02})`,
+          background: r === 0 ? `radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)` : 'none',
           pointerEvents: 'none',
-          transition: 'width 0.1s, height 0.1s',
+          transition: 'width 0.08s, height 0.08s',
         }} />
-      )}
+      ))}
 
       {/* Title + crab */}
       <div style={{
@@ -1707,38 +1758,34 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
         transform: 'translate(-50%, -50%)',
         textAlign: 'center',
         opacity: showTitle ? 1 : 0,
-        transition: 'opacity 0.6s cubic-bezier(0.22,1,0.36,1)',
+        transition: 'opacity 0.5s ease',
         pointerEvents: 'none',
       }}>
-        <div style={{
-          marginBottom: 20,
-          display: 'inline-block',
-          animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none',
-          transformOrigin: 'bottom center',
-        }}>
+        <div style={{ marginBottom: 20, display: 'inline-block', animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none', transformOrigin: 'bottom center' }}>
           <img src="/images/claude-crab.svg" alt="" style={{ width: isMobileScreen ? 64 : 110, height: isMobileScreen ? 64 : 110, imageRendering: 'pixelated' }} />
         </div>
-        <div style={{
-          fontFamily: "'Inter', 'Helvetica Neue', sans-serif",
-          fontSize: isMobileScreen ? 'clamp(28px, 7vw, 72px)' : 'clamp(42px, 7vw, 78px)',
-          fontWeight: 800,
-          letterSpacing: '0.16em',
-          color: '#fff',
-          textTransform: 'uppercase' as const,
-          textShadow: '0 0 60px rgba(255,255,255,0.25)',
-          animation: showTitle ? 'titleReveal 0.7s cubic-bezier(0.22,1,0.36,1) both' : 'none',
-        }}>
-          ABDULLAH SULTAN
+        {/* Letter-by-letter title */}
+        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: isMobileScreen ? 1 : 3 }}>
+          {titleChars.map((ch, i) => (
+            <span key={i} style={{
+              fontFamily: "'Inter','Helvetica Neue',sans-serif",
+              fontSize: isMobileScreen ? 'clamp(26px,7vw,52px)' : 'clamp(42px,7vw,78px)',
+              fontWeight: 800,
+              letterSpacing: ch === ' ' ? '0.5em' : '0.04em',
+              color: '#fff',
+              textShadow: '0 0 40px rgba(255,255,255,0.3)',
+              display: 'inline-block',
+              animation: showTitle ? `letterDrop 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.04}s both` : 'none',
+            }}>
+              {ch === ' ' ? ' ' : ch}
+            </span>
+          ))}
         </div>
         <div style={{
-          marginTop: 12,
-          fontFamily: "'Inter', sans-serif",
-          fontSize: 13,
-          fontWeight: 500,
-          letterSpacing: '0.3em',
-          color: 'rgba(255,255,255,0.35)',
+          marginTop: 14, fontFamily: "'Inter',sans-serif", fontSize: isMobileScreen ? 11 : 13,
+          fontWeight: 500, letterSpacing: '0.3em', color: 'rgba(255,255,255,0.35)',
           textTransform: 'uppercase' as const,
-          animation: showTitle ? 'titleReveal 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s both' : 'none',
+          animation: showTitle ? 'letterDrop 0.6s ease 0.7s both' : 'none',
         }}>
           student builder · riyadh
         </div>
@@ -1749,9 +1796,9 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
           from { transform: rotate(-14deg) translateY(0px); }
           to   { transform: rotate(14deg) translateY(-8px); }
         }
-        @keyframes titleReveal {
-          from { opacity: 0; transform: translateY(18px); }
-          to   { opacity: 1; transform: translateY(0); }
+        @keyframes letterDrop {
+          from { opacity: 0; transform: translateY(20px) scale(0.85); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
         }
       `}</style>
     </div>
