@@ -480,11 +480,14 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
     return () => ro.disconnect();
   }, []);
 
-  // Size container to exact photo aspect ratio so object-fit:fill aligns 1:1
-  const h = Math.round(w / PHOTO_RATIO);
-  // ASCII font size + scaleX — identical formula to desktop MainPhotoBackdrop
-  const fontSize = h / (ASCII_ROWS * ASCII_LINE_H);
-  const scaleX = w / (ASCII_COLS * fontSize * CHAR_W_RATIO);
+  // The wrapper is 100vw (via negative margins), so always use innerWidth.
+  const vw = typeof window !== 'undefined' ? window.innerWidth : 375;
+  const containerW = vw;
+  const h = Math.round(containerW / PHOTO_RATIO);
+  // 1.5% overshoot ensures ASCII always fills to the bottom edge regardless of
+  // sub-pixel font rendering differences between browsers.
+  const fontSize = (h / (ASCII_ROWS * ASCII_LINE_H)) * 1.015;
+  const scaleX = containerW / (ASCII_COLS * fontSize * CHAR_W_RATIO);
 
   return (
     <div style={{ width: '100%', marginTop: 32 }}>
@@ -504,9 +507,7 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
         </div>
       </div>
 
-      {/* Pixel-perfect overlay split: both layers at identical scale,
-          photo clipped to left 50%, ASCII clipped to right 50% */}
-      <div ref={wrapRef} style={{ position: 'relative', width: '100%', height: h, overflow: 'hidden' }}>
+      <div style={{ position: 'relative', width: '100%', height: h, overflow: 'hidden' }}>
 
         {/* Photo — full container, clipped to left half */}
         <img
@@ -1447,7 +1448,12 @@ function Inner() {
         .rg-mobile-bottom { display: none; }
 
         @media (max-width: 500px) {
-          .rg-mobile-bottom { display: block; }
+          .rg-mobile-bottom {
+            display: block;
+            margin-left: -16px;
+            margin-right: -16px;
+            width: 100vw;
+          }
 
           .rg-container {
             margin-left: 16px;
@@ -1668,7 +1674,7 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
             border: `2px solid ${bubble.color}`,
             color: bubble.color,
             fontFamily: "'Inter', sans-serif",
-            fontSize: isMobileScreen ? 18 : 36,
+            fontSize: isMobileScreen ? 14 : 36,
             fontWeight: 800,
             letterSpacing: '0.07em',
             whiteSpace: 'nowrap',
