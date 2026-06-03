@@ -1,15 +1,6 @@
 {
   "headers": [
     {
-      "source": "/(.*)\\.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
       "source": "/",
       "headers": [
         {
@@ -19,7 +10,16 @@
       ]
     },
     {
-      "source": "/(.*)\\.(?:js|css|woff2?|otf|ttf|eot)",
+      "source": "/(.*)\\.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
