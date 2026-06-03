@@ -457,7 +457,7 @@ function ResumeEntry({ title, date, color, children }: {
 
 function MobilePhotoSection({ dark }: { dark: boolean }) {
   const [ascii, setAscii] = useState('');
-  const [panelW, setPanelW] = useState(187);
+  const [w, setW] = useState(375);
 
   useEffect(() => {
     fetch('/images/myascii.txt')
@@ -467,20 +467,22 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
   }, []);
 
   useEffect(() => {
-    const update = () => setPanelW(Math.round(window.innerWidth * 0.5));
+    const update = () => setW(window.innerWidth);
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  const panelH = Math.round(panelW / PHOTO_RATIO);
-  const fontSize = panelH / (ASCII_ROWS * ASCII_LINE_H);
-  const scaleX = panelW / (ASCII_COLS * fontSize * CHAR_W_RATIO);
+  // Size container to exact photo aspect ratio so object-fit:fill aligns 1:1
+  const h = Math.round(w / PHOTO_RATIO);
+  // ASCII font size + scaleX — identical formula to desktop MainPhotoBackdrop
+  const fontSize = h / (ASCII_ROWS * ASCII_LINE_H);
+  const scaleX = w / (ASCII_COLS * fontSize * CHAR_W_RATIO);
 
   return (
-    <div style={{ width: '100%', marginTop: 32, paddingBottom: 0 }}>
+    <div style={{ width: '100%', marginTop: 32 }}>
       {/* Badge */}
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 10 }}>
         <div style={{
           display: 'inline-flex', alignItems: 'center', gap: 8,
           padding: '8px 16px', borderRadius: 10,
@@ -495,35 +497,37 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
         </div>
       </div>
 
-      {/* Photo | ASCII row */}
-      <div style={{ display: 'flex', width: '100%', height: panelH, overflow: 'hidden' }}>
-        {/* Left — photo */}
-        <div style={{ width: '50%', flexShrink: 0, overflow: 'hidden' }}>
-          <img
-            src="/images/myimage.png"
-            alt="Abdullah Sultan"
-            draggable={false}
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center', display: 'block' }}
-          />
-        </div>
-        {/* Right — ASCII */}
-        <div style={{
-          width: '50%', flexShrink: 0,
-          position: 'relative', overflow: 'hidden',
-          background: dark ? 'rgba(0,0,0,0.45)' : 'rgba(245,245,244,0.6)',
-        }}>
+      {/* Pixel-perfect overlay split: both layers at identical scale,
+          photo clipped to left 50%, ASCII clipped to right 50% */}
+      <div style={{ position: 'relative', width: '100%', height: h, overflow: 'hidden' }}>
+
+        {/* Photo — full container, clipped to left half */}
+        <img
+          src="/images/myimage.png"
+          alt=""
+          draggable={false}
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'fill',
+            clipPath: 'inset(0 50% 0 0)',
+          }}
+        />
+
+        {/* ASCII — full container, anchored right like desktop, clipped to right half */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', clipPath: 'inset(0 0 0 50%)' }}>
           <pre aria-hidden="true" style={{
-            position: 'absolute', top: 0, left: 0, margin: 0,
+            position: 'absolute', top: 0, right: 0, margin: 0,
             color: dark ? '#f5f5f4' : '#1c1917',
-            opacity: 0.88,
-            fontFamily: "'SF Mono', 'Menlo', monospace",
+            opacity: 0.85,
+            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
             fontWeight: 900,
             fontSize: `${fontSize}px`,
             lineHeight: ASCII_LINE_H,
             letterSpacing: 0,
             whiteSpace: 'pre',
             transform: `scaleX(${scaleX})`,
-            transformOrigin: 'left top',
+            transformOrigin: 'right top',
             WebkitFontSmoothing: 'antialiased' as const,
           }}>
             {ascii}
@@ -1437,7 +1441,7 @@ function Inner() {
 
         @media (max-width: 500px) {
           .rg-mobile-bottom { display: block; }
-          .menacing-aura { display: none !important; }
+
           .rg-container {
             margin-left: 16px;
             max-width: calc(100vw - 32px);
@@ -1457,7 +1461,7 @@ function Inner() {
           .rg-item { gap: 12px; }
           .rg-build-card { padding: 16px; }
           .rg-build-grid { grid-template-columns: 1fr !important; }
-          .menacing-aura { display: none !important; }
+
           .rg-resume-body { max-height: 320px; font-size: 12px; }
         }
       `}</style>
