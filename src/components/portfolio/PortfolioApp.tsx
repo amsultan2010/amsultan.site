@@ -1550,14 +1550,9 @@ function Inner() {
           }
 
           .rg-container {
-            margin-left: 8px;
-            margin-right: 8px;
-            max-width: calc(100vw - 16px);
-            padding: 32px 20px 32px 20px;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            background: rgba(8, 10, 18, 0.6);
-            border-radius: 16px;
+            margin-left: 16px;
+            max-width: calc(100vw - 32px);
+            padding: 32px 16px 24px 0;
           }
           .rg-header {
             align-items: flex-start;
