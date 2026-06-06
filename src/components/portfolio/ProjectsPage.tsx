@@ -21,8 +21,8 @@ const PROJECTS = [
   {
     title: 'the downforce blog',
     cover: '/images/projects/downforceblog.png',
-    repo: 'https://thedownforceblog.com',
-    demo: 'https://thedownforceblog.com',
+    repo: 'https://thedownforceblog.vercel.app',
+    demo: 'https://thedownforceblog.vercel.app',
     demoNewTab: true,
     desc: 'online automated formula one sports blog with weekly articles.',
     tech: ['Automation', 'F1', 'Blog'],

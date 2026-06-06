@@ -27,7 +27,7 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const count = window.innerWidth <= 768 ? 35 : 70;
-    const connectionDist = window.innerWidth <= 768 ? 100 : 140;
+    const connectionDist = window.innerWidth <= 768 ? 160 : 220;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -41,8 +41,8 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
         y: Math.random() * canvas.height,
         vx: (Math.random() - 0.5) * (reducedMotion ? 0 : 0.35),
         vy: (Math.random() - 0.5) * (reducedMotion ? 0 : 0.35),
-        size: Math.random() * 1.8 + 0.4,
-        alpha: Math.random() * 0.5 + 0.15,
+        size: Math.random() * 2.8 + 0.8,
+        alpha: Math.random() * 0.6 + 0.3,
       }));
     };
     initParticles();
@@ -98,12 +98,12 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
           const dy = a.y - b.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDist) {
-            const alpha = (1 - dist / connectionDist) * (dark ? 0.22 : 0.14);
+            const alpha = (1 - dist / connectionDist) * (dark ? 0.45 : 0.28);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
             ctx.strokeStyle = `rgba(${lineColor}, ${alpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.lineWidth = 1.0;
             ctx.stroke();
           }
         }

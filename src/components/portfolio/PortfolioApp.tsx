@@ -48,9 +48,9 @@ const BUILDING = [
   },
   {
     label: 'the downforce blog',
-    href: 'https://thedownforceblog.com',
+    href: 'https://thedownforceblog.vercel.app',
     cover: '/images/projects/downforceblog.png',
-    desc: 'automated f1 sports blog — race analysis, actual opinions.',
+    desc: 'automated f1 sports blog. race analysis, actual opinions.',
     tech: ['Automation', 'F1', 'Blog'],
   },
 ];
@@ -80,7 +80,7 @@ const EDUCATION: EducationEntry[] = [
     details: ['ap precalc, ap psych, ap compsci a', 'aspiring doctors club lead', '#2 varsity tennis seed'],
     activities: [
       'self-studying ap precalc, ap psych, and ap compsci a',
-      'highest achievable level of maths; one year of aa sl in 10th grade — 1 of 4 students in the grade',
+      'highest achievable level of maths; one year of aa sl in 10th grade, 1 of 4 students in the grade',
       "aspiring doctors' club: promoted to leader within first year; 14 recurring members",
       "jv boys' badminton",
       "#2 seed on varsity boys' tennis; season cancelled due to geopolitical conflict",
@@ -899,19 +899,19 @@ function Inner() {
                       <li>Engineered SMA-crossover backtesting engine, multi-asset portfolio backtester, and Black-Scholes options pricer.</li>
                     </ul>
                   </ResumeEntry>
-                  <ResumeEntry title="The Downforce Blog — Founder & Writer" date="9/2025 – Present" color={t.textStrong}>
+                  <ResumeEntry title="The Downforce Blog, Founder and Writer" date="9/2025 – Present" color={t.textStrong}>
                     Formula One sports blog covering race strategy, driver analysis, and team dynamics.
                   </ResumeEntry>
                 </ResumeSection>
 
                 <ResumeSection label="LEADERSHIP & VOLUNTEERING" dark={dark} border={t.border} textMuted={t.textMuted}>
-                  <ResumeEntry title="X-Combinator — Founder" date="5/2026 – Present" color={t.textStrong}>
+                  <ResumeEntry title="X-Combinator, Founder" date="5/2026 – Present" color={t.textStrong}>
                     Founded AIS-R's first student-run startup incubator modeled on Y Combinator; cohorts of 12–15 students pitch, build, and launch real software products each semester with a school-wide Demo Day.
                   </ResumeEntry>
-                  <ResumeEntry title="Aspiring Doctors' Club — Leader" date="12/2025 – Present" color={t.textStrong}>
+                  <ResumeEntry title="Aspiring Doctors' Club, Leader" date="12/2025 – Present" color={t.textStrong}>
                     Partnered with King Faisal University to educate 60+ students on diabetes care; pioneered a tech-in-medicine track covering AlphaFold and TRIBEv2.
                   </ResumeEntry>
-                  <ResumeEntry title="Peer Tutoring — Founder (tutoringbyabdullah.xyz)" date="4/2026 – Present" color={t.textStrong}>
+                  <ResumeEntry title="Peer Tutoring, Founder (tutoringbyabdullah.xyz)" date="4/2026 – Present" color={t.textStrong}>
                     Hybrid for-profit/non-profit tutoring raising student grades by avg 2.03 pts on IB 7-point scale; 9th–10th grade math and science.
                   </ResumeEntry>
                 </ResumeSection>
@@ -960,7 +960,7 @@ function Inner() {
           </div>
           <p style={{ fontSize: 14, color: t.textMuted, marginTop: 4 }} className="rg-copyright">
             2026 &copy; Abdullah Sultan
-            <span className="rg-copyright-made"> — made with Cursor (Opus 4.7 Extra High and GPT-5.5 Medium)</span>
+            <span className="rg-copyright-made"> · made with Cursor (Opus 4.7 Extra High and GPT-5.5 Medium)</span>
           </p>
         </footer>
 

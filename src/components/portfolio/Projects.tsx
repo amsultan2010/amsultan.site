@@ -79,18 +79,18 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
     {
       id: 1,
       title: "the downforce blog",
-      description: "automated f1 sports blog — race analysis, actual opinions, no corporate hedging.",
+      description: "automated f1 sports blog. race analysis, actual opinions, no corporate hedging.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
       coverImage: "/images/projects/downforceblog.png",
-      repoUrl: "https://thedownforceblog.com",
+      repoUrl: "https://thedownforceblog.vercel.app",
       detail: {
         type: 'project' as const,
         id: 1,
         title: "the downforce blog",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/downforceblog.png",
-        liveUrl: "https://thedownforceblog.com",
-        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions — no corporate hedging.",
+        liveUrl: "https://thedownforceblog.vercel.app",
+        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions. no corporate hedging.",
         technicalChallenges: [
           "automated article generation pipeline",
           "weekly publishing cadence",
@@ -101,7 +101,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
           "sports blogs live or die by timing and tone"
         ],
         techStack: ["Automation","F1","Blog"],
-        repoUrl: "https://thedownforceblog.com"
+        repoUrl: "https://thedownforceblog.vercel.app"
       } satisfies ProjectDetail
     },
     {

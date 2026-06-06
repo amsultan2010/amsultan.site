@@ -153,10 +153,10 @@ const projects = [
   {
     id: 2,
     title: "the downforce blog",
-    description: "automated f1 sports blog — race analysis, actual opinions, no corporate hedging.",
+    description: "automated f1 sports blog. race analysis, actual opinions, no corporate hedging.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
     coverImage: "/images/projects/downforceblog.png",
-    repoUrl: "https://thedownforceblog.com",
+    repoUrl: "https://thedownforceblog.vercel.app",
     language: "Automation",
     files: ["README.md", "about.md", "links.md"],
       detail: {
@@ -165,8 +165,8 @@ const projects = [
         title: "the downforce blog",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/downforceblog.png",
-        liveUrl: "https://thedownforceblog.com",
-        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions — no corporate hedging.",
+        liveUrl: "https://thedownforceblog.vercel.app",
+        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions. no corporate hedging.",
         technicalChallenges: [
           "automated article generation pipeline",
           "weekly publishing cadence",
@@ -177,10 +177,10 @@ const projects = [
           "sports blogs live or die by timing and tone"
         ],
         techStack: ["Automation","F1","Blog"],
-        repoUrl: "https://thedownforceblog.com",
+        repoUrl: "https://thedownforceblog.vercel.app",
         sections: [
           { title: "about", content: "automated f1 blog covering race analysis, driver standings, and strategy calls every week." },
-          { title: "links", content: "live site: thedownforceblog.com." }
+          { title: "links", content: "live site: thedownforceblog.vercel.app." }
         ]
       } satisfies ProjectDetail
   },

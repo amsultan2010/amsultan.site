@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FaRegFolderClosed } from 'react-icons/fa6';
 
 export default function MacTerminal() {
-  const welcomeMessage = `Abdullah Sultan — student builder
+  const welcomeMessage = `Abdullah Sultan, student builder
 
 LinkedIn: music.youtube.com
 GitHub: github.com/amsultan2010
@@ -43,7 +43,7 @@ I build systems that think, design that feels, and code that connects ideas to i
       lower === 'help'
         ? 'Static commands: help, about, projects, contact'
         : lower === 'about'
-          ? 'Abdullah Sultan — student builder interested in startups, vertical ai, robotics, education, and automation.'
+          ? 'Abdullah Sultan, student builder interested in startups, vertical ai, robotics, education, and automation.'
           : lower === 'projects'
             ? 'projects: abdullahOS, tutoringbyabdullah, quantbacktesterpy, quantportfoliopy, quantoptionspy.'
             : lower === 'contact'
