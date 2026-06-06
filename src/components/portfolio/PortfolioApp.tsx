@@ -5,6 +5,8 @@ import type { ContentViewData } from './ContentViewer';
 import { contentMap } from './contentData';
 import AbdullahAsciiLogo from '../desktop/AbdullahAsciiLogo';
 import TextScramble from '../effects/TextScramble';
+import VisualLayer from '../effects/VisualLayer';
+import GradientOrbs from '../effects/GradientOrbs';
 
 const LazyDesktopShell = lazy(() => import('../desktop/DesktopShell'));
 
@@ -546,6 +548,37 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
   );
 }
 
+const CURRENTLY = [
+  'building something',
+  'overthinking system design',
+  'reading about robotics',
+  'debugging at 2am',
+  'plotting a startup',
+  'vibecoding with claude',
+];
+
+function CurrentlyStatus({ dark }: { dark: boolean }) {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => { setIdx(i => (i + 1) % CURRENTLY.length); setVisible(true); }, 300);
+    }, 3000);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div style={{
+      fontSize: 11, fontFamily: "'SF Mono', monospace",
+      color: dark ? 'rgba(163,163,163,0.5)' : 'rgba(87,83,78,0.5)',
+      letterSpacing: '0.06em', marginTop: 2,
+      opacity: visible ? 1 : 0, transition: 'opacity 0.25s ease',
+    }}>
+      {'> '}{CURRENTLY[idx]}<span className="rg-blink">_</span>
+    </div>
+  );
+}
+
 function Inner() {
   const { dark, toggle, siteReady } = useContext(ThemeCtx);
   const [activeContent, setActiveContent] = useState<ContentViewData | null>(null);
@@ -597,19 +630,34 @@ function Inner() {
 
   return (
     <div ref={rootRef} className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
+      <VisualLayer dark={dark} showCursor={true} showMatrix={true} />
       <MainPhotoBackdrop dark={dark} />
       <MenacingAura dark={dark} />
       <div className="rg-container">
         {/* ── Header ── */}
         <header className="rg-header">
-          <h1 className="rg-name" style={{ color: t.textStrong }}>
-            <TextScramble text="abdullah sultan" duration={1800} />
-          </h1>
+          <div>
+            <h1 className="rg-name" style={{ color: t.textStrong }}>
+              <TextScramble text="abdullah sultan" duration={1800} />
+            </h1>
+            <CurrentlyStatus dark={dark} />
+          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <nav className="rg-nav">
-              <a href="/" className="rg-nav-link" style={{ color: t.textStrong }}>about</a>
-              <a href="/projects" className="rg-nav-link" style={{ color: t.text }}>projects</a>
-              <a href="#education" className="rg-nav-link" style={{ color: t.text }}>education</a>
+              {(['about','projects','education'] as const).map((label, i) => (
+                <a key={label}
+                  href={i === 0 ? '/' : i === 1 ? '/projects' : '#education'}
+                  className="rg-nav-link"
+                  style={{ color: i === 0 ? t.textStrong : t.text }}
+                  onMouseMove={(e) => {
+                    const r = e.currentTarget.getBoundingClientRect();
+                    const x = (e.clientX - r.left - r.width / 2) * 0.35;
+                    const y = (e.clientY - r.top - r.height / 2) * 0.35;
+                    e.currentTarget.style.transform = `translate(${x}px,${y}px)`;
+                  }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = ''; }}
+                >{label}</a>
+              ))}
             </nav>
             <button onClick={toggle} className="rg-theme-btn" style={{ color: t.text, border: `1px solid ${t.border}`, background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)' }} aria-label="Toggle theme">
               {dark ? (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>) : (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>)}
@@ -779,9 +827,16 @@ function Inner() {
                 padding: '10px 16px',
                 borderBottom: `1px solid ${t.border}`,
               }}>
-                <span style={{ fontSize: 13, color: t.textMuted, fontFamily: "'SF Mono', monospace" }}>
-                  Abdullah_Sultan_Resume.docx
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ display: 'flex', gap: 5 }}>
+                    {['#ff5f56','#ffbd2e','#27c93f'].map(c => (
+                      <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.8 }} />
+                    ))}
+                  </div>
+                  <span style={{ fontSize: 13, color: t.textMuted, fontFamily: "'SF Mono', monospace" }}>
+                    Abdullah_Sultan_Resume.docx
+                  </span>
+                </div>
                 <a
                   href="/resume.docx"
                   download
@@ -1575,6 +1630,34 @@ function Inner() {
           display: inline-block;
         }
         .rg-signature:hover { opacity: 0.85; letter-spacing: -0.01em; }
+
+        /* ── Blinking cursor ── */
+        @keyframes rgBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+        .rg-blink { animation: rgBlink 1s step-end infinite; }
+
+        /* ── Diamond hover glow pulse ── */
+        @keyframes rgDiamondPop { 0%{transform:rotate(45deg) scale(1)} 50%{transform:rotate(45deg) scale(1.7)} 100%{transform:rotate(45deg) scale(1)} }
+        .rg-item:hover .rg-diamond { animation: rgDiamondPop 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
+
+        /* ── Glowing border on hovered build card ── */
+        .rg-build-card:hover {
+          border-color: ${dark ? 'rgba(139,92,246,0.35)' : 'rgba(139,92,246,0.25)'} !important;
+          box-shadow:
+            0 0 0 1px ${dark ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.12)'},
+            0 14px 44px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.12);
+        }
+
+        /* ── Custom scrollbar ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+          background: ${dark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.12)'};
+          border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+          background: ${dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'};
+        }
+
 
         /* ── Sweeping gradient underline on slink ── */
         .rg-slink {

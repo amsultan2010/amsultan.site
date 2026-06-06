@@ -119,14 +119,14 @@ export default function MobileAbdullahOS() {
 
   // 8 grid apps
   const gridApps = [
-    { id: 'photos',    label: 'Photos',    icon: <ImgIcon src="/icons/photos.png" alt="Photos" />,          action: () => setActiveSection('photos') },
-    { id: 'gmail',     label: 'Gmail',     icon: <ImgIcon src="/images/logosicons/gmail.png" alt="Gmail" bg="#fff" contain />, action: () => { window.location.href = 'mailto:abdullahmsultan1@gmail.com'; } },
-    { id: 'watchlist', label: 'Netflix',   icon: <ImgIcon src="/images/logosicons/netflix.png" alt="Netflix" bg="#141414" contain />, action: () => setActiveSection('watchlist') },
-    { id: 'github',    label: 'GitHub',    icon: <GradIcon gradient="linear-gradient(145deg,#2a2a2a,#454545)"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg></GradIcon>, action: () => window.open('https://github.com/amsultan2010', '_blank') },
-    { id: 'music',     label: 'Music',     icon: <ImgIcon src="/images/logosicons/youtubemusic.png" alt="Music" bg="#fff" contain />, action: () => window.open('https://music.youtube.com/@amsultan303', '_blank') },
-    { id: 'linkedin',  label: 'LinkedIn',  icon: <GradIcon gradient="linear-gradient(145deg,#0a66c2,#004182)"><BsLinkedin size={28} color="#fff" /></GradIcon>, action: () => window.open('https://www.linkedin.com/in/abdullah-sultan-4a264939a/', '_blank') },
-    { id: 'instagram', label: 'Instagram', icon: <GradIcon gradient="linear-gradient(145deg,#833ab4,#fd1d1d 55%,#fcb045)"><BsInstagram size={28} color="#fff" /></GradIcon>, action: () => window.open('https://www.instagram.com/a.m.sultan_/', '_blank') },
-    { id: 'projects',  label: 'VS Code',   icon: <ImgIcon src="/vscode.png" alt="VS Code" bg="#fff" contain />, action: () => setActiveSection('projects') },
+    { id: 'photos',    label: 'Photos',    badge: 0,  icon: <ImgIcon src="/icons/photos.png" alt="Photos" />,          action: () => setActiveSection('photos') },
+    { id: 'gmail',     label: 'Gmail',     badge: 3,  icon: <ImgIcon src="/images/logosicons/gmail.png" alt="Gmail" bg="#fff" contain />, action: () => { window.location.href = 'mailto:abdullahmsultan1@gmail.com'; } },
+    { id: 'watchlist', label: 'Netflix',   badge: 0,  icon: <ImgIcon src="/images/logosicons/netflix.png" alt="Netflix" bg="#141414" contain />, action: () => setActiveSection('watchlist') },
+    { id: 'github',    label: 'GitHub',    badge: 12, icon: <GradIcon gradient="linear-gradient(145deg,#2a2a2a,#454545)"><svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg></GradIcon>, action: () => window.open('https://github.com/amsultan2010', '_blank') },
+    { id: 'music',     label: 'Music',     badge: 0,  icon: <ImgIcon src="/images/logosicons/youtubemusic.png" alt="Music" bg="#fff" contain />, action: () => window.open('https://music.youtube.com/@amsultan303', '_blank') },
+    { id: 'linkedin',  label: 'LinkedIn',  badge: 5,  icon: <GradIcon gradient="linear-gradient(145deg,#0a66c2,#004182)"><BsLinkedin size={28} color="#fff" /></GradIcon>, action: () => window.open('https://www.linkedin.com/in/abdullah-sultan-4a264939a/', '_blank') },
+    { id: 'instagram', label: 'Instagram', badge: 0,  icon: <GradIcon gradient="linear-gradient(145deg,#833ab4,#fd1d1d 55%,#fcb045)"><BsInstagram size={28} color="#fff" /></GradIcon>, action: () => window.open('https://www.instagram.com/a.m.sultan_/', '_blank') },
+    { id: 'projects',  label: 'VS Code',   badge: 0,  icon: <ImgIcon src="/vscode.png" alt="VS Code" bg="#fff" contain />, action: () => setActiveSection('projects') },
   ];
 
   // 3 dock apps
@@ -151,6 +151,14 @@ export default function MobileAbdullahOS() {
 
   return (
     <div className="aos-mobile-root" style={{ position: 'fixed', top: 28, left: 0, right: 0, bottom: 0, zIndex: 5000, display: 'flex', flexDirection: 'column', fontFamily: "'SF Pro Text',-apple-system,BlinkMacSystemFont,sans-serif", touchAction: 'manipulation', animation: 'aosHomeIn 0.45s ease-out' }}>
+
+      {/* Dynamic Island */}
+      <div style={{ position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)', zIndex: 20 }}>
+        <div className="aos-dynamic-island">
+          <div className="aos-di-camera" />
+          <span className="aos-di-text">abdullahOS</span>
+        </div>
+      </div>
 
       <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}>
         <div style={{ maxWidth: 440, margin: '0 auto', padding: '20px max(18px,env(safe-area-inset-right)) 100px max(18px,env(safe-area-inset-left))' }}>
@@ -178,8 +186,21 @@ export default function MobileAbdullahOS() {
           {/* App grid — 4 columns, 2 rows */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px 8px', justifyItems: 'center' }}>
             {gridApps.map((app, i) => (
-              <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent', animation: `aosIconIn 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.06}s both` }}>
-                {app.icon}
+              <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent', animation: `aosIconIn 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.06}s both`, position: 'relative' }}>
+                <div style={{ position: 'relative' }}>
+                  {app.icon}
+                  {app.badge > 0 && (
+                    <div style={{
+                      position: 'absolute', top: -4, right: -4,
+                      minWidth: 18, height: 18, borderRadius: 9,
+                      background: '#ff3b30', border: '2px solid rgba(0,0,0,0.6)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 10, fontWeight: 700, color: '#fff',
+                      fontFamily: "'SF Pro Text',-apple-system,sans-serif",
+                      padding: '0 4px', boxSizing: 'border-box',
+                    }}>{app.badge > 99 ? '99+' : app.badge}</div>
+                  )}
+                </div>
                 <span style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.2, textShadow: '0 1px 4px rgba(0,0,0,0.6)', maxWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{app.label}</span>
               </button>
             ))}
@@ -204,6 +225,28 @@ export default function MobileAbdullahOS() {
       {activeContent && <div style={{ position: 'fixed', inset: 0, zIndex: 10100, animation: 'aosPushIn 0.3s ease-out' }}><ContentViewer content={activeContent} onClose={() => setActiveContent(null)} /></div>}
 
       <style>{`
+        /* Dynamic Island */
+        .aos-dynamic-island {
+          display: flex; align-items: center; gap: 7px;
+          background: #000;
+          border-radius: 20px;
+          padding: 6px 14px 6px 10px;
+          box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.6);
+          animation: aosHomeIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+          white-space: nowrap;
+        }
+        .aos-di-camera {
+          width: 10px; height: 10px; border-radius: 50%;
+          background: radial-gradient(circle at 35% 35%, #1a1a2e, #080808);
+          border: 1px solid rgba(255,255,255,0.06);
+          flex-shrink: 0;
+        }
+        .aos-di-text {
+          font-size: 11px; font-weight: 500;
+          color: rgba(255,255,255,0.75);
+          font-family: "'SF Pro Text',-apple-system,sans-serif";
+          letter-spacing: 0.02em;
+        }
         @keyframes aosHomeIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
         @keyframes aosSheetIn { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
         @keyframes aosPushIn { from{transform:translateX(20%);opacity:0} to{transform:translateX(0);opacity:1} }
