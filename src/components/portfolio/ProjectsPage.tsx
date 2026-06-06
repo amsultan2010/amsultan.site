@@ -19,6 +19,15 @@ const PROJECTS = [
     tech: ['Education', 'Product', 'Website'],
   },
   {
+    title: 'the downforce blog',
+    cover: '/images/projects/downforceblog.png',
+    repo: 'https://thedownforceblog.com',
+    demo: 'https://thedownforceblog.com',
+    demoNewTab: true,
+    desc: 'online automated formula one sports blog with weekly articles.',
+    tech: ['Automation', 'F1', 'Blog'],
+  },
+  {
     title: 'quantbacktesterpy',
     cover: '/images/projects/quantbacktesterpy.png',
     repo: 'https://github.com/amsultan2010',

@@ -50,6 +50,62 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
   const projects = [
     {
       id: 0,
+      title: "tutoringbyabdullah",
+      description: "a tutoring platform focused on teaching style, recommendations, and real understanding.",
+      gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+      coverImage: "/images/projects/tutoringpreview.png",
+      repoUrl: "https://tutoringbyabdullah.xyz",
+      detail: {
+        type: 'project' as const,
+        id: 0,
+        title: "tutoringbyabdullah",
+        gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+        coverImage: "/images/projects/tutoringpreview.png",
+        liveUrl: "https://tutoringbyabdullah.xyz",
+        architecture: "education service focused on teaching style, recommendations, and helping students actually understand concepts instead of memorizing steps.",
+        technicalChallenges: [
+          "clear service flow",
+          "education-focused copy",
+          "fast static site delivery"
+        ],
+        lessonsLearned: [
+          "education products need clarity first",
+          "good tutoring starts with diagnosis"
+        ],
+        techStack: ["Education","Website","Product"],
+        repoUrl: "https://tutoringbyabdullah.xyz"
+      } satisfies ProjectDetail
+    },
+    {
+      id: 1,
+      title: "the downforce blog",
+      description: "automated f1 sports blog — race analysis, actual opinions, no corporate hedging.",
+      gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+      coverImage: "/images/projects/downforceblog.png",
+      repoUrl: "https://thedownforceblog.com",
+      detail: {
+        type: 'project' as const,
+        id: 1,
+        title: "the downforce blog",
+        gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+        coverImage: "/images/projects/downforceblog.png",
+        liveUrl: "https://thedownforceblog.com",
+        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions — no corporate hedging.",
+        technicalChallenges: [
+          "automated article generation pipeline",
+          "weekly publishing cadence",
+          "f1 data sourcing and analysis"
+        ],
+        lessonsLearned: [
+          "automation works best with strong editorial constraints",
+          "sports blogs live or die by timing and tone"
+        ],
+        techStack: ["Automation","F1","Blog"],
+        repoUrl: "https://thedownforceblog.com"
+      } satisfies ProjectDetail
+    },
+    {
+      id: 2,
       title: "abdullahOS",
       description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -57,7 +113,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       repoUrl: "/desktop",
       detail: {
         type: 'project' as const,
-        id: 0,
+        id: 2,
         title: "abdullahOS",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/readme/portfolio-desktop.jpg",
@@ -77,35 +133,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       } satisfies ProjectDetail
     },
     {
-      id: 1,
-      title: "tutoringbyabdullah",
-      description: "a tutoring platform focused on teaching style, recommendations, and real understanding.",
-      gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
-      coverImage: "/images/projects/tutoringpreview.png",
-      repoUrl: "https://tutoringbyabdullah.xyz",
-      detail: {
-        type: 'project' as const,
-        id: 1,
-        title: "tutoringbyabdullah",
-        gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
-        coverImage: "/images/projects/tutoringpreview.png",
-        liveUrl: "https://tutoringbyabdullah.xyz",
-        architecture: "a tutoring platform focused on teaching style, recommendations, and helping students actually understand concepts instead of memorizing steps.",
-        technicalChallenges: [
-          "clear service flow",
-          "education-focused copy",
-          "fast static site delivery"
-        ],
-        lessonsLearned: [
-          "education products need clarity first",
-          "good tutoring starts with diagnosis"
-        ],
-        techStack: ["Education","Website","Product"],
-        repoUrl: "https://tutoringbyabdullah.xyz"
-      } satisfies ProjectDetail
-    },
-    {
-      id: 2,
+      id: 3,
       title: "quantbacktesterpy",
       description: "single-stock sma crossover backtester w/ parameter heatmaps.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -132,7 +160,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       } satisfies ProjectDetail
     },
     {
-      id: 3,
+      id: 4,
       title: "quantportfoliopy",
       description: "multi-asset risk parity portfolio backtester.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -140,7 +168,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       repoUrl: "https://github.com/amsultan2010",
       detail: {
         type: 'project' as const,
-        id: 3,
+        id: 4,
         title: "quantportfoliopy",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/quantportfoliopy.png",
@@ -159,7 +187,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       } satisfies ProjectDetail
     },
     {
-      id: 4,
+      id: 5,
       title: "quantoptionspy",
       description: "black-scholes + monte carlo options pricer w/ greeks.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -167,7 +195,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
       repoUrl: "https://github.com/amsultan2010",
       detail: {
         type: 'project' as const,
-        id: 4,
+        id: 5,
         title: "quantoptionspy",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/quantoptionspy.png",
@@ -290,7 +318,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
                 justifyContent: 'center',
                 position: 'relative'
               }}>
-                {project.id === 0 && project.coverImage ? (
+                {project.id === 2 && project.coverImage ? (
                   <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <img
                       src={project.coverImage}

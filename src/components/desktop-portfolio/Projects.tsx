@@ -152,6 +152,40 @@ const projects = [
   },
   {
     id: 2,
+    title: "the downforce blog",
+    description: "automated f1 sports blog — race analysis, actual opinions, no corporate hedging.",
+    gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+    coverImage: "/images/projects/downforceblog.png",
+    repoUrl: "https://thedownforceblog.com",
+    language: "Automation",
+    files: ["README.md", "about.md", "links.md"],
+      detail: {
+        type: 'project' as const,
+        id: 2,
+        title: "the downforce blog",
+        gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
+        coverImage: "/images/projects/downforceblog.png",
+        liveUrl: "https://thedownforceblog.com",
+        architecture: "online automated formula one sports blog with weekly articles. race analysis, driver standings, strategy breakdowns, and actual opinions — no corporate hedging.",
+        technicalChallenges: [
+          "automated article generation pipeline",
+          "weekly publishing cadence",
+          "f1 data sourcing and analysis"
+        ],
+        lessonsLearned: [
+          "automation works best with strong editorial constraints",
+          "sports blogs live or die by timing and tone"
+        ],
+        techStack: ["Automation","F1","Blog"],
+        repoUrl: "https://thedownforceblog.com",
+        sections: [
+          { title: "about", content: "automated f1 blog covering race analysis, driver standings, and strategy calls every week." },
+          { title: "links", content: "live site: thedownforceblog.com." }
+        ]
+      } satisfies ProjectDetail
+  },
+  {
+    id: 3,
     title: "quantbacktesterpy",
     description: "single-stock sma crossover backtester w/ parameter heatmaps.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -184,7 +218,7 @@ const projects = [
       } satisfies ProjectDetail
   },
   {
-    id: 3,
+    id: 4,
     title: "quantportfoliopy",
     description: "multi-asset risk parity portfolio backtester.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -194,7 +228,7 @@ const projects = [
     files: ["README.md", "technical.md", "proof.md"],
       detail: {
         type: 'project' as const,
-        id: 3,
+        id: 4,
         title: "quantportfoliopy",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/quantportfoliopy.png",
@@ -217,7 +251,7 @@ const projects = [
       } satisfies ProjectDetail
   },
   {
-    id: 4,
+    id: 5,
     title: "quantoptionspy",
     description: "black-scholes + monte carlo options pricer w/ greeks.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
@@ -227,7 +261,7 @@ const projects = [
     files: ["README.md", "technical.md", "proof.md"],
       detail: {
         type: 'project' as const,
-        id: 4,
+        id: 5,
         title: "quantoptionspy",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/images/projects/quantoptionspy.png",

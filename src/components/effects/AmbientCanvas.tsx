@@ -59,8 +59,8 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
     window.addEventListener('mouseleave', onLeave);
 
     let raf = 0;
-    const lineColor = dark ? '147, 112, 219' : '120, 80, 180';
-    const dotColor = dark ? '180, 130, 220' : '100, 60, 160';
+    const lineColor = dark ? '251, 146, 60' : '234, 120, 40';
+    const dotColor = dark ? '253, 170, 90' : '220, 100, 30';
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -111,7 +111,7 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
 
       if (mx > 0) {
         const grad = ctx.createRadialGradient(mx, my, 0, mx, my, 220);
-        grad.addColorStop(0, dark ? 'rgba(147, 112, 219, 0.08)' : 'rgba(120, 80, 180, 0.06)');
+        grad.addColorStop(0, dark ? 'rgba(251, 146, 60, 0.08)' : 'rgba(234, 120, 40, 0.06)');
         grad.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = grad;
         ctx.fillRect(mx - 220, my - 220, 440, 440);
