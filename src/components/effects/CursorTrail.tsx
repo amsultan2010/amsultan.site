@@ -40,8 +40,8 @@ export default function CursorTrail({ dark = false }: Props) {
     window.addEventListener('mousemove', onMove);
 
     let raf = 0;
-    const core = dark ? 'rgba(180, 130, 255, 0.9)' : 'rgba(100, 60, 180, 0.85)';
-    const glow = dark ? 'rgba(139, 92, 246, 0.4)' : 'rgba(120, 80, 180, 0.35)';
+    const core = dark ? 'rgba(255, 160, 60, 0.9)' : 'rgba(220, 110, 20, 0.85)';
+    const glow = dark ? 'rgba(251, 146, 60, 0.4)' : 'rgba(234, 120, 40, 0.35)';
 
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -56,8 +56,8 @@ export default function CursorTrail({ dark = false }: Props) {
         ctx.beginPath();
         ctx.arc(dot.x, dot.y, size, 0, Math.PI * 2);
         ctx.fillStyle = dark
-          ? `rgba(180, 130, 255, ${dot.life * 0.5})`
-          : `rgba(100, 60, 180, ${dot.life * 0.4})`;
+          ? `rgba(255, 160, 60, ${dot.life * 0.5})`
+          : `rgba(220, 110, 20, ${dot.life * 0.4})`;
         ctx.fill();
       }
 

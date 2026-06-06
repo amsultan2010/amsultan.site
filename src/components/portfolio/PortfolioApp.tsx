@@ -40,18 +40,18 @@ function ThemeProvider({ children, siteReady = false }: { children: React.ReactN
 
 const BUILDING = [
   {
-    label: 'abdullahOS',
-    href: '/desktop',
-    cover: '/readme/portfolio-desktop.jpg',
-    desc: 'desktop-style portfolio w/ draggable windows and static apps.',
-    tech: ['Astro', 'React', 'TypeScript'],
-  },
-  {
     label: 'tutoringbyabdullah',
     href: 'https://tutoringbyabdullah.xyz',
     cover: '/images/projects/tutoringpreview.png',
     desc: 'education service focused on understanding, not memorizing.',
     tech: ['Education', 'Product', 'Website'],
+  },
+  {
+    label: 'the downforce blog',
+    href: 'https://thedownforceblog.com',
+    cover: '/images/projects/downforceblog.png',
+    desc: 'automated f1 sports blog — race analysis, actual opinions.',
+    tech: ['Automation', 'F1', 'Blog'],
   },
 ];
 
@@ -1577,17 +1577,17 @@ function Inner() {
         }
 
         /* ── Staggered entrance (plays when .rg-ready is set after loader) ── */
-        .rg-ready .rg-header { animation: rgFadeUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
-        .rg-ready .rg-list > li:nth-child(1) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
-        .rg-ready .rg-list > li:nth-child(2) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.21s both; }
-        .rg-ready .rg-list > li:nth-child(3) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.30s both; }
-        .rg-ready .rg-list > li:nth-child(4) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.39s both; }
-        .rg-ready .rg-list > li:nth-child(5) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.48s both; }
-        .rg-ready .rg-signature { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
-        .rg-ready .rg-footer { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.62s both; }
+        .rg-ready .rg-header { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+        .rg-ready .rg-list > li:nth-child(1) { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.10s both; }
+        .rg-ready .rg-list > li:nth-child(2) { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.17s both; }
+        .rg-ready .rg-list > li:nth-child(3) { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.24s both; }
+        .rg-ready .rg-list > li:nth-child(4) { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.31s both; }
+        .rg-ready .rg-list > li:nth-child(5) { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.38s both; }
+        .rg-ready .rg-signature { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.44s both; }
+        .rg-ready .rg-footer { animation: rgFadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.50s both; }
         @keyframes rgFadeUp {
-          from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
-          to   { opacity: 1; transform: translateY(0);    filter: blur(0px); }
+          from { opacity: 0; transform: translateY(14px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ── Name glitch on hover ── */

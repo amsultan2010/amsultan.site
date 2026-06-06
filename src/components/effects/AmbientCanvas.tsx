@@ -26,7 +26,7 @@ export default function AmbientCanvas({ dark = false, zIndex = 0 }: Props) {
     if (!ctx) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const count = window.innerWidth <= 768 ? 55 : 120;
+    const count = window.innerWidth <= 768 ? 35 : 70;
     const connectionDist = window.innerWidth <= 768 ? 100 : 140;
 
     const resize = () => {
