@@ -1560,14 +1560,18 @@ function Inner() {
             gap: 12px;
             flex-wrap: wrap;
           }
-          .rg-list { font-size: 17px; }
-          .rg-name { font-size: 20px; }
-          .rg-nav-link { font-size: 15px; }
-          .rg-item { gap: 12px; }
-          .rg-build-card { padding: 16px; }
-          .rg-build-grid { grid-template-columns: 1fr !important; }
-
-          .rg-resume-body { max-height: 320px; font-size: 12px; }
+          .rg-list { font-size: 15px; gap: 6px; }
+          .rg-name { font-size: 19px; }
+          .rg-nav-link { font-size: 14px; }
+          .rg-nav { gap: 10px; }
+          .rg-item { gap: 10px; padding-left: 16px; }
+          .rg-item-nested { gap: 8px; }
+          .rg-build-card { padding: 14px; }
+          .rg-build-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+          .rg-section-label { font-size: 13px; }
+          .rg-subitem { font-size: 13px; }
+          /* hide resume on mobile — too dense */
+          .rg-item:has(.rg-resume-body) { display: none; }
         }
 
         /* ── Staggered entrance (plays when .rg-ready is set after loader) ── */
@@ -2298,17 +2302,24 @@ export default function PortfolioApp() {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 7px 13px;
+            padding: 9px 16px;
             border-radius: 999px;
-            background: rgba(20, 20, 20, 0.88);
-            color: #f5f5f4;
+            background: rgba(10, 10, 10, 0.92);
+            color: #fff;
             font-family: 'SF Mono', 'Menlo', monospace;
-            font-size: 11px;
-            letter-spacing: 0.02em;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.07), 0 6px 20px rgba(0,0,0,0.4);
             pointer-events: none;
+            animation: chipPulse 2.4s ease-in-out infinite;
+          }
+          @keyframes chipPulse {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(255,255,255,0.07), 0 6px 20px rgba(0,0,0,0.4); }
+            50%       { box-shadow: 0 0 0 5px rgba(255,255,255,0.13), 0 6px 24px rgba(0,0,0,0.5); }
           }
           .peek-hint {
             display: none;

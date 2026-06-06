@@ -146,7 +146,7 @@ export default function MobileAbdullahOS() {
         <span style={{ fontFamily: "'SF Mono',monospace", color: '#fff', fontSize: 18, fontWeight: 300 }}>{'>'}</span>
         <span style={{ display: 'inline-block', width: 7, height: 2, background: '#fff', marginTop: 5 }} />
       </div>
-    ), action: () => window.open('https://github.com/amsultan2010', '_blank') },
+    ), action: () => setActiveSection('blog') },
   ];
 
   return (
