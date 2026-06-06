@@ -50,7 +50,7 @@ const BUILDING = [
     label: 'tutoringbyabdullah',
     href: 'https://tutoringbyabdullah.xyz',
     cover: '/images/projects/tutoringpreview.png',
-    desc: 'education product focused on understanding, not memorizing.',
+    desc: 'education service focused on understanding, not memorizing.',
     tech: ['Education', 'Product', 'Website'],
   },
 ];
