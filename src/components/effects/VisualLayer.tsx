@@ -2,23 +2,20 @@ import AmbientCanvas from './AmbientCanvas';
 import GradientOrbs from './GradientOrbs';
 import FilmGrain from './FilmGrain';
 import MatrixRain from './MatrixRain';
-import CursorTrail from './CursorTrail';
 
 interface Props {
   dark?: boolean;
-  showCursor?: boolean;
   showMatrix?: boolean;
 }
 
 /** Shared ambient visual stack for portfolio pages */
-export default function VisualLayer({ dark = false, showCursor = true, showMatrix = true }: Props) {
+export default function VisualLayer({ dark = false, showMatrix = true }: Props) {
   return (
     <>
       <GradientOrbs dark={dark} zIndex={0} />
       {showMatrix && <MatrixRain dark={dark} zIndex={0} opacity={dark ? 0.05 : 0.035} />}
       <AmbientCanvas dark={dark} zIndex={1} />
       <FilmGrain opacity={dark ? 0.05 : 0.035} />
-      {showCursor && <CursorTrail dark={dark} />}
       <div
         aria-hidden="true"
         className="scan-overlay"

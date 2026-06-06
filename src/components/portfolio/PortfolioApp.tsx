@@ -632,7 +632,7 @@ function Inner() {
 
   return (
     <div ref={rootRef} className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
-      <VisualLayer dark={dark} showCursor={true} showMatrix={true} />
+      <VisualLayer dark={dark} showMatrix={true} />
       <MainPhotoBackdrop dark={dark} />
       <MenacingAura dark={dark} />
       <div className="rg-container">
