@@ -121,15 +121,28 @@ export default function MobileAbdullahOS() {
         <div style={{ maxWidth: 440, margin: '0 auto', padding: '20px max(18px,env(safe-area-inset-right)) 100px max(18px,env(safe-area-inset-left))' }}>
 
           {/* Clock */}
-          <div style={{ textAlign: 'center', marginBottom: 24, paddingTop: 8 }}>
-            <div style={{ fontSize: 'clamp(52px,14vw,72px)', fontWeight: 200, color: '#fff', letterSpacing: '-2px', lineHeight: 1, fontFamily: "'SF Pro Display',-apple-system,sans-serif", textShadow: '0 2px 24px rgba(0,0,0,0.45)' }}>{timeStr}</div>
-            <div style={{ marginTop: 8, fontSize: 15, fontWeight: 500, color: 'rgba(255,255,255,0.65)' }}>{dateStr}</div>
+          <div style={{ textAlign: 'center', marginBottom: 28, paddingTop: 12, position: 'relative' }}>
+            <div style={{
+              position: 'absolute', top: '50%', left: '50%',
+              transform: 'translate(-50%,-50%)',
+              width: '90%', height: '120%',
+              background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)',
+              pointerEvents: 'none', filter: 'blur(24px)',
+            }} />
+            <div style={{
+              fontSize: 'clamp(68px,17vw,88px)', fontWeight: 100, color: '#fff',
+              letterSpacing: '-4px', lineHeight: 1,
+              fontFamily: "'SF Pro Display',-apple-system,sans-serif",
+              textShadow: '0 0 80px rgba(255,255,255,0.12), 0 4px 32px rgba(0,0,0,0.5)',
+              position: 'relative',
+            }}>{timeStr}</div>
+            <div style={{ marginTop: 10, fontSize: 14, fontWeight: 400, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.04em', position: 'relative' }}>{dateStr}</div>
           </div>
 
           {/* App grid — 4 columns, 2 rows */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px 8px', justifyItems: 'center' }}>
             {gridApps.map(app => (
-              <button key={app.id} type="button" onClick={app.action} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
+              <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
                 {app.icon}
                 <span style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.2, textShadow: '0 1px 4px rgba(0,0,0,0.6)', maxWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{app.label}</span>
               </button>
@@ -140,9 +153,9 @@ export default function MobileAbdullahOS() {
 
       {/* Bottom dock — 3 apps */}
       <div style={{ flexShrink: 0, padding: '10px max(16px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))', background: 'linear-gradient(180deg,transparent 0%,rgba(0,0,0,0.55) 40%)' }}>
-        <div style={{ maxWidth: 320, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: 8, padding: '12px 20px', borderRadius: 22, background: 'rgba(255,255,255,0.14)', backdropFilter: 'blur(40px) saturate(180%)', WebkitBackdropFilter: 'blur(40px) saturate(180%)', border: '0.5px solid rgba(255,255,255,0.2)', boxShadow: '0 8px 32px rgba(0,0,0,0.35)' }}>
+        <div style={{ maxWidth: 320, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: 8, padding: '14px 24px', borderRadius: 26, background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(60px) saturate(200%) brightness(1.06)', WebkitBackdropFilter: 'blur(60px) saturate(200%) brightness(1.06)', border: '0.5px solid rgba(255,255,255,0.22)', boxShadow: '0 10px 40px rgba(0,0,0,0.45), inset 0 0.5px 0 rgba(255,255,255,0.28)' }}>
           {dockApps.map(app => (
-            <button key={app.id} type="button" onClick={app.action} aria-label={app.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
+            <button key={app.id} type="button" onClick={app.action} aria-label={app.label} className="aos-dock-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
               {app.icon}
               <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontWeight: 500 }}>{app.label}</span>
             </button>
@@ -155,10 +168,21 @@ export default function MobileAbdullahOS() {
       {activeContent && <div style={{ position: 'fixed', inset: 0, zIndex: 10100, animation: 'aosPushIn 0.3s ease-out' }}><ContentViewer content={activeContent} onClose={() => setActiveContent(null)} /></div>}
 
       <style>{`
-        @keyframes aosHomeIn { from{opacity:0} to{opacity:1} }
-        @keyframes aosSheetIn { from{transform:translateY(12px);opacity:0} to{transform:translateY(0);opacity:1} }
+        @keyframes aosHomeIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+        @keyframes aosSheetIn { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
         @keyframes aosPushIn { from{transform:translateX(20%);opacity:0} to{transform:translateX(0);opacity:1} }
         .aos-mobile-root * { -webkit-tap-highlight-color:transparent; }
+
+        /* App icon press */
+        .aos-app-btn { transition: transform 0.12s cubic-bezier(0.22,1,0.36,1), opacity 0.12s; }
+        .aos-app-btn:active { transform: scale(0.88) !important; opacity: 0.75; }
+
+        /* Dock app press */
+        .aos-dock-btn { transition: transform 0.12s cubic-bezier(0.22,1,0.36,1), opacity 0.12s; }
+        .aos-dock-btn:active { transform: scale(0.86) !important; opacity: 0.7; }
+
+        /* Sheet header done button */
+        .aos-sheet-done:active { opacity: 0.6; transform: scale(0.96); }
       `}</style>
     </div>
   );

@@ -4,7 +4,7 @@ import ContentViewer from './ContentViewer';
 import type { ContentViewData } from './ContentViewer';
 import { contentMap } from './contentData';
 import AbdullahAsciiLogo from '../desktop/AbdullahAsciiLogo';
-import PokemonWalkers from '../PokemonWalkers';
+import TextScramble from '../effects/TextScramble';
 
 const LazyDesktopShell = lazy(() => import('../desktop/DesktopShell'));
 
@@ -547,7 +547,7 @@ function MobilePhotoSection({ dark }: { dark: boolean }) {
 }
 
 function Inner() {
-  const { dark, toggle } = useContext(ThemeCtx);
+  const { dark, toggle, siteReady } = useContext(ThemeCtx);
   const [activeContent, setActiveContent] = useState<ContentViewData | null>(null);
   const [selectedEdu, setSelectedEdu] = useState<EducationEntry | null>(null);
 
@@ -583,14 +583,15 @@ function Inner() {
   };
 
   return (
-    <div className="rg-root" style={{ background: t.bg, color: t.text }}>
+    <div className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
       <MainPhotoBackdrop dark={dark} />
       <MenacingAura dark={dark} />
-      <PokemonWalkers zIndex={50} />
       <div className="rg-container">
         {/* ── Header ── */}
         <header className="rg-header">
-          <h1 className="rg-name" style={{ color: t.textStrong }}>abdullah sultan</h1>
+          <h1 className="rg-name" style={{ color: t.textStrong }}>
+            <TextScramble text="abdullah sultan" duration={1800} />
+          </h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <nav className="rg-nav">
               <a href="/" className="rg-nav-link" style={{ color: t.textStrong }}>about</a>
@@ -1111,14 +1112,26 @@ function Inner() {
           border-radius: 10px;
           border: 1px solid;
           text-decoration: none;
-          transition: transform 0.2s, box-shadow 0.2s;
+          transition: transform 0.3s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s;
           overflow: hidden;
+          position: relative;
+        }
+        .rg-build-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 55%);
+          opacity: 0;
+          transition: opacity 0.35s ease;
+          pointer-events: none;
         }
         .rg-build-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+          transform: translateY(-5px);
+          box-shadow: 0 14px 44px rgba(0,0,0,0.18), 0 3px 10px rgba(0,0,0,0.1);
         }
-        .rg-build-card:hover .rg-build-cover { transform: scale(1.05); }
+        .rg-build-card:hover::after { opacity: 1; }
+        .rg-build-card:hover .rg-build-cover { transform: scale(1.06); }
         .rg-build-label {
           font-family: 'NeueMontreal-Medium', sans-serif;
           font-weight: 600;
@@ -1477,6 +1490,76 @@ function Inner() {
 
           .rg-resume-body { max-height: 320px; font-size: 12px; }
         }
+
+        /* ── Staggered entrance (plays when .rg-ready is set after loader) ── */
+        .rg-ready .rg-header { animation: rgFadeUp 0.75s cubic-bezier(0.22,1,0.36,1) 0.05s both; }
+        .rg-ready .rg-list > li:nth-child(1) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.12s both; }
+        .rg-ready .rg-list > li:nth-child(2) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.21s both; }
+        .rg-ready .rg-list > li:nth-child(3) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.30s both; }
+        .rg-ready .rg-list > li:nth-child(4) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.39s both; }
+        .rg-ready .rg-list > li:nth-child(5) { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.48s both; }
+        .rg-ready .rg-signature { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.55s both; }
+        .rg-ready .rg-footer { animation: rgFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.62s both; }
+        @keyframes rgFadeUp {
+          from { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+          to   { opacity: 1; transform: translateY(0);    filter: blur(0px); }
+        }
+
+        /* ── Name glitch on hover ── */
+        .rg-name { cursor: default; }
+        .rg-name:hover { animation: nameGlitch 0.30s steps(2,end) forwards; }
+        @keyframes nameGlitch {
+          0%   { text-shadow:  2px 0 rgba(244,63,94,.85),  -2px 0 rgba(59,130,246,.85); }
+          20%  { text-shadow: -3px 0 rgba(244,63,94,.9),    3px 0 rgba(59,130,246,.9);  transform: translate(-1px,0); }
+          40%  { text-shadow:  2px 0 rgba(16,185,129,.8),  -2px 0 rgba(244,63,94,.8);   }
+          60%  { text-shadow: -1px 0 rgba(59,130,246,.7),   1px 0 rgba(16,185,129,.7);  transform: translate(1px,0); }
+          80%  { text-shadow:  1px 0 rgba(139,92,246,.5),  -1px 0 rgba(244,63,94,.5);   }
+          100% { text-shadow: none; transform: translate(0,0); }
+        }
+
+        /* ── Diamond hover glow ring ── */
+        .rg-item:hover > .rg-diamond { animation: diamondGlow 0.55s ease-out forwards; }
+        @keyframes diamondGlow {
+          0%   { box-shadow: 0 0 0 0   rgba(128,128,128,.6); }
+          50%  { box-shadow: 0 0 0 5px rgba(128,128,128,.14); }
+          100% { box-shadow: 0 0 0 9px rgba(128,128,128,0); }
+        }
+
+        /* ── Nav link hover glow ── */
+        .rg-nav-link:hover { text-shadow: 0 0 14px rgba(128,128,128,0.4); letter-spacing: 0.015em; }
+
+        /* ── Education card enhanced hover ── */
+        .rg-education-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* ── Footer social glow ── */
+        .rg-socials a { transition: color 0.25s, transform 0.25s; }
+        .rg-socials a:hover { transform: translateY(-2px); }
+        .rg-socials a:hover svg { filter: drop-shadow(0 0 5px currentColor); }
+
+        /* ── Signature ── */
+        .rg-signature {
+          font-size: 46px;
+          font-family: 'Georgia','Times New Roman',serif;
+          font-style: italic;
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          opacity: 0.45;
+          transition: opacity 0.3s, letter-spacing 0.3s;
+          display: inline-block;
+        }
+        .rg-signature:hover { opacity: 0.85; letter-spacing: -0.01em; }
+
+        /* ── Sweeping gradient underline on slink ── */
+        .rg-slink {
+          background: linear-gradient(90deg, currentColor 0%, currentColor 100%) no-repeat;
+          background-size: 0% 1px;
+          background-position: 0 100%;
+          transition: background-size 0.35s cubic-bezier(0.22,1,0.36,1), color 0.2s;
+        }
+        .rg-slink:hover { background-size: 100% 1px; }
       `}</style>
     </div>
   );
