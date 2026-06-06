@@ -570,11 +570,13 @@ function CurrentlyStatus({ dark }: { dark: boolean }) {
   return (
     <div style={{
       fontSize: 11, fontFamily: "'SF Mono', monospace",
-      color: dark ? 'rgba(163,163,163,0.5)' : 'rgba(87,83,78,0.5)',
       letterSpacing: '0.06em', marginTop: 2,
       opacity: visible ? 1 : 0, transition: 'opacity 0.25s ease',
+      display: 'flex', alignItems: 'center',
     }}>
-      {'> '}{CURRENTLY[idx]}<span className="rg-blink">_</span>
+      <span style={{ color: '#22c55e', marginRight: 4 }}>{'>'}</span>
+      <span style={{ color: dark ? 'rgba(163,163,163,0.55)' : 'rgba(87,83,78,0.55)' }}>{CURRENTLY[idx]}</span>
+      <span className="rg-blink" style={{ color: '#22c55e', marginLeft: 1 }}>_</span>
     </div>
   );
 }
@@ -1624,16 +1626,21 @@ function Inner() {
 
         /* ── Signature ── */
         .rg-signature {
-          font-size: 46px;
+          font-size: 52px;
           font-family: 'Georgia','Times New Roman',serif;
           font-style: italic;
           font-weight: 700;
           letter-spacing: -0.03em;
-          opacity: 0.45;
-          transition: opacity 0.3s, letter-spacing 0.3s;
+          opacity: 0.38;
+          transition: opacity 0.5s cubic-bezier(0.22,1,0.36,1), letter-spacing 0.5s, text-shadow 0.5s;
           display: inline-block;
+          position: relative;
         }
-        .rg-signature:hover { opacity: 0.85; letter-spacing: -0.01em; }
+        .rg-signature:hover {
+          opacity: 1;
+          letter-spacing: -0.01em;
+          text-shadow: 0 0 40px rgba(120,113,108,0.3);
+        }
 
         /* ── Blinking cursor ── */
         @keyframes rgBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
@@ -1645,9 +1652,10 @@ function Inner() {
 
         /* ── Glowing border on hovered build card ── */
         .rg-build-card:hover {
-          border-color: ${dark ? 'rgba(139,92,246,0.35)' : 'rgba(139,92,246,0.25)'} !important;
+          border-color: ${dark ? 'rgba(139,92,246,0.45)' : 'rgba(139,92,246,0.3)'} !important;
           box-shadow:
-            0 0 0 1px ${dark ? 'rgba(139,92,246,0.2)' : 'rgba(139,92,246,0.12)'},
+            0 0 0 1px ${dark ? 'rgba(139,92,246,0.25)' : 'rgba(139,92,246,0.15)'},
+            0 0 28px ${dark ? 'rgba(139,92,246,0.12)' : 'rgba(139,92,246,0.08)'},
             0 14px 44px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.12);
         }
 
@@ -1740,6 +1748,28 @@ function Inner() {
           height: 1px;
           background: linear-gradient(90deg, transparent 0%, rgba(120,113,108,0.2) 30%, rgba(120,113,108,0.35) 50%, rgba(120,113,108,0.2) 70%, transparent 100%);
           pointer-events: none;
+        }
+
+        /* ── Subtle left accent line ── */
+        .rg-container::after {
+          content: '';
+          position: absolute;
+          top: 80px;
+          bottom: 120px;
+          left: -1px;
+          width: 1px;
+          background: linear-gradient(180deg,
+            transparent 0%,
+            ${dark ? 'rgba(120,113,108,0.12)' : 'rgba(87,83,78,0.08)'} 15%,
+            ${dark ? 'rgba(120,113,108,0.25)' : 'rgba(87,83,78,0.15)'} 50%,
+            ${dark ? 'rgba(120,113,108,0.12)' : 'rgba(87,83,78,0.08)'} 85%,
+            transparent 100%
+          );
+          pointer-events: none;
+        }
+
+        @media (max-width: 500px) {
+          .rg-container::after { display: none; }
         }
       `}</style>
     </div>

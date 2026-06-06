@@ -57,12 +57,14 @@ function MobileStatus() {
 
   return (
     <div style={{
-      fontSize: 12, fontWeight: 400, color: 'rgba(255,255,255,0.38)',
-      letterSpacing: '0.04em', marginTop: 4, fontFamily: "'SF Mono',monospace",
+      fontSize: 12, fontWeight: 400,
+      letterSpacing: '0.04em', marginTop: 6, fontFamily: "'SF Mono',monospace",
       opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease',
-      position: 'relative',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
     }}>
-      {STATUS_MESSAGES[idx]}
+      <span style={{ color: '#22c55e', opacity: 0.8 }}>{'>'}</span>
+      <span style={{ color: 'rgba(255,255,255,0.38)' }}>{STATUS_MESSAGES[idx]}</span>
+      <span style={{ color: '#22c55e', opacity: 0.8, animation: 'rgBlink 1s step-end infinite' }}>_</span>
     </div>
   );
 }
@@ -163,24 +165,34 @@ export default function MobileAbdullahOS() {
       <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}>
         <div style={{ maxWidth: 440, margin: '0 auto', padding: '20px max(18px,env(safe-area-inset-right)) 100px max(18px,env(safe-area-inset-left))' }}>
 
-          {/* Clock — frosted glass card */}
+          {/* Clock — frosted glass card with aurora */}
           <div style={{
-            textAlign: 'center', marginBottom: 24, paddingTop: 8, position: 'relative',
-            background: 'rgba(255,255,255,0.04)',
-            backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-            borderRadius: 28,
-            border: '0.5px solid rgba(255,255,255,0.1)',
-            padding: '28px 24px 20px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.12)',
+            textAlign: 'center', marginBottom: 24, position: 'relative',
+            borderRadius: 28, overflow: 'hidden',
+            border: '0.5px solid rgba(255,255,255,0.12)',
+            boxShadow: '0 8px 40px rgba(0,0,0,0.35), inset 0 0.5px 0 rgba(255,255,255,0.18)',
           }}>
-            <div className="aos-clock-time" style={{
-              fontSize: 'clamp(64px,16vw,84px)', fontWeight: 100, color: '#fff',
-              letterSpacing: '-4px', lineHeight: 1,
-              fontFamily: "'SF Pro Display',-apple-system,sans-serif",
-              textShadow: '0 0 60px rgba(255,255,255,0.1), 0 2px 24px rgba(0,0,0,0.4)',
-            }}>{timeStr}</div>
-            <div style={{ marginTop: 8, fontSize: 13, fontWeight: 400, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{dateStr}</div>
-            <MobileStatus />
+            {/* Aurora gradient background */}
+            <div className="aos-aurora" aria-hidden="true" style={{
+              position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+            }} />
+            {/* Frosted glass layer */}
+            <div style={{
+              position: 'absolute', inset: 0, zIndex: 1,
+              background: 'rgba(6,8,18,0.55)',
+              backdropFilter: 'blur(28px)', WebkitBackdropFilter: 'blur(28px)',
+            }} />
+            {/* Content */}
+            <div style={{ position: 'relative', zIndex: 2, padding: '28px 24px 20px' }}>
+              <div className="aos-clock-time" style={{
+                fontSize: 'clamp(64px,16vw,84px)', fontWeight: 100, color: '#fff',
+                letterSpacing: '-4px', lineHeight: 1,
+                fontFamily: "'SF Pro Display',-apple-system,sans-serif",
+                textShadow: '0 0 80px rgba(139,92,246,0.3), 0 0 40px rgba(59,130,246,0.2), 0 2px 24px rgba(0,0,0,0.5)',
+              }}>{timeStr}</div>
+              <div style={{ marginTop: 8, fontSize: 13, fontWeight: 400, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{dateStr}</div>
+              <MobileStatus />
+            </div>
           </div>
 
           {/* App grid — 4 columns, 2 rows */}
@@ -238,15 +250,21 @@ export default function MobileAbdullahOS() {
           background: #000;
           border-radius: 20px;
           padding: 6px 14px 6px 10px;
-          box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.6);
+          box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 0 18px rgba(139,92,246,0.18), 0 4px 20px rgba(0,0,0,0.6);
           animation: aosHomeIn 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both;
           white-space: nowrap;
+          transition: box-shadow 0.4s ease, transform 0.3s ease;
+        }
+        .aos-dynamic-island:hover {
+          box-shadow: 0 0 0 1px rgba(255,255,255,0.14), 0 0 32px rgba(139,92,246,0.35), 0 6px 28px rgba(0,0,0,0.7);
+          transform: scaleX(1.06) scaleY(1.05);
         }
         .aos-di-camera {
           width: 10px; height: 10px; border-radius: 50%;
           background: radial-gradient(circle at 35% 35%, #1a1a2e, #080808);
           border: 1px solid rgba(255,255,255,0.06);
           flex-shrink: 0;
+          animation: diCameraBreath 3s ease-in-out infinite;
         }
         .aos-di-text {
           font-size: 11px; font-weight: 500;
@@ -254,15 +272,39 @@ export default function MobileAbdullahOS() {
           font-family: "'SF Pro Text',-apple-system,sans-serif";
           letter-spacing: 0.02em;
         }
+        @keyframes diCameraBreath {
+          0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,0)}
+          50%{box-shadow:0 0 0 3px rgba(139,92,246,0.18)}
+        }
+
+        /* Aurora animation */
+        .aos-aurora {
+          background: linear-gradient(135deg,
+            #0a0a1a 0%, #1a0533 20%, #0d1f3c 40%,
+            #0a1a2e 60%, #1a0533 80%, #0f0f1a 100%
+          );
+          background-size: 400% 400%;
+          animation: auroraShift 12s ease-in-out infinite;
+        }
+        @keyframes auroraShift {
+          0%  { background-position: 0% 50%; }
+          33% { background-position: 100% 0%; }
+          66% { background-position: 50% 100%; }
+          100%{ background-position: 0% 50%; }
+        }
         @keyframes aosHomeIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
+        @keyframes rgBlink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
         @keyframes aosSheetIn { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
         @keyframes aosPushIn { from{transform:translateX(20%);opacity:0} to{transform:translateX(0);opacity:1} }
         @keyframes aosIconIn { from{opacity:0;transform:translateY(14px) scale(0.85)} to{opacity:1;transform:translateY(0) scale(1)} }
-        @keyframes clockGlow { 0%,100%{text-shadow:0 0 80px rgba(255,255,255,0.12),0 4px 32px rgba(0,0,0,0.5)} 50%{text-shadow:0 0 100px rgba(255,255,255,0.18),0 0 40px rgba(59,130,246,0.08),0 4px 32px rgba(0,0,0,0.5)} }
+        @keyframes clockGlow {
+          0%,100%{text-shadow:0 0 80px rgba(139,92,246,0.25),0 0 40px rgba(59,130,246,0.15),0 4px 32px rgba(0,0,0,0.5)}
+          50%{text-shadow:0 0 120px rgba(139,92,246,0.45),0 0 60px rgba(59,130,246,0.3),0 0 20px rgba(255,255,255,0.08),0 4px 32px rgba(0,0,0,0.5)}
+        }
         .aos-mobile-root * { -webkit-tap-highlight-color:transparent; }
 
         /* Clock subtle pulse */
-        .aos-clock-time { animation: clockGlow 4s ease-in-out infinite; }
+        .aos-clock-time { animation: clockGlow 5s ease-in-out infinite; }
 
         /* App icon press */
         .aos-app-btn { transition: transform 0.12s cubic-bezier(0.22,1,0.36,1), opacity 0.12s; }
