@@ -150,10 +150,11 @@ export default function AppWindow({ windowState, children, darkMode, titleBarBg,
           ? '0 24px 80px rgba(0,0,0,0.18), 0 8px 24px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(0,0,0,0.06), inset 0 0.5px 0 rgba(255,255,255,0.6)'
           : '0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.06), inset 0 0.5px 0 rgba(255,255,255,0.4)',
         opacity: entering ? 0 : 1,
-        transform: entering ? 'scale(0.92)' : 'scale(1)',
+        transform: entering ? 'scale(0.87) translateY(14px)' : 'scale(1) translateY(0)',
+        filter: entering ? 'blur(8px)' : 'blur(0px)',
         transition: isDragging
-          ? 'opacity 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.2s ease, border-color 0.2s ease'
-          : 'opacity 0.25s ease-out, transform 0.25s ease-out, box-shadow 0.2s ease, border-color 0.2s ease, border-radius 0.2s ease, width 0.25s ease, height 0.25s ease',
+          ? 'opacity 0.35s cubic-bezier(0.22,1,0.36,1), transform 0.35s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease, box-shadow 0.2s ease, border-color 0.2s ease'
+          : 'opacity 0.35s cubic-bezier(0.22,1,0.36,1), transform 0.35s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease, box-shadow 0.2s ease, border-color 0.2s ease, border-radius 0.2s ease, width 0.25s ease, height 0.25s ease',
         willChange: 'transform',
       }}
     >

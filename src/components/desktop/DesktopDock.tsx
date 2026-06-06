@@ -268,12 +268,12 @@ function DockButton({ item, scale, isOpen, onClick }: {
       {/* Open indicator dot */}
       {isOpen && (
         <div style={{
-          width: '4px',
-          height: '4px',
+          width: '5px',
+          height: '5px',
           borderRadius: '50%',
-          background: 'rgba(0, 0, 0, 0.5)',
+          background: 'rgba(255,255,255,0.92)',
           marginTop: `${2 + translateY}px`,
-          boxShadow: '0 0 4px rgba(0,0,0,0.15)',
+          boxShadow: '0 0 6px rgba(255,255,255,0.8), 0 0 12px rgba(255,255,255,0.4)',
         }} />
       )}
     </div>

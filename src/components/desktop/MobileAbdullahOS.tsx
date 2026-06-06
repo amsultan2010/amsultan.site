@@ -163,28 +163,34 @@ export default function MobileAbdullahOS() {
       <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}>
         <div style={{ maxWidth: 440, margin: '0 auto', padding: '20px max(18px,env(safe-area-inset-right)) 100px max(18px,env(safe-area-inset-left))' }}>
 
-          {/* Clock */}
-          <div style={{ textAlign: 'center', marginBottom: 28, paddingTop: 12, position: 'relative' }}>
-            <div style={{
-              position: 'absolute', top: '50%', left: '50%',
-              transform: 'translate(-50%,-50%)',
-              width: '90%', height: '120%',
-              background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)',
-              pointerEvents: 'none', filter: 'blur(24px)',
-            }} />
+          {/* Clock — frosted glass card */}
+          <div style={{
+            textAlign: 'center', marginBottom: 24, paddingTop: 8, position: 'relative',
+            background: 'rgba(255,255,255,0.04)',
+            backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+            borderRadius: 28,
+            border: '0.5px solid rgba(255,255,255,0.1)',
+            padding: '28px 24px 20px',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 0.5px 0 rgba(255,255,255,0.12)',
+          }}>
             <div className="aos-clock-time" style={{
-              fontSize: 'clamp(68px,17vw,88px)', fontWeight: 100, color: '#fff',
+              fontSize: 'clamp(64px,16vw,84px)', fontWeight: 100, color: '#fff',
               letterSpacing: '-4px', lineHeight: 1,
               fontFamily: "'SF Pro Display',-apple-system,sans-serif",
-              textShadow: '0 0 80px rgba(255,255,255,0.12), 0 4px 32px rgba(0,0,0,0.5)',
-              position: 'relative',
+              textShadow: '0 0 60px rgba(255,255,255,0.1), 0 2px 24px rgba(0,0,0,0.4)',
             }}>{timeStr}</div>
-            <div style={{ marginTop: 10, fontSize: 14, fontWeight: 400, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.04em', position: 'relative' }}>{dateStr}</div>
+            <div style={{ marginTop: 8, fontSize: 13, fontWeight: 400, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{dateStr}</div>
             <MobileStatus />
           </div>
 
           {/* App grid — 4 columns, 2 rows */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px 8px', justifyItems: 'center' }}>
+          <div style={{
+            background: 'rgba(255,255,255,0.03)',
+            backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+            borderRadius: 24, border: '0.5px solid rgba(255,255,255,0.07)',
+            padding: '18px 12px',
+          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '18px 6px', justifyItems: 'center' }}>
             {gridApps.map((app, i) => (
               <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent', animation: `aosIconIn 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.06}s both`, position: 'relative' }}>
                 <div style={{ position: 'relative' }}>
@@ -204,6 +210,7 @@ export default function MobileAbdullahOS() {
                 <span style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.2, textShadow: '0 1px 4px rgba(0,0,0,0.6)', maxWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{app.label}</span>
               </button>
             ))}
+          </div>
           </div>
         </div>
       </div>

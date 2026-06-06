@@ -56,8 +56,9 @@ export default function DesktopMenuBar() {
     <div ref={barRef} className="desktop-menu-bar" style={{
       position: 'fixed', top: 0, left: 0, right: 0, height: '28px', zIndex: 10010,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px',
-      background: '#000000',
-      backdropFilter: 'none', WebkitBackdropFilter: 'none',
+      background: 'rgba(0,0,0,0.78)',
+      backdropFilter: 'blur(24px) saturate(180%)', WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+      borderBottom: '0.5px solid rgba(255,255,255,0.06)',
       borderBottom: 'none',
       fontFamily: "'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
       fontSize: isMobile ? '12px' : '14px', color: '#FFFFFF', userSelect: 'none',
