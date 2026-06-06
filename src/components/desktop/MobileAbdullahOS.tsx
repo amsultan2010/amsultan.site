@@ -32,6 +32,41 @@ function useLiveClock() {
   return now;
 }
 
+const STATUS_MESSAGES = [
+  'coding something cool',
+  'procrastinating productively',
+  'over-engineering a side project',
+  'drinking too much matcha',
+  'vibecoding with claude',
+];
+
+function MobileStatus() {
+  const [idx, setIdx] = useState(0);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVisible(false);
+      setTimeout(() => {
+        setIdx(i => (i + 1) % STATUS_MESSAGES.length);
+        setVisible(true);
+      }, 350);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{
+      fontSize: 12, fontWeight: 400, color: 'rgba(255,255,255,0.38)',
+      letterSpacing: '0.04em', marginTop: 4, fontFamily: "'SF Mono',monospace",
+      opacity: visible ? 1 : 0, transition: 'opacity 0.3s ease',
+      position: 'relative',
+    }}>
+      {STATUS_MESSAGES[idx]}
+    </div>
+  );
+}
+
 function ImgIcon({ src, alt, bg = 'transparent', contain = false }: { src: string; alt: string; bg?: string; contain?: boolean }) {
   return (
     <div style={{ width: 58, height: 58, borderRadius: 14, overflow: 'hidden', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(0,0,0,0.35)', flexShrink: 0 }}>
@@ -129,7 +164,7 @@ export default function MobileAbdullahOS() {
               background: 'radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%)',
               pointerEvents: 'none', filter: 'blur(24px)',
             }} />
-            <div style={{
+            <div className="aos-clock-time" style={{
               fontSize: 'clamp(68px,17vw,88px)', fontWeight: 100, color: '#fff',
               letterSpacing: '-4px', lineHeight: 1,
               fontFamily: "'SF Pro Display',-apple-system,sans-serif",
@@ -137,12 +172,13 @@ export default function MobileAbdullahOS() {
               position: 'relative',
             }}>{timeStr}</div>
             <div style={{ marginTop: 10, fontSize: 14, fontWeight: 400, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.04em', position: 'relative' }}>{dateStr}</div>
+            <MobileStatus />
           </div>
 
           {/* App grid — 4 columns, 2 rows */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '20px 8px', justifyItems: 'center' }}>
-            {gridApps.map(app => (
-              <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}>
+            {gridApps.map((app, i) => (
+              <button key={app.id} type="button" onClick={app.action} className="aos-app-btn" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7, width: '100%', maxWidth: 76, background: 'none', border: 'none', padding: 0, cursor: 'pointer', WebkitTapHighlightColor: 'transparent', animation: `aosIconIn 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.06}s both` }}>
                 {app.icon}
                 <span style={{ fontSize: 10, fontWeight: 500, color: 'rgba(255,255,255,0.85)', textAlign: 'center', lineHeight: 1.2, textShadow: '0 1px 4px rgba(0,0,0,0.6)', maxWidth: 64, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{app.label}</span>
               </button>
@@ -171,7 +207,12 @@ export default function MobileAbdullahOS() {
         @keyframes aosHomeIn { from{opacity:0;transform:scale(0.97)} to{opacity:1;transform:scale(1)} }
         @keyframes aosSheetIn { from{transform:translateY(16px);opacity:0} to{transform:translateY(0);opacity:1} }
         @keyframes aosPushIn { from{transform:translateX(20%);opacity:0} to{transform:translateX(0);opacity:1} }
+        @keyframes aosIconIn { from{opacity:0;transform:translateY(14px) scale(0.85)} to{opacity:1;transform:translateY(0) scale(1)} }
+        @keyframes clockGlow { 0%,100%{text-shadow:0 0 80px rgba(255,255,255,0.12),0 4px 32px rgba(0,0,0,0.5)} 50%{text-shadow:0 0 100px rgba(255,255,255,0.18),0 0 40px rgba(59,130,246,0.08),0 4px 32px rgba(0,0,0,0.5)} }
         .aos-mobile-root * { -webkit-tap-highlight-color:transparent; }
+
+        /* Clock subtle pulse */
+        .aos-clock-time { animation: clockGlow 4s ease-in-out infinite; }
 
         /* App icon press */
         .aos-app-btn { transition: transform 0.12s cubic-bezier(0.22,1,0.36,1), opacity 0.12s; }

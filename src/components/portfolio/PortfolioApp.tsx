@@ -550,6 +550,19 @@ function Inner() {
   const { dark, toggle, siteReady } = useContext(ThemeCtx);
   const [activeContent, setActiveContent] = useState<ContentViewData | null>(null);
   const [selectedEdu, setSelectedEdu] = useState<EducationEntry | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const onMove = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      el.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+      el.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    };
+    el.addEventListener('mousemove', onMove);
+    return () => el.removeEventListener('mousemove', onMove);
+  }, []);
 
   const openPost = (slug: string) => {
     const data = contentMap[slug];
@@ -583,7 +596,7 @@ function Inner() {
   };
 
   return (
-    <div className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
+    <div ref={rootRef} className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
       <MainPhotoBackdrop dark={dark} />
       <MenacingAura dark={dark} />
       <div className="rg-container">
@@ -648,7 +661,19 @@ function Inner() {
                 <a key={i} href={b.href} target="_blank" rel="noopener noreferrer" className="rg-build-card" style={{
                   background: t.cardBg,
                   borderColor: t.border,
-                }}>
+                  transformStyle: 'preserve-3d',
+                }}
+                  onMouseMove={(e) => {
+                    const el = e.currentTarget;
+                    const r = el.getBoundingClientRect();
+                    const x = (e.clientX - r.left) / r.width - 0.5;
+                    const y = (e.clientY - r.top) / r.height - 0.5;
+                    el.style.transform = `perspective(600px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg) translateY(-4px)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'perspective(600px) rotateY(0deg) rotateX(0deg) translateY(0px)';
+                  }}
+                >
                   <div style={{
                     aspectRatio: '16 / 10',
                     overflow: 'hidden',
@@ -1127,8 +1152,7 @@ function Inner() {
           pointer-events: none;
         }
         .rg-build-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 14px 44px rgba(0,0,0,0.18), 0 3px 10px rgba(0,0,0,0.1);
+          box-shadow: 0 14px 44px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.12);
         }
         .rg-build-card:hover::after { opacity: 1; }
         .rg-build-card:hover .rg-build-cover { transform: scale(1.06); }
@@ -1560,6 +1584,76 @@ function Inner() {
           transition: background-size 0.35s cubic-bezier(0.22,1,0.36,1), color 0.2s;
         }
         .rg-slink:hover { background-size: 100% 1px; }
+
+        /* ── Spotlight cursor radial glow ── */
+        .rg-root::before {
+          content: '';
+          position: fixed;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          background: radial-gradient(
+            600px circle at var(--mx, -9999px) var(--my, -9999px),
+            rgba(120,113,108,0.07) 0%,
+            transparent 70%
+          );
+          transition: background 0.1s ease;
+        }
+
+        /* ── Section label subtle glow on hover ── */
+        .rg-section-label {
+          transition: text-shadow 0.3s ease, opacity 0.3s;
+        }
+        li:hover > .rg-section-label {
+          text-shadow: 0 0 20px rgba(128,128,128,0.25);
+        }
+
+        /* ── Education card inset left accent ── */
+        .rg-edu-card {
+          transition: box-shadow 0.3s ease, background 0.3s ease;
+        }
+        .rg-edu-card:hover {
+          box-shadow: inset 3px 0 0 rgba(120,113,108,0.5), 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        /* ── Build card sweep shimmer on hover ── */
+        .rg-build-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -75%;
+          width: 50%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+          transform: skewX(-20deg);
+          transition: left 0.5s ease;
+          pointer-events: none;
+        }
+        .rg-build-card:hover::before { left: 150%; }
+
+        /* ── Build label gradient text ── */
+        .rg-build-label {
+          background: linear-gradient(135deg, currentColor 0%, currentColor 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          transition: -webkit-text-fill-color 0.3s;
+        }
+        .rg-build-card:hover .rg-build-label {
+          -webkit-text-fill-color: transparent;
+          background-image: linear-gradient(135deg, #a8a29e 0%, #d6d3d1 100%);
+        }
+
+        /* ── Container ambient top glow ── */
+        .rg-container::before {
+          content: '';
+          position: absolute;
+          top: -1px;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: linear-gradient(90deg, transparent 0%, rgba(120,113,108,0.2) 30%, rgba(120,113,108,0.35) 50%, rgba(120,113,108,0.2) 70%, transparent 100%);
+          pointer-events: none;
+        }
       `}</style>
     </div>
   );
@@ -1848,11 +1942,11 @@ function SiteLoader({ onDone }: { onDone: () => void }) {
           <img src="/images/claude-crab.svg" alt="" style={{ width: isMobileScreen ? 64 : 110, height: isMobileScreen ? 64 : 110, imageRendering: 'pixelated' }} />
         </div>
         {/* Letter-by-letter title */}
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: isMobileScreen ? 1 : 3 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'nowrap', gap: isMobileScreen ? 1 : 3 }}>
           {titleChars.map((ch, i) => (
             <span key={i} style={{
               fontFamily: "'Inter','Helvetica Neue',sans-serif",
-              fontSize: isMobileScreen ? 'clamp(26px,7vw,52px)' : 'clamp(42px,7vw,78px)',
+              fontSize: isMobileScreen ? 'clamp(16px,4.2vw,52px)' : 'clamp(42px,7vw,78px)',
               fontWeight: 800,
               letterSpacing: ch === ' ' ? '0.5em' : '0.04em',
               color: '#fff',
