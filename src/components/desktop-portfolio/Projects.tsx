@@ -210,6 +210,7 @@ const projects = [
           "backtests need assumptions in the open"
         ],
         techStack: ["Python","Pandas","Matplotlib"],
+        liveUrl: "https://quantbacktesterpy.vercel.app",
         repoUrl: "https://github.com/amsultan2010",
         sections: [
           { title: "technical", content: "python backtest pipeline w/ sma crossover rules, parameter sweeps, and heatmap output." },
@@ -243,6 +244,7 @@ const projects = [
           "allocation logic needs readable outputs"
         ],
         techStack: ["Python","Finance","Research"],
+        liveUrl: "https://quantportfoliopy.vercel.app",
         repoUrl: "https://github.com/amsultan2010",
         sections: [
           { title: "technical", content: "multi-asset backtester w/ risk parity allocation and portfolio-level outputs." },
@@ -276,6 +278,7 @@ const projects = [
           "numerical methods are easier to trust when visualized"
         ],
         techStack: ["Python","Options","Monte Carlo"],
+        liveUrl: "https://quantoptionspy.vercel.app",
         repoUrl: "https://github.com/amsultan2010",
         sections: [
           { title: "technical", content: "options pricing toolkit w/ black-scholes, monte carlo, greeks, and exotic payoff support." },

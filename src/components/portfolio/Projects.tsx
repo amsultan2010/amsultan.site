@@ -156,6 +156,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
           "backtests need assumptions in the open"
         ],
         techStack: ["Python","Pandas","Matplotlib"],
+        liveUrl: "https://quantbacktesterpy.vercel.app",
         repoUrl: "https://github.com/amsultan2010"
       } satisfies ProjectDetail
     },
@@ -183,6 +184,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
           "allocation logic needs readable outputs"
         ],
         techStack: ["Python","Finance","Research"],
+        liveUrl: "https://quantportfoliopy.vercel.app",
         repoUrl: "https://github.com/amsultan2010"
       } satisfies ProjectDetail
     },
@@ -210,6 +212,7 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
           "numerical methods are easier to trust when visualized"
         ],
         techStack: ["Python","Options","Monte Carlo"],
+        liveUrl: "https://quantoptionspy.vercel.app",
         repoUrl: "https://github.com/amsultan2010"
       } satisfies ProjectDetail
     }
