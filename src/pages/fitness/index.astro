@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/global/Nav';
 import FitnessCharts from '../../components/FitnessCharts';
-
 import runsData from '../../data/runs.json';
 import liftsData from '../../data/lifts.json';
 ---
@@ -10,21 +9,15 @@ import liftsData from '../../data/lifts.json';
 <Layout
   title='Fitness - Abdullah Sultan'
   description='Running and strength training progress tracking'
-  canonical='https://github.com/amsultan2010'
+  canonical='https://abdullahmsultan.me/fitness'
 >
   <Nav currentPath="/fitness" />
-  
   <main class="min-h-screen bg-bg pt-12">
     <div class="max-w-6xl mx-auto px-4 py-12">
-      <!-- Header -->
       <div class="mb-12">
         <h1 class="text-3xl font-bold text-ink mb-4">Fitness</h1>
-        <p class="text-ink-mute">
-          Tracking running and strength training progress with data-driven insights.
-        </p>
+        <p class="text-ink-mute">Tracking running and strength training progress with data-driven insights.</p>
       </div>
-
-      <!-- Charts Component -->
       <FitnessCharts runs={runsData} lifts={liftsData} client:load />
     </div>
   </main>

@@ -1,4 +1,4 @@
-import AmbientCanvas from './AmbientCanvas';
+import { useEffect, useState } from 'react';
 import GradientOrbs from './GradientOrbs';
 import FilmGrain from './FilmGrain';
 import MatrixRain from './MatrixRain';
@@ -8,31 +8,38 @@ interface Props {
   showMatrix?: boolean;
 }
 
-/** Shared ambient visual stack for portfolio pages */
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  return reduced;
+}
+
+/** Shared ambient visual stack — lighter in light mode, respects reduced motion */
 export default function VisualLayer({ dark = false, showMatrix = true }: Props) {
+  const reducedMotion = usePrefersReducedMotion();
+
+  if (reducedMotion) {
+    return null;
+  }
+
   return (
     <>
-      <GradientOrbs dark={dark} zIndex={0} />
-      {showMatrix && <MatrixRain dark={dark} zIndex={0} opacity={dark ? 0.05 : 0.035} />}
-      <AmbientCanvas dark={dark} zIndex={1} />
-      <FilmGrain opacity={dark ? 0.05 : 0.035} />
-      <div
-        aria-hidden="true"
-        className="scan-overlay"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          pointerEvents: 'none',
-          zIndex: 2,
-          background: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            ${dark ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.015)'} 2px,
-            ${dark ? 'rgba(0,0,0,0.03)' : 'rgba(0,0,0,0.015)'} 4px
-          )`,
-        }}
-      />
+      {dark ? (
+        <>
+          {showMatrix && <MatrixRain dark={dark} zIndex={0} opacity={0.045} />}
+          <FilmGrain opacity={0.04} />
+        </>
+      ) : (
+        <GradientOrbs dark={dark} zIndex={0} />
+      )}
     </>
   );
 }

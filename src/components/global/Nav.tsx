@@ -243,7 +243,7 @@ export default function Nav({ currentPath }: NavProps) {
         </a>
         
         <a 
-          href="/Abdullah_Sultan_Resume.pdf" 
+          href="/resume.html" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-white hover:text-white/80 transition-colors text-sm font-normal whitespace-nowrap flex-shrink-0"

@@ -156,8 +156,10 @@ function ProjectsContent() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 8 }}>
-      {PROJECTS.map(p => (
-        <ProjectCard key={p.title} project={p} dark={dark} />
+      {PROJECTS.map((p, i) => (
+        <div key={p.title} className={i === 0 ? 'rg-project-featured' : ''} style={i === 0 ? { marginBottom: 8, padding: 4, borderRadius: 14, background: dark ? 'rgba(251,146,60,0.06)' : 'rgba(234,88,12,0.04)' } : undefined}>
+          <ProjectCard project={p} dark={dark} />
+        </div>
       ))}
 
       <p style={{ fontSize: 14, color: t.text, marginTop: 8, lineHeight: 1.6 }}>

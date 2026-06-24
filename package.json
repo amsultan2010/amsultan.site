@@ -10,7 +10,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "fix:dashes": "tsx scripts/fix-dashes.ts"
+    "fix:dashes": "tsx scripts/fix-dashes.ts",
+    "lint": "eslint .",
+    "typecheck": "astro check",
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.0",
@@ -41,8 +45,13 @@
     "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/typography": "^0.5.19",
+    "eslint": "^10.5.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "tsx": "^4.20.6",
+    "typescript-eslint": "^8.62.0",
     "unist-util-visit": "^5.0.0"
   }
 }

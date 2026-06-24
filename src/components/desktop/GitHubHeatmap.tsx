@@ -52,7 +52,7 @@ export default function GitHubHeatmap() {
       </div>
       <div style={{ marginTop: '6px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '10px', fontFamily: "'SF Mono', monospace" }}>
         <span style={{ color: '#fff' }}>{total} contributions</span>
-        <span style={{ color: 'rgba(255,255,255,0.5)' }}>Placeholder activity</span>
+        <span style={{ color: 'rgba(255,255,255,0.5)' }}>Simulated activity (demo data)</span>
       </div>
     </div>
   );

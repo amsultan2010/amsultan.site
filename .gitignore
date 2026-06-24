@@ -38,7 +38,7 @@ env/
 ENV/
 
 # Data output
-data/
+src/data/*.local.*
 *.csv
 
 # Next.js leftovers
@@ -54,3 +54,7 @@ src/content/blog/_archive/
 *_SUMMARY.md
 *_COMPLETE.md
 plan.md
+
+# Playwright
+test-results/
+playwright-report/

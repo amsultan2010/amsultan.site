@@ -14,12 +14,13 @@ import DesktopShell from '../components/desktop/DesktopShell';
     <AstroSeo
       title="Abdullah OS — Interactive Desktop"
       description="An interactive macOS-themed desktop environment showcasing Abdullah Sultan's portfolio"
-      canonical="https://github.com/amsultan2010"
+      canonical="https://abdullahmsultan.me"
       openGraph={{
-        url: 'https://github.com/amsultan2010',
+        url: 'https://abdullahmsultan.me',
         title: 'Abdullah OS — Interactive Desktop',
         description: 'An interactive macOS-themed desktop environment showcasing Abdullah Sultan\'s portfolio',
         site_name: 'Abdullah Sultan',
+        images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
     />
 
@@ -77,6 +78,8 @@ import DesktopShell from '../components/desktop/DesktopShell';
         color: #535bf2;
       }
     </style>
+      <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
   </head>
   <body>
     <DesktopShell client:only="react" />

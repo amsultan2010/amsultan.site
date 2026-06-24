@@ -10,7 +10,7 @@ import remarkFixDashes from './scripts/remark-fix-dashes.mjs';
 
 export default defineConfig({
   // Replace with your website URL (required for sitemap generation)
-  site: 'https://github.com/amsultan2010',
+  site: 'https://abdullahmsultan.me',
 
   // URL configuration
   trailingSlash: 'never', // Removes trailing slashes from URLs

@@ -14,12 +14,13 @@ import ProjectsPage from '../../components/portfolio/ProjectsPage';
     <AstroSeo
       title="Projects | Abdullah Sultan"
       description="Student builder based in Riyadh, Saudi Arabia."
-      canonical="https://github.com/amsultan2010"
+      canonical="https://abdullahmsultan.me"
       openGraph={{
-        url: 'https://github.com/amsultan2010',
+        url: 'https://abdullahmsultan.me',
         title: 'Projects | Abdullah Sultan',
         description: 'Student builder based in Riyadh, Saudi Arabia.',
         site_name: 'Abdullah Sultan',
+        images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
     />
 
@@ -61,6 +62,8 @@ import ProjectsPage from '../../components/portfolio/ProjectsPage';
         text-decoration: inherit;
       }
     </style>
+      <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
   </head>
   <body>
     <ProjectsPage client:only="react" />

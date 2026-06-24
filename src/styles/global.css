@@ -1,5 +1,16 @@
 @import 'tailwindcss';
 
+/* Portfolio design tokens */
+:root {
+  --rg-font-body: 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --rg-font-medium: 'NeueMontreal-Medium', -apple-system, sans-serif;
+  --rg-font-mono: 'SF Mono', 'Menlo', ui-monospace, monospace;
+  --rg-accent: #ea580c;
+  --rg-accent-bright: #fb923c;
+  --rg-focus-ring: rgba(251, 146, 60, 0.7);
+  --rg-max-projects: 780px;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }

@@ -1,38 +1,22 @@
-import { useState, useEffect, useCallback, useRef, useMemo, createContext, useContext, lazy, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo, useContext, lazy, Suspense } from 'react';
 
 import ContentViewer from './ContentViewer';
 import type { ContentViewData } from './ContentViewer';
 import { contentMap } from './contentData';
+import {
+  ThemeProvider,
+  ThemeCtx,
+  themeColors,
+  shouldSkipIntro,
+  markIntroSeen,
+} from './PageShell';
 import AbdullahAsciiLogo from '../desktop/AbdullahAsciiLogo';
 import TextScramble from '../effects/TextScramble';
+import { RevealList, RevealItem, RevealFade } from '../effects/Reveal';
 import VisualLayer from '../effects/VisualLayer';
 import GradientOrbs from '../effects/GradientOrbs';
 
 const LazyDesktopShell = lazy(() => import('../desktop/DesktopShell'));
-
-/* ══════════════════════════════════════════════════════════
-   Theme context — dark/light mode
-   ══════════════════════════════════════════════════════════ */
-
-const ThemeCtx = createContext<{ dark: boolean; toggle: () => void; siteReady: boolean }>({ dark: false, toggle: () => {}, siteReady: false });
-
-function getInitialTheme() {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('rg-theme') === 'dark';
-  }
-  return false;
-}
-
-function ThemeProvider({ children, siteReady = false }: { children: React.ReactNode; siteReady?: boolean }) {
-  const [dark, setDark] = useState(getInitialTheme);
-  const toggle = () => {
-    setDark(d => {
-      localStorage.setItem('rg-theme', d ? 'light' : 'dark');
-      return !d;
-    });
-  };
-  return <ThemeCtx.Provider value={{ dark, toggle, siteReady }}>{children}</ThemeCtx.Provider>;
-}
 
 /* ══════════════════════════════════════════════════════════
    Data
@@ -295,62 +279,7 @@ function MenacingAura({ dark }: { dark: boolean }) {
       <span className="menacing-ch menacing-ch-3">ゴ</span>
       <span className="menacing-ch menacing-ch-4">ゴ</span>
       <span className="menacing-ch menacing-ch-5">ゴ</span>
-      <style>{`
-        /* Desktop: pinned to the upper area of the ascii art, shifted right
-           so the aura overlaps the left edge of the visible ascii letters. */
-        .menacing-aura {
-          position: fixed;
-          top: 40px;
-          left: 54vw;
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          pointer-events: none;
-          user-select: none;
-          z-index: 3;
-        }
-        .menacing-ch {
-          position: relative;
-          display: inline-block;
-          font-family: 'YuMincho', 'Hiragino Mincho ProN', 'MS Mincho', 'Times New Roman', serif;
-          font-weight: 900;
-          font-style: italic;
-          line-height: 0.9;
-          letter-spacing: -0.04em;
-          color: ${color};
-          text-shadow: ${shadow};
-          animation: menacingPulse 1.8s ease-in-out infinite;
-        }
-        /* Sizes are 2x larger than the previous step. */
-        .menacing-ch-1 { font-size: 100px; left: 0;   transform: rotate(-3deg); animation-delay: 0s; }
-        .menacing-ch-2 { font-size: 88px;  left: 32px; transform: rotate(2deg);  animation-delay: 0.22s; }
-        .menacing-ch-3 { font-size: 120px; left: 8px;  transform: rotate(-1deg); animation-delay: 0.44s; }
-        .menacing-ch-4 { font-size: 72px;  left: 44px; transform: rotate(3deg);  animation-delay: 0.66s; }
-        .menacing-ch-5 { font-size: 92px;  left: 12px; transform: rotate(-2deg); animation-delay: 0.88s; }
-        @keyframes menacingPulse {
-          0%, 100% { opacity: 0.4; top: 0; }
-          50%      { opacity: 1;   top: -6px; }
-        }
-        /* Tablet */
-        @media (max-width: 900px) {
-          .menacing-aura { top: 32px; left: 54vw; gap: 4px; }
-          .menacing-ch-1 { font-size: 80px; }
-          .menacing-ch-2 { font-size: 68px; }
-          .menacing-ch-3 { font-size: 92px; }
-          .menacing-ch-4 { font-size: 56px; }
-          .menacing-ch-5 { font-size: 72px; }
-        }
-        /* Mobile: ascii art sits at the bottom of the viewport, so move
-           the aura to the top-left edge of that lower-half region. */
-        @media (max-width: 500px) {
-          .menacing-aura { top: auto; bottom: 32px; left: 8px; gap: 1px; }
-          .menacing-ch-1 { font-size: 32px; }
-          .menacing-ch-2 { font-size: 28px; }
-          .menacing-ch-3 { font-size: 38px; }
-          .menacing-ch-4 { font-size: 24px; }
-          .menacing-ch-5 { font-size: 30px; }
-        }
-      `}</style>
+      {/* styles in src/styles/portfolio.css */}
     </div>
   );
 }
@@ -618,17 +547,7 @@ function Inner() {
     };
   }, [selectedEdu]);
 
-  const t = {
-    bg: dark ? '#000000' : '#f5f5f4',
-    text: dark ? '#a3a3a3' : '#57534e',
-    textStrong: dark ? '#d6d3d1' : '#44403c',
-    textMuted: dark ? '#78716c' : '#78716c',
-    diamond: dark ? '#d6d3d1' : '#1c1917',
-    border: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-    cardBg: dark ? '#171717' : '#f5f5f5',
-    footerLine: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-    dotGrid: dark ? 'radial-gradient(#1f2937 1px, transparent 1px)' : 'radial-gradient(#e5e7eb 1px, transparent 1px)',
-  };
+  const t = themeColors(dark);
 
   return (
     <div ref={rootRef} className={`rg-root${siteReady ? ' rg-ready' : ''}`} style={{ background: t.bg, color: t.text }}>
@@ -637,6 +556,7 @@ function Inner() {
       <MenacingAura dark={dark} />
       <div className="rg-container">
         {/* ── Header ── */}
+        <RevealFade>
         <header className="rg-header">
           <div>
             <h1 className="rg-name" style={{ color: t.textStrong }}>
@@ -646,9 +566,9 @@ function Inner() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <nav className="rg-nav">
-              {(['about','projects','education'] as const).map((label, i) => (
+              {(['about','projects','desktop','education'] as const).map((label, i) => (
                 <a key={label}
-                  href={i === 0 ? '/' : i === 1 ? '/projects' : '#education'}
+                  href={i === 0 ? '/' : i === 1 ? '/projects' : i === 2 ? '/desktop' : '#education'}
                   className="rg-nav-link"
                   style={{ color: i === 0 ? t.textStrong : t.text }}
                   onMouseMove={(e) => {
@@ -666,9 +586,10 @@ function Inner() {
             </button>
           </div>
         </header>
+        </RevealFade>
 
         {/* ── Main bullet list ── */}
-        <ul className="rg-list" id="projects">
+        <RevealList className="rg-list" id="projects">
           <BulletItem diamond={t.diamond}>
             <span style={{ color: t.text }}>
               Student builder{' '}
@@ -706,12 +627,16 @@ function Inner() {
           <li className="rg-item rg-item-nested" style={{ marginTop: 8 }}>
             <div className="rg-diamond" style={{ background: t.diamond }} />
             <span className="rg-section-label" style={{ color: t.text }}>what i've been building:</span>
-            <div className="rg-build-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginTop: 6, width: '100%' }}>
+            <div className="rg-build-grid" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginTop: 6, width: '100%' }}>
               {BUILDING.map((b, i) => (
-                <a key={i} href={b.href} target="_blank" rel="noopener noreferrer" className="rg-build-card" style={{
+                <a key={i} href={b.href} target="_blank" rel="noopener noreferrer" className={`rg-build-card${i === 0 ? ' rg-build-card--featured' : ' rg-build-card--compact'}`} style={{
                   background: t.cardBg,
                   borderColor: t.border,
                   transformStyle: 'preserve-3d',
+                  gridColumn: i === 0 ? '1 / -1' : undefined,
+                  flexDirection: i === 0 ? 'column' : 'row',
+                  alignItems: i === 0 ? undefined : 'center',
+                  gap: i === 0 ? 6 : 16,
                 }}
                   onMouseMove={(e) => {
                     const el = e.currentTarget;
@@ -933,7 +858,16 @@ function Inner() {
               </div>
             </div>
           </li>
-        </ul>
+          <li id="contact" className="rg-item" style={{ marginTop: 8 }}>
+            <div className="rg-diamond" style={{ background: t.diamond }} />
+            <span style={{ color: t.text }}>
+              want to talk?{' '}
+              <SLink href="mailto:abdullahmsultan1@gmail.com" external={false}>email me</SLink>
+              {' '}or{' '}
+              <SLink href="/desktop" external={false}>open abdullahOS</SLink>
+            </span>
+          </li>
+        </RevealList>
 
 
         <div className="rg-signature" style={{ color: t.textStrong }}>Abdullah</div>
@@ -1065,7 +999,7 @@ function Inner() {
           display: flex;
           justify-content: flex-start;
           align-items: flex-start;
-          font-family: 'Inter', 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 300;
           line-height: 1.6;
           overflow: hidden;
@@ -1117,7 +1051,7 @@ function Inner() {
         }
         .rg-nav { display: flex; gap: 18px; }
         .rg-nav-link {
-          font-size: 18px;
+          font-size: 15px;
           text-decoration: none;
           position: relative;
           transition: color 0.2s, opacity 0.2s;
@@ -1151,7 +1085,7 @@ function Inner() {
           display: flex;
           flex-direction: column;
           gap: 10px;
-          font-size: 22px;
+          font-size: 18px;
         }
         .rg-item {
           display: flex;
@@ -1178,12 +1112,30 @@ function Inner() {
         .rg-item:hover > .rg-diamond { transform: rotate(90deg) scale(1.1); }
 
         .rg-section-label {
-          font-style: italic;
+          font-style: normal;
           font-family: 'NeueMontreal-Medium', sans-serif;
-          font-weight: 700;
+          font-weight: 600;
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
         }
 
         .rg-inline-link-group { margin-left: 6px; }
+
+
+        .rg-build-card--compact {
+          flex-direction: row !important;
+          align-items: center !important;
+          padding: 14px 16px !important;
+        }
+        .rg-build-card--compact > div:first-child {
+          width: 120px !important;
+          min-width: 120px !important;
+          margin: 0 !important;
+          aspect-ratio: 4 / 3 !important;
+          border-radius: 8px !important;
+        }
+        .rg-build-card--featured .rg-build-label { font-size: 21px; }
 
         /* Build cards */
         .rg-build-card {
@@ -1821,10 +1773,10 @@ function FooterIcon({ href, label, dark, children, external = true }: {
 
 function BulletItem({ diamond, children }: { diamond: string; children: React.ReactNode }) {
   return (
-    <li className="rg-item">
+    <RevealItem className="rg-item">
       <div className="rg-diamond" style={{ background: diamond }} />
       {children}
-    </li>
+    </RevealItem>
   );
 }
 
@@ -1834,267 +1786,99 @@ function BulletItem({ diamond, children }: { diamond: string; children: React.Re
 
 type AppPhase = 'loading' | 'site' | 'peeling' | 'desktop';
 
-const INTRO_BUBBLES = [
-  { text: 'YC',              color: '#3B82F6', angle:   0, dist: 34 },
-  { text: 'AGENTIC AI',      color: '#10B981', angle:  30, dist: 38 },
-  { text: 'OPENCLAW',        color: '#EC4899', angle:  60, dist: 32 },
-  { text: 'CLAUDE CODE',     color: '#06B6D4', angle:  90, dist: 36 },
-  { text: 'ROBOTICS',        color: '#F97316', angle: 120, dist: 34 },
-  { text: 'STARTUPS',        color: '#84CC16', angle: 150, dist: 38 },
-  { text: 'AI B2B-SAAS',     color: '#EF4444', angle: 180, dist: 32 },
-  { text: 'MATH',            color: '#F43F5E', angle: 210, dist: 30 },
-  { text: 'NEURAL NETWORKS', color: '#8B5CF6', angle: 240, dist: 40 },
-  { text: 'TALENT',          color: '#14B8A6', angle: 270, dist: 33 },
-  { text: 'ABG CMO',         color: '#F59E0B', angle: 300, dist: 36 },
-  { text: 'OMOGGLE',         color: '#7C3AED', angle: 330, dist: 34 },
-];
-
 function SiteLoader({ onDone }: { onDone: () => void }) {
-  const [tick, setTick] = useState(0);
-  const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 600;
+  const [now, setNow] = useState(0);
+  const [exiting, setExiting] = useState(false);
 
-  // 6-second timeline in ms
-  const T = {
-    particlesStart: 200,
-    bubblesIn:      600,
-    bubblesOrbit:   3800,
-    converge:       5200,
-    titleIn:        5900,
-    finalHold:      7200,
-    fadeOut:        7700,
-    done:           8400,
-  };
-
-  useEffect(() => {
-    const id = setInterval(() => setTick(t => t + 1), 50);
-    return () => clearInterval(id);
-  }, []);
-
-  useEffect(() => {
-    const t = setTimeout(() => onDone(), T.done);
-    return () => clearTimeout(t);
+  const finish = useCallback(() => {
+    markIntroSeen();
+    onDone();
   }, [onDone]);
 
-  const now = tick * 50;
-  const phase = now < T.bubblesIn ? 'particles'
-    : now < T.converge           ? 'orbit'
-    : now < T.titleIn            ? 'converge'
-    : now < T.finalHold          ? 'title'
-    : now < T.fadeOut            ? 'title'
-    : 'fade';
+  const skip = useCallback(() => {
+    setExiting(true);
+    window.setTimeout(finish, 280);
+  }, [finish]);
 
-  if (now >= T.done) return null;
+  useEffect(() => {
+    const tick = window.setInterval(() => setNow(n => n + 50), 50);
+    const doneTimer = window.setTimeout(() => {
+      setExiting(true);
+      window.setTimeout(finish, 320);
+    }, 2500);
+    return () => {
+      window.clearInterval(tick);
+      window.clearTimeout(doneTimer);
+    };
+  }, [finish]);
 
-  // Orbit angle progresses over time
-  const orbitProgress = Math.max(0, (now - T.bubblesOrbit) / (T.converge - T.bubblesOrbit));
-  const baseAngle = orbitProgress * 360;
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        skip();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [skip]);
 
-  const showTitle = phase === 'title' || phase === 'fade';
-  const isFading = phase === 'fade';
-
-  // Matrix rain characters
-  const MATRIX_CHARS = '01アイウエオカキクケコサシスセソタチツテトナニヌネノ';
-  const matrixCols = isMobileScreen ? 12 : 28;
-
-  // Bubble positions for SVG network lines
-  const bubblePositions = INTRO_BUBBLES.map((bubble, i) => {
-    const isIn = now > T.bubblesIn + i * 180;
-    const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
-    const orbitAngle = (bubble.angle + baseAngle * (i % 2 === 0 ? 1 : -0.7)) * (Math.PI / 180);
-    const effectiveDist = isMobileScreen ? bubble.dist * 0.6 : bubble.dist;
-    const orbitX = 50 + Math.cos(orbitAngle) * effectiveDist;
-    const orbitY = 50 + Math.sin(orbitAngle) * effectiveDist;
-    const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
-    const cx = isConverging ? 50 + (orbitX - 50) * (1 - convProgress) : orbitX;
-    const cy = isConverging ? 50 + (orbitY - 50) * (1 - convProgress) : orbitY;
-    return { x: isIn ? cx : orbitX, y: isIn ? cy : orbitY, isIn, color: bubble.color };
-  });
-
-  const titleChars = 'ABDULLAH SULTAN'.split('');
+  const showTitle = now >= 700;
+  const showLogo = now >= 200;
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 10001, background: '#000',
-      overflow: 'hidden',
-      opacity: isFading ? 0 : 1,
-      transition: isFading ? 'opacity 0.7s cubic-bezier(0.4,0,0.2,1)' : 'none',
-    }}>
-
-      {/* CRT scanlines overlay */}
+    <div
+      role="dialog"
+      aria-label="Site introduction"
+      aria-modal="true"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 10001, background: '#000',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 20,
+        opacity: exiting ? 0 : 1,
+        transition: exiting ? 'opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1)' : 'none',
+        overflow: 'hidden',
+      }}
+    >
       <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 20,
-        background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)',
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        background: 'radial-gradient(circle at 50% 40%, rgba(251, 146, 60, 0.08) 0%, transparent 55%)',
       }} />
-
-      {/* Matrix rain */}
-      {(phase === 'particles' || phase === 'orbit') && Array.from({ length: matrixCols }).map((_, col) => {
-        const colPct = (col / matrixCols) * 100;
-        const speed = 1.2 + (col % 4) * 0.4;
-        const offset = (col * 137) % 100;
-        const charIdx = Math.floor((now * speed * 0.01 + offset) % MATRIX_CHARS.length);
-        const charIdx2 = Math.floor((now * speed * 0.008 + offset + 5) % MATRIX_CHARS.length);
-        const top = ((now * speed * 0.015 + col * 23) % 120) - 20;
-        return (
-          <div key={col} style={{ position: 'absolute', left: `${colPct}%`, top: `${top}%`, pointerEvents: 'none', display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <span style={{ fontFamily: "'SF Mono',monospace", fontSize: isMobileScreen ? 10 : 14, color: '#00ff41', opacity: 0.7, lineHeight: 1 }}>{MATRIX_CHARS[charIdx]}</span>
-            <span style={{ fontFamily: "'SF Mono',monospace", fontSize: isMobileScreen ? 10 : 14, color: '#00ff41', opacity: 0.3, lineHeight: 1 }}>{MATRIX_CHARS[charIdx2]}</span>
-          </div>
-        );
-      })}
-
-      {/* Particle field */}
-      {phase !== 'fade' && Array.from({ length: 28 }).map((_, i) => {
-        const a = (i / 28) * 360 + now * 0.04;
-        const r = 28 + (i % 5) * 9;
-        const x = 50 + Math.cos(a * Math.PI / 180) * r;
-        const y = 50 + Math.sin(a * Math.PI / 180) * r;
-        const visible = now > T.particlesStart + i * 40;
-        return (
-          <div key={i} style={{
-            position: 'absolute', left: `${x}%`, top: `${y}%`,
-            width: i % 3 === 0 ? 3 : 2, height: i % 3 === 0 ? 3 : 2,
-            borderRadius: '50%',
-            background: ['#3B82F6','#10B981','#EF4444','#F59E0B','#8B5CF6'][i % 5],
-            opacity: visible ? (phase === 'converge' ? Math.max(0, 1 - orbitProgress * 2) : 0.55) : 0,
-            transition: 'opacity 0.4s ease', transform: 'translate(-50%,-50%)', pointerEvents: 'none',
-          }} />
-        );
-      })}
-
-      {/* Network lines between orbiting bubbles (SVG) */}
-      {phase === 'orbit' && (
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', opacity: Math.min(1, (now - T.bubblesOrbit) / 800) }}>
-          {bubblePositions.filter(b => b.isIn).map((b, i) => {
-            const next = bubblePositions[(i + 1) % bubblePositions.length];
-            if (!next.isIn) return null;
-            return (
-              <line key={i}
-                x1={`${b.x}%`} y1={`${b.y}%`}
-                x2={`${next.x}%`} y2={`${next.y}%`}
-                stroke={b.color} strokeWidth="0.5" strokeOpacity="0.25"
-              />
-            );
-          })}
-        </svg>
-      )}
-
-      {/* Dual scanning lines */}
-      {(phase === 'particles' || phase === 'orbit') && (<>
-        <div style={{ position: 'absolute', left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(59,130,246,0.6) 40%,rgba(16,185,129,0.6) 60%,transparent)', top: `${50 + Math.sin(now * 0.002) * 30}%`, pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', left: 0, right: 0, height: 1, background: 'linear-gradient(90deg,transparent,rgba(139,92,246,0.4) 40%,rgba(236,72,153,0.4) 60%,transparent)', top: `${50 + Math.sin(now * 0.003 + 2) * 20}%`, pointerEvents: 'none' }} />
-      </>)}
-
-      {/* Pulsing concentric rings during orbit */}
-      {phase === 'orbit' && [0,1,2].map(r => {
-        const ringProgress = ((now * 0.0004 + r * 0.33) % 1);
-        const size = ringProgress * (isMobileScreen ? 80 : 120);
-        return (
-          <div key={r} style={{
-            position: 'absolute', left: '50%', top: '50%',
-            transform: 'translate(-50%,-50%)',
-            width: `${size}vw`, height: `${size}vw`,
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.06)',
-            opacity: (1 - ringProgress) * 0.5,
-            pointerEvents: 'none',
-          }} />
-        );
-      })}
-
-      {/* Word bubbles */}
-      {INTRO_BUBBLES.map((bubble, i) => {
-        const { x: cx, y: cy, isIn } = bubblePositions[i];
-        const isConverging = phase === 'converge' || phase === 'title' || phase === 'fade';
-        const convProgress = Math.min(1, Math.max(0, (now - T.converge) / 500));
-        return (
-          <div key={bubble.text} style={{
-            position: 'absolute', left: `${cx}%`, top: `${cy}%`,
-            transform: `translate(-50%,-50%) scale(${isConverging ? Math.max(0, 1 - convProgress) : 1})`,
-            opacity: !isIn ? 0 : isConverging ? Math.max(0, 1 - convProgress * 1.5) : 1,
-            transition: isIn && !isConverging ? 'left 0.1s linear, top 0.1s linear, opacity 0.5s ease' : isConverging ? 'left 0.5s ease, top 0.5s ease, opacity 0.35s ease, transform 0.45s ease' : 'opacity 0.5s ease',
-            padding: isMobileScreen ? '8px 14px' : '12px 24px',
-            borderRadius: 999,
-            background: `${bubble.color}18`,
-            border: `2px solid ${bubble.color}`,
-            color: bubble.color,
-            fontFamily: "'Inter', sans-serif",
-            fontSize: isMobileScreen ? 14 : 36,
-            fontWeight: 800,
-            letterSpacing: '0.07em',
-            whiteSpace: 'nowrap',
-            pointerEvents: 'none',
-            boxShadow: `0 0 20px ${bubble.color}55, 0 0 60px ${bubble.color}22`,
-            textShadow: `0 0 12px ${bubble.color}88`,
-          }}>
-            {bubble.text}
-          </div>
-        );
-      })}
-
-      {/* Multi-ring converge burst */}
-      {phase === 'converge' && [0,1,2,3].map(r => (
-        <div key={r} style={{
-          position: 'absolute', left: '50%', top: '50%',
-          transform: 'translate(-50%,-50%)',
-          width: `${Math.min(100, orbitProgress * (60 + r * 15))}vw`,
-          height: `${Math.min(100, orbitProgress * (60 + r * 15))}vw`,
-          borderRadius: '50%',
-          border: `1px solid rgba(255,255,255,${0.12 - r * 0.02})`,
-          background: r === 0 ? `radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)` : 'none',
-          pointerEvents: 'none',
-          transition: 'width 0.08s, height 0.08s',
-        }} />
-      ))}
-
-      {/* Title + crab */}
       <div style={{
-        position: 'absolute', top: '50%', left: '50%',
-        transform: 'translate(-50%, -50%)',
-        textAlign: 'center',
-        opacity: showTitle ? 1 : 0,
-        transition: 'opacity 0.5s ease',
-        pointerEvents: 'none',
+        opacity: showLogo ? 1 : 0,
+        transform: showLogo ? 'scale(1)' : 'scale(0.92)',
+        transition: 'opacity 0.45s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+        position: 'relative', zIndex: 1,
       }}>
-        <div style={{ marginBottom: 20, display: 'inline-block', animation: showTitle ? 'crabWave 0.55s ease-in-out infinite alternate' : 'none', transformOrigin: 'bottom center' }}>
-          <img src="/images/claude-crab.svg" alt="" style={{ width: isMobileScreen ? 64 : 110, height: isMobileScreen ? 64 : 110, imageRendering: 'pixelated' }} />
-        </div>
-        {/* Letter-by-letter title */}
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'nowrap', gap: isMobileScreen ? 1 : 3 }}>
-          {titleChars.map((ch, i) => (
-            <span key={i} style={{
-              fontFamily: "'Inter','Helvetica Neue',sans-serif",
-              fontSize: isMobileScreen ? 'clamp(16px,4.2vw,52px)' : 'clamp(42px,7vw,78px)',
-              fontWeight: 800,
-              letterSpacing: ch === ' ' ? '0.5em' : '0.04em',
-              color: '#fff',
-              textShadow: '0 0 40px rgba(255,255,255,0.3)',
-              display: 'inline-block',
-              animation: showTitle ? `letterDrop 0.5s cubic-bezier(0.22,1,0.36,1) ${i * 0.04}s both` : 'none',
-            }}>
-              {ch === ' ' ? ' ' : ch}
-            </span>
-          ))}
-        </div>
-        <div style={{
-          marginTop: 14, fontFamily: "'Inter',sans-serif", fontSize: isMobileScreen ? 11 : 13,
-          fontWeight: 500, letterSpacing: '0.3em', color: 'rgba(255,255,255,0.35)',
-          textTransform: 'uppercase' as const,
-          animation: showTitle ? 'letterDrop 0.6s ease 0.7s both' : 'none',
-        }}>
-          student builder · riyadh
-        </div>
+        <AbdullahAsciiLogo width={88} height={88} color="#fff" opacity={0.92} />
       </div>
-
-      <style>{`
-        @keyframes crabWave {
-          from { transform: rotate(-14deg) translateY(0px); }
-          to   { transform: rotate(14deg) translateY(-8px); }
-        }
-        @keyframes letterDrop {
-          from { opacity: 0; transform: translateY(20px) scale(0.85); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-      `}</style>
+      <div style={{
+        textAlign: 'center', position: 'relative', zIndex: 1,
+        opacity: showTitle ? 1 : 0,
+        transform: showTitle ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 0.5s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)',
+      }}>
+        <h1 style={{
+          margin: 0, fontFamily: "'NeueMontreal-Medium', sans-serif",
+          fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 600, letterSpacing: '-0.02em', color: '#fafaf9',
+        }}>abdullah sultan</h1>
+        <p style={{
+          margin: '10px 0 0', fontFamily: "'SF Mono', monospace", fontSize: 12,
+          letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)',
+        }}>student builder · riyadh</p>
+      </div>
+      <button
+        type="button"
+        onClick={skip}
+        style={{
+          position: 'absolute', bottom: 28, right: 28, zIndex: 2,
+          padding: '8px 14px', borderRadius: 999,
+          border: '1px solid rgba(255,255,255,0.14)', background: 'rgba(255,255,255,0.06)',
+          color: 'rgba(255,255,255,0.72)', fontFamily: "'SF Mono', monospace",
+          fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer',
+        }}
+      >
+        skip intro
+      </button>
     </div>
   );
 }
@@ -2142,7 +1926,7 @@ function OSCloseButton({ onClose }: { onClose: () => void }) {
 }
 
 export default function PortfolioApp() {
-  const [phase, setPhase] = useState<AppPhase>('loading');
+  const [phase, setPhase] = useState<AppPhase>(() => (shouldSkipIntro() ? 'site' : 'loading'));
   const [expanded, setExpanded] = useState(false);
 
   const handleLoaded = useCallback(() => {

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://github.com/amsultan2010/sitemap-index.xml
+Sitemap: https://abdullahmsultan.me/sitemap-index.xml

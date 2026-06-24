@@ -1,80 +1,58 @@
 [
   {
-    "id": "l-001",
-    "date": "2025-09-29",
+    "id": "lift-1",
+    "date": "2026-01-08",
     "movements": [
-      { 
-        "name": "Squat", 
+      {
+        "name": "Bench Press",
         "sets": [
-          { "weight": 225, "reps": 5 }, 
-          { "weight": 235, "reps": 5 },
-          { "weight": 245, "reps": 3 }
-        ] 
-      },
-      { 
-        "name": "Bench Press", 
-        "sets": [
-          { "weight": 165, "reps": 5 }, 
-          { "weight": 175, "reps": 5 },
-          { "weight": 185, "reps": 3 }
-        ] 
-      },
-      { 
-        "name": "Deadlift", 
-        "sets": [
-          { "weight": 275, "reps": 5 },
-          { "weight": 295, "reps": 3 }
-        ] 
+          {
+            "weight": 60,
+            "reps": 8
+          },
+          {
+            "weight": 65,
+            "reps": 6
+          }
+        ]
       }
     ]
   },
   {
-    "id": "l-002", 
-    "date": "2025-09-26",
+    "id": "lift-2",
+    "date": "2026-01-22",
     "movements": [
-      { 
-        "name": "Overhead Press", 
+      {
+        "name": "Squat",
         "sets": [
-          { "weight": 115, "reps": 5 }, 
-          { "weight": 125, "reps": 5 },
-          { "weight": 135, "reps": 3 }
-        ] 
-      },
-      { 
-        "name": "Pull-ups", 
-        "sets": [
-          { "weight": 0, "reps": 8 }, 
-          { "weight": 0, "reps": 7 },
-          { "weight": 0, "reps": 6 }
-        ] 
-      },
-      { 
-        "name": "Squat", 
-        "sets": [
-          { "weight": 205, "reps": 8 }, 
-          { "weight": 215, "reps": 6 }
-        ] 
+          {
+            "weight": 80,
+            "reps": 5
+          },
+          {
+            "weight": 85,
+            "reps": 5
+          }
+        ]
       }
     ]
   },
   {
-    "id": "l-003",
-    "date": "2025-09-24",
+    "id": "lift-3",
+    "date": "2026-02-10",
     "movements": [
-      { 
-        "name": "Bench Press", 
+      {
+        "name": "Deadlift",
         "sets": [
-          { "weight": 155, "reps": 8 }, 
-          { "weight": 165, "reps": 6 },
-          { "weight": 175, "reps": 4 }
-        ] 
-      },
-      { 
-        "name": "Barbell Row", 
-        "sets": [
-          { "weight": 145, "reps": 8 }, 
-          { "weight": 155, "reps": 6 }
-        ] 
+          {
+            "weight": 100,
+            "reps": 5
+          },
+          {
+            "weight": 105,
+            "reps": 3
+          }
+        ]
       }
     ]
   }

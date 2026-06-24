@@ -1,26 +1,57 @@
 import { useState, createContext, useContext } from 'react';
+import '../../styles/global.css';
 
+export const INTRO_SEEN_KEY = 'rg-intro-seen';
+export const THEME_STORAGE_KEY = 'rg-theme';
 
 /* Theme context */
-const ThemeCtx = createContext<{ dark: boolean; toggle: () => void }>({ dark: false, toggle: () => {} });
+const ThemeCtx = createContext<{ dark: boolean; toggle: () => void; siteReady: boolean }>({
+  dark: false,
+  toggle: () => {},
+  siteReady: true,
+});
 export { ThemeCtx };
 
 function getInitialTheme() {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem('rg-theme') === 'dark';
+    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark';
   }
   return false;
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function shouldSkipIntro(): boolean {
+  if (typeof window === 'undefined') return false;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
+  return localStorage.getItem(INTRO_SEEN_KEY) === '1';
+}
+
+export function markIntroSeen(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(INTRO_SEEN_KEY, '1');
+  }
+}
+
+export function ThemeProvider({
+  children,
+  siteReady = true,
+}: {
+  children: React.ReactNode;
+  siteReady?: boolean;
+}) {
   const [dark, setDark] = useState(getInitialTheme);
   const toggle = () => {
     setDark(d => {
-      localStorage.setItem('rg-theme', d ? 'light' : 'dark');
+      localStorage.setItem(THEME_STORAGE_KEY, d ? 'light' : 'dark');
       return !d;
     });
   };
-  return <ThemeCtx.Provider value={{ dark, toggle }}>{children}</ThemeCtx.Provider>;
+  return (
+    <ThemeCtx.Provider value={{ dark, toggle, siteReady }}>
+      <div data-rg-theme={dark ? 'dark' : 'light'} style={{ display: 'contents' }}>
+        {children}
+      </div>
+    </ThemeCtx.Provider>
+  );
 }
 
 export function useTheme() {
@@ -38,6 +69,8 @@ export function themeColors(dark: boolean) {
     cardBg: dark ? '#171717' : '#f5f5f5',
     footerLine: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
     dotGrid: dark ? 'radial-gradient(#1f2937 1px, transparent 1px)' : 'radial-gradient(#e5e7eb 1px, transparent 1px)',
+    accent: dark ? '#fb923c' : '#ea580c',
+    accentMuted: dark ? 'rgba(251, 146, 60, 0.35)' : 'rgba(234, 88, 12, 0.25)',
   };
 }
 
@@ -129,6 +162,7 @@ function PageShellInner({ activePage, children }: { activePage: string; children
             <nav className="rg-nav">
               <a href="/" className="rg-nav-link" style={{ color: activePage === 'about' ? t.textStrong : t.text }}>about</a>
               <a href="/projects" className="rg-nav-link" style={{ color: activePage === 'projects' ? t.textStrong : t.text }}>projects</a>
+              <a href="/desktop" className="rg-nav-link" style={{ color: activePage === 'desktop' ? t.textStrong : t.text }}>desktop</a>
               <a href="/#education" className="rg-nav-link" style={{ color: t.text }}>education</a>
             </nav>
             <button onClick={toggle} className="rg-theme-btn" style={{ color: t.text, border: `1px solid ${t.border}`, background: dark ? '#1c1917' : '#fafaf9' }} aria-label="Toggle theme">
@@ -191,13 +225,13 @@ function PageShellInner({ activePage, children }: { activePage: string; children
           flex-direction: column;
           gap: 16px;
           width: 100%;
-          max-width: 500px;
-          padding: 60px 24px 40px;
+          max-width: var(--rg-max-projects, 780px);
+          padding: 64px 24px 40px;
         }
         .rg-header { display: flex; justify-content: space-between; align-items: center; }
         .rg-name {
           font-family: 'NeueMontreal-Medium', -apple-system, sans-serif;
-          font-weight: 600; font-size: 16px; margin: 0; letter-spacing: -0.01em;
+          font-weight: 600; font-size: 18px; margin: 0; letter-spacing: -0.01em;
         }
         .rg-nav { display: flex; gap: 16px; }
         .rg-nav-link {

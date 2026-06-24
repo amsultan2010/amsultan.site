@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo, lazy, Suspense } from 'react';
 import { createPortal } from 'react-dom';
 import { DesktopProvider, useDesktop } from './DesktopContext';
 import Background from './MacBackground';
@@ -16,8 +16,10 @@ import Experience from '../desktop-portfolio/Experience';
 import Projects from '../desktop-portfolio/Projects';
 import Blog from '../desktop-portfolio/Blog';
 import EmailCompose from '../desktop-portfolio/EmailCompose';
-import Photos from '../desktop-portfolio/Photos';
-import Watchlist from '../desktop-portfolio/Watchlist';
+const LazyPhotos = lazy(() => import('../desktop-portfolio/Photos'));
+const LazyWatchlist = lazy(() => import('../desktop-portfolio/Watchlist'));
+const LazyProjects = lazy(() => import('../desktop-portfolio/Projects'));
+const LazyBlog = lazy(() => import('../desktop-portfolio/Blog'));
 import WifiSettings from '../desktop-portfolio/WifiSettings';
 import DetailPanel from '../desktop-portfolio/DetailPanel';
 import ContentViewer from '../desktop-portfolio/ContentViewer';
@@ -43,15 +45,15 @@ function WindowContent({ id }: { id: WindowId }) {
     case 'experience':
       return <Experience onCardClick={handleCardClick} windowMode />;
     case 'projects':
-      return <Projects onCardClick={handleCardClick} windowMode />;
+      return <Suspense fallback={<div style={{ padding: 24, opacity: 0.5 }}>Loading…</div>}><LazyProjects onCardClick={handleCardClick} windowMode /></Suspense>;
     case 'blog':
-      return <Blog onContentClick={handleContentClick} windowMode />;
+      return <Suspense fallback={<div style={{ padding: 24, opacity: 0.5 }}>Loading…</div>}><LazyBlog onContentClick={handleContentClick} windowMode /></Suspense>;
     case 'email':
       return <EmailCompose windowMode />;
     case 'photos':
-      return <Photos windowMode />;
+      return <Suspense fallback={<div style={{ padding: 24, opacity: 0.5 }}>Loading…</div>}><LazyPhotos windowMode /></Suspense>;
     case 'watchlist':
-      return <Watchlist windowMode />;
+      return <Suspense fallback={<div style={{ padding: 24, opacity: 0.5 }}>Loading…</div>}><LazyWatchlist windowMode /></Suspense>;
     default:
       return null;
   }
@@ -5889,6 +5891,10 @@ function TerminalContent() {
 
 
 function Desktop() {
+  const [siteDark, setSiteDark] = useState(false);
+  useEffect(() => {
+    setSiteDark(localStorage.getItem('rg-theme') === 'dark');
+  }, []);
   const { state, dispatch } = useDesktop();
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 768);
   const [hoveredWindowId, setHoveredWindowId] = useState<string | null>('terminal');
@@ -6098,7 +6104,7 @@ function Desktop() {
 
       <style>{`
         :root {
-          color-scheme: light;
+          color-scheme: ${siteDark ? "dark" : "light"};
           color: rgba(0, 0, 0, 0.87);
           font-synthesis: none;
           text-rendering: optimizeLegibility;

@@ -1,42 +1,30 @@
 [
-  { 
-    "id": "r-001", 
-    "date": "2025-09-28", 
-    "distanceKm": 8.2, 
-    "durationSec": 2400, 
-    "notes": "Tempo run along the canal",
-    "pace": "4:52"
+  {
+    "id": "run-1",
+    "date": "2026-01-05",
+    "distanceKm": 5.2,
+    "durationSec": 1680,
+    "pace": "5:23/km"
   },
-  { 
-    "id": "r-002", 
-    "date": "2025-10-01", 
-    "distanceKm": 5.0, 
-    "durationSec": 1530,
-    "notes": "Easy recovery",
-    "pace": "5:06"
+  {
+    "id": "run-2",
+    "date": "2026-01-12",
+    "distanceKm": 8.0,
+    "durationSec": 2520,
+    "pace": "5:15/km"
   },
-  { 
-    "id": "r-003", 
-    "date": "2025-09-25", 
-    "distanceKm": 12.0, 
-    "durationSec": 3600,
-    "notes": "Long run - felt strong",
-    "pace": "5:00"
+  {
+    "id": "run-3",
+    "date": "2026-02-02",
+    "distanceKm": 10.1,
+    "durationSec": 3180,
+    "pace": "5:15/km"
   },
-  { 
-    "id": "r-004", 
-    "date": "2025-09-22", 
-    "distanceKm": 6.5, 
-    "durationSec": 1950,
-    "notes": "Threshold intervals",
-    "pace": "5:00"
-  },
-  { 
-    "id": "r-005", 
-    "date": "2025-09-20", 
-    "distanceKm": 4.0, 
-    "durationSec": 1200,
-    "notes": "Easy shakeout",
-    "pace": "5:00"
+  {
+    "id": "run-4",
+    "date": "2026-02-18",
+    "distanceKm": 6.5,
+    "durationSec": 2040,
+    "pace": "5:14/km"
   }
 ]
