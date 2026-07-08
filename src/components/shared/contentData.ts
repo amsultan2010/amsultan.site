@@ -1,81 +1,31 @@
 import type { ContentViewData } from '../portfolio/ContentViewer';
 
+/** Active writing — no stub “coming soon” papers. */
 export const contentMap: Record<string, ContentViewData> = {
-  'abdullahos-overview': {
+  'lab-notes': {
     type: 'blog',
-    slug: 'abdullahos-overview',
-    title: 'abdullahOS overview',
-    publishedAt: '2026-01-01',
-    tags: ['astro', 'react'],
+    slug: 'lab-notes',
+    title: 'the lab replaces abdullahOS',
+    publishedAt: '2026-07-08',
+    tags: ['lab', 'portfolio'],
     readingTime: 2,
-    summary: 'desktop-style portfolio w/ draggable windows, app interactions, photos, projects, and static links.',
-    markdown: `abdullahOS is the desktop-style shell for this portfolio.
+    summary: 'Why the macOS clone retired and what the lab keeps.',
+    markdown: `the desktop shell was fun to build, but it read like every other macos portfolio.
 
-it keeps the macos-inspired interface, draggable windows, dock apps, local photos, projects, contact, and terminal-style details in one static site.`
+the lab keeps the personal DNA — ascii brand, chronograph, a real tiny terminal — without the glass dock and traffic lights.
+
+homepage stays sharp for founders and recruiters. the lab is where the toys live.`,
   },
-
-  'abdullahos-parts': {
+  'building-in-riyadh': {
     type: 'blog',
-    slug: 'abdullahos-parts',
-    title: 'app map',
-    publishedAt: '2026-01-02',
-    tags: ['desktop', 'apps'],
+    slug: 'building-in-riyadh',
+    title: 'building in riyadh',
+    publishedAt: '2026-06-01',
+    tags: ['notes', 'builder'],
     readingTime: 2,
-    summary: 'about, projects, photos, contact, github, youtube music, terminal, and abdullahOS.',
-    markdown: `the app set is intentionally simple: about, projects, photos, contact, github, youtube music, terminal, and abdullahOS.
+    summary: 'Student builder notes from Riyadh — tutoring, F1 media, agent tools.',
+    markdown: `i ship from riyadh: tutoringbyabdullah, the downforce blog, and a small quant suite as technical proof.
 
-everything is static for now so the portfolio stays easy to customize.`
+if you want to talk products, education, or agent workflows — email me.`,
   },
-  'investor-behavior-gap': {
-    type: 'blog',
-    slug: 'investor-behavior-gap',
-    title: 'Why Investors Underperform the Markets They Invest In',
-    publishedAt: '2026-03-01',
-    tags: ['Finance', 'Behavioral Economics', 'Markets', 'Research'],
-    readingTime: 14,
-    summary: 'Financial markets produce strong long-term returns, yet the average investor consistently earns far less.',
-    markdown: `Financial markets produce strong long-term returns, yet the average investor consistently earns far less.
-
-Full paper coming soon. This entry summarizes the research direction and key questions explored in the write-up.`,
-  },
-
-  'discipline-paradox': {
-    type: 'blog',
-    slug: 'discipline-paradox',
-    title: 'The Discipline Paradox',
-    publishedAt: '2026-03-01',
-    tags: ['Psychology', 'Behavioral Economics', 'Research'],
-    readingTime: 16,
-    summary: 'Why talented people fail while disciplined people win — consistency beats raw ability.',
-    markdown: `Why talented people fail while disciplined people win — consistency beats raw ability.
-
-Full paper coming soon. This entry summarizes the research direction and key questions explored in the write-up.`,
-  },
-
-  'enterprise-software-cost': {
-    type: 'blog',
-    slug: 'enterprise-software-cost',
-    title: 'Why Enterprise Software Costs Millions',
-    publishedAt: '2026-03-01',
-    tags: ['Technology', 'Business', 'Enterprise', 'Research'],
-    readingTime: 12,
-    summary: 'Understanding why companies pay enormous sums for tools that often look like spreadsheets.',
-    markdown: `Understanding why companies pay enormous sums for tools that often look like spreadsheets.
-
-Full paper coming soon. This entry summarizes the research direction and key questions explored in the write-up.`,
-  },
-
-  'attention-economy': {
-    type: 'blog',
-    slug: 'attention-economy',
-    title: 'The Attention Economy Is Rewiring Human Motivation',
-    publishedAt: '2026-03-01',
-    tags: ['Psychology', 'Technology', 'Economics', 'Research'],
-    readingTime: 13,
-    summary: 'Why focus may become the most valuable skill in the modern economy.',
-    markdown: `Why focus may become the most valuable skill in the modern economy.
-
-Full paper coming soon. This entry summarizes the research direction and key questions explored in the write-up.`,
-  },
-
 };

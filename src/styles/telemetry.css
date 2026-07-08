@@ -1,0 +1,195 @@
+/* Telemetry Desk — portfolio design system */
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-Medium.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'NeueMontreal';
+  src: url('/NeueMontreal-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'MenoBanner';
+  src: url('/meno-banner-condensed-italic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* Telemetry Desk palette */
+  --td-ink: #0e1116;
+  --td-paper: #f2ebe0;
+  --td-signal: #ff4d2e;
+  --td-phosphor: #7dffb3;
+  --td-steel: #8b93a7;
+  --td-dust: #c4b8a5;
+
+  --td-bg: var(--td-paper);
+  --td-fg: #2a2e36;
+  --td-fg-strong: var(--td-ink);
+  --td-fg-muted: var(--td-steel);
+  --td-border: rgba(14, 17, 22, 0.12);
+  --td-surface: rgba(14, 17, 22, 0.04);
+  --td-accent: var(--td-signal);
+  --td-accent-muted: rgba(255, 77, 46, 0.22);
+  --td-focus: rgba(255, 77, 46, 0.75);
+  --td-selection: rgba(255, 77, 46, 0.22);
+
+  --td-font-display: 'NeueMontreal', 'Avenir Next', 'Segoe UI', sans-serif;
+  --td-font-body: 'NeueMontreal', 'Avenir Next', 'Segoe UI', sans-serif;
+  --td-font-mono: 'JetBrains Mono', 'SF Mono', 'Menlo', ui-monospace, monospace;
+  --td-font-italic: 'MenoBanner', Georgia, 'Times New Roman', serif;
+
+  --td-max: 1080px;
+  --td-gutter: clamp(20px, 4vw, 48px);
+}
+
+[data-rg-theme='dark'],
+[data-td-theme='dark'] {
+  --td-bg: var(--td-ink);
+  --td-fg: #b8bfc9;
+  --td-fg-strong: #f2ebe0;
+  --td-fg-muted: var(--td-steel);
+  --td-border: rgba(242, 235, 224, 0.12);
+  --td-surface: rgba(242, 235, 224, 0.05);
+  --td-accent: var(--td-signal);
+  --td-accent-muted: rgba(255, 77, 46, 0.35);
+  --td-selection: rgba(255, 77, 46, 0.35);
+}
+
+/* Legacy aliases used by older shells */
+:root {
+  --rg-font-body: var(--td-font-body);
+  --rg-font-medium: var(--td-font-display);
+  --rg-font-mono: var(--td-font-mono);
+  --rg-accent: var(--td-signal);
+  --rg-accent-bright: #ff6b4a;
+  --rg-focus-ring: var(--td-focus);
+  --rg-max-projects: 780px;
+}
+
+body {
+  font-family: var(--td-font-body);
+  font-weight: 400;
+  background-color: var(--td-bg);
+  color: var(--td-fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--td-selection);
+}
+
+:focus-visible {
+  outline: 2px solid var(--td-focus) !important;
+  outline-offset: 2px;
+}
+
+.td-mono {
+  font-family: var(--td-font-mono);
+  font-feature-settings: 'ss01' on;
+  letter-spacing: 0.02em;
+}
+
+.td-display {
+  font-family: var(--td-font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.td-italic {
+  font-family: var(--td-font-italic);
+  font-style: italic;
+}
+
+/* Quiet material surfaces — no glass */
+.td-surface {
+  background: var(--td-surface);
+  border: 1px solid var(--td-border);
+}
+
+.td-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-family: var(--td-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.td-btn-primary {
+  background: var(--td-signal);
+  color: #fff;
+  border-color: var(--td-signal);
+}
+
+.td-btn-primary:hover {
+  background: #e63f22;
+  border-color: #e63f22;
+  transform: translateY(-1px);
+}
+
+.td-btn-ghost {
+  background: transparent;
+  color: var(--td-fg-strong);
+  border-color: var(--td-border);
+}
+
+.td-btn-ghost:hover {
+  border-color: var(--td-fg-strong);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .td-btn,
+  .td-btn-primary,
+  .td-btn-ghost {
+    transition: none;
+  }
+  .td-btn-primary:hover,
+  .td-btn-ghost:hover {
+    transform: none;
+  }
+}

@@ -195,7 +195,7 @@ export default function Nav({ currentPath }: NavProps) {
   ];
 
   const projectItems = [
-    { label: 'abdullahOS', href: '/desktop', sublabel: 'featured project' },
+    { label: 'the lab', href: '/lab', sublabel: 'playground' },
     { label: 'tutoringbyabdullah', href: 'https://tutoringbyabdullah.xyz', sublabel: 'education product' },
     { label: 'quantbacktesterpy', href: '/projects', sublabel: 'python backtester' },
     { label: 'all projects', href: '/projects', sublabel: 'view all projects', divider: true },

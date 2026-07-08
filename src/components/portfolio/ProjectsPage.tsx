@@ -1,171 +1,152 @@
-import { useState } from 'react';
+import { PROJECTS } from '../../data/projects';
 import PageShell, { useTheme, themeColors } from './PageShell';
 
-const PROJECTS = [
-  {
-    title: 'abdullahOS',
-    cover: '/readme/portfolio-desktop.jpg',
-    repo: '/desktop',
-    demo: '/desktop',
-    demoNewTab: true,
-    desc: 'desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.',
-    tech: ['Astro', 'React', 'TypeScript'],
-  },
-  {
-    title: 'tutoringbyabdullah',
-    cover: '/images/projects/tutoringpreview.png',
-    repo: 'https://tutoringbyabdullah.xyz',
-    desc: 'tutoring platform focused on teaching style, recommendations, and real understanding.',
-    tech: ['Education', 'Product', 'Website'],
-  },
-  {
-    title: 'the downforce blog',
-    cover: '/images/projects/downforceblog.png',
-    repo: 'https://thedownforceblog.vercel.app',
-    demo: 'https://thedownforceblog.vercel.app',
-    demoNewTab: true,
-    desc: 'online automated formula one sports blog with weekly articles.',
-    tech: ['Automation', 'F1', 'Blog'],
-  },
-  {
-    title: 'quantbacktesterpy',
-    cover: '/images/projects/quantbacktesterpy.png',
-    repo: 'https://github.com/amsultan2010',
-    desc: 'single-stock sma crossover backtester w/ parameter heatmaps.',
-    tech: ['Python', 'Pandas', 'Backtesting'],
-  },
-  {
-    title: 'quantportfoliopy',
-    cover: '/images/projects/quantportfoliopy.png',
-    repo: 'https://github.com/amsultan2010',
-    desc: 'multi-asset risk parity portfolio backtester.',
-    tech: ['Python', 'Finance', 'Research'],
-  },
-  {
-    title: 'quantoptionspy',
-    cover: '/images/projects/quantoptionspy.png',
-    repo: 'https://github.com/amsultan2010',
-    desc: 'black-scholes + monte carlo options pricer w/ greeks.',
-    tech: ['Python', 'Options', 'Monte Carlo'],
-  },
-];
-
-function ProjectCard({ project, dark }: { project: typeof PROJECTS[number]; dark: boolean }) {
-  const [hovered, setHovered] = useState(false);
-  const t = themeColors(dark);
-
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        borderRadius: 12,
-        overflow: 'hidden',
-        background: dark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)',
-        border: `1px solid ${t.border}`,
-        transition: 'transform 0.3s, box-shadow 0.3s',
-        transform: hovered ? 'translateY(-2px)' : 'none',
-        boxShadow: hovered ? '0 4px 20px rgba(0,0,0,0.2)' : 'none',
-      }}
-    >
-      {/* Cover image */}
-      <a href={(project as any).demo || project.repo} target={((project as any).demoNewTab || (project as any).demo?.startsWith('http') || !(project as any).demo) ? '_blank' : undefined} rel="noopener noreferrer" style={{ display: 'block', overflow: 'hidden' }}>
-        <img
-          src={project.cover}
-          alt={project.title}
-          style={{
-            width: '100%',
-            height: hovered ? 275 : 250,
-            objectFit: 'cover',
-            objectPosition: 'center',
-            display: 'block',
-            transition: 'height 0.5s ease',
-            ...((project as any).coverStyle || {}),
-          }}
-        />
-      </a>
-
-      {/* Content */}
-      <div style={{ padding: '20px 24px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-          <a
-            href={(project as any).demo || project.repo}
-            target={((project as any).demoNewTab || (project as any).demo?.startsWith('http') || !(project as any).demo) ? '_blank' : undefined}
-            rel="noopener noreferrer"
-            style={{ textDecoration: 'none', color: t.textStrong, transition: 'color 0.2s' }}
-          >
-            <h3 style={{
-              margin: 0,
-              fontSize: 24,
-              fontWeight: 600,
-              fontFamily: "'NeueMontreal-Medium', -apple-system, sans-serif",
-            }}>
-              {project.title}
-            </h3>
-          </a>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <a
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.title} GitHub`}
-              style={{ color: t.text, transition: 'color 0.2s', display: 'flex', alignItems: 'center', padding: 4, borderRadius: 6 }}
-              onMouseEnter={e => (e.currentTarget.style.color = t.textStrong)}
-              onMouseLeave={e => (e.currentTarget.style.color = t.text)}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-            </a>
-            {(project as any).demo && (
-              <a
-                href={(project as any).demo}
-                target={((project as any).demoNewTab || (project as any).demo?.startsWith('http')) ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                aria-label={`${project.title} Demo`}
-                style={{ color: t.text, transition: 'color 0.2s', display: 'flex', alignItems: 'center', padding: 4, borderRadius: 6 }}
-                onMouseEnter={e => (e.currentTarget.style.color = t.textStrong)}
-                onMouseLeave={e => (e.currentTarget.style.color = t.text)}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-              </a>
-            )}
-          </div>
-        </div>
-
-        <p style={{
-          margin: 0,
-          fontSize: 15,
-          lineHeight: 1.6,
-          color: t.text,
-        }}>
-          {project.desc}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function ProjectsContent() {
+function ProjectsList() {
   const { dark } = useTheme();
   const t = themeColors(dark);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, marginTop: 8 }}>
-      {PROJECTS.map((p, i) => (
-        <div key={p.title} className={i === 0 ? 'rg-project-featured' : ''} style={i === 0 ? { marginBottom: 8, padding: 4, borderRadius: 14, background: dark ? 'rgba(251,146,60,0.06)' : 'rgba(234,88,12,0.04)' } : undefined}>
-          <ProjectCard project={p} dark={dark} />
-        </div>
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+      <header style={{ marginBottom: 40 }}>
+        <p
+          className="td-mono"
+          style={{
+            margin: 0,
+            fontSize: 12,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: t.accent,
+          }}
+        >
+          archive
+        </p>
+        <h2
+          className="td-display"
+          style={{
+            margin: '10px 0 0',
+            fontSize: 'clamp(32px, 5vw, 48px)',
+            color: t.textStrong,
+            textTransform: 'lowercase',
+          }}
+        >
+          projects
+        </h2>
+        <p style={{ margin: '12px 0 0', color: t.text, maxWidth: 480, lineHeight: 1.55 }}>
+          everything shipped or in motion — featured builds first, then the rest.
+        </p>
+      </header>
 
-      <p style={{ fontSize: 14, color: t.text, marginTop: 8, lineHeight: 1.6 }}>
-        i am most interested in vertical ai for automation, enterprise software, robotics, productivity, and education.
-        long term, i want to help build a yc-funded startup that actually does something meaningful.
-      </p>
+      <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+        {PROJECTS.map((project, i) => {
+          const href = project.demo || project.href;
+          const external = href.startsWith('http');
+          return (
+            <li key={project.id}>
+              <a
+                href={href}
+                target={external || project.demoNewTab ? '_blank' : undefined}
+                rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(0, 1.4fr) minmax(120px, 0.6fr)',
+                  gap: 24,
+                  alignItems: 'center',
+                  padding: '28px 0',
+                  borderTop: `1px solid ${t.border}`,
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+                className="td-project-row"
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap' }}>
+                    <span className="td-mono" style={{ fontSize: 11, color: t.textMuted }}>
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h3
+                      className="td-display"
+                      style={{
+                        margin: 0,
+                        fontSize: 'clamp(22px, 3vw, 28px)',
+                        color: t.textStrong,
+                        textTransform: 'lowercase',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {project.title}
+                    </h3>
+                    {project.featured && (
+                      <span
+                        className="td-mono"
+                        style={{
+                          fontSize: 10,
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
+                          color: t.accent,
+                          border: `1px solid ${t.accentMuted}`,
+                          padding: '2px 8px',
+                        }}
+                      >
+                        featured
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ margin: '10px 0 0', color: t.text, fontSize: 15, lineHeight: 1.5, maxWidth: 520 }}>
+                    {project.desc}
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12 }}>
+                    {project.tech.map((tag) => (
+                      <span
+                        key={tag}
+                        className="td-mono"
+                        style={{
+                          fontSize: 10,
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          color: t.textMuted,
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div
+                  style={{
+                    aspectRatio: '16 / 10',
+                    overflow: 'hidden',
+                    border: `1px solid ${t.border}`,
+                    background: t.cardBg,
+                  }}
+                >
+                  <img
+                    src={project.cover}
+                    alt=""
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                      filter: dark ? 'saturate(0.92)' : 'none',
+                    }}
+                  />
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+
+      <style>{`
+        .td-project-row:hover h3 {
+          color: var(--td-signal) !important;
+        }
+        @media (max-width: 640px) {
+          .td-project-row {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 }
@@ -173,7 +154,7 @@ function ProjectsContent() {
 export default function ProjectsPage() {
   return (
     <PageShell activePage="projects">
-      <ProjectsContent />
+      <ProjectsList />
     </PageShell>
   );
 }

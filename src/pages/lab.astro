@@ -1,7 +1,7 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
 import Analytics from '@vercel/analytics/astro';
-import PortfolioApp from '../components/portfolio/PortfolioApp';
+import LabApp from '../components/lab/LabApp';
 ---
 
 <html lang="en">
@@ -12,13 +12,13 @@ import PortfolioApp from '../components/portfolio/PortfolioApp';
     <meta name="author" content="Abdullah Sultan" />
 
     <AstroSeo
-      title="Abdullah Sultan — student builder"
-      description="Student builder in Riyadh. Shipping tutoring, F1 media, and agent tools."
-      canonical="https://abdullahmsultan.me"
+      title="The Lab — Abdullah Sultan"
+      description="Interactive playground: ASCII instrument, chronograph, terminal easter egg."
+      canonical="https://abdullahmsultan.me/lab"
       openGraph={{
-        url: 'https://abdullahmsultan.me',
-        title: 'Abdullah Sultan — student builder',
-        description: 'Student builder in Riyadh. Shipping tutoring, F1 media, and agent tools.',
+        url: 'https://abdullahmsultan.me/lab',
+        title: 'The Lab — Abdullah Sultan',
+        description: 'Interactive playground: ASCII instrument, chronograph, terminal easter egg.',
         site_name: 'Abdullah Sultan',
         images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
@@ -27,12 +27,10 @@ import PortfolioApp from '../components/portfolio/PortfolioApp';
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/abdullah-apple-touch.png" />
     <meta name="theme-color" content="#0e1116" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="preload" href="/NeueMontreal-Medium.otf" as="font" type="font/otf" crossorigin />
-    <link rel="preload" href="/images/myimage.jpg" as="image" type="image/jpeg" fetchpriority="high" />
 
     <style is:global>
       * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +39,6 @@ import PortfolioApp from '../components/portfolio/PortfolioApp';
         overflow-x: hidden;
         max-width: 100vw;
         min-height: 100vh;
-        scroll-behavior: smooth;
       }
       body {
         margin: 0;
@@ -52,17 +49,13 @@ import PortfolioApp from '../components/portfolio/PortfolioApp';
         width: 100%;
         font-family: 'NeueMontreal', 'Avenir Next', sans-serif;
       }
-      @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-      }
       a { color: inherit; text-decoration: inherit; }
-      canvas { display: block !important; max-width: 100% !important; }
     </style>
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
   </head>
   <body>
-    <PortfolioApp client:only="react" />
+    <LabApp client:only="react" />
     <Analytics />
   </body>
 </html>

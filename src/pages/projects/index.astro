@@ -26,8 +26,12 @@ import ProjectsPage from '../../components/portfolio/ProjectsPage';
 
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/abdullah-apple-touch.png" />
-    <meta name="theme-color" content="#242424" />
+    <meta name="theme-color" content="#0e1116" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="preload" href="/NeueMontreal-Medium.otf" as="font" type="font/otf" crossorigin />
 
     <style is:global>
       * {
@@ -37,7 +41,7 @@ import ProjectsPage from '../../components/portfolio/ProjectsPage';
       }
 
       html {
-        background-color: #000000;
+        background-color: #0e1116;
         overflow-x: hidden;
         max-width: 100vw;
         min-height: 100vh;
@@ -50,11 +54,7 @@ import ProjectsPage from '../../components/portfolio/ProjectsPage';
         overflow-x: hidden;
         min-height: 100vh;
         width: 100%;
-      }
-
-      ::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
+        font-family: 'NeueMontreal', 'Avenir Next', sans-serif;
       }
 
       a {

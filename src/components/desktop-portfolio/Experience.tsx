@@ -27,74 +27,74 @@ const Experience = ({ onCardClick, windowMode }: ExperienceProps) => {
   const experiences = [
     {
       id: 0,
-      company: "abdullahOS",
+      company: "the lab",
       role: "featured project",
       date: "Current",
       location: "Riyadh, Saudi Arabia",
-      description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
+      description: "interactive playground — ascii instrument, chronograph, terminal easter egg.",
       logo: "/terminal.png",
       detail: {
         type: 'experience' as const,
         id: 0,
-        company: "abdullahOS",
+        company: "the lab",
         role: "featured project",
         date: "Current",
         location: "Riyadh, Saudi Arabia",
         logo: "/terminal.png",
         timeline: [
-          { month: "Stage 1", description: "Static abdullahOS future shell. Final project details will be added later." }
+          { month: "Now", description: "Replaced the macOS clone with a smaller expressive playground." }
         ],
-        reflection: "abdullahOS is the main custom project app for Abdullah Sultan's portfolio.",
-        skillsLearned: ["AI", "Desktop UI", "Creative hardware", "Product thinking"],
-        techStack: ["Astro", "React", "TypeScript"]
+        reflection: "Keep the personal DNA without the glass dock.",
+        skillsLearned: ["Three.js", "Motion", "Product thinking"],
+        techStack: ["Astro", "React", "Three.js"]
       } satisfies ExperienceDetail
     },
     {
       id: 1,
-      company: "vertical ai",
-      role: "product track",
-      date: "TBD",
+      company: "tutoringbyabdullah",
+      role: "education product",
+      date: "Current",
       location: "Riyadh, Saudi Arabia",
-      description: "startup and vertical ai product interests across education, automation, and enterprise software.",
+      description: "education service focused on understanding, not memorizing.",
       logo: "/icons/folder.png",
       detail: {
         type: 'experience' as const,
         id: 1,
-        company: "vertical ai",
-        role: "product track",
-        date: "TBD",
+        company: "tutoringbyabdullah",
+        role: "education product",
+        date: "Current",
         location: "Riyadh, Saudi Arabia",
         logo: "/icons/folder.png",
         timeline: [
-          { month: "Future", description: "Future startup experience copy goes here." }
+          { month: "Shipped", description: "Live site with teaching style and recommendations." }
         ],
-        reflection: "focused on building useful vertical products, not pitch-deck theater.",
-        skillsLearned: ["Startups", "Product", "Operations"],
-        techStack: ["Future"]
+        reflection: "Building useful vertical products in education.",
+        skillsLearned: ["Product", "Education", "Operations"],
+        techStack: ["Web", "Product"]
       } satisfies ExperienceDetail
     },
     {
       id: 2,
-      company: "robotics automation",
-      role: "product track",
-      date: "TBD",
+      company: "quant suite",
+      role: "technical proof",
+      date: "2025–2026",
       location: "Riyadh, Saudi Arabia",
-      description: "robotics, automation, sensors, and creative hardware experiments.",
+      description: "python backtesters and options tools as proof of systems thinking.",
       logo: "/icons/folder.png",
       detail: {
         type: 'experience' as const,
         id: 2,
-        company: "robotics automation",
-        role: "product track",
-        date: "TBD",
+        company: "quant suite",
+        role: "technical proof",
+        date: "2025–2026",
         location: "Riyadh, Saudi Arabia",
         logo: "/icons/folder.png",
         timeline: [
-          { month: "Future", description: "Future robotics and hardware experience copy goes here." }
+          { month: "Shipped", description: "Backtester, portfolio, and options pricer as Flask/Plotly apps." }
         ],
-        reflection: "hands-on systems work across hardware and software.",
-        skillsLearned: ["Robotics", "Hardware", "Prototyping"],
-        techStack: ["Future"]
+        reflection: "Quant as technical proof, not identity.",
+        skillsLearned: ["Python", "Finance", "Research"],
+        techStack: ["Python", "Pandas", "Plotly"]
       } satisfies ExperienceDetail
     }
   ];

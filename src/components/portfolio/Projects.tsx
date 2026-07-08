@@ -106,30 +106,29 @@ const Projects = ({ onCardClick }: ProjectsProps) => {
     },
     {
       id: 2,
-      title: "abdullahOS",
-      description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
+      title: "the lab",
+      description: "interactive playground — ascii instrument, chronograph, terminal easter egg.",
       gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
       coverImage: "/readme/portfolio-desktop.jpg",
-      repoUrl: "/desktop",
+      repoUrl: "/lab",
       detail: {
         type: 'project' as const,
         id: 2,
-        title: "abdullahOS",
+        title: "the lab",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/readme/portfolio-desktop.jpg",
-        liveUrl: "/desktop",
-        architecture: "a desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui. includes draggable windows, app interactions, photos, projects, links, and custom static apps.",
+        liveUrl: "/lab",
+        architecture: "expressive playground — ascii instrument, chronograph, and a real tiny terminal.",
         technicalChallenges: [
-          "draggable window state",
-          "dock + menu bar interactions",
-          "static app content without live apis"
+          "webgl ascii instrument with reduced-motion fallback",
+          "keeping personality without macos chrome"
         ],
         lessonsLearned: [
-          "interfaces feel better when small details stay consistent",
-          "static systems can still feel alive"
+          "authorship beats assembly",
+          "one signature moment lands harder than ten effects"
         ],
-        techStack: ["Astro","React","TypeScript"],
-        repoUrl: "/desktop"
+        techStack: ["Astro","React","Three.js"],
+        repoUrl: "/lab"
       } satisfies ProjectDetail
     },
     {

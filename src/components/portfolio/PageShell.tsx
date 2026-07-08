@@ -4,9 +4,8 @@ import '../../styles/global.css';
 export const INTRO_SEEN_KEY = 'rg-intro-seen';
 export const THEME_STORAGE_KEY = 'rg-theme';
 
-/* Theme context */
 const ThemeCtx = createContext<{ dark: boolean; toggle: () => void; siteReady: boolean }>({
-  dark: false,
+  dark: true,
   toggle: () => {},
   siteReady: true,
 });
@@ -14,9 +13,12 @@ export { ThemeCtx };
 
 function getInitialTheme() {
   if (typeof window !== 'undefined') {
-    return localStorage.getItem(THEME_STORAGE_KEY) === 'dark';
+    const stored = localStorage.getItem(THEME_STORAGE_KEY);
+    if (stored === 'light') return false;
+    if (stored === 'dark') return true;
+    return true; // Telemetry Desk defaults dark
   }
-  return false;
+  return true;
 }
 
 export function shouldSkipIntro(): boolean {
@@ -47,7 +49,7 @@ export function ThemeProvider({
   };
   return (
     <ThemeCtx.Provider value={{ dark, toggle, siteReady }}>
-      <div data-rg-theme={dark ? 'dark' : 'light'} style={{ display: 'contents' }}>
+      <div data-rg-theme={dark ? 'dark' : 'light'} data-td-theme={dark ? 'dark' : 'light'} style={{ display: 'contents' }}>
         {children}
       </div>
     </ThemeCtx.Provider>
@@ -58,38 +60,42 @@ export function useTheme() {
   return useContext(ThemeCtx);
 }
 
+/** Telemetry Desk color tokens for inline styles */
 export function themeColors(dark: boolean) {
   return {
-    bg: dark ? '#000000' : '#f5f5f4',
-    text: dark ? '#a3a3a3' : '#57534e',
-    textStrong: dark ? '#d6d3d1' : '#44403c',
-    textMuted: dark ? '#78716c' : '#78716c',
-    diamond: dark ? '#d6d3d1' : '#1c1917',
-    border: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-    cardBg: dark ? '#171717' : '#f5f5f5',
-    footerLine: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-    dotGrid: dark ? 'radial-gradient(#1f2937 1px, transparent 1px)' : 'radial-gradient(#e5e7eb 1px, transparent 1px)',
-    accent: dark ? '#fb923c' : '#ea580c',
-    accentMuted: dark ? 'rgba(251, 146, 60, 0.35)' : 'rgba(234, 88, 12, 0.25)',
+    bg: dark ? '#0e1116' : '#f2ebe0',
+    text: dark ? '#b8bfc9' : '#2a2e36',
+    textStrong: dark ? '#f2ebe0' : '#0e1116',
+    textMuted: '#8b93a7',
+    diamond: dark ? '#f2ebe0' : '#0e1116',
+    border: dark ? 'rgba(242,235,224,0.12)' : 'rgba(14,17,22,0.12)',
+    cardBg: dark ? 'rgba(242,235,224,0.05)' : 'rgba(14,17,22,0.04)',
+    footerLine: dark ? 'rgba(242,235,224,0.12)' : 'rgba(14,17,22,0.12)',
+    dotGrid: dark
+      ? 'radial-gradient(rgba(242,235,224,0.08) 1px, transparent 1px)'
+      : 'radial-gradient(rgba(14,17,22,0.08) 1px, transparent 1px)',
+    accent: '#ff4d2e',
+    accentMuted: dark ? 'rgba(255,77,46,0.35)' : 'rgba(255,77,46,0.22)',
+    phosphor: '#7dffb3',
+    dust: '#c4b8a5',
+    steel: '#8b93a7',
   };
 }
 
-/* Styled link with sweep underline */
 export function SLink({
   href, children, icon, external = true,
 }: {
   href: string; children: React.ReactNode; icon?: string; external?: boolean;
 }) {
   const { dark } = useTheme();
-  const fg = dark ? '#d6d3d1' : '#44403c';
-  const ul = dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)';
+  const t = themeColors(dark);
   return (
     <a
       href={href}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
       className="rg-slink"
-      style={{ color: fg, '--ul': ul, '--fg-hover': dark ? '#d6d3d1' : '#44403c' } as React.CSSProperties}
+      style={{ color: t.textStrong, '--ul': t.border, '--fg-hover': t.accent } as React.CSSProperties}
     >
       {icon && (
         <img src={icon} alt="" style={{
@@ -102,13 +108,11 @@ export function SLink({
   );
 }
 
-/* Footer icon with label that expands on hover (like Martin's) */
 function FooterIcon({ href, label, dark, children, external = true }: {
   href: string; label: string; dark: boolean; children: React.ReactNode; external?: boolean;
 }) {
   const [hovered, setHovered] = useState(false);
-  const color = dark ? '#78716c' : '#78716c';
-  const hoverColor = dark ? '#d6d3d1' : '#44403c';
+  const t = themeColors(dark);
   return (
     <a
       href={href}
@@ -118,7 +122,7 @@ function FooterIcon({ href, label, dark, children, external = true }: {
       onMouseLeave={() => setHovered(false)}
       style={{
         display: 'flex', alignItems: 'center', gap: 0,
-        color: hovered ? hoverColor : color, textDecoration: 'none', transition: 'color 0.3s',
+        color: hovered ? t.textStrong : t.textMuted, textDecoration: 'none', transition: 'color 0.3s',
       }}
     >
       <span style={{ display: 'flex', transition: 'transform 0.5s ease', transform: hovered ? 'scale(1.1)' : 'scale(1)' }}>
@@ -127,7 +131,8 @@ function FooterIcon({ href, label, dark, children, external = true }: {
       <span style={{
         display: 'inline-block', overflow: 'hidden',
         width: hovered ? 'auto' : 0, maxWidth: hovered ? 80 : 0,
-        marginLeft: hovered ? 6 : 0, opacity: hovered ? 1 : 0, fontSize: 14,
+        marginLeft: hovered ? 6 : 0, opacity: hovered ? 1 : 0, fontSize: 13,
+        fontFamily: 'var(--td-font-mono)',
         whiteSpace: 'nowrap', transition: 'max-width 0.5s ease, opacity 0.5s ease, margin-left 0.3s ease',
       }}>
         {label}
@@ -136,7 +141,13 @@ function FooterIcon({ href, label, dark, children, external = true }: {
   );
 }
 
-/* Full page shell with header, WebGL bg, footer */
+const NAV = [
+  { href: '/#work', label: 'work', id: 'work' },
+  { href: '/lab', label: 'lab', id: 'lab' },
+  { href: '/#about', label: 'about', id: 'about' },
+  { href: '/#contact', label: 'contact', id: 'contact' },
+];
+
 export default function PageShell({ activePage, children }: { activePage: string; children: React.ReactNode }) {
   return (
     <ThemeProvider>
@@ -151,30 +162,48 @@ function PageShellInner({ activePage, children }: { activePage: string; children
 
   return (
     <div className="rg-root" style={{ background: t.bg, color: t.text }}>
-
       <div className="rg-container">
-        {/* Header */}
         <header className="rg-header">
           <h1 className="rg-name" style={{ color: t.textStrong }}>
             <a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>abdullah sultan</a>
           </h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <nav className="rg-nav">
-              <a href="/" className="rg-nav-link" style={{ color: activePage === 'about' ? t.textStrong : t.text }}>about</a>
-              <a href="/projects" className="rg-nav-link" style={{ color: activePage === 'projects' ? t.textStrong : t.text }}>projects</a>
-              <a href="/desktop" className="rg-nav-link" style={{ color: activePage === 'desktop' ? t.textStrong : t.text }}>desktop</a>
-              <a href="/#education" className="rg-nav-link" style={{ color: t.text }}>education</a>
+            <nav className="rg-nav" aria-label="Primary">
+              {NAV.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.href}
+                  className="rg-nav-link"
+                  style={{ color: activePage === item.id || activePage === item.label ? t.textStrong : t.text }}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <a
+                href="/projects"
+                className="rg-nav-link"
+                style={{ color: activePage === 'projects' ? t.textStrong : t.text }}
+              >
+                projects
+              </a>
             </nav>
-            <button onClick={toggle} className="rg-theme-btn" style={{ color: t.text, border: `1px solid ${t.border}`, background: dark ? '#1c1917' : '#fafaf9' }} aria-label="Toggle theme">
-              {dark ? (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>) : (<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>)}
+            <button
+              onClick={toggle}
+              className="rg-theme-btn"
+              style={{ color: t.text, border: `1px solid ${t.border}`, background: t.cardBg }}
+              aria-label="Toggle theme"
+            >
+              {dark ? (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              ) : (
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              )}
             </button>
           </div>
         </header>
 
-        {/* Page content */}
         {children}
 
-        {/* Footer */}
         <footer className="rg-footer">
           <div style={{ height: 1, background: t.footerLine }} />
           <div className="rg-socials">
@@ -187,11 +216,13 @@ function PageShellInner({ activePage, children }: { activePage: string; children
             <FooterIcon href="mailto:abdullahmsultan1@gmail.com" label="email" dark={dark} external={false}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
             </FooterIcon>
-            <FooterIcon href="https://github.com/amsultan2010" label="projects" dark={dark}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <FooterIcon href="https://www.linkedin.com/in/abdullah-sultan-4a264939a/" label="linkedin" dark={dark}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 0.774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </FooterIcon>
           </div>
-          <p style={{ fontSize: 13, color: t.textMuted, marginTop: 4 }}>2026 &copy; Abdullah Sultan</p>
+          <p style={{ fontSize: 12, color: t.textMuted, marginTop: 4, fontFamily: 'var(--td-font-mono)' }}>
+            2026 © Abdullah Sultan
+          </p>
         </footer>
       </div>
 
@@ -210,13 +241,10 @@ function PageShellInner({ activePage, children }: { activePage: string; children
           display: flex;
           justify-content: center;
           align-items: flex-start;
-          font-family: 'NeueMontreal-Regular', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          font-weight: 300;
+          font-family: var(--td-font-body);
+          font-weight: 400;
           line-height: 1.6;
           transition: background 0.3s, color 0.3s;
-        }
-        .rg-root ::selection {
-          background: ${dark ? 'rgba(133, 77, 14, 0.6)' : 'rgba(254, 240, 138, 0.8)'};
         }
         .rg-container {
           position: relative;
@@ -225,59 +253,50 @@ function PageShellInner({ activePage, children }: { activePage: string; children
           flex-direction: column;
           gap: 16px;
           width: 100%;
-          max-width: var(--rg-max-projects, 780px);
-          padding: 64px 24px 40px;
+          max-width: var(--td-max, 1080px);
+          padding: 48px var(--td-gutter) 40px;
         }
-        .rg-header { display: flex; justify-content: space-between; align-items: center; }
+        .rg-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
         .rg-name {
-          font-family: 'NeueMontreal-Medium', -apple-system, sans-serif;
-          font-weight: 600; font-size: 18px; margin: 0; letter-spacing: -0.01em;
+          font-family: var(--td-font-display);
+          font-weight: 700; font-size: 18px; margin: 0; letter-spacing: -0.02em;
+          text-transform: lowercase;
         }
-        .rg-nav { display: flex; gap: 16px; }
+        .rg-nav { display: flex; gap: 16px; flex-wrap: wrap; }
         .rg-nav-link {
-          font-size: 14px; text-decoration: none; position: relative; transition: color 0.2s, opacity 0.2s;
+          font-family: var(--td-font-mono);
+          font-size: 12px; text-decoration: none; text-transform: uppercase;
+          letter-spacing: 0.06em; position: relative; transition: color 0.2s;
         }
         .rg-nav-link::after {
-          content: ''; position: absolute; left: 0; bottom: -1px;
-          width: 100%; height: 1px; background: currentColor; opacity: 0.25;
+          content: ''; position: absolute; left: 0; bottom: -2px;
+          width: 100%; height: 1px; background: currentColor; opacity: 0.2;
         }
-        .rg-nav-link:hover { opacity: 1; }
+        .rg-nav-link:hover { color: ${t.accent} !important; }
         .rg-theme-btn {
           background: none; border: none; cursor: pointer; font-size: 16px;
-          padding: 4px 6px; border-radius: 6px; transition: background 0.2s; line-height: 1;
+          padding: 4px 6px; border-radius: 2px; transition: background 0.2s; line-height: 1;
         }
         .rg-theme-btn:hover { background: rgba(128,128,128,0.15); }
 
-        /* Sweep-underline link */
         .rg-slink {
           text-decoration: none;
-          font-family: 'NeueMontreal-Medium', sans-serif;
+          font-family: var(--td-font-display);
           font-weight: 500; position: relative; transition: color 0.2s;
         }
         .rg-slink::after {
           content: ''; position: absolute; left: 0; bottom: -1px;
           width: 100%; height: 1px; background: var(--ul); z-index: 1;
         }
-        .rg-slink::before {
-          content: ''; position: absolute; left: 0; bottom: -1px;
-          width: 100%; height: 1px; background: var(--fg-hover); z-index: 2;
-          transform: scaleX(0); transform-origin: left; opacity: 0; transition: opacity 0.15s;
-        }
         .rg-slink:hover { color: var(--fg-hover); }
-        .rg-slink:hover::before { opacity: 1; animation: sweep 2s ease-in-out infinite; }
-        @keyframes sweep {
-          0%   { transform: scaleX(0); transform-origin: left; }
-          50%  { transform: scaleX(1); transform-origin: left; }
-          50.1%{ transform: scaleX(1); transform-origin: right; }
-          100% { transform: scaleX(0); transform-origin: right; }
-        }
 
-        .rg-footer { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+        .rg-footer { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
         .rg-socials { display: flex; gap: 20px; }
-        .rg-social-link { font-size: 14px; text-decoration: none; transition: opacity 0.2s; }
-        .rg-social-link:hover { opacity: 1; }
 
-        @media (max-width: 500px) { .rg-container { padding: 40px 20px 32px; } }
+        @media (max-width: 640px) {
+          .rg-container { padding: 32px 20px 28px; }
+          .rg-nav { gap: 12px; }
+        }
       `}</style>
     </div>
   );

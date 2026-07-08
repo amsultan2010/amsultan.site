@@ -80,38 +80,38 @@ function getTechColor(tech: string): { bg: string; text: string; border: string 
 const projects = [
   {
     id: 0,
-    title: "abdullahOS",
-    description: "desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui.",
+    title: "the lab",
+    description: "interactive playground — ascii instrument, chronograph, terminal easter egg.",
     gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
     coverImage: "/readme/portfolio-desktop.jpg",
-    repoUrl: "/desktop",
+    repoUrl: "/lab",
     language: "TypeScript",
     files: ["README.md", "projects.md", "startup.md", "robotics.md", "education.md", "links.md"],
       detail: {
         type: 'project' as const,
         id: 0,
-        title: "abdullahOS",
+        title: "the lab",
         gradient: "linear-gradient(135deg, #111827 0%, #1f2937 50%, #0f172a 100%)",
         coverImage: "/readme/portfolio-desktop.jpg",
-        liveUrl: "/desktop",
-        architecture: "a desktop-style personal portfolio built w/ astro, react, and a macos-inspired ui. includes draggable windows, app interactions, photos, projects, links, and custom static apps.",
+        liveUrl: "/lab",
+        architecture: "expressive playground extracted from the old desktop shell — ascii instrument, chronograph, and a real tiny terminal.",
         technicalChallenges: [
-          "draggable window state",
-          "dock + menu bar interactions",
-          "static app content without live apis"
+          "webgl ascii instrument with reduced-motion fallback",
+          "keeping personality without macos chrome",
+          "static site with interactive toys"
         ],
         lessonsLearned: [
-          "interfaces feel better when small details stay consistent",
-          "static systems can still feel alive"
+          "authorship beats assembly",
+          "one signature moment lands harder than ten effects"
         ],
-        techStack: ["Astro","React","TypeScript"],
-        repoUrl: "/desktop",
+        techStack: ["Astro","React","Three.js"],
+        repoUrl: "/lab",
         sections: [
-          { title: "projects", content: "abdullahOS, tutoringbyabdullah, robotics shells, and quant tools in one workspace." },
-          { title: "startup", content: "long-term direction: build toward x-combinator from ais-r, with vertical ai that actually saves people time." },
+          { title: "projects", content: "the lab, tutoringbyabdullah, downforce blog, and quant tools." },
+          { title: "startup", content: "long-term direction: build useful vertical products from ais-r." },
           { title: "robotics", content: "automation, sensors, prototypes, and creative engineering experiments." },
           { title: "education", content: "tutoringbyabdullah plus school activity around teaching, clubs, and technical self-study." },
-          { title: "links", content: "github, youtube music, gmail, linkedin, instagram, and local photos." }
+          { title: "links", content: "github, youtube music, gmail, linkedin, and the lab." }
         ]
       } satisfies ProjectDetail
   },

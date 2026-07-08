@@ -1,4 +1,16 @@
 {
+  "redirects": [
+    {
+      "source": "/desktop",
+      "destination": "/lab",
+      "permanent": true
+    },
+    {
+      "source": "/desktop/(.*)",
+      "destination": "/lab",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/",
