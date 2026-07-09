@@ -2,12 +2,12 @@
 ---
 
 <header class="site-head">
-  <a href="/#top" class="site-head__brand vf-mono">abdullah sultan</a>
+  <a href="/#top" class="site-head__brand vf-mono js-magnetic">abdullah sultan</a>
   <nav class="site-head__nav vf-mono" aria-label="primary">
-    <a href="/#about" data-section="about" class="js-nav-link">about</a>
-    <a href="/#work" data-section="work" class="js-nav-link">work</a>
-    <a href="/#proof" data-section="proof" class="js-nav-link">proof</a>
-    <a href="/#contact" data-section="contact" class="js-nav-link">contact</a>
+    <a href="/#about" data-section="about" class="js-nav-link js-scramble">about</a>
+    <a href="/#work" data-section="work" class="js-nav-link js-scramble">work</a>
+    <a href="/#proof" data-section="proof" class="js-nav-link js-scramble">proof</a>
+    <a href="/#contact" data-section="contact" class="js-nav-link js-scramble">contact</a>
   </nav>
   <button type="button" class="site-head__contrast js-contrast vf-mono" aria-label="toggle contrast">
     contrast
@@ -24,19 +24,18 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    background: color-mix(in srgb, var(--vf-field) 88%, transparent);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid color-mix(in srgb, var(--vf-ink) 14%, transparent);
+    background: color-mix(in srgb, var(--vf-field) 82%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid color-mix(in srgb, var(--vf-ink) 12%, transparent);
   }
   .site-head__brand {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     letter-spacing: 0.14em;
     text-decoration: none;
     color: var(--vf-ink);
-    padding: 0.4rem 0;
+    padding: 0.45rem 0;
     display: inline-block;
-    transition: color 0.25s var(--vf-ease);
   }
   .site-head__brand:hover {
     color: var(--vf-mark);
@@ -44,34 +43,37 @@
   .site-head__nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.15rem;
-    font-size: 0.66rem;
+    gap: 0.35rem;
+    font-size: 0.68rem;
     letter-spacing: 0.12em;
   }
   .site-head__nav a {
     text-decoration: none;
     color: var(--vf-ink);
-    opacity: 0.7;
-    padding: 0.55rem 0.75rem;
-    transition: opacity 0.25s var(--vf-ease), color 0.25s var(--vf-ease);
+    opacity: 0.72;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid transparent;
+    transition: opacity 0.2s, color 0.2s, border-color 0.2s, background 0.2s;
   }
   .site-head__nav a:hover {
     opacity: 1;
+    color: var(--vf-mark);
   }
   .site-head__nav a.is-active {
     opacity: 1;
     color: var(--vf-mark);
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, transparent);
+    background: color-mix(in srgb, var(--vf-mark) 12%, transparent);
   }
   .site-head__contrast {
-    font-size: 0.64rem;
+    font-size: 0.68rem;
     letter-spacing: 0.12em;
     background: transparent;
     border: 1px solid var(--vf-ink);
     color: var(--vf-ink);
-    padding: 0.5rem 0.85rem;
+    padding: 0.55rem 0.85rem;
     cursor: pointer;
-    min-height: 2.4rem;
-    transition: background 0.25s var(--vf-ease), color 0.25s var(--vf-ease), border-color 0.25s var(--vf-ease);
+    min-height: 2.5rem;
   }
   .site-head__contrast:hover {
     background: var(--vf-mark);
@@ -86,6 +88,11 @@
     .site-head__nav {
       grid-column: 1 / -1;
       order: 3;
+      padding-top: 0.15rem;
+      gap: 0.2rem;
+    }
+    .site-head__nav a {
+      padding: 0.5rem 0.55rem;
     }
   }
 </style>

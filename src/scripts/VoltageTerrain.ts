@@ -231,7 +231,7 @@ export function createVoltageTerrain({
     uValley: { value: new THREE.Color('#7a1806') },
     uMid: { value: new THREE.Color('#ff4d1a') },
     uLightDir: { value: new THREE.Vector3(0.55, 1.0, 0.35).normalize() },
-    uOpacity: { value: reducedMotion ? 0.5 : 0.78 },
+    uOpacity: { value: reducedMotion ? 0.55 : 0.92 },
   };
 
   const material = new THREE.ShaderMaterial({
@@ -257,7 +257,7 @@ export function createVoltageTerrain({
     uniforms: {
       ...shared,
       uWire: { value: new THREE.Color('#fffaf5') },
-      uOpacity: { value: 0.18 },
+      uOpacity: { value: 0.22 },
     },
     vertexShader: wireVert,
     fragmentShader: wireFrag,
@@ -281,16 +281,16 @@ export function createVoltageTerrain({
       uniforms.uPeak.value.set('#ff4d1a');
       uniforms.uValley.value.set('#d4c4b0');
       uniforms.uMid.value.set('#fff8f1');
-      uniforms.uOpacity.value = 0.55;
+      uniforms.uOpacity.value = 0.65;
       wireMat.uniforms.uWire.value.set('#14110f');
-      wireMat.uniforms.uOpacity.value = 0.14;
+      wireMat.uniforms.uOpacity.value = 0.18;
     } else {
       uniforms.uPeak.value.set('#fffaf5');
       uniforms.uValley.value.set('#7a1806');
       uniforms.uMid.value.set('#ff4d1a');
-      uniforms.uOpacity.value = reducedMotion ? 0.5 : 0.78;
+      uniforms.uOpacity.value = reducedMotion ? 0.55 : 0.92;
       wireMat.uniforms.uWire.value.set('#fffaf5');
-      wireMat.uniforms.uOpacity.value = 0.18;
+      wireMat.uniforms.uOpacity.value = 0.22;
     }
   };
 

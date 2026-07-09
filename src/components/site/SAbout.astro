@@ -11,7 +11,7 @@ import { EDUCATION } from '../../data/education';
         founding x-combinator, a student-run startup incubator.
       </p>
       <p class="s-about__resume">
-        <a href="/resume.docx" class="vf-mono js-magnetic">download resume →</a>
+        <a href="/resume.docx" class="vf-mono js-magnetic js-scramble">download resume →</a>
       </p>
     </div>
 
@@ -91,19 +91,14 @@ import { EDUCATION } from '../../data/education';
     text-decoration: none;
     letter-spacing: 0.1em;
     font-size: 0.72rem;
-    color: var(--vf-ink);
-    border-bottom: 1px solid var(--vf-ink);
-    padding: 0.35rem 0;
-    transition: color 0.25s var(--vf-ease), border-color 0.25s var(--vf-ease);
-  }
-  .s-about__resume a:hover {
+    border-bottom: 1px solid var(--vf-mark);
     color: var(--vf-mark);
-    border-color: var(--vf-mark);
   }
   .s-about__aside {
-    border-left: 1px solid var(--vf-line);
-    padding: 0.25rem 0 0.25rem 1.15rem;
+    border: 1px solid var(--vf-line);
+    padding: 1.15rem;
     align-self: start;
+    background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
   }
   .s-about__aside-label {
     margin: 0 0 0.85rem;

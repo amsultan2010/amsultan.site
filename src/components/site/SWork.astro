@@ -7,7 +7,7 @@ const total = String(featured.length).padStart(2, '0');
 
 <section id="work" class="s-work js-work" aria-label="work">
   <div class="s-work__head">
-    <a href="/projects" class="s-work__all vf-mono js-magnetic">full archive →</a>
+    <a href="/projects" class="s-work__all vf-mono js-magnetic js-scramble">full archive →</a>
   </div>
 
   <div class="s-work__viewport">
@@ -69,32 +69,51 @@ const total = String(featured.length).padStart(2, '0');
     font-size: 0.7rem;
     letter-spacing: 0.12em;
     text-decoration: none;
-    color: var(--vf-ink);
-    border-bottom: 1px solid var(--vf-ink);
-    padding: 0.35rem 0;
-    transition: color 0.25s var(--vf-ease), border-color 0.25s var(--vf-ease);
-  }
-  .s-work__all:hover {
     color: var(--vf-mark);
-    border-color: var(--vf-mark);
+    border-bottom: 1px solid var(--vf-mark);
   }
   .s-work__viewport {
     overflow: hidden;
   }
   .s-work__track {
     display: flex;
-    gap: 1.75rem;
+    gap: 1rem;
     padding: 0.5rem var(--vf-pad) 2.5rem;
     width: max-content;
     will-change: transform;
+    perspective: 1200px;
   }
   .s-work__item {
-    flex: 0 0 min(78vw, 360px);
+    --mx: 50%;
+    --my: 50%;
+    flex: 0 0 min(78vw, 380px);
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.65rem;
+    border: 1px solid var(--vf-line);
+    padding: 0.9rem;
+    background: color-mix(in srgb, var(--vf-ink) 5%, transparent);
     position: relative;
     min-width: 0;
+    transform-style: preserve-3d;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .s-work__item:hover {
+    transform: translateY(-6px);
+  }
+  .s-work__item.is-hot {
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
+  }
+  .s-work__item.is-hot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      240px circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--vf-ink) 14%, transparent),
+      transparent 55%
+    );
   }
   .s-work__meta {
     display: flex;
@@ -108,7 +127,7 @@ const total = String(featured.length).padStart(2, '0');
     aspect-ratio: 16 / 10;
     overflow: hidden;
     border: 1px solid var(--vf-line);
-    background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+    background: color-mix(in srgb, var(--vf-ink) 8%, transparent);
     display: block;
   }
   .s-work__media img {
@@ -116,10 +135,10 @@ const total = String(featured.length).padStart(2, '0');
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s var(--vf-ease);
+    transition: transform 0.55s ease;
   }
   .s-work__item:hover .s-work__media img {
-    transform: scale(1.04);
+    transform: scale(1.06);
   }
   .s-work__copy {
     min-width: 0;
@@ -161,12 +180,11 @@ const total = String(featured.length).padStart(2, '0');
   .s-work__metrics li {
     font-size: 0.55rem;
     letter-spacing: 0.06em;
+    border: 1px solid var(--vf-line);
+    padding: 0.28rem 0.4rem;
     color: var(--vf-mark);
     max-width: 100%;
     overflow-wrap: anywhere;
-  }
-  .s-work__metrics li::before {
-    content: '· ';
   }
   @media (max-width: 767px) {
     .s-work__track {

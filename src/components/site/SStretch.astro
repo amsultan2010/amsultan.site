@@ -8,7 +8,7 @@ const letters = [...word.toLowerCase()];
 ---
 
 <section class={`s-stretch js-stretch ${className}`} aria-hidden="true">
-  <div class="s-stretch__track">
+  <div class="s-stretch__track js-stretch-track">
     {letters.map((ch) => (
       <span class="s-stretch__letter js-stretch-letter">{ch === ' ' ? '\u00a0' : ch}</span>
     ))}
@@ -17,24 +17,25 @@ const letters = [...word.toLowerCase()];
 
 <style>
   .s-stretch {
-    min-height: 48vh;
+    min-height: 58vh;
     display: flex;
     align-items: center;
     overflow: hidden;
-    padding: 6vh 0;
+    padding: 8vh 0;
   }
   .s-stretch__track {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: 0 0.25rem;
+    padding: 0 0.15rem;
+    will-change: transform;
   }
   .s-stretch__letter {
     font-family: var(--vf-font-display);
     font-weight: 800;
-    font-size: clamp(3.2rem, 15vw, 11rem);
-    line-height: 0.78;
-    letter-spacing: -0.06em;
+    font-size: clamp(3.8rem, 18vw, 14rem);
+    line-height: 0.75;
+    letter-spacing: -0.07em;
     color: var(--vf-ink);
     flex: 1 1 0;
     text-align: center;

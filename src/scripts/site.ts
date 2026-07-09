@@ -298,33 +298,49 @@ function initHero() {
     });
   });
 
-  // Soft magnetic letters — intentional, not jittery
+  // Magnetic letters + 3D title tilt (wodniack depth)
   const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+  let tiltX = 0;
+  let tiltY = 0;
+  let tiltTX = 0;
+  let tiltTY = 0;
   let magnetRaf = 0;
 
   const magnetLoop = () => {
     magnetRaf = requestAnimationFrame(magnetLoop);
+    tiltX += (tiltTX - tiltX) * 0.08;
+    tiltY += (tiltTY - tiltY) * 0.08;
+    title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
+
     allChars.forEach((char, i) => {
       const o = offsets[i];
-      o.x += (o.tx - o.x) * 0.12;
-      o.y += (o.ty - o.y) * 0.12;
-      char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
+      o.x += (o.tx - o.x) * 0.16;
+      o.y += (o.ty - o.y) * 0.16;
+      const z = Math.abs(o.x) + Math.abs(o.y);
+      char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, ${z.toFixed(1)}px)`;
     });
   };
   magnetLoop();
 
   const onMove = (e: PointerEvent) => {
     const heroRect = hero.getBoundingClientRect();
+    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
     const inside =
       e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
 
     if (!inside) {
+      tiltTX = 0;
+      tiltTY = 0;
       offsets.forEach((o) => {
         o.tx = 0;
         o.ty = 0;
       });
       return;
     }
+
+    tiltTX = ny * -8;
+    tiltTY = nx * 10;
 
     allChars.forEach((char, i) => {
       const r = char.getBoundingClientRect();
@@ -333,11 +349,11 @@ function initHero() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const radius = 220;
+      const radius = 280;
       if (dist < radius) {
-        const force = (1 - dist / radius) * 22;
-        offsets[i].tx = (dx / dist) * force * -0.55;
-        offsets[i].ty = (dy / dist) * force * -0.4;
+        const force = (1 - dist / radius) * 42;
+        offsets[i].tx = (dx / dist) * force * -0.7;
+        offsets[i].ty = (dy / dist) * force * -0.55;
       } else {
         offsets[i].tx = 0;
         offsets[i].ty = 0;
@@ -349,6 +365,17 @@ function initHero() {
     if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
     else magnetLoop();
   });
+
+  window.setInterval(() => {
+    if (!allChars.length) return;
+    const i = Math.floor(Math.random() * allChars.length);
+    offsets[i].tx += (Math.random() - 0.5) * 14;
+    offsets[i].ty += (Math.random() - 0.5) * 14;
+    window.setTimeout(() => {
+      offsets[i].tx *= 0.15;
+      offsets[i].ty *= 0.15;
+    }, 320);
+  }, 1400);
 }
 
 function initTextWarp() {
@@ -457,6 +484,17 @@ function initStretch() {
       },
     );
 
+    gsap.to(letters, {
+      yPercent: (i) => (i % 2 === 0 ? -22 : 22),
+      rotate: (i) => (i % 2 === 0 ? -4 : 4),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
   });
 }
 
@@ -613,12 +651,29 @@ function initWork() {
       trigger: section,
       start: 'top 75%',
     },
-    y: 36,
+    y: 50,
     opacity: 0,
-    duration: 0.7,
+    duration: 0.65,
     stagger: 0.08,
     ease: 'power3.out',
   });
+
+  // Cursor glow on work cards
+  if (!prefersReducedMotion()) {
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
+      item.addEventListener('pointermove', (e) => {
+        const r = item.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        item.style.setProperty('--mx', `${x}%`);
+        item.style.setProperty('--my', `${y}%`);
+        item.classList.add('is-hot');
+      });
+      item.addEventListener('pointerleave', () => {
+        item.classList.remove('is-hot');
+      });
+    });
+  }
 
   if (prefersReducedMotion() || window.innerWidth < 768) {
     track.style.overflowX = 'auto';
@@ -631,8 +686,8 @@ function initWork() {
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${getScroll() + window.innerHeight * 1.05}`,
-      scrub: 0.65,
+      end: () => `+=${getScroll() + window.innerHeight * 1.1}`,
+      scrub: true,
       pin: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
@@ -642,7 +697,7 @@ function initWork() {
   document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
     gsap.fromTo(
       item.querySelector('.s-work__media img'),
-      { scale: 1.08 },
+      { scale: 1.12 },
       {
         scale: 1,
         ease: 'none',
@@ -651,6 +706,23 @@ function initWork() {
           containerAnimation: scrollTween,
           start: 'left 90%',
           end: 'left 40%',
+          scrub: true,
+        },
+      },
+    );
+
+    gsap.fromTo(
+      item,
+      { rotateY: 14, z: -50 },
+      {
+        rotateY: 0,
+        z: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: item,
+          containerAnimation: scrollTween,
+          start: 'left 98%',
+          end: 'left 50%',
           scrub: true,
         },
       },
@@ -691,16 +763,27 @@ function initMargin() {
   const cards = document.querySelectorAll<HTMLElement>('.js-margin-card');
   if (!cards.length) return;
 
-  gsap.from(cards, {
-    y: 28,
-    opacity: 0,
-    duration: 0.55,
-    stagger: 0.03,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: cards[0],
-      start: 'top 88%',
-    },
+  cards.forEach((card, i) => {
+    gsap.fromTo(
+      card,
+      {
+        y: 80,
+        rotate: i % 2 === 0 ? -10 : 10,
+        opacity: 0,
+      },
+      {
+        y: 0,
+        rotate: i % 2 === 0 ? -2 : 2,
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
+          start: 'top 92%',
+          end: 'top 58%',
+          scrub: true,
+        },
+      },
+    );
   });
 }
 
@@ -715,12 +798,14 @@ function initContact() {
     gsap.from(label, {
       scrollTrigger: {
         trigger: section,
-        start: 'top 78%',
+        start: 'top 75%',
+        end: 'top 28%',
+        scrub: true,
       },
-      y: 48,
-      opacity: 0,
-      duration: 0.85,
-      ease: 'power3.out',
+      scale: 0.4,
+      opacity: 0.15,
+      y: 120,
+      rotate: -6,
     });
 
     gsap.from('.s-contact__title, .s-contact__email, .s-contact__sub, .s-contact__links', {
@@ -728,32 +813,70 @@ function initContact() {
         trigger: section,
         start: 'top 65%',
       },
-      y: 28,
+      y: 36,
       opacity: 0,
-      duration: 0.65,
-      stagger: 0.07,
+      duration: 0.7,
+      stagger: 0.08,
       ease: 'power3.out',
     });
   }
 
   const letters = reveal.querySelectorAll('.js-contact-letter');
-  gsap.set(letters, { y: 16, opacity: 0 });
+  gsap.set(letters, { y: 24, opacity: 0, rotateX: -40 });
+
+  let goTiltX = 0;
+  let goTiltY = 0;
+  let goTX = 0;
+  let goTY = 0;
+  let goRaf = 0;
+
+  if (!prefersReducedMotion()) {
+    const loop = () => {
+      goRaf = requestAnimationFrame(loop);
+      goTiltX += (goTX - goTiltX) * 0.1;
+      goTiltY += (goTY - goTiltY) * 0.1;
+      go.style.transform = `rotateX(${goTiltX.toFixed(2)}deg) rotateY(${goTiltY.toFixed(2)}deg)`;
+    };
+    loop();
+
+    go.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = go.getBoundingClientRect();
+        const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        goTX = ny * -12;
+        goTY = nx * 14;
+      },
+      { passive: true },
+    );
+    go.addEventListener('pointerleave', () => {
+      goTX = 0;
+      goTY = 0;
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(goRaf);
+      else loop();
+    });
+  }
 
   const enter = () => {
     gsap.to(letters, {
       y: 0,
       opacity: 1,
-      duration: 0.35,
-      stagger: 0.035,
+      rotateX: 0,
+      duration: 0.4,
+      stagger: 0.04,
       ease: 'power3.out',
     });
     if (label) gsap.to(label, { color: 'var(--vf-mark)', duration: 0.25 });
   };
   const leave = () => {
     gsap.to(letters, {
-      y: 16,
+      y: 24,
       opacity: 0,
-      duration: 0.22,
+      rotateX: -40,
+      duration: 0.28,
       stagger: 0.02,
       ease: 'power2.in',
     });
@@ -764,6 +887,52 @@ function initContact() {
   go.addEventListener('focus', enter);
   go.addEventListener('mouseleave', leave);
   go.addEventListener('blur', leave);
+}
+
+function initCursor() {
+  const root = document.querySelector<HTMLElement>('.js-cursor');
+  const ring = document.querySelector<HTMLElement>('.js-cursor-ring');
+  const dot = document.querySelector<HTMLElement>('.js-cursor-dot');
+  if (!root || !ring || !dot) return;
+  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.body.classList.add('has-cursor');
+  root.classList.add('is-on');
+
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+  let rx = x;
+  let ry = y;
+  let raf = 0;
+
+  const loop = () => {
+    raf = requestAnimationFrame(loop);
+    rx += (x - rx) * 0.18;
+    ry += (y - ry) * 0.18;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+    dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  };
+  loop();
+
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      x = e.clientX;
+      y = e.clientY;
+    },
+    { passive: true },
+  );
+
+  const hot = 'a, button, .js-magnetic, .s-work__item, .js-contact-go, .js-scramble';
+  document.querySelectorAll(hot).forEach((el) => {
+    el.addEventListener('mouseenter', () => root.classList.add('is-hot'));
+    el.addEventListener('mouseleave', () => root.classList.remove('is-hot'));
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
+    else loop();
+  });
 }
 
 function initMagneticButtons() {
@@ -804,6 +973,41 @@ function initMagneticButtons() {
   });
 }
 
+function initScramble() {
+  if (prefersReducedMotion()) return;
+  const glyphs = 'abcdefghijklmnopqrstuvwxyz####////';
+
+  document.querySelectorAll<HTMLElement>('.js-scramble').forEach((el) => {
+    const original = (el.textContent ?? '').trim();
+    if (!original) return;
+
+    let timer = 0;
+    el.addEventListener('mouseenter', () => {
+      window.clearInterval(timer);
+      let frame = 0;
+      const max = 10;
+      timer = window.setInterval(() => {
+        el.textContent = [...original]
+          .map((ch, i) => {
+            if (ch === ' ') return ' ';
+            if (frame / max > i / original.length) return original[i];
+            return glyphs[Math.floor(Math.random() * glyphs.length)];
+          })
+          .join('');
+        frame += 1;
+        if (frame > max) {
+          window.clearInterval(timer);
+          el.textContent = original;
+        }
+      }, 28);
+    });
+    el.addEventListener('mouseleave', () => {
+      window.clearInterval(timer);
+      el.textContent = original;
+    });
+  });
+}
+
 function initActiveNav() {
   const links = document.querySelectorAll<HTMLAnchorElement>('.js-nav-link');
   if (!links.length) return;
@@ -829,19 +1033,98 @@ function initActiveNav() {
   });
 }
 
+function initImageParallax() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.s-margin__card img').forEach((img) => {
+    gsap.fromTo(
+      img,
+      { yPercent: -10, scale: 1.14 },
+      {
+        yPercent: 10,
+        scale: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: img.parentElement,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      },
+    );
+  });
+}
+
 function initRevealLines() {
   if (prefersReducedMotion()) return;
 
   document.querySelectorAll<HTMLElement>('.js-reveal-lines').forEach((el) => {
-    gsap.from(el, {
-      y: 28,
-      opacity: 0,
-      duration: 0.75,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 82%',
+    const chars = splitChars(el, 'vf-warp-char');
+    if (!chars.length) return;
+    gsap.fromTo(
+      chars,
+      { yPercent: 110, opacity: 0, rotateX: -40 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        rotateX: 0,
+        ease: 'power3.out',
+        stagger: 0.02,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 82%',
+        },
       },
+    );
+  });
+}
+
+function initClipReveals() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-proof-skill, .js-work-item').forEach((el) => {
+    gsap.fromTo(
+      el,
+      { clipPath: 'inset(12% 8% 12% 8%)', opacity: 0.35 },
+      {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 92%',
+          end: 'top 55%',
+          scrub: true,
+        },
+      },
+    );
+  });
+}
+
+function initNoisePulse() {
+  const noise = document.querySelector<HTMLElement>('.js-noise');
+  if (!noise || prefersReducedMotion()) return;
+
+  gsap.to(noise, {
+    opacity: 0.08,
+    duration: 2.4,
+    yoyo: true,
+    repeat: -1,
+    ease: 'sine.inOut',
+  });
+}
+
+function initMarqueeSpeed() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-sep').forEach((sep) => {
+    const track = sep.querySelector<HTMLElement>('.a-sep__track');
+    if (!track) return;
+    sep.addEventListener('mouseenter', () => {
+      track.style.animationDuration = '10s';
+    });
+    sep.addEventListener('mouseleave', () => {
+      track.style.animationDuration = '';
     });
   });
 }
@@ -874,7 +1157,11 @@ function boot() {
   const afterIntro = () => {
     initLenis();
     initProgress();
+    initCursor();
     initMagneticButtons();
+    initScramble();
+    initNoisePulse();
+    initMarqueeSpeed();
     initHero();
     initTextWarp();
     initRevealLines();
@@ -886,8 +1173,10 @@ function boot() {
     initRules();
     initAbout();
     initWork();
+    initClipReveals();
     initProof();
     initMargin();
+    initImageParallax();
     initContact();
     initActiveNav();
     ScrollTrigger.refresh();
