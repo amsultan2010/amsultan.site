@@ -1,14 +1,22 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import { photos } from '../../data/photos';
 
 const picks = photos.slice(0, 6);
+const asciiPath = path.join(process.cwd(), 'public/images/myascii.txt');
+const ascii = fs.existsSync(asciiPath)
+  ? fs.readFileSync(asciiPath, 'utf8').trimEnd()
+  : 'abdullah';
 ---
 
 <section id="margin" class="s-margin" aria-label="photos">
   <div class="s-margin__grid">
     <article class="s-margin__ascii js-margin-card">
       <p class="vf-mono s-margin__label">ascii</p>
-      <pre class="s-margin__pre" data-ascii-src="/images/myascii.txt">loading…</pre>
+      <div class="s-margin__ascii-frame">
+        <pre class="s-margin__pre">{ascii}</pre>
+      </div>
     </article>
 
     {picks.map((photo, i) => (
@@ -21,23 +29,6 @@ const picks = photos.slice(0, 6);
     ))}
   </div>
 </section>
-
-<script>
-  const pre = document.querySelector<HTMLElement>('.s-margin__pre');
-  if (pre) {
-    const src = pre.dataset.asciiSrc;
-    if (src) {
-      fetch(src)
-        .then((r) => r.text())
-        .then((t) => {
-          pre.textContent = t.trimEnd().split('\n').slice(0, 36).join('\n');
-        })
-        .catch(() => {
-          pre.textContent = 'abdullah';
-        });
-    }
-  }
-</script>
 
 <style>
   .s-margin {
@@ -55,8 +46,8 @@ const picks = photos.slice(0, 6);
     border: 1px solid var(--vf-line);
     padding: 0.75rem;
     background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
-    min-height: 240px;
     min-width: 0;
+    container-type: inline-size;
   }
   .s-margin__label {
     margin: 0 0 0.5rem;
@@ -64,16 +55,20 @@ const picks = photos.slice(0, 6);
     letter-spacing: 0.12em;
     color: var(--vf-mark);
   }
+  .s-margin__ascii-frame {
+    overflow: hidden;
+    width: 100%;
+  }
   .s-margin__pre {
     margin: 0;
     font-family: var(--vf-font-mono);
-    font-size: 5px;
+    font-size: 1.05cqi;
     line-height: 1.05;
-    overflow: hidden;
-    max-height: 280px;
     color: var(--vf-ink);
-    opacity: 0.85;
+    opacity: 0.9;
     white-space: pre;
+    width: max-content;
+    max-width: none;
   }
   .s-margin__card {
     grid-column: span 3;

@@ -734,46 +734,6 @@ function initProof() {
   const section = document.querySelector('.js-proof');
   if (!section) return;
 
-  gsap.from('.js-proof-stat', {
-    scrollTrigger: {
-      trigger: '.s-proof__stats',
-      start: 'top 80%',
-    },
-    y: 48,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.12,
-    ease: 'power3.out',
-  });
-
-  // Peak-End: big numbers land hard when they enter
-  if (!prefersReducedMotion()) {
-    document.querySelectorAll<HTMLElement>('.s-proof__value[data-value]').forEach((el) => {
-      const raw = el.dataset.value ?? el.textContent ?? '';
-      const match = raw.match(/([\d.]+)/);
-      if (!match) return;
-      const target = Number.parseFloat(match[1]);
-      if (!Number.isFinite(target)) return;
-      const prefix = raw.slice(0, raw.indexOf(match[1]));
-      const suffix = raw.slice(raw.indexOf(match[1]) + match[1].length);
-      const state = { v: 0 };
-      gsap.to(state, {
-        v: target,
-        duration: 1.4,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          once: true,
-        },
-        onUpdate: () => {
-          const decimals = match[1].includes('.') ? 2 : 0;
-          el.textContent = `${prefix}${state.v.toFixed(decimals)}${suffix}`;
-        },
-      });
-    });
-  }
-
   gsap.from('.js-proof-lead', {
     scrollTrigger: {
       trigger: '.s-proof__lead',
@@ -1122,7 +1082,7 @@ function initRevealLines() {
 function initClipReveals() {
   if (prefersReducedMotion()) return;
 
-  document.querySelectorAll<HTMLElement>('.js-proof-stat, .js-proof-skill, .js-work-item').forEach((el) => {
+  document.querySelectorAll<HTMLElement>('.js-proof-skill, .js-work-item').forEach((el) => {
     gsap.fromTo(
       el,
       { clipPath: 'inset(12% 8% 12% 8%)', opacity: 0.35 },

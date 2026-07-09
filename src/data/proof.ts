@@ -1,9 +1,3 @@
-export type ProofStat = {
-  value: string;
-  label: string;
-  note: string;
-};
-
 export type LeadershipItem = {
   title: string;
   org: string;
@@ -16,47 +10,24 @@ export type SkillGroup = {
   items: string[];
 };
 
-export const PROOF_STATS: ProofStat[] = [
-  {
-    value: '2.03',
-    label: 'ib grade lift',
-    note: 'avg points raised for tutoring students.',
-  },
-  {
-    value: '3',
-    label: 'quant apps',
-    note: 'backtester, portfolio, options on vercel.',
-  },
-  {
-    value: '12-15',
-    label: 'incubator cohort',
-    note: 'x-combinator at ais-r.',
-  },
-  {
-    value: '5-0',
-    label: 'debate record',
-    note: '1st at horace mann juniors.',
-  },
-];
-
 export const LEADERSHIP: LeadershipItem[] = [
   {
     title: 'x-combinator',
     org: 'ais-r · founder',
     period: '2026 - present',
-    body: 'first student-run startup incubator at ais-r. cohorts pitch, build, and launch each semester.',
+    body: 'student-run startup incubator at ais-r. cohorts pitch, build, and launch each semester.',
   },
   {
     title: 'aspiring doctors’ club',
     org: 'ais-r · leader',
     period: '2025 - present',
-    body: 'diabetes awareness month with king faisal university (60+ students). tech-in-medicine track.',
+    body: 'diabetes awareness month with king faisal university. tech-in-medicine track.',
   },
   {
     title: 'prime',
     org: 'pingry · founder',
     period: 'engineering club',
-    body: 'speaker sessions with njit and rutgers professors on paths into engineering.',
+    body: 'speaker sessions with njit and rutgers professors.',
   },
 ];
 
@@ -66,15 +37,15 @@ export const SKILL_GROUPS: SkillGroup[] = [
     items: ['python', 'pandas', 'numpy', 'matplotlib', 'java', 'flask', 'plotly'],
   },
   {
-    label: 'ship',
+    label: 'tools',
     items: ['vercel', 'supabase', 'cursor', 'claude code', 'codex'],
   },
   {
-    label: 'speak',
+    label: 'languages',
     items: ['english', 'urdu / hindi', 'spanish'],
   },
   {
-    label: 'chase',
+    label: 'interests',
     items: ['ai + robotics', 'education', 'quant', 'f1', '3d printing'],
   },
 ];
