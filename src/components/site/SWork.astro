@@ -53,21 +53,21 @@ const total = String(featured.length).padStart(2, '0');
 
 <style>
   .s-work {
-    padding: 1vh 0 10vh;
+    padding: 1vh 0 6vh;
     overflow-x: clip;
   }
   .s-work__head {
     display: flex;
     justify-content: flex-end;
-    padding: 0 var(--vf-pad) 1.25rem;
+    padding: 0 var(--vf-pad) 1rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-work__all {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
     text-decoration: none;
     color: var(--vf-mark);
     border-bottom: 1px solid var(--vf-mark);
@@ -119,9 +119,9 @@ const total = String(featured.length).padStart(2, '0');
     display: flex;
     justify-content: space-between;
     gap: 0.75rem;
-    font-size: 0.58rem;
-    letter-spacing: 0.1em;
-    opacity: 0.75;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    opacity: 0.8;
   }
   .s-work__media {
     aspect-ratio: 16 / 10;
@@ -147,13 +147,13 @@ const total = String(featured.length).padStart(2, '0');
   }
   .s-work__role {
     margin: 0;
-    font-size: 0.58rem;
-    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
     color: var(--vf-mark);
   }
   .s-work__name {
     margin: 0;
-    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
     line-height: 1.05;
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -166,7 +166,7 @@ const total = String(featured.length).padStart(2, '0');
   }
   .s-work__desc {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.4;
   }
   .s-work__metrics {
@@ -178,10 +178,10 @@ const total = String(featured.length).padStart(2, '0');
     gap: 0.35rem;
   }
   .s-work__metrics li {
-    font-size: 0.55rem;
-    letter-spacing: 0.06em;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
     border: 1px solid var(--vf-line);
-    padding: 0.28rem 0.4rem;
+    padding: 0.32rem 0.45rem;
     color: var(--vf-mark);
     max-width: 100%;
     overflow-wrap: anywhere;
