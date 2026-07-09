@@ -33,10 +33,15 @@
     pointer-events: auto;
     cursor: grab;
     will-change: transform, height;
+    transition: background 0.2s ease;
+  }
+  .site-scrollbar__thumb:hover {
+    background: color-mix(in srgb, var(--vf-ink) 85%, var(--vf-mark));
   }
   .site-scrollbar.is-dragging .site-scrollbar__thumb {
     cursor: grabbing;
-    background: var(--vf-ink);
+    background: var(--vf-field);
+    outline: 1px solid var(--vf-ink);
   }
   @media (max-width: 720px) {
     .site-scrollbar {

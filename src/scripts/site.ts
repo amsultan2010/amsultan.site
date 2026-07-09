@@ -275,8 +275,8 @@ function initHero() {
   if (!hero || !title || prefersReducedMotion()) return;
 
   gsap.to(title, {
-    yPercent: -14,
-    scale: 0.94,
+    yPercent: -18,
+    scale: 0.9,
     ease: 'none',
     scrollTrigger: {
       trigger: hero,
@@ -374,8 +374,8 @@ function initHero() {
       return;
     }
 
-    tiltTX = ny * -6;
-    tiltTY = nx * 8;
+    tiltTX = ny * -9;
+    tiltTY = nx * 11;
 
     allChars.forEach((char, i) => {
       const r = char.getBoundingClientRect();
@@ -384,11 +384,11 @@ function initHero() {
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const radius = 260;
+      const radius = 320;
       if (dist < radius) {
-        const force = (1 - dist / radius) * 28;
-        offsets[i].tx = (dx / dist) * force * -0.65;
-        offsets[i].ty = (dy / dist) * force * -0.5;
+        const force = (1 - dist / radius) * 38;
+        offsets[i].tx = (dx / dist) * force * -0.75;
+        offsets[i].ty = (dy / dist) * force * -0.58;
       } else {
         offsets[i].tx = 0;
         offsets[i].ty = 0;
@@ -404,14 +404,19 @@ function initHero() {
   // Ambient letter flip — signature wodniack living type
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
   const flipTick = () => {
-    if (!allChars.length || Math.random() > 0.28) return;
-    const char = allChars[Math.floor(Math.random() * allChars.length)];
-    if (dirs.some((d) => char.classList.contains(d))) return;
-    const dir = dirs[Math.floor(Math.random() * dirs.length)];
-    char.classList.add(dir);
-    window.setTimeout(() => char.classList.remove(dir), 1000);
+    if (!allChars.length || Math.random() > 0.22) return;
+    // Occasionally flip a small cluster — more "alive" without chaos
+    const start = Math.floor(Math.random() * allChars.length);
+    const count = 1 + Math.floor(Math.random() * 2);
+    for (let n = 0; n < count; n += 1) {
+      const char = allChars[(start + n) % allChars.length];
+      if (dirs.some((d) => char.classList.contains(d))) continue;
+      const dir = dirs[Math.floor(Math.random() * dirs.length)];
+      char.classList.add(dir);
+      window.setTimeout(() => char.classList.remove(dir), 1000);
+    }
   };
-  window.setInterval(flipTick, 140);
+  window.setInterval(flipTick, 120);
 }
 
 function initTextWarp() {
@@ -886,9 +891,10 @@ function initContact() {
         end: 'top 35%',
         scrub: true,
       },
-      scale: 0.55,
-      opacity: 0.2,
-      y: 80,
+      scale: 0.48,
+      opacity: 0.15,
+      y: 100,
+      rotate: -8,
     });
 
     gsap.from('.s-contact__title, .s-contact__email, .s-contact__sub, .s-contact__links', {
@@ -896,10 +902,10 @@ function initContact() {
         trigger: section,
         start: 'top 65%',
       },
-      y: 36,
+      y: 42,
       opacity: 0,
-      duration: 0.7,
-      stagger: 0.08,
+      duration: 0.8,
+      stagger: 0.09,
       ease: 'expo.out',
     });
   }
@@ -908,21 +914,66 @@ function initContact() {
   let pulse: gsap.core.Tween | null = null;
   if (!prefersReducedMotion() && label) {
     pulse = gsap.to(label, {
-      scale: 1.06,
-      duration: 1.8,
+      scale: 1.08,
+      duration: 1.6,
       yoyo: true,
       repeat: -1,
       ease: 'power1.inOut',
     });
   }
 
+  // Magnetic pull on the GO circle
+  if (!prefersReducedMotion() && !window.matchMedia('(pointer: coarse)').matches) {
+    let mx = 0;
+    let my = 0;
+    let mtx = 0;
+    let mty = 0;
+    let mraf = 0;
+    const mloop = () => {
+      mraf = requestAnimationFrame(mloop);
+      mx += (mtx - mx) * 0.12;
+      my += (mty - my) * 0.12;
+      if (!hover.classList.contains('is-active')) {
+        go.style.transform = `translate3d(${mx.toFixed(2)}px, ${my.toFixed(2)}px, 0)`;
+      }
+    };
+    mloop();
+    hover.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = hover.getBoundingClientRect();
+        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+      },
+      { passive: true },
+    );
+    hover.addEventListener('pointerleave', () => {
+      mtx = 0;
+      mty = 0;
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
+      else mloop();
+    });
+  }
+
+  const chars = hover.querySelectorAll<HTMLElement>('.s-contact__cta-char');
   const enter = () => {
     hover.classList.add('is-active');
+    go.style.transform = '';
     pulse?.pause();
+    if (!prefersReducedMotion() && chars.length) {
+      gsap.fromTo(
+        chars,
+        { yPercent: 110, opacity: 0 },
+        { yPercent: 0, opacity: 1, duration: 0.55, stagger: 0.035, ease: 'expo.out', delay: 0.12 },
+      );
+    }
   };
   const leave = () => {
     hover.classList.remove('is-active');
     pulse?.play();
+    go.style.transform = '';
   };
 
   hover.addEventListener('mouseenter', enter);
@@ -1007,8 +1058,8 @@ function initCursor() {
 
   const loop = () => {
     raf = requestAnimationFrame(loop);
-    rx += (x - rx) * 0.18;
-    ry += (y - ry) * 0.18;
+    rx += (x - rx) * 0.12;
+    ry += (y - ry) * 0.12;
     ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
     dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
   };
@@ -1023,11 +1074,14 @@ function initCursor() {
     { passive: true },
   );
 
-  const hot = 'a, button, .js-magnetic, .s-work__item, .js-contact-go, .js-scramble';
+  const hot = 'a, button, .js-magnetic, .s-work__item, .js-contact-go, .js-contact-hover, .js-scramble, .js-margin-card';
   document.querySelectorAll(hot).forEach((el) => {
     el.addEventListener('mouseenter', () => root.classList.add('is-hot'));
     el.addEventListener('mouseleave', () => root.classList.remove('is-hot'));
   });
+
+  document.addEventListener('mousedown', () => root.classList.add('is-down'));
+  document.addEventListener('mouseup', () => root.classList.remove('is-down'));
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
@@ -1057,8 +1111,8 @@ function initMagneticButtons() {
       'pointermove',
       (e) => {
         const r = el.getBoundingClientRect();
-        tx = (e.clientX - (r.left + r.width / 2)) * 0.38;
-        ty = (e.clientY - (r.top + r.height / 2)) * 0.38;
+        tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
+        ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
       },
       { passive: true },
     );
@@ -1085,7 +1139,7 @@ function initScramble() {
     el.addEventListener('mouseenter', () => {
       window.clearInterval(timer);
       let frame = 0;
-      const max = 14;
+      const max = 16;
       timer = window.setInterval(() => {
         el.textContent = [...original]
           .map((ch, i) => {
@@ -1099,7 +1153,7 @@ function initScramble() {
           window.clearInterval(timer);
           el.textContent = original;
         }
-      }, 22);
+      }, 18);
     });
     el.addEventListener('mouseleave', () => {
       window.clearInterval(timer);
@@ -1232,6 +1286,80 @@ function initNav() {
   });
 }
 
+function initFadeUps() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-fade-up').forEach((el, i) => {
+    gsap.from(el, {
+      y: 36,
+      opacity: 0,
+      duration: 0.9,
+      delay: 0.15 + i * 0.08,
+      ease: 'expo.out',
+    });
+  });
+}
+
+function initLivingLabels() {
+  if (prefersReducedMotion()) return;
+
+  // Soft ambient scramble on mono labels while in view — instrument chatter
+  const labels = document.querySelectorAll<HTMLElement>(
+    '.s-proof__block-label, .s-about__aside-label, .s-about__edu-label, .s-margin__label, .s-work__count',
+  );
+  const glyphs = 'abcdefghijklmnopqrstuvwxyz##/';
+
+  labels.forEach((el) => {
+    const original = (el.textContent ?? '').trim();
+    if (!original || original.length > 18) return;
+
+    let active = false;
+    let tick = 0;
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 90%',
+      end: 'bottom 10%',
+      onEnter: () => {
+        active = true;
+      },
+      onEnterBack: () => {
+        active = true;
+      },
+      onLeave: () => {
+        active = false;
+        window.clearInterval(tick);
+        el.textContent = original;
+      },
+      onLeaveBack: () => {
+        active = false;
+        window.clearInterval(tick);
+        el.textContent = original;
+      },
+    });
+
+    window.setInterval(() => {
+      if (!active || Math.random() > 0.08 || tick) return;
+      let frame = 0;
+      const max = 6;
+      tick = window.setInterval(() => {
+        el.textContent = [...original]
+          .map((ch, i) => {
+            if (ch === ' ') return ' ';
+            if (frame / max > i / original.length) return original[i];
+            return glyphs[Math.floor(Math.random() * glyphs.length)];
+          })
+          .join('');
+        frame += 1;
+        if (frame > max) {
+          window.clearInterval(tick);
+          tick = 0;
+          el.textContent = original;
+        }
+      }, 24);
+    }, 2400);
+  });
+}
+
 function boot() {
   document.documentElement.classList.add('is-scroll-blocked');
   initContrastToggle();
@@ -1248,6 +1376,7 @@ function boot() {
     initScramble();
     initNoisePulse();
     initHero();
+    initFadeUps();
     initTextWarp();
     initRevealLines();
     initRunways();
@@ -1263,6 +1392,7 @@ function boot() {
     initMargin();
     initImageParallax();
     initContact();
+    initLivingLabels();
     initActiveNav();
     ScrollTrigger.refresh();
   };

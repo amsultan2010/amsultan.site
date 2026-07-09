@@ -368,10 +368,23 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .site-cursor.is-hot .site-cursor__ring {
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
-  background: color-mix(in srgb, var(--vf-ink) 12%, transparent);
+  width: 72px;
+  height: 72px;
+  margin: -36px 0 0 -36px;
+  background: color-mix(in srgb, var(--vf-ink) 14%, transparent);
+  mix-blend-mode: difference;
+}
+
+.site-cursor.is-down .site-cursor__ring {
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  background: color-mix(in srgb, var(--vf-ink) 35%, transparent);
+}
+
+.site-cursor.is-down .site-cursor__dot {
+  transform: scale(0.4);
+  opacity: 0.4;
 }
 
 @media (pointer: coarse), (max-width: 900px) {

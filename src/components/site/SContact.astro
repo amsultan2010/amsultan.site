@@ -95,7 +95,7 @@ const talkBot = ['t', 'a', 'l', 'k'];
     font-size: clamp(4.5rem, 16vw, 9rem);
     line-height: 0.85;
     color: var(--vf-ink);
-    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s;
     will-change: transform;
   }
   .s-contact__go-label {
@@ -106,6 +106,7 @@ const talkBot = ['t', 'a', 'l', 'k'];
     border-color: transparent;
     color: var(--vf-field);
     transform: scale(0.92);
+    transition: color 0.35s, border-color 0.35s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .s-contact__hover.is-active .s-contact__go-label {
     color: var(--vf-field);
@@ -143,12 +144,20 @@ const talkBot = ['t', 'a', 'l', 'k'];
   .s-contact__cta-char {
     display: inline-grid;
     overflow: hidden;
+    will-change: transform, opacity;
   }
   .s-contact__cta-slice {
     display: block;
   }
   .s-contact__cta-slice:nth-child(2) {
     opacity: 0.35;
+  }
+  .s-contact__hover.is-active .s-contact__cta-slice:nth-child(2) {
+    animation: contact-ghost 1.4s ease-in-out infinite;
+  }
+  @keyframes contact-ghost {
+    0%, 100% { transform: translateY(0); opacity: 0.3; }
+    50% { transform: translateY(0.08em); opacity: 0.55; }
   }
   .s-contact__panel-email {
     margin: 0.85rem 0 0;

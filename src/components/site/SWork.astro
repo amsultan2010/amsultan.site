@@ -129,10 +129,13 @@ const total = String(featured.length).padStart(2, '0');
     inset: 0;
     pointer-events: none;
     background: radial-gradient(
-      280px circle at var(--mx) var(--my),
-      color-mix(in srgb, var(--vf-ink) 14%, transparent),
-      transparent 55%
+      320px circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--vf-ink) 18%, transparent),
+      transparent 58%
     );
+  }
+  .s-work__item.is-hot .s-work__name a {
+    color: var(--vf-mark);
   }
   .s-work__meta {
     display: flex;

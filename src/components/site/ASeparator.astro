@@ -77,11 +77,11 @@ const strip = Array.from({ length: 18 }, (_, i) => phrases[i % phrases.length]);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
+    width: max(120%, 100%);
     padding: 0 1.25rem;
-    gap: 0.45rem;
+    gap: 0.55rem;
     overflow: hidden;
-    animation: sep-drift 28s linear infinite;
+    animation: sep-drift 22s linear infinite;
   }
   .a-sep--reverse .a-sep__binaries {
     flex-direction: row-reverse;
@@ -89,7 +89,7 @@ const strip = Array.from({ length: 18 }, (_, i) => phrases[i % phrases.length]);
   }
   @keyframes sep-drift {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-4%); }
+    100% { transform: translateX(-8%); }
   }
   .a-sep__group {
     display: inline-flex;

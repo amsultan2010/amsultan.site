@@ -1,29 +1,28 @@
 import { test, expect, type Page } from '@playwright/test';
 
 async function dismissIntro(page: Page) {
-  await page.waitForLoadState('domcontentloaded');
-  // Always force-complete — intro wipe can race under parallel workers
-  await page.waitForFunction(() => !!document.querySelector('.js-site-wrapper'), null, {
-    timeout: 15000,
+  // Skip intro before navigation so parallel workers don't race the wipe
+  await page.addInitScript(() => {
+    sessionStorage.setItem('vf-intro-seen', '1');
   });
-  const skip = page.getByRole('button', { name: /skip/i });
-  if (await skip.isVisible({ timeout: 800 }).catch(() => false)) {
-    await skip.click({ force: true }).catch(() => undefined);
-  }
+}
+
+async function openHome(page: Page) {
+  await dismissIntro(page);
+  await page.goto('/');
+  await page.waitForSelector('.js-site-wrapper', { state: 'attached', timeout: 15000 });
   await page.evaluate(() => {
     const intro = document.querySelector('.js-intro');
     const wrapper = document.querySelector<HTMLElement>('.js-site-wrapper');
     if (wrapper) wrapper.style.opacity = '1';
     intro?.remove();
     document.documentElement.classList.remove('is-scroll-blocked');
-    sessionStorage.setItem('vf-intro-seen', '1');
   });
   await expect(page.locator('.js-site-wrapper')).toBeVisible({ timeout: 5000 });
 }
 
 test('homepage loads voltage frame with brand and work', async ({ page }) => {
-  await page.goto('/');
-  await dismissIntro(page);
+  await openHome(page);
   await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible({ timeout: 10000 });
   await expect(page.locator('.js-terrain-canvas')).toBeAttached();
   await expect(page.locator('#work')).toBeVisible();
@@ -52,16 +51,14 @@ test('lab and desktop redirect home', async ({ page }) => {
 });
 
 test('contrast toggle works on homepage', async ({ page }) => {
-  await page.goto('/');
-  await dismissIntro(page);
+  await openHome(page);
   const toggle = page.getByRole('button', { name: /toggle contrast|contrast/i });
   await toggle.click();
   await expect(page.locator('html.theme-contrasted')).toBeVisible({ timeout: 5000 });
 });
 
 test('nav is section-only on homepage', async ({ page }) => {
-  await page.goto('/');
-  await dismissIntro(page);
+  await openHome(page);
   const nav = page.getByRole('navigation', { name: /primary/i });
   await expect(nav.getByRole('link', { name: /^about$/i })).toBeVisible();
   await expect(nav.getByRole('link', { name: /^work$/i })).toBeVisible();
