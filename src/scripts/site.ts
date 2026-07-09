@@ -210,12 +210,23 @@ function splitChars(el: HTMLElement, className: string) {
   el.textContent = '';
   el.setAttribute('aria-label', text);
   const spans: HTMLElement[] = [];
-  [...text].forEach((ch) => {
-    const span = document.createElement('span');
-    span.className = className;
-    span.textContent = ch === ' ' ? '\u00a0' : ch;
-    el.appendChild(span);
-    spans.push(span);
+  // Keep words intact so inline-block letters don't wrap mid-word.
+  text.split(/(\s+)/).forEach((token) => {
+    if (!token) return;
+    if (/^\s+$/.test(token)) {
+      el.appendChild(document.createTextNode(token.replace(/ /g, '\u00a0')));
+      return;
+    }
+    const word = document.createElement('span');
+    word.className = 'vf-warp-word';
+    [...token].forEach((ch) => {
+      const span = document.createElement('span');
+      span.className = className;
+      span.textContent = ch;
+      word.appendChild(span);
+      spans.push(span);
+    });
+    el.appendChild(word);
   });
   return spans;
 }

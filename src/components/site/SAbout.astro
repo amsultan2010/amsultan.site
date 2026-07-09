@@ -59,35 +59,37 @@ import { EDUCATION } from '../../data/education';
   .s-about {
     padding: 1vh 0 5vh;
     overflow-x: clip;
-    text-align: center;
+    text-align: left;
   }
   .s-about__grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 0.7fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
     padding: 0 var(--vf-pad);
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
     margin: 0 auto;
-    justify-items: center;
+    align-items: start;
+    text-align: left;
   }
   .s-about__copy {
-    max-width: 40rem;
+    max-width: none;
   }
   .s-about__title {
-    margin: 0 auto;
-    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
-    max-width: 12ch;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    hyphens: auto;
-    text-align: center;
+    margin: 0;
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    max-width: none;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: manual;
+    text-align: left;
+    text-wrap: balance;
   }
   .s-about__body {
-    margin: 1rem auto 0;
-    font-size: clamp(1.3rem, 2.6vw, 1.55rem);
+    margin: 1rem 0 0;
+    font-size: clamp(1.3rem, 2.4vw, 1.55rem);
     line-height: 1.45;
-    max-width: 36rem;
-    text-align: center;
+    max-width: 48rem;
+    text-align: left;
   }
   .s-about__resume {
     margin: 1.25rem 0 0;
@@ -109,7 +111,8 @@ import { EDUCATION } from '../../data/education';
     padding: 1.15rem 1.35rem;
     background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
     width: 100%;
-    max-width: 28rem;
+    max-width: none;
+    text-align: left;
   }
   .s-about__aside-label {
     margin: 0 0 0.75rem;
@@ -134,7 +137,7 @@ import { EDUCATION } from '../../data/education';
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.55rem;
   }
   .s-about__edu-label {
@@ -156,9 +159,9 @@ import { EDUCATION } from '../../data/education';
     grid-template-columns: 1.25rem minmax(0, 1fr);
     gap: 0.85rem;
     padding: 0 0 1.35rem;
-    text-align: center;
-    max-width: 40rem;
-    margin: 0 auto;
+    text-align: left;
+    max-width: none;
+    margin: 0;
     width: 100%;
   }
   .s-about__cred-rail {
@@ -189,7 +192,7 @@ import { EDUCATION } from '../../data/education';
   }
   .s-about__cred-top {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 0.85rem;
     margin-bottom: 0.5rem;
@@ -208,9 +211,10 @@ import { EDUCATION } from '../../data/education';
   }
   .s-about__cred-school {
     margin: 0;
-    font-size: clamp(1.65rem, 3.6vw, 2.35rem);
-    line-height: 1.1;
-    overflow-wrap: anywhere;
+    font-size: clamp(1.65rem, 3.2vw, 2.35rem);
+    line-height: 1.15;
+    overflow-wrap: normal;
+    word-break: normal;
   }
   .s-about__cred-loc {
     margin: 0.4rem 0 0;
@@ -219,23 +223,54 @@ import { EDUCATION } from '../../data/education';
     opacity: 0.8;
   }
   .s-about__cred-focus {
-    margin: 0.65rem auto 0;
+    margin: 0.65rem 0 0;
     font-size: 1.25rem;
     opacity: 0.95;
-    max-width: 36rem;
+    max-width: 56rem;
   }
   .s-about__cred-list {
-    margin: 0.75rem auto 0;
-    padding: 0;
-    list-style: none;
+    margin: 0.75rem 0 0;
+    padding: 0 0 0 1.15rem;
+    list-style: disc;
     font-size: 1.15rem;
     display: grid;
     gap: 0.4rem;
-    max-width: 36rem;
+    max-width: 56rem;
   }
-  .s-about__cred-list li::before {
-    content: '· ';
-    color: var(--vf-mark);
+
+  @media (max-width: 900px) {
+    .s-about__grid {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .s-about__title,
+    .s-about__body {
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .s-about__aside {
+      text-align: center;
+      max-width: 36rem;
+      margin: 0 auto;
+    }
+    .s-about__edu-head {
+      align-items: center;
+    }
+    .s-about__cred {
+      text-align: center;
+    }
+    .s-about__cred-top {
+      justify-content: center;
+    }
+    .s-about__cred-list {
+      padding-left: 0;
+      list-style: none;
+    }
+    .s-about__cred-list li::before {
+      content: '· ';
+      color: var(--vf-mark);
+    }
   }
 
   @media (max-width: 720px) {
@@ -247,24 +282,13 @@ import { EDUCATION } from '../../data/education';
       display: none;
     }
     .s-about__title {
-      font-size: clamp(2.2rem, 11vw, 3rem);
+      font-size: clamp(2.2rem, 10vw, 3rem);
     }
     .s-about__body {
       font-size: 1.25rem;
     }
-    .s-about__resume a {
-      font-size: 1.05rem;
-      min-height: 3.1rem;
-    }
-    .s-about__now {
-      font-size: 1.05rem;
-    }
     .s-about__cred-school {
       font-size: 1.7rem;
-    }
-    .s-about__cred-focus,
-    .s-about__cred-list {
-      font-size: 1.15rem;
     }
   }
 </style>

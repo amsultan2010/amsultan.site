@@ -109,7 +109,7 @@ import ASeparator from './ASeparator.astro';
     left: 0;
     transform: translateY(-50%);
     color: var(--vf-ink);
-    word-break: break-all;
+    white-space: nowrap;
     pointer-events: none;
   }
   .s-hero__char.to-top .s-hero__char-inner {
@@ -149,13 +149,15 @@ import ASeparator from './ASeparator.astro';
     will-change: transform;
   }
   .s-hero__lede {
-    max-width: 34rem;
+    max-width: 44rem;
     margin: 1.25rem auto 0;
     padding: 0 var(--vf-pad);
     text-align: center;
     font-size: clamp(1.35rem, 3vw, 1.75rem);
     line-height: 1.4;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
   }
   .s-hero__actions {
     display: flex;

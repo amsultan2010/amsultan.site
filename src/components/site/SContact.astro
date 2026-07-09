@@ -185,14 +185,16 @@ const talkBot = ['t', 'a', 'l', 'k'];
     position: relative;
     margin: 1rem 0 0;
     font-size: clamp(2rem, 5vw, 3.2rem);
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
   }
   .s-contact__email {
     position: relative;
     margin: 1rem 0 0;
     font-size: clamp(1rem, 2.4vw, 1.2rem);
     letter-spacing: 0.04em;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
   .s-contact__email a {
     text-decoration: none;
@@ -209,7 +211,7 @@ const talkBot = ['t', 'a', 'l', 'k'];
   .s-contact__sub {
     position: relative;
     margin: 0.9rem auto 0;
-    max-width: 28rem;
+    max-width: 40rem;
     font-size: clamp(1.3rem, 2.6vw, 1.5rem);
     padding: 0 0.5rem;
   }

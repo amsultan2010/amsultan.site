@@ -40,11 +40,14 @@ const total = String(PROJECTS.length).padStart(2, '0');
       <SiteHead />
       <main class="archive">
         <header class="archive__head">
-          <p class="vf-band">archive</p>
-          <h1 class="archive__title vf-display">projects</h1>
-          <p class="archive__lede vf-serif">tutoring, f1 media, and quant tools.</p>
-          <p class="archive__back"><a href="/#work" class="vf-mono">← back to work</a></p>
+          <div class="archive__head-copy">
+            <p class="vf-band">archive</p>
+            <h1 class="archive__title vf-display">projects</h1>
+            <p class="archive__lede vf-serif">tutoring, f1 media, and quant tools. {PROJECTS.length} shipped.</p>
+          </div>
+          <a href="/#work" class="archive__back vf-mono">← back to work</a>
         </header>
+
         <ul class="archive__list">
           {PROJECTS.map((project, i) => {
             const href = project.demo || project.href;
@@ -58,6 +61,9 @@ const total = String(PROJECTS.length).padStart(2, '0');
                   target={external || project.demoNewTab ? '_blank' : undefined}
                   rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
                 >
+                  <div class="archive__media">
+                    <img src={project.cover} alt="" loading="lazy" />
+                  </div>
                   <div class="archive__copy">
                     <p class="archive__serial vf-mono">
                       {serial}
@@ -72,9 +78,7 @@ const total = String(PROJECTS.length).padStart(2, '0');
                       <p class="archive__metrics vf-mono">{project.metrics.join(' · ')}</p>
                     )}
                     <p class="archive__tech vf-mono">{project.tech.join(' · ')}</p>
-                  </div>
-                  <div class="archive__media">
-                    <img src={project.cover} alt="" loading="lazy" />
+                    <span class="archive__cta vf-mono">open project →</span>
                   </div>
                 </a>
               </li>
@@ -119,35 +123,34 @@ const total = String(PROJECTS.length).padStart(2, '0');
 
 <style>
   .archive {
-    text-align: center;
+    text-align: left;
   }
   .archive__head {
-    padding: 2rem var(--vf-pad) 1.25rem;
-    max-width: 40rem;
-    margin: 0 auto;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 2.25rem var(--vf-pad) 1.75rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    margin: 0 auto;
+  }
+  .archive__head-copy {
+    display: grid;
+    gap: 0.45rem;
   }
   .archive__title {
-    margin: 0.5rem 0 0;
-    font-size: clamp(2.6rem, 8vw, 4.6rem);
-    overflow-wrap: anywhere;
-  }
-  .archive__copy {
-    min-width: 0;
-    display: grid;
-    justify-items: center;
+    margin: 0;
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    overflow-wrap: normal;
+    word-break: normal;
   }
   .archive__lede {
-    margin: 0.85rem 0 0;
-    font-size: 1.4rem;
+    margin: 0.35rem 0 0;
+    font-size: 1.35rem;
+    max-width: 40rem;
   }
   .archive__back {
-    margin: 1.1rem 0 0;
-  }
-  .archive__back a {
     font-size: 1rem;
     letter-spacing: 0.08em;
     text-decoration: none;
@@ -155,80 +158,117 @@ const total = String(PROJECTS.length).padStart(2, '0');
     min-height: var(--vf-tap);
     display: inline-flex;
     align-items: center;
+    border-bottom: 1px solid var(--vf-mark);
   }
   .archive__list {
     list-style: none;
     margin: 0 auto;
-    padding: 0 var(--vf-pad) 3rem;
+    padding: 0 var(--vf-pad) 3.5rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    display: grid;
+    gap: 1.5rem;
   }
   .archive__row {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.15rem;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(1.25rem, 3vw, 2.5rem);
     align-items: center;
-    justify-items: center;
-    padding: 1.75rem 0;
-    border-top: 1px solid color-mix(in srgb, var(--vf-ink) 30%, transparent);
+    padding: 1.35rem;
+    border: 1px solid var(--vf-line);
+    background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
     text-decoration: none;
     color: inherit;
-    text-align: center;
+    transition: border-color 0.25s, transform 0.25s;
   }
-  .archive__row:hover .archive__name {
+  .archive__row:hover {
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
+    transform: translateY(-3px);
+  }
+  .archive__row:hover .archive__name,
+  .archive__row:hover .archive__cta {
     color: var(--vf-mark);
+  }
+  .archive__copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.45rem;
+    justify-items: start;
   }
   .archive__serial {
     margin: 0;
-    font-size: 0.95rem;
-    letter-spacing: 0.08em;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
     color: var(--vf-mark);
   }
   .archive__name {
-    margin: 0.5rem 0 0;
-    font-size: clamp(1.6rem, 3.6vw, 2.35rem);
-    line-height: 1.05;
-    overflow-wrap: anywhere;
-    word-break: break-word;
+    margin: 0;
+    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+    line-height: 1.1;
+    overflow-wrap: normal;
+    word-break: normal;
+    text-wrap: balance;
   }
   .archive__desc {
-    margin: 0.7rem auto 0;
-    max-width: 36rem;
+    margin: 0.2rem 0 0;
+    max-width: none;
     font-size: 1.25rem;
   }
   .archive__detail {
-    margin: 0.55rem auto 0;
-    max-width: 36rem;
+    margin: 0.15rem 0 0;
+    max-width: none;
     opacity: 0.88;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
   .archive__metrics {
-    margin: 0.75rem 0 0;
-    font-size: 0.95rem;
-    letter-spacing: 0.06em;
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
     color: var(--vf-mark);
   }
   .archive__tech {
-    margin: 0.55rem 0 0;
-    font-size: 0.95rem;
-    letter-spacing: 0.06em;
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
     opacity: 0.7;
+  }
+  .archive__cta {
+    margin-top: 0.55rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 0.1rem;
   }
   .archive__media {
     border: 1px solid var(--vf-ink);
     aspect-ratio: 16 / 10;
     overflow: hidden;
     width: 100%;
-    max-width: 28rem;
+    max-width: none;
   }
   .archive__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s ease;
+  }
+  .archive__row:hover .archive__media img {
+    transform: scale(1.04);
+  }
+
+  @media (max-width: 860px) {
+    .archive__row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .archive__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
   @media (max-width: 720px) {
     .archive__row {
-      padding: 1.35rem 0;
+      padding: 1rem;
     }
     .archive__name {
       font-size: 1.7rem;

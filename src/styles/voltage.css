@@ -10,8 +10,8 @@
   --vf-font-display: 'Unbounded', 'Arial Black', Impact, sans-serif;
   --vf-font-body: 'Newsreader', Georgia, 'Times New Roman', serif;
   --vf-font-mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
-  --vf-max: 920px;
-  --vf-pad: clamp(1.15rem, 4vw, 2.25rem);
+  --vf-max: 1480px;
+  --vf-pad: clamp(1.25rem, 4vw, 3.5rem);
   --vf-tap: 2.75rem;
   color-scheme: light;
 }
@@ -72,7 +72,7 @@ body {
   font-family: var(--vf-font-body);
   font-size: clamp(1.2rem, 2.4vw, 1.4rem);
   line-height: 1.5;
-  text-align: center;
+  text-align: left;
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
@@ -412,10 +412,10 @@ html.theme-contrasted .site-contrast-mask {
 
 .vf-rule {
   height: 1px;
-  width: min(12rem, 40vw);
-  margin: 0 auto;
+  width: min(16rem, 50%);
+  margin: 0;
   background: var(--vf-line);
-  transform-origin: center;
+  transform-origin: left center;
 }
 
 .vf-runway {
@@ -434,10 +434,15 @@ html.theme-contrasted .site-contrast-mask {
   letter-spacing: -0.045em;
   line-height: 0.9;
   text-align: center;
-  max-width: min(12ch, 92vw);
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  max-width: min(28ch, 96vw);
+  overflow-wrap: normal;
+  word-break: normal;
   will-change: transform, opacity;
+}
+
+.vf-warp-word {
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .vf-chapter {
@@ -466,7 +471,9 @@ html.theme-contrasted .site-contrast-mask {
   font-size: clamp(2.4rem, 8vw, 5.5rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
-  max-width: 14ch;
+  max-width: min(28ch, 96vw);
+  overflow-wrap: normal;
+  word-break: normal;
   will-change: transform;
 }
 
@@ -483,18 +490,18 @@ html.theme-contrasted .site-contrast-mask {
 
 .vf-chapter__lede {
   margin: 0.85rem auto 0;
-  max-width: 36rem;
+  max-width: 48rem;
   font-size: clamp(1.3rem, 2.4vw, 1.55rem);
   opacity: 0.9;
   text-align: center;
 }
 
 .vf-section-index {
-  margin: 0 auto 0.35rem;
+  margin: 0 0 0.35rem;
   font-size: 0.95rem;
   letter-spacing: 0.1em;
   color: var(--vf-mark);
-  text-align: center;
+  text-align: left;
 }
 
 /* Section rhythm — Law of Proximity: content clusters, air between chapters */
