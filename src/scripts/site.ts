@@ -2,7 +2,6 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { createVoltageTerrain, type VoltageTerrainHandle } from './VoltageTerrain';
-import { bootMobile } from './mobileMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,16 +18,7 @@ function isCoarsePointer() {
   );
 }
 
-function isTouchMotion() {
-  return (
-    document.documentElement.classList.contains('touch-ready') ||
-    isCoarsePointer() ||
-    window.innerWidth < 768
-  );
-}
-
 function initLenis() {
-  // Desktop only — mobile uses mobileMotion.ts (no Lenis / no ST scrub).
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -67,13 +57,7 @@ function initTerrain() {
     return;
   }
 
-  // On touch, keep a soft CSS wash under the canvas so phones never look blank
-  // if WebGL stalls; desktop can drop the fallback for a cleaner GL look.
-  if (isTouchMotion()) {
-    if (fallback) fallback.style.opacity = '0.55';
-  } else {
-    fallback?.remove();
-  }
+  fallback?.remove();
 
   if (document.documentElement.classList.contains('theme-contrasted')) {
     terrain.setContrasted(true);
@@ -117,11 +101,8 @@ function runIntro(onDone: () => void) {
     return;
   }
 
-  // Touch: skip wipe so the page never sits blank waiting on the GSAP bundle.
-  // All scroll/ambient motion still runs after this — only the intro chrome is skipped.
   if (
     prefersReducedMotion() ||
-    isTouchMotion() ||
     sessionStorage.getItem('vf-intro-seen') === '1'
   ) {
     sessionStorage.setItem('vf-intro-seen', '1');
@@ -461,23 +442,19 @@ function initHero() {
 
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
   const flipTick = () => {
-    if (!allChars.length) return;
-    // Phones: flip harder/more often so the glitch reads without a pointer
-    if (Math.random() > (coarse ? 0.55 : 0.18)) return;
+    if (!allChars.length || Math.random() > 0.18) return;
     const start = Math.floor(Math.random() * allChars.length);
-    const count = coarse
-      ? 2 + Math.floor(Math.random() * 4)
-      : 1 + Math.floor(Math.random() * 3);
+    const count = 1 + Math.floor(Math.random() * 3);
     for (let n = 0; n < count; n += 1) {
       const char = allChars[(start + n) % allChars.length];
       if (dirs.some((d) => char.classList.contains(d))) continue;
       const dir = dirs[Math.floor(Math.random() * dirs.length)];
       char.classList.add(dir);
-      window.setTimeout(() => char.classList.remove(dir), coarse ? 1100 : 1000);
+      window.setTimeout(() => char.classList.remove(dir), 1000);
     }
   };
   flipTick();
-  window.setInterval(flipTick, coarse ? 70 : 120);
+  window.setInterval(flipTick, 120);
 }
 
 function initTextWarp() {
@@ -653,15 +630,14 @@ function initSeparators() {
     const r = sep.getBoundingClientRect();
     if (r.top < window.innerHeight && r.bottom > 0) setActive(true);
 
-    const touch = isTouchMotion();
     window.setInterval(() => {
       if (!active) return;
       chars.forEach((char) => {
-        if (Math.random() > (touch ? 0.28 : 0.16)) return;
+        if (Math.random() > 0.16) return;
         char.classList.add('is-flip');
-        window.setTimeout(() => char.classList.remove('is-flip'), touch ? 320 : 220);
+        window.setTimeout(() => char.classList.remove('is-flip'), 220);
       });
-    }, touch ? 90 : 220);
+    }, 220);
   });
 }
 
@@ -851,7 +827,7 @@ function initWork() {
 
   // Card glow — pointer on desktop; ambient in-view on touch (no extra desktop load)
   if (!prefersReducedMotion()) {
-    const coarse = isTouchMotion();
+    const coarse = isCoarsePointer();
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
       if (coarse) {
         let hot = false;
@@ -908,18 +884,15 @@ function initWork() {
 
   if (prefersReducedMotion()) return;
 
-  // Same horizontal pin/scrub gallery on every viewport (transform pin for iOS)
-  const touch = isTouchMotion();
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
     ease: 'none',
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${getScroll() + window.innerHeight * (touch ? 0.85 : 1.1)}`,
+      end: () => `+=${getScroll() + window.innerHeight * 1.1}`,
       scrub: true,
       pin: true,
-      pinType: touch ? 'transform' : 'fixed',
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },
@@ -1043,7 +1016,7 @@ function initMargin() {
 
   // Soft 3D tilt — ambient float on coarse; pointer on desktop
   cards.forEach((card, i) => {
-    if (isCoarsePointer() || isTouchMotion()) {
+    if (isCoarsePointer()) {
       const state = { rx: 0, ry: 0, y: 0 };
       gsap.to(state, {
         rx: i % 2 === 0 ? -14 : 14,
@@ -1117,30 +1090,23 @@ function initContact() {
   let pulse: gsap.core.Tween | null = null;
   if (!prefersReducedMotion() && label) {
     pulse = gsap.to(label, {
-      scale: isTouchMotion() ? 1.14 : 1.08,
-      duration: isTouchMotion() ? 1.15 : 1.6,
+      scale: 1.08,
+      duration: 1.6,
       yoyo: true,
       repeat: -1,
       ease: 'power1.inOut',
     });
   }
 
-  // Magnetic pull — ambient orbit on coarse; pointer on desktop
-  if (!prefersReducedMotion()) {
+  // Magnetic pull on the GO circle
+  if (!prefersReducedMotion() && !isCoarsePointer()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
     let mty = 0;
     let mraf = 0;
-    let t = 0;
-    const coarse = isCoarsePointer() || isTouchMotion();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
-      t += 0.016;
-      if (coarse) {
-        mtx = Math.sin(t * 1.35) * 22;
-        mty = Math.cos(t * 1.05) * 16;
-      }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
       if (!hover.classList.contains('is-active')) {
@@ -1148,21 +1114,19 @@ function initContact() {
       }
     };
     mloop();
-    if (!coarse) {
-      hover.addEventListener(
-        'pointermove',
-        (e) => {
-          const r = hover.getBoundingClientRect();
-          mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
-          mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
-        },
-        { passive: true },
-      );
-      hover.addEventListener('pointerleave', () => {
-        mtx = 0;
-        mty = 0;
-      });
-    }
+    hover.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = hover.getBoundingClientRect();
+        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+      },
+      { passive: true },
+    );
+    hover.addEventListener('pointerleave', () => {
+      mtx = 0;
+      mty = 0;
+    });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
       else mloop();
@@ -1188,40 +1152,10 @@ function initContact() {
     go.style.transform = '';
   };
 
-  // Auto-reveal GO / "let's talk" when the section scrolls into view
-  if (!prefersReducedMotion()) {
-    const reveal = () => enter();
-    ScrollTrigger.create({
-      trigger: section || hover,
-      start: 'top 85%',
-      end: 'bottom 20%',
-      onEnter: reveal,
-      onEnterBack: reveal,
-      onLeave: leave,
-      onLeaveBack: leave,
-    });
-    // Kick immediately if already near viewport (short pages / fast scroll)
-    requestAnimationFrame(() => {
-      const r = (section || hover).getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.9 && r.bottom > window.innerHeight * 0.15) {
-        enter();
-      }
-    });
-  }
-
-  // Desktop still gets hover; touch relies on scroll reveal above
-  if (!isCoarsePointer()) {
-    hover.addEventListener('pointerenter', enter);
-    hover.addEventListener('focusin', enter);
-    hover.addEventListener('pointerleave', leave);
-    hover.addEventListener('focusout', leave);
-  } else {
-    // Tap also toggles reveal on phones
-    hover.addEventListener('pointerdown', () => {
-      if (hover.classList.contains('is-active')) leave();
-      else enter();
-    });
-  }
+  hover.addEventListener('pointerenter', enter);
+  hover.addEventListener('focusin', enter);
+  hover.addEventListener('pointerleave', leave);
+  hover.addEventListener('focusout', leave);
 }
 
 function initScrollbar() {
@@ -1613,9 +1547,9 @@ function initLivingLabels() {
       },
     });
 
-    const cadence = isCoarsePointer() || isTouchMotion() ? 900 : 2400;
+    const cadence = isCoarsePointer() ? 1400 : 2400;
     window.setInterval(() => {
-      if (!active || Math.random() > (isCoarsePointer() || isTouchMotion() ? 0.35 : 0.08) || tick) return;
+      if (!active || Math.random() > (isCoarsePointer() ? 0.2 : 0.08) || tick) return;
       let frame = 0;
       const max = 6;
       tick = window.setInterval(() => {
@@ -1637,7 +1571,7 @@ function initLivingLabels() {
   });
 }
 
-function bootDesktop() {
+function boot() {
   document.documentElement.classList.add('is-scroll-blocked');
 
   initContrastToggle();
@@ -1693,26 +1627,6 @@ function bootDesktop() {
   } else {
     runIntro(afterIntro);
   }
-}
-
-function boot() {
-  // Hard split: phones never touch the desktop Lenis/ScrollTrigger stack.
-  if (isTouchMotion()) {
-    try {
-      bootMobile();
-      // Soft CSS terrain wash only — skip WebGL on phones
-      const fallback = document.querySelector<HTMLElement>('.site-terrain__fallback');
-      const canvas = document.querySelector<HTMLCanvasElement>('.js-terrain-canvas');
-      canvas?.remove();
-      if (fallback) fallback.style.opacity = '1';
-    } catch (err) {
-      console.error('[voltage] mobile boot failed', err);
-      revealSite();
-    }
-    return;
-  }
-
-  bootDesktop();
 }
 
 boot();
