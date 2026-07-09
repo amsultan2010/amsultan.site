@@ -87,8 +87,12 @@ body *::after {
 }
 
 @media (max-width: 720px) {
+  :root {
+    --vf-pad: clamp(0.9rem, 4.5vw, 1.35rem);
+    --vf-tap: 2.5rem;
+  }
   body {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -554,7 +558,7 @@ html.theme-contrasted .site-contrast-mask {
   #proof,
   #margin,
   #contact {
-    scroll-margin-top: 7.5rem;
+    scroll-margin-top: 5.75rem;
   }
 }
 
