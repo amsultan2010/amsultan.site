@@ -193,24 +193,35 @@ export function createVoltageTerrain({
   canvas,
   reducedMotion = false,
 }: TerrainOpts): VoltageTerrainHandle | null {
+  const isMobile =
+    window.matchMedia('(max-width: 767px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches;
+
+  // Never probe getContext before Three — that steals the canvas on iOS Safari
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
-      powerPreference: 'high-performance',
+      powerPreference: isMobile ? 'default' : 'high-performance',
+      failIfMajorPerformanceCaveat: false,
     });
   } catch {
     return null;
   }
-  if (!renderer.getContext()) return null;
+  if (!renderer.getContext()) {
+    renderer.dispose();
+    return null;
+  }
 
-  const isMobile = window.matchMedia('(max-width: 767px)').matches;
-  const segs = isMobile ? 72 : 110;
+  const segs = isMobile ? 48 : 110;
 
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.4 : 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75));
+  // Keep the canvas composited on iOS
+  canvas.style.transform = 'translateZ(0)';
+  canvas.style.setProperty('-webkit-transform', 'translateZ(0)');
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 80);
@@ -308,6 +319,12 @@ export function createVoltageTerrain({
     raf = requestAnimationFrame(tick);
     time = t * 0.001;
 
+    // Ambient drift so phones get living terrain without a finger
+    if (!reducedMotion) {
+      mouse.tx = Math.sin(time * 0.35) * 0.55 + Math.sin(time * 0.11) * 0.2;
+      mouse.ty = Math.cos(time * 0.28) * 0.4;
+    }
+
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
     pulse *= 0.93;
@@ -331,6 +348,8 @@ export function createVoltageTerrain({
   };
 
   const onPointer = (e: PointerEvent) => {
+    // Fine pointers still steer the peak; coarse keeps ambient drift
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
   };

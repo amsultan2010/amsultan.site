@@ -11,9 +11,16 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isCoarsePointer() {
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches
+  );
+}
+
 function initLenis() {
   // Same Lenis on every viewport. syncTouch off so iOS keeps native touch
-  // gestures while ScrollTrigger still updates from Lenis scroll.
+  // gestures; we force ScrollTrigger.update from native scroll + ticker.
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -26,10 +33,14 @@ function initLenis() {
 
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
+    // Critical on iOS: scrubbed text warps must update every frame while
+    // the finger is scrolling (Lenis alone often misses native touch scroll).
+    ScrollTrigger.update();
   });
   gsap.ticker.lagSmoothing(0);
 
   window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
+  window.addEventListener('touchmove', () => ScrollTrigger.update(), { passive: true });
 
   document.documentElement.classList.add('lenis', 'lenis-smooth');
 
@@ -347,16 +358,31 @@ function initHero() {
     });
   }
 
-  // Living hero type — same magnet + flips on every device
+  // Living hero type — ambient on every device (no finger required)
   const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
   let tiltX = 0;
   let tiltY = 0;
   let tiltTX = 0;
   let tiltTY = 0;
   let magnetRaf = 0;
+  let ambientT = 0;
+  const coarse = isCoarsePointer();
 
   const magnetLoop = () => {
     magnetRaf = requestAnimationFrame(magnetLoop);
+    ambientT += 0.016;
+
+    if (coarse) {
+      // Auto wave so phones get the same living magnet feel without pointer
+      tiltTX = Math.sin(ambientT * 0.7) * 7;
+      tiltTY = Math.cos(ambientT * 0.55) * 9;
+      allChars.forEach((_, i) => {
+        const phase = ambientT * 1.4 + i * 0.35;
+        offsets[i].tx = Math.sin(phase) * 10;
+        offsets[i].ty = Math.cos(phase * 0.85) * 7;
+      });
+    }
+
     tiltX += (tiltTX - tiltX) * 0.08;
     tiltY += (tiltTY - tiltY) * 0.08;
     title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
@@ -370,45 +396,47 @@ function initHero() {
   };
   magnetLoop();
 
-  const onMove = (e: PointerEvent) => {
-    const heroRect = hero.getBoundingClientRect();
-    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
-    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
-    const inside =
-      e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
+  if (!coarse) {
+    const onMove = (e: PointerEvent) => {
+      const heroRect = hero.getBoundingClientRect();
+      const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+      const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
+      const inside =
+        e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
 
-    if (!inside) {
-      tiltTX = 0;
-      tiltTY = 0;
-      offsets.forEach((o) => {
-        o.tx = 0;
-        o.ty = 0;
-      });
-      return;
-    }
-
-    tiltTX = ny * -9;
-    tiltTY = nx * 11;
-
-    allChars.forEach((char, i) => {
-      const r = char.getBoundingClientRect();
-      const cx = r.left + r.width / 2 - offsets[i].x;
-      const cy = r.top + r.height / 2 - offsets[i].y;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const radius = 320;
-      if (dist < radius) {
-        const force = (1 - dist / radius) * 38;
-        offsets[i].tx = (dx / dist) * force * -0.75;
-        offsets[i].ty = (dy / dist) * force * -0.58;
-      } else {
-        offsets[i].tx = 0;
-        offsets[i].ty = 0;
+      if (!inside) {
+        tiltTX = 0;
+        tiltTY = 0;
+        offsets.forEach((o) => {
+          o.tx = 0;
+          o.ty = 0;
+        });
+        return;
       }
-    });
-  };
-  window.addEventListener('pointermove', onMove, { passive: true });
+
+      tiltTX = ny * -9;
+      tiltTY = nx * 11;
+
+      allChars.forEach((char, i) => {
+        const r = char.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - offsets[i].x;
+        const cy = r.top + r.height / 2 - offsets[i].y;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const radius = 320;
+        if (dist < radius) {
+          const force = (1 - dist / radius) * 38;
+          offsets[i].tx = (dx / dist) * force * -0.75;
+          offsets[i].ty = (dy / dist) * force * -0.58;
+        } else {
+          offsets[i].tx = 0;
+          offsets[i].ty = 0;
+        }
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+  }
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
@@ -417,9 +445,9 @@ function initHero() {
 
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
   const flipTick = () => {
-    if (!allChars.length || Math.random() > 0.22) return;
+    if (!allChars.length || Math.random() > 0.18) return;
     const start = Math.floor(Math.random() * allChars.length);
-    const count = 1 + Math.floor(Math.random() * 2);
+    const count = 1 + Math.floor(Math.random() * 3);
     for (let n = 0; n < count; n += 1) {
       const char = allChars[(start + n) % allChars.length];
       if (dirs.some((d) => char.classList.contains(d))) continue;
@@ -428,7 +456,9 @@ function initHero() {
       window.setTimeout(() => char.classList.remove(dir), 1000);
     }
   };
-  window.setInterval(flipTick, 120);
+  // Kick immediately so phones see flips without waiting
+  flipTick();
+  window.setInterval(flipTick, coarse ? 90 : 120);
 }
 
 function initTextWarp() {
@@ -668,7 +698,56 @@ function initAbout() {
   const section = document.querySelector('.js-about');
   if (!section) return;
 
-  gsap.from('.js-about-copy > *', {
+  // Body copy: scrubbed char warp (not a plain fade) on every viewport
+  if (!prefersReducedMotion()) {
+    document.querySelectorAll<HTMLElement>('.js-about-copy .s-about__body').forEach((p) => {
+      const chars = splitChars(p, 'vf-warp-char');
+      if (!chars.length) return;
+      gsap.fromTo(
+        chars,
+        { y: 48, skewX: 12, opacity: 0.12, rotateX: -28 },
+        {
+          y: 0,
+          skewX: 0,
+          opacity: 1,
+          rotateX: 0,
+          ease: 'none',
+          stagger: { each: 0.012, from: 'start' },
+          scrollTrigger: {
+            trigger: p,
+            start: 'top 90%',
+            end: 'top 45%',
+            scrub: true,
+          },
+        },
+      );
+    });
+
+    document.querySelectorAll<HTMLElement>('.s-about__cred-school').forEach((title) => {
+      const chars = splitChars(title, 'vf-warp-char');
+      if (!chars.length) return;
+      gsap.fromTo(
+        chars,
+        { y: 56, skewX: 14, opacity: 0.1, scaleY: 1.2 },
+        {
+          y: 0,
+          skewX: 0,
+          opacity: 1,
+          scaleY: 1,
+          ease: 'none',
+          stagger: { each: 0.02, from: 'start' },
+          scrollTrigger: {
+            trigger: title,
+            start: 'top 92%',
+            end: 'top 50%',
+            scrub: true,
+          },
+        },
+      );
+    });
+  }
+
+  gsap.from('.js-about-copy > *:not(.s-about__body):not(.js-reveal-lines)', {
     scrollTrigger: {
       trigger: section,
       start: 'top 75%',
@@ -741,20 +820,59 @@ function initWork() {
     ease: 'power3.out',
   });
 
-  // Card glow — same pointer path on every device
+  // Card glow — ambient while in view (no tap/hover required)
   if (!prefersReducedMotion()) {
-    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
-      item.addEventListener('pointermove', (e) => {
-        const r = item.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width) * 100;
-        const y = ((e.clientY - r.top) / r.height) * 100;
-        item.style.setProperty('--mx', `${x}%`);
-        item.style.setProperty('--my', `${y}%`);
-        item.classList.add('is-hot');
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      let hot = false;
+      ScrollTrigger.create({
+        trigger: item,
+        start: 'top 85%',
+        end: 'bottom 20%',
+        onEnter: () => {
+          hot = true;
+          item.classList.add('is-hot');
+        },
+        onEnterBack: () => {
+          hot = true;
+          item.classList.add('is-hot');
+        },
+        onLeave: () => {
+          hot = false;
+          item.classList.remove('is-hot');
+        },
+        onLeaveBack: () => {
+          hot = false;
+          item.classList.remove('is-hot');
+        },
       });
-      item.addEventListener('pointerleave', () => {
-        item.classList.remove('is-hot');
+
+      // Drift the glow hotspot so it reads alive without a pointer
+      gsap.to(item, {
+        duration: 3.2 + (i % 3) * 0.4,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        onUpdate() {
+          if (!hot) return;
+          const t = this.progress();
+          item.style.setProperty('--mx', `${20 + t * 60}%`);
+          item.style.setProperty('--my', `${30 + (1 - t) * 40}%`);
+        },
       });
+
+      if (!isCoarsePointer()) {
+        item.addEventListener('pointermove', (e) => {
+          const r = item.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top) / r.height) * 100;
+          item.style.setProperty('--mx', `${x}%`);
+          item.style.setProperty('--my', `${y}%`);
+          item.classList.add('is-hot');
+        });
+        item.addEventListener('pointerleave', () => {
+          if (!hot) item.classList.remove('is-hot');
+        });
+      }
     });
   }
 
@@ -809,6 +927,31 @@ function initWork() {
 function initProof() {
   const section = document.querySelector('.js-proof');
   if (!section) return;
+
+  if (!prefersReducedMotion()) {
+    document.querySelectorAll<HTMLElement>('.s-proof__lead-title').forEach((title) => {
+      const chars = splitChars(title, 'vf-warp-char');
+      if (!chars.length) return;
+      gsap.fromTo(
+        chars,
+        { y: 52, skewX: 12, opacity: 0.1, rotateX: -30 },
+        {
+          y: 0,
+          skewX: 0,
+          opacity: 1,
+          rotateX: 0,
+          ease: 'none',
+          stagger: { each: 0.018, from: 'start' },
+          scrollTrigger: {
+            trigger: title,
+            start: 'top 92%',
+            end: 'top 48%',
+            scrub: true,
+          },
+        },
+      );
+    });
+  }
 
   gsap.from('.js-proof-lead', {
     scrollTrigger: {
@@ -866,8 +1009,24 @@ function initMargin() {
 
   if (prefersReducedMotion()) return;
 
-  // Soft 3D tilt — same pointer path on every device
-  cards.forEach((card) => {
+  // Soft 3D tilt — ambient float on coarse; pointer on desktop
+  cards.forEach((card, i) => {
+    if (isCoarsePointer()) {
+      const state = { rx: 0, ry: 0 };
+      gsap.to(state, {
+        rx: i % 2 === 0 ? -8 : 8,
+        ry: i % 2 === 0 ? 10 : -10,
+        duration: 2.8 + (i % 3) * 0.35,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+        onUpdate: () => {
+          card.style.setProperty('--rx', `${state.rx.toFixed(2)}deg`);
+          card.style.setProperty('--ry', `${state.ry.toFixed(2)}deg`);
+        },
+      });
+      return;
+    }
     card.addEventListener(
       'pointermove',
       (e) => {
@@ -932,15 +1091,22 @@ function initContact() {
     });
   }
 
-  // Magnetic pull on the GO circle — same on every device
+  // Magnetic pull — ambient orbit on coarse; pointer on desktop
   if (!prefersReducedMotion()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
     let mty = 0;
     let mraf = 0;
+    let t = 0;
+    const coarse = isCoarsePointer();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
+      t += 0.016;
+      if (coarse) {
+        mtx = Math.sin(t * 1.1) * 14;
+        mty = Math.cos(t * 0.9) * 10;
+      }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
       if (!hover.classList.contains('is-active')) {
@@ -948,19 +1114,21 @@ function initContact() {
       }
     };
     mloop();
-    hover.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = hover.getBoundingClientRect();
-        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
-        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
-      },
-      { passive: true },
-    );
-    hover.addEventListener('pointerleave', () => {
-      mtx = 0;
-      mty = 0;
-    });
+    if (!coarse) {
+      hover.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = hover.getBoundingClientRect();
+          mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+          mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+        },
+        { passive: true },
+      );
+      hover.addEventListener('pointerleave', () => {
+        mtx = 0;
+        mty = 0;
+      });
+    }
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
       else mloop();
@@ -985,6 +1153,19 @@ function initContact() {
     pulse?.play();
     go.style.transform = '';
   };
+
+  // Auto-reveal GO letters when the section scrolls into view (no tap)
+  if (!prefersReducedMotion()) {
+    ScrollTrigger.create({
+      trigger: section || hover,
+      start: 'top 70%',
+      end: 'bottom 30%',
+      onEnter: enter,
+      onEnterBack: enter,
+      onLeave: leave,
+      onLeaveBack: leave,
+    });
+  }
 
   hover.addEventListener('pointerenter', enter);
   hover.addEventListener('focusin', enter);
@@ -1099,35 +1280,44 @@ function initCursor() {
 
 function initMagneticButtons() {
   if (prefersReducedMotion()) return;
+  const coarse = isCoarsePointer();
 
-  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el) => {
+  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el, i) => {
     let x = 0;
     let y = 0;
     let tx = 0;
     let ty = 0;
     let raf = 0;
+    let t = i * 0.7;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
+      t += 0.016;
+      if (coarse) {
+        tx = Math.sin(t * 1.3 + i) * 6;
+        ty = Math.cos(t * 1.1 + i) * 4;
+      }
       x += (tx - x) * 0.16;
       y += (ty - y) * 0.16;
       el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
     };
     loop();
 
-    el.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = el.getBoundingClientRect();
-        tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
-        ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
-      },
-      { passive: true },
-    );
-    el.addEventListener('pointerleave', () => {
-      tx = 0;
-      ty = 0;
-    });
+    if (!coarse) {
+      el.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = el.getBoundingClientRect();
+          tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
+          ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
+        },
+        { passive: true },
+      );
+      el.addEventListener('pointerleave', () => {
+        tx = 0;
+        ty = 0;
+      });
+    }
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
       else loop();
@@ -1164,14 +1354,31 @@ function initScramble() {
     if (!original) return;
 
     let timer = 0;
-    el.addEventListener('pointerenter', () => {
-      window.clearInterval(timer);
-      timer = runScramble(el, original);
+    // Auto-scramble when scrolled into view — no hover/tap
+    ScrollTrigger.create({
+      trigger: el,
+      start: 'top 90%',
+      end: 'bottom 15%',
+      onEnter: () => {
+        window.clearInterval(timer);
+        timer = runScramble(el, original);
+      },
+      onEnterBack: () => {
+        window.clearInterval(timer);
+        timer = runScramble(el, original);
+      },
     });
-    el.addEventListener('pointerleave', () => {
-      window.clearInterval(timer);
-      el.textContent = original;
-    });
+
+    if (!isCoarsePointer()) {
+      el.addEventListener('pointerenter', () => {
+        window.clearInterval(timer);
+        timer = runScramble(el, original);
+      });
+      el.addEventListener('pointerleave', () => {
+        window.clearInterval(timer);
+        el.textContent = original;
+      });
+    }
   });
 }
 
@@ -1228,18 +1435,22 @@ function initRevealLines() {
   document.querySelectorAll<HTMLElement>('.js-reveal-lines').forEach((el) => {
     const chars = splitChars(el, 'vf-warp-char');
     if (!chars.length) return;
+    // Scrubbed char rise — same living warp on phone scroll as desktop
     gsap.fromTo(
       chars,
-      { yPercent: 110, opacity: 0, rotateX: -40 },
+      { yPercent: 110, opacity: 0, rotateX: -40, skewX: 10 },
       {
         yPercent: 0,
         opacity: 1,
         rotateX: 0,
-        ease: 'power3.out',
-        stagger: 0.02,
+        skewX: 0,
+        ease: 'none',
+        stagger: { each: 0.02, from: 'start' },
         scrollTrigger: {
           trigger: el,
-          start: 'top 82%',
+          start: 'top 92%',
+          end: 'top 42%',
+          scrub: true,
         },
       },
     );
@@ -1352,8 +1563,9 @@ function initLivingLabels() {
       },
     });
 
+    const cadence = isCoarsePointer() ? 1400 : 2400;
     window.setInterval(() => {
-      if (!active || Math.random() > 0.08 || tick) return;
+      if (!active || Math.random() > (isCoarsePointer() ? 0.2 : 0.08) || tick) return;
       let frame = 0;
       const max = 6;
       tick = window.setInterval(() => {
@@ -1371,7 +1583,7 @@ function initLivingLabels() {
           el.textContent = original;
         }
       }, 24);
-    }, 2400);
+    }, cadence);
   });
 }
 

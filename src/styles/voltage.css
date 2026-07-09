@@ -145,6 +145,8 @@ a {
   display: block;
   width: 100%;
   height: 100%;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .site-terrain__fallback {
@@ -154,6 +156,16 @@ a {
     radial-gradient(ellipse 90% 70% at 35% 45%, color-mix(in srgb, var(--vf-ink) 28%, transparent), transparent 68%),
     radial-gradient(ellipse 80% 60% at 70% 55%, color-mix(in srgb, var(--vf-mark) 35%, transparent), transparent 62%);
   opacity: 0.85;
+}
+
+/* Phones: keep topography readable behind content */
+@media (max-width: 767px), (pointer: coarse) {
+  .site-terrain {
+    opacity: 1;
+  }
+  .site-terrain canvas {
+    opacity: 0.95;
+  }
 }
 
 html.theme-contrasted .site-terrain {
