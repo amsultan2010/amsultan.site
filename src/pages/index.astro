@@ -6,11 +6,10 @@ import SiteFoot from '../components/site/SiteFoot.astro';
 import SHero from '../components/site/SHero.astro';
 import SAbout from '../components/site/SAbout.astro';
 import SWork from '../components/site/SWork.astro';
+import SProof from '../components/site/SProof.astro';
 import SMargin from '../components/site/SMargin.astro';
 import SContact from '../components/site/SContact.astro';
-import ASeparator from '../components/site/ASeparator.astro';
-import SRunway from '../components/site/SRunway.astro';
-import SStretch from '../components/site/SStretch.astro';
+import SChapter from '../components/site/SChapter.astro';
 import '../styles/voltage.css';
 ---
 
@@ -22,13 +21,13 @@ import '../styles/voltage.css';
     <meta name="author" content="Abdullah Sultan" />
 
     <AstroSeo
-      title="Abdullah Sultan — student builder"
-      description="Student builder in Riyadh. Shipping tutoring, F1 media, and agent tools."
+      title="Abdullah Sultan · student builder"
+      description="Student builder in Riyadh. Shipping tutoring, F1 media, and a Python quant suite."
       canonical="https://abdullahmsultan.me"
       openGraph={{
         url: 'https://abdullahmsultan.me',
-        title: 'Abdullah Sultan — student builder',
-        description: 'Student builder in Riyadh. Shipping tutoring, F1 media, and agent tools.',
+        title: 'Abdullah Sultan · student builder',
+        description: 'Student builder in Riyadh. Shipping tutoring, F1 media, and a Python quant suite.',
         site_name: 'Abdullah Sultan',
         images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
@@ -42,7 +41,7 @@ import '../styles/voltage.css';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Unbounded:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
 
@@ -50,41 +49,55 @@ import '../styles/voltage.css';
     <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
   </head>
   <body>
+    <div class="site-progress js-progress" aria-hidden="true"></div>
+
+    <div class="site-terrain js-terrain" aria-hidden="true">
+      <div class="site-terrain__fallback"></div>
+      <canvas class="js-terrain-canvas"></canvas>
+    </div>
+
     <div id="top" class="site-wrapper js-site-wrapper" style="opacity: 0;">
       <SiteHead />
       <main>
         <SHero />
-        <ASeparator />
-        <SRunway text="ship · prove · repeat" />
+        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <SChapter
+          index="01 · about"
+          title="About"
+          lede="Student in Riyadh. Math track. Shipping products that teach, automate, and prove."
+        />
         <SAbout />
-        <ASeparator phrases={['work', 'build', '////', 'live', 'urls', '####']} />
-        <SStretch word="WORK" />
-        <SRunway text="specimens on the tape" />
+        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <SChapter
+          index="02 · work"
+          title="Work"
+          lede="Tutoring, F1 media, and a three-app quant suite with real metrics."
+        />
         <SWork />
-        <ASeparator phrases={['margin', 'photos', 'ascii', '////', 'human']} />
-        <SRunway text="off the record" />
+        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <SChapter
+          index="03 · proof"
+          title="Proof"
+          lede="Grade lift, incubator, debate record, and the stack behind the builds."
+        />
+        <SProof />
+        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <SChapter
+          index="04 · margin"
+          title="Margin"
+          lede="ASCII, photos, and hobbies that don’t fit a resume line."
+        />
         <SMargin />
-        <ASeparator phrases={['talk', 'go', '####', 'coffee', 'chat']} />
-        <SStretch word="TALK" />
-        <SRunway text="leave a note" />
+        <div class="vf-rule js-rule" aria-hidden="true"></div>
         <SContact />
       </main>
       <SiteFoot />
     </div>
 
     <div class="site-intro js-intro">
-      <div class="site-intro__lines" aria-hidden="true">
-        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
-        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
-        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
-        <div class="site-intro__line site-intro__line--h js-intro-line-h"></div>
-        <div class="site-intro__line site-intro__line--h js-intro-line-h"></div>
-      </div>
-      <p class="site-intro__mark js-intro-mark">as · voltage</p>
-      <div class="site-intro__border site-intro__border--top js-intro-border"></div>
-      <div class="site-intro__border site-intro__border--left js-intro-border"></div>
-      <div class="site-intro__border site-intro__border--right js-intro-border"></div>
-      <button type="button" class="site-intro__skip js-intro-skip">skip intro</button>
+      <div class="site-intro__panel js-intro-panel" aria-hidden="true"></div>
+      <p class="site-intro__mark js-intro-mark">abdullah sultan</p>
+      <button type="button" class="site-intro__skip js-intro-skip">skip</button>
     </div>
 
     <div class="site-contrast-mask js-contrast-mask" aria-hidden="true"></div>

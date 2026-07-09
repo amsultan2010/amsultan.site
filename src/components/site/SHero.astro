@@ -1,28 +1,38 @@
 ---
-import ASeparator from './ASeparator.astro';
 ---
 
 <section class="s-hero" aria-label="Introduction">
-  <div class="s-hero__status vf-mono">riyadh · shipping · student builder</div>
-
-  <ASeparator phrases={['abdullah', 'sultan', '////', 'ship', 'prove', '####']} />
+  <div class="s-hero__meta vf-mono">
+    <span>riyadh</span>
+    <span aria-hidden="true">·</span>
+    <span>10th grade</span>
+    <span aria-hidden="true">·</span>
+    <span class="js-clock">--:--</span>
+  </div>
 
   <h1 class="s-hero__title vf-display">
-    <span class="s-hero__word js-hero-word">Abdullah</span>
-    <span class="s-hero__star" aria-hidden="true">★</span>
-    <span class="s-hero__word js-hero-word">Sultan</span>
+    <span class="s-hero__line js-hero-line">Abdullah</span>
+    <span class="s-hero__line js-hero-line">Sultan</span>
   </h1>
 
-  <ASeparator phrases={['tutoring', 'f1', 'quant', 'agents', '////', 'build']} />
+  <p class="s-hero__role vf-mono">student builder · math · cs · products</p>
 
   <p class="s-hero__lede vf-serif">
-    shipping tutoring, f1 media, and agent tools — looking for coffee chats with builders.
+    I ship tutoring that moves grades, an F1 blog with a real voice, and a Python quant suite.
+    Looking for coffee chats with founders and recruiters.
   </p>
 
   <div class="s-hero__actions vf-mono">
-    <a href="#work" class="s-hero__btn s-hero__btn--mark">see work</a>
+    <a href="#work" class="s-hero__btn s-hero__btn--solid">see work</a>
     <a href="#contact" class="s-hero__btn">talk</a>
+    <a href="/resume.docx" class="s-hero__btn">resume</a>
   </div>
+
+  <ul class="s-hero__ticks vf-mono" aria-label="Quick facts">
+    <li><strong>+2.03</strong> IB grade lift</li>
+    <li><strong>3</strong> quant apps live</li>
+    <li><strong>X-C</strong> incubator founder</li>
+  </ul>
 </section>
 
 <style>
@@ -31,80 +41,89 @@ import ASeparator from './ASeparator.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 4rem 0 8vh;
+    padding: 5rem var(--vf-pad) 4rem;
     position: relative;
     overflow: hidden;
   }
-  .s-hero__status {
-    padding: 0 1.25rem 1rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    color: var(--vf-mark);
-  }
-  .s-hero__title {
+  .s-hero__meta {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.15em 0.25em;
-    margin: 0.75rem 0;
-    padding: 0 0.75rem;
-    font-size: clamp(3.2rem, 14vw, 9.5rem);
-    text-align: center;
-    overflow: hidden;
+    gap: 0.5rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--vf-mark);
+    margin-bottom: 1.5rem;
   }
-  .s-hero__word {
-    display: inline-flex;
+  .s-hero__title {
+    margin: 0;
+    font-size: clamp(3.4rem, 13vw, 8.5rem);
+    max-width: 12ch;
+  }
+  .s-hero__line {
+    display: block;
     overflow: hidden;
   }
   .s-hero__char {
     display: inline-block;
     will-change: transform;
   }
-  .s-hero__star {
-    color: var(--vf-mark);
-    font-size: 0.45em;
-    line-height: 1;
-    transform: translateY(0.15em);
+  .s-hero__role {
+    margin: 1.25rem 0 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    opacity: 0.85;
   }
   .s-hero__lede {
-    max-width: 34rem;
-    margin: 1.5rem auto 0;
-    padding: 0 1.25rem;
-    text-align: center;
-    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    max-width: 38rem;
+    margin: 1.25rem 0 0;
+    font-size: clamp(1.15rem, 2.2vw, 1.4rem);
     line-height: 1.45;
   }
   .s-hero__actions {
     display: flex;
-    justify-content: center;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.65rem;
     margin-top: 1.75rem;
-    padding: 0 1.25rem;
   }
   .s-hero__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.85rem 1.25rem;
+    padding: 0.8rem 1.15rem;
     border: 1px solid var(--vf-ink);
     text-decoration: none;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
     transition: background 0.2s, color 0.2s, border-color 0.2s;
   }
   .s-hero__btn:hover {
     background: var(--vf-ink);
     color: var(--vf-field);
   }
-  .s-hero__btn--mark {
+  .s-hero__btn--solid {
     background: var(--vf-ink);
-    border-color: var(--vf-ink);
     color: var(--vf-field);
   }
-  .s-hero__btn--mark:hover {
+  .s-hero__btn--solid:hover {
     background: transparent;
     color: var(--vf-ink);
+  }
+  .s-hero__ticks {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.75rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--vf-line);
+    padding-top: 1.25rem;
+    max-width: 40rem;
+  }
+  .s-hero__ticks strong {
+    color: var(--vf-mark);
+    font-weight: 600;
+    margin-right: 0.35rem;
   }
 </style>

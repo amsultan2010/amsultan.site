@@ -1,98 +1,112 @@
 ---
-const talk = 'talk';
 ---
 
 <section id="contact" class="s-contact" aria-label="Contact">
   <div class="vf-band">contact</div>
   <div class="s-contact__inner">
     <p class="s-contact__kicker vf-mono">founders · recruiters · curious builders</p>
+    <h2 class="s-contact__title vf-display js-contact-title js-warp">Let’s talk</h2>
+    <p class="s-contact__sub vf-serif">
+      Coffee chats welcome. Products, education, quant systems, or agent workflows. Say what you’re
+      building.
+    </p>
     <a
       href="mailto:abdullahmsultan1@gmail.com"
-      class="s-contact__go js-contact-go vf-display"
+      class="s-contact__go js-contact-go vf-mono"
     >
-      <span class="s-contact__go-label">GO</span>
-      <span class="s-contact__reveal js-contact-reveal" aria-hidden="true">
-        {[...talk].map((ch) => (
-          <span class="js-contact-letter">{ch}</span>
-        ))}
-      </span>
+      email me →
     </a>
     <p class="s-contact__email vf-mono">
       <a href="mailto:abdullahmsultan1@gmail.com">abdullahmsultan1@gmail.com</a>
     </p>
-    <p class="s-contact__sub vf-serif">
-      want to talk? email me. coffee chats welcome.
-    </p>
+    <div class="s-contact__links vf-mono">
+      <a href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer">github</a>
+      <a href="https://www.linkedin.com/in/abdullah-sultan-4a264939a/" target="_blank" rel="noopener noreferrer">linkedin</a>
+      <a href="/resume.docx">resume</a>
+    </div>
   </div>
 </section>
 
 <style>
   .s-contact {
-    padding: 4vh 0 10vh;
+    padding: 2vh 0 8vh;
   }
   .s-contact__inner {
-    padding: 6rem 1.25rem 8rem;
-    text-align: center;
+    padding: 3rem var(--vf-pad) 5rem;
+    max-width: 44rem;
     position: relative;
   }
   .s-contact__inner::before {
     content: '';
     position: absolute;
-    inset: 10% 15%;
-    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--vf-mark) 18%, transparent), transparent 70%);
+    inset: 5% 0 auto;
+    height: 55%;
+    background: radial-gradient(ellipse at left, color-mix(in srgb, var(--vf-mark) 22%, transparent), transparent 70%);
     pointer-events: none;
   }
   .s-contact__kicker {
     position: relative;
     margin: 0;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
     color: var(--vf-mark);
+  }
+  .s-contact__title {
+    position: relative;
+    margin: 0.75rem 0 0;
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+  }
+  .s-contact__sub {
+    position: relative;
+    margin: 1.1rem 0 0;
+    font-size: 1.2rem;
+    max-width: 34rem;
   }
   .s-contact__go {
     position: relative;
     display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 1rem;
+    margin-top: 1.75rem;
+    padding: 0.95rem 1.35rem;
+    border: 1px solid var(--vf-ink);
+    background: var(--vf-ink);
+    color: var(--vf-field);
     text-decoration: none;
-    font-size: clamp(5rem, 18vw, 12rem);
-    line-height: 0.85;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .s-contact__go:hover,
+  .s-contact__go:focus {
+    background: transparent;
     color: var(--vf-ink);
-  }
-  .s-contact__go:hover .s-contact__go-label,
-  .s-contact__go:focus .s-contact__go-label {
-    color: var(--vf-mark);
-  }
-  .s-contact__reveal {
-    display: flex;
-    gap: 0.02em;
-    font-size: 0.28em;
-    letter-spacing: 0.12em;
-    margin-top: 0.15em;
-    min-height: 1.2em;
-  }
-  .js-contact-letter {
-    display: inline-block;
   }
   .s-contact__email {
     position: relative;
-    margin: 1.5rem 0 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    margin: 1.25rem 0 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
   }
   .s-contact__email a {
     text-decoration: none;
-    border-bottom: 1px solid var(--vf-ink);
+    border-bottom: 1px solid var(--vf-line);
   }
   .s-contact__email a:hover {
     color: var(--vf-mark);
     border-color: var(--vf-mark);
   }
-  .s-contact__sub {
+  .s-contact__links {
     position: relative;
-    margin: 1rem auto 0;
-    max-width: 28rem;
-    font-size: 1.15rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+  }
+  .s-contact__links a {
+    text-decoration: none;
+  }
+  .s-contact__links a:hover {
+    color: var(--vf-mark);
   }
 </style>

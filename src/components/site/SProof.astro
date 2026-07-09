@@ -1,0 +1,158 @@
+---
+import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
+---
+
+<section id="proof" class="s-proof js-proof" aria-label="Proof and leadership">
+  <div class="vf-band">proof</div>
+  <div class="s-proof__intro">
+    <h2 class="s-proof__title vf-display">Proof</h2>
+    <p class="s-proof__lede vf-serif">
+      Impact, leadership, and the stack I actually use. Pulled from the resume.
+    </p>
+  </div>
+
+  <ul class="s-proof__stats">
+    {PROOF_STATS.map((stat) => (
+      <li class="s-proof__stat js-proof-stat">
+        <p class="s-proof__value vf-display" data-value={stat.value}>{stat.value}</p>
+        <p class="s-proof__label vf-mono">{stat.label}</p>
+        <p class="s-proof__note vf-serif">{stat.note}</p>
+      </li>
+    ))}
+  </ul>
+
+  <div class="vf-band" style="margin-top: 3.5rem;">leadership</div>
+  <ul class="s-proof__lead">
+    {LEADERSHIP.map((item) => (
+      <li class="s-proof__lead-item js-proof-lead">
+        <div class="s-proof__lead-meta vf-mono">
+          <span>{item.org}</span>
+          <span>{item.period}</span>
+        </div>
+        <h3 class="s-proof__lead-title vf-display">{item.title}</h3>
+        <p class="s-proof__lead-body vf-serif">{item.body}</p>
+      </li>
+    ))}
+  </ul>
+
+  <div class="vf-band" style="margin-top: 3.5rem;">stack</div>
+  <div class="s-proof__skills">
+    {SKILL_GROUPS.map((group) => (
+      <div class="s-proof__skill js-proof-skill">
+        <p class="s-proof__skill-label vf-mono">{group.label}</p>
+        <p class="s-proof__skill-items vf-serif">{group.items.join(' · ')}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .s-proof {
+    padding: 2vh 0 10vh;
+  }
+  .s-proof__intro {
+    padding: 1rem var(--vf-pad) 0;
+    max-width: 40rem;
+  }
+  .s-proof__title {
+    margin: 0;
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+  }
+  .s-proof__lede {
+    margin: 0.85rem 0 0;
+    font-size: 1.15rem;
+  }
+  .s-proof__stats {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0 var(--vf-pad);
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+  }
+  .s-proof__stat {
+    border-top: 2px solid var(--vf-mark);
+    padding: 1rem 0.15rem 0.5rem;
+  }
+  .s-proof__value {
+    margin: 0;
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    color: var(--vf-ink);
+  }
+  .s-proof__label {
+    margin: 0.5rem 0 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--vf-mark);
+  }
+  .s-proof__note {
+    margin: 0.55rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+  .s-proof__lead {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0 var(--vf-pad);
+    display: grid;
+    gap: 0;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+  }
+  .s-proof__lead-item {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--vf-line);
+  }
+  .s-proof__lead-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+  }
+  .s-proof__lead-title {
+    margin: 0.55rem 0 0;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+  }
+  .s-proof__lead-body {
+    margin: 0.65rem 0 0;
+    max-width: 42rem;
+    font-size: 1.05rem;
+  }
+  .s-proof__skills {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 1.5rem;
+    padding: 1.25rem var(--vf-pad) 0;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+  }
+  .s-proof__skill {
+    border: 1px solid var(--vf-line);
+    padding: 1rem;
+  }
+  .s-proof__skill-label {
+    margin: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: var(--vf-mark);
+  }
+  .s-proof__skill-items {
+    margin: 0.55rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+  @media (max-width: 900px) {
+    .s-proof__stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .s-proof__stats,
+    .s-proof__skills {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

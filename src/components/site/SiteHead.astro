@@ -6,7 +6,7 @@
   <nav class="site-head__nav vf-mono" aria-label="Primary">
     <a href="/#about">about</a>
     <a href="/#work">work</a>
-    <a href="/#margin">margin</a>
+    <a href="/#proof">proof</a>
     <a href="/#contact">contact</a>
   </nav>
   <button type="button" class="site-head__contrast js-contrast vf-mono" aria-label="Toggle contrast">
@@ -20,16 +20,16 @@
     grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: 1rem;
-    padding: 1rem 1.25rem;
+    padding: 0.9rem var(--vf-pad);
     position: sticky;
     top: 0;
     z-index: 20;
-    background: color-mix(in srgb, var(--vf-field) 88%, transparent);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: color-mix(in srgb, var(--vf-field) 86%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
   .site-head__brand {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-decoration: none;
     color: var(--vf-ink);
@@ -41,7 +41,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.85rem;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     letter-spacing: 0.12em;
   }
   .site-head__nav a {
@@ -54,7 +54,7 @@
     color: var(--vf-mark);
   }
   .site-head__contrast {
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     letter-spacing: 0.12em;
     background: transparent;
     border: 1px solid var(--vf-ink);
@@ -75,7 +75,7 @@
     .site-head__nav {
       grid-column: 1 / -1;
       order: 3;
-      padding-top: 0.25rem;
+      padding-top: 0.2rem;
     }
   }
 </style>

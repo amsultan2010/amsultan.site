@@ -1,15 +1,19 @@
 ---
 import { PROJECTS } from '../../data/projects';
 
-/** Homepage strip: real builds only — lab stays on /projects archive. */
 const specimens = PROJECTS.filter((p) => p.id !== 'lab');
 const total = String(PROJECTS.length).padStart(2, '0');
 ---
 
 <section id="work" class="s-work js-work" aria-label="Work">
-  <div class="vf-band">work</div>
   <div class="s-work__head">
-    <h2 class="s-work__title vf-display">specimens</h2>
+    <div>
+      <div class="vf-band" style="margin-left: 0;">work</div>
+      <h2 class="s-work__title vf-display">Work</h2>
+      <p class="s-work__lede vf-serif">
+        Live products and tools I’ve shipped. Scroll sideways for the strip, or open the full list.
+      </p>
+    </div>
     <a href="/projects" class="s-work__all vf-mono">full list of projects →</a>
   </div>
 
@@ -20,23 +24,34 @@ const total = String(PROJECTS.length).padStart(2, '0');
         const external = href.startsWith('http');
         const serial = `#as-${String(i + 1).padStart(4, '0')}/${total}`;
         return (
-          <a
-            class="s-work__item"
-            href={href}
-            target={external || project.demoNewTab ? '_blank' : undefined}
-            rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
-          >
+          <article class="s-work__item">
             <div class="s-work__meta vf-mono">
               <span>{serial}</span>
-              {project.featured && <span class="s-work__tag">featured</span>}
+              <span>{project.period}</span>
             </div>
-            <div class="s-work__media">
+            <a
+              class="s-work__media"
+              href={href}
+              target={external || project.demoNewTab ? '_blank' : undefined}
+              rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
+            >
               <img src={project.cover} alt="" loading="lazy" />
-            </div>
-            <h3 class="s-work__name vf-display">{project.title}</h3>
+            </a>
+            <p class="s-work__role vf-mono">{project.role}</p>
+            <h3 class="s-work__name vf-display">
+              <a href={href} target={external || project.demoNewTab ? '_blank' : undefined} rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}>
+                {project.title}
+              </a>
+            </h3>
             <p class="s-work__desc vf-serif">{project.desc}</p>
+            <p class="s-work__detail vf-serif">{project.detail}</p>
+            {project.metrics && (
+              <ul class="s-work__metrics vf-mono">
+                {project.metrics.map((m) => <li>{m}</li>)}
+              </ul>
+            )}
             <p class="s-work__tech vf-mono">{project.tech.join(' · ')}</p>
-          </a>
+          </article>
         );
       })}
     </div>
@@ -45,97 +60,150 @@ const total = String(PROJECTS.length).padStart(2, '0');
 
 <style>
   .s-work {
-    padding: 4vh 0 12vh;
+    padding: 2vh 0 8vh;
   }
   .s-work__head {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-    padding: 1.5rem 1.25rem 1rem;
+    align-items: flex-end;
+    gap: 1.5rem;
+    padding: 0 var(--vf-pad) 1.5rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-work__title {
-    margin: 0;
-    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin: 0.75rem 0 0;
+    font-size: clamp(2rem, 5.5vw, 3.4rem);
+  }
+  .s-work__lede {
+    margin: 0.75rem 0 0;
+    max-width: 34rem;
+    font-size: 1.1rem;
   }
   .s-work__all {
+    flex-shrink: 0;
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     text-decoration: none;
     color: var(--vf-mark);
+    border-bottom: 1px solid var(--vf-mark);
+    padding-bottom: 0.15rem;
+    margin-bottom: 0.35rem;
   }
   .s-work__viewport {
     overflow: hidden;
-    perspective: 1200px;
   }
   .s-work__track {
     display: flex;
-    gap: 1.5rem;
-    padding: 1rem 1.25rem 3rem;
+    gap: 1.25rem;
+    padding: 0.5rem var(--vf-pad) 2.5rem;
     width: max-content;
     will-change: transform;
   }
   .s-work__item {
-    flex: 0 0 min(78vw, 420px);
+    --mx: 50%;
+    --my: 50%;
+    flex: 0 0 min(82vw, 440px);
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
-    text-decoration: none;
-    color: inherit;
-    border: 1px solid var(--vf-ink);
-    padding: 0.85rem;
-    background: var(--vf-field);
-    transition: background 0.2s, color 0.2s;
+    gap: 0.45rem;
+    border: 1px solid var(--vf-line);
+    padding: 1rem;
+    background: color-mix(in srgb, var(--vf-ink) 5%, transparent);
+    position: relative;
+    transition: border-color 0.25s, box-shadow 0.25s;
   }
-  .s-work__item:hover {
-    background: var(--vf-ink);
-    color: var(--vf-field);
+  .s-work__item.is-hot {
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-mark) 25%, transparent);
   }
-  .s-work__item:hover .s-work__tag,
-  .s-work__item:hover .s-work__meta {
-    color: var(--vf-mark);
+  .s-work__item.is-hot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      280px circle at var(--mx) var(--my),
+      color-mix(in srgb, var(--vf-ink) 14%, transparent),
+      transparent 55%
+    );
   }
   .s-work__meta {
     display: flex;
     justify-content: space-between;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.1em;
-    opacity: 0.8;
-  }
-  .s-work__tag {
-    color: var(--vf-mark);
+    opacity: 0.75;
   }
   .s-work__media {
     aspect-ratio: 16 / 10;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--vf-ink) 35%, transparent);
+    border: 1px solid var(--vf-line);
     background: color-mix(in srgb, var(--vf-ink) 8%, transparent);
+    display: block;
   }
   .s-work__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: contrast(1.05) saturate(0.9);
+    transition: transform 0.5s ease;
+  }
+  .s-work__item:hover .s-work__media img {
+    transform: scale(1.04);
+  }
+  .s-work__role {
+    margin: 0.35rem 0 0;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    color: var(--vf-mark);
   }
   .s-work__name {
-    margin: 0.25rem 0 0;
-    font-size: clamp(1.4rem, 3vw, 1.85rem);
-    text-transform: lowercase;
+    margin: 0;
+    font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+  }
+  .s-work__name a {
+    text-decoration: none;
+  }
+  .s-work__name a:hover {
+    color: var(--vf-mark);
   }
   .s-work__desc {
-    margin: 0;
-    font-size: 1rem;
+    margin: 0.15rem 0 0;
+    font-size: 1.05rem;
     line-height: 1.4;
-    opacity: 0.9;
+  }
+  .s-work__detail {
+    margin: 0.15rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    opacity: 0.88;
+  }
+  .s-work__metrics {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .s-work__metrics li {
+    font-size: 0.58rem;
+    letter-spacing: 0.08em;
+    border: 1px solid var(--vf-line);
+    padding: 0.3rem 0.45rem;
+    color: var(--vf-mark);
   }
   .s-work__tech {
-    margin: 0;
-    font-size: 0.6rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.58rem;
     letter-spacing: 0.08em;
     opacity: 0.65;
   }
   @media (max-width: 767px) {
+    .s-work__head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
     .s-work__track {
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -143,7 +211,7 @@ const total = String(PROJECTS.length).padStart(2, '0');
     }
     .s-work__item {
       scroll-snap-align: start;
-      flex-basis: min(85vw, 360px);
+      flex-basis: min(88vw, 380px);
     }
   }
 </style>

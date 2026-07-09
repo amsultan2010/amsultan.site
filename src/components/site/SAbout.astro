@@ -3,161 +3,167 @@ import { EDUCATION } from '../../data/education';
 ---
 
 <section id="about" class="s-about js-about" aria-label="About">
-  <div class="s-about__walls" aria-hidden="true">
-    <div class="s-about__wall s-about__wall--l js-about-wall"></div>
-    <div class="s-about__wall s-about__wall--r js-about-wall"></div>
-    <div class="s-about__wall s-about__wall--t js-about-wall"></div>
-  </div>
-
   <div class="vf-band">about</div>
 
-  <div class="s-about__inner js-about-copy">
-    <p class="s-about__kicker vf-mono">building in public from riyadh</p>
-    <h2 class="s-about__title vf-display">proof over pitch</h2>
-    <p class="s-about__body vf-serif">
-      I care about products that teach, tools that automate the boring parts, and systems that prove
-      the math. Currently a student — shipping tutoringbyabdullah, an F1 media experiment, and a
-      small quant suite as technical proof.
-    </p>
+  <div class="s-about__grid">
+    <div class="s-about__copy js-about-copy">
+      <h2 class="s-about__title vf-display">Built, not pitched</h2>
+      <p class="s-about__body vf-serif">
+        Advanced math student in Riyadh. I care about products that teach, tools that automate the
+        boring parts, and systems that prove the math.
+      </p>
+      <p class="s-about__body vf-serif">
+        Right now that means tutoringbyabdullah, the Downforce Blog, a three-app QuantPy suite, and
+        X-Combinator (AIS-R’s first student-run startup incubator). Looking for shadowing and coffee
+        chats with builders this summer.
+      </p>
+      <p class="s-about__resume">
+        <a href="/resume.docx" class="vf-mono">download resume →</a>
+      </p>
+    </div>
 
-    <div class="vf-band" style="margin-top: 2.5rem;">credentials</div>
-    <ul class="s-about__creds">
-      {EDUCATION.map((entry) => (
-        <li class="s-about__cred">
-          <span class="s-about__cred-years vf-mono">{entry.years}</span>
-          <div>
-            <h3 class="s-about__cred-school vf-serif">{entry.school}</h3>
-            <p class="s-about__cred-loc vf-mono">{entry.location}</p>
-            <ul class="s-about__cred-list vf-serif">
-              {entry.highlights.map((h) => <li>{h}</li>)}
-            </ul>
-          </div>
-        </li>
-      ))}
-    </ul>
-
-    <p class="s-about__resume">
-      <a href="/resume.docx" class="vf-mono">download resume →</a>
-    </p>
+    <aside class="s-about__aside js-about-aside">
+      <p class="s-about__aside-label vf-mono">currently</p>
+      <ul class="s-about__now">
+        <li>AIS-R · 10th grade</li>
+        <li>AA SL math track</li>
+        <li>shipping QuantPy + tutoring</li>
+        <li>founding X-Combinator</li>
+      </ul>
+    </aside>
   </div>
+
+  <div class="vf-band" style="margin-top: 3rem;">education</div>
+  <ul class="s-about__creds">
+    {EDUCATION.map((entry) => (
+      <li class="s-about__cred js-about-cred">
+        <div class="s-about__cred-top">
+          <span class="s-about__cred-years vf-mono">{entry.years}</span>
+          <img class="s-about__cred-logo" src={entry.logo} alt="" width="36" height="36" loading="lazy" />
+        </div>
+        <h3 class="s-about__cred-school vf-display">{entry.school}</h3>
+        <p class="s-about__cred-loc vf-mono">{entry.location}</p>
+        <p class="s-about__cred-focus vf-serif">{entry.focus}</p>
+        <ul class="s-about__cred-list vf-serif">
+          {entry.highlights.map((h) => <li>{h}</li>)}
+        </ul>
+      </li>
+    ))}
+  </ul>
 </section>
 
 <style>
   .s-about {
-    position: relative;
-    padding: 8vh 0 16vh;
-    overflow: hidden;
+    padding: 2vh 0 10vh;
   }
-  .s-about__walls {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    perspective: 800px;
-  }
-  .s-about__wall {
-    position: absolute;
-    background-image:
-      linear-gradient(var(--vf-ink) 1px, transparent 1px),
-      linear-gradient(90deg, var(--vf-ink) 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.18;
-  }
-  .s-about__wall--l {
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 12%;
-    transform-origin: left center;
-    transform: rotateY(28deg);
-  }
-  .s-about__wall--r {
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 12%;
-    transform-origin: right center;
-    transform: rotateY(-28deg);
-  }
-  .s-about__wall--t {
-    left: 12%;
-    right: 12%;
-    top: 0;
-    height: 10%;
-    transform-origin: center top;
-    transform: rotateX(-35deg);
-  }
-  .s-about__inner {
-    position: relative;
-    z-index: 1;
-    max-width: 42rem;
-    margin: 0 auto;
-    padding: 2.5rem 1.25rem 0;
-  }
-  .s-about__kicker {
-    margin: 0 0 0.75rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    color: var(--vf-mark);
+  .s-about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.7fr);
+    gap: 2.5rem;
+    padding: 1.5rem var(--vf-pad) 0;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-about__title {
     margin: 0;
-    font-size: clamp(2.4rem, 7vw, 4.5rem);
+    font-size: clamp(2.2rem, 6vw, 3.8rem);
   }
   .s-about__body {
-    margin: 1.25rem 0 0;
-    font-size: 1.2rem;
+    margin: 1.1rem 0 0;
+    font-size: 1.15rem;
     line-height: 1.55;
-  }
-  .s-about__creds {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .s-about__cred {
-    display: grid;
-    grid-template-columns: 7.5rem 1fr;
-    gap: 1rem;
-    padding: 1.5rem 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--vf-ink) 25%, transparent);
-  }
-  .s-about__cred-years {
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    opacity: 0.7;
-    padding-top: 0.35rem;
-  }
-  .s-about__cred-school {
-    margin: 0;
-    font-size: 1.35rem;
-    font-weight: 400;
-  }
-  .s-about__cred-loc {
-    margin: 0.25rem 0 0;
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    opacity: 0.65;
-  }
-  .s-about__cred-list {
-    margin: 0.75rem 0 0;
-    padding-left: 1.1rem;
-    font-size: 0.98rem;
+    max-width: 38rem;
   }
   .s-about__resume {
-    margin: 2rem 0 0;
+    margin: 1.75rem 0 0;
   }
   .s-about__resume a {
     text-decoration: none;
     letter-spacing: 0.1em;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     border-bottom: 1px solid var(--vf-mark);
     color: var(--vf-mark);
   }
-  @media (max-width: 640px) {
-    .s-about__wall--l,
-    .s-about__wall--r { width: 6%; }
-    .s-about__cred {
+  .s-about__aside {
+    border: 1px solid var(--vf-line);
+    padding: 1.25rem;
+    align-self: start;
+    background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+  }
+  .s-about__aside-label {
+    margin: 0 0 0.85rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    color: var(--vf-mark);
+  }
+  .s-about__now {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.65rem;
+    font-family: var(--vf-font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .s-about__creds {
+    list-style: none;
+    margin: 0;
+    padding: 1rem var(--vf-pad) 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+  }
+  .s-about__cred {
+    border-top: 1px solid var(--vf-line);
+    padding: 1.25rem 0 0.5rem;
+  }
+  .s-about__cred-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .s-about__cred-years {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    opacity: 0.75;
+  }
+  .s-about__cred-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: grayscale(0.2);
+  }
+  .s-about__cred-school {
+    margin: 0;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    line-height: 1.15;
+  }
+  .s-about__cred-loc {
+    margin: 0.4rem 0 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+  .s-about__cred-focus {
+    margin: 0.75rem 0 0;
+    font-size: 0.98rem;
+    opacity: 0.92;
+  }
+  .s-about__cred-list {
+    margin: 0.85rem 0 0;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  @media (max-width: 860px) {
+    .s-about__grid,
+    .s-about__creds {
       grid-template-columns: 1fr;
-      gap: 0.35rem;
     }
   }
 </style>

@@ -16,12 +16,12 @@ const total = String(PROJECTS.length).padStart(2, '0');
     <meta name="author" content="Abdullah Sultan" />
     <AstroSeo
       title="Projects | Abdullah Sultan"
-      description="Archive of shipped work — tutoring, F1 media, quant tools, and the lab."
+      description="Archive of shipped work: tutoring, F1 media, quant tools, and the lab."
       canonical="https://abdullahmsultan.me/projects"
       openGraph={{
         url: 'https://abdullahmsultan.me/projects',
         title: 'Projects | Abdullah Sultan',
-        description: 'Archive of shipped work — tutoring, F1 media, quant tools, and the lab.',
+        description: 'Archive of shipped work: tutoring, F1 media, quant tools, and the lab.',
         site_name: 'Abdullah Sultan',
         images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
@@ -31,7 +31,7 @@ const total = String(PROJECTS.length).padStart(2, '0');
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Unbounded:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -41,8 +41,9 @@ const total = String(PROJECTS.length).padStart(2, '0');
       <main class="archive">
         <header class="archive__head">
           <p class="vf-band">archive</p>
-          <h1 class="archive__title vf-display">projects</h1>
-          <p class="archive__lede vf-serif">everything shipped or in motion — specimens first.</p>
+          <h1 class="archive__title vf-display">Projects</h1>
+          <p class="archive__lede vf-serif">Everything shipped or in motion, with the detail that didn’t fit the homepage strip.</p>
+          <p class="archive__back"><a href="/#work" class="vf-mono">← back to work</a></p>
         </header>
         <ul class="archive__list">
           {PROJECTS.map((project, i) => {
@@ -61,9 +62,15 @@ const total = String(PROJECTS.length).padStart(2, '0');
                     <p class="archive__serial vf-mono">
                       {serial}
                       {project.featured && <span> · featured</span>}
+                      <span> · {project.role}</span>
+                      <span> · {project.period}</span>
                     </p>
                     <h2 class="archive__name vf-display">{project.title}</h2>
                     <p class="archive__desc vf-serif">{project.desc}</p>
+                    <p class="archive__detail vf-serif">{project.detail}</p>
+                    {project.metrics && (
+                      <p class="archive__metrics vf-mono">{project.metrics.join(' · ')}</p>
+                    )}
                     <p class="archive__tech vf-mono">{project.tech.join(' · ')}</p>
                   </div>
                   <div class="archive__media">
@@ -112,7 +119,7 @@ const total = String(PROJECTS.length).padStart(2, '0');
 
 <style>
   .archive__head {
-    padding: 2rem 1.25rem 1rem;
+    padding: 2rem var(--vf-pad) 1rem;
     max-width: 40rem;
   }
   .archive__title {
@@ -123,10 +130,19 @@ const total = String(PROJECTS.length).padStart(2, '0');
     margin: 0.75rem 0 0;
     font-size: 1.2rem;
   }
+  .archive__back {
+    margin: 1rem 0 0;
+  }
+  .archive__back a {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    color: var(--vf-mark);
+  }
   .archive__list {
     list-style: none;
     margin: 0;
-    padding: 0 1.25rem 3rem;
+    padding: 0 var(--vf-pad) 3rem;
   }
   .archive__row {
     display: grid;
@@ -156,8 +172,20 @@ const total = String(PROJECTS.length).padStart(2, '0');
     margin: 0.6rem 0 0;
     max-width: 36rem;
   }
+  .archive__detail {
+    margin: 0.5rem 0 0;
+    max-width: 38rem;
+    opacity: 0.88;
+    font-size: 1rem;
+  }
+  .archive__metrics {
+    margin: 0.65rem 0 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--vf-mark);
+  }
   .archive__tech {
-    margin: 0.75rem 0 0;
+    margin: 0.55rem 0 0;
     font-size: 0.6rem;
     letter-spacing: 0.08em;
     opacity: 0.65;
