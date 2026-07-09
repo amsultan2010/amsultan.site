@@ -1,0 +1,149 @@
+---
+import { PROJECTS } from '../../data/projects';
+
+/** Homepage strip: real builds only — lab stays on /projects archive. */
+const specimens = PROJECTS.filter((p) => p.id !== 'lab');
+const total = String(PROJECTS.length).padStart(2, '0');
+---
+
+<section id="work" class="s-work js-work" aria-label="Work">
+  <div class="vf-band">work</div>
+  <div class="s-work__head">
+    <h2 class="s-work__title vf-display">specimens</h2>
+    <a href="/projects" class="s-work__all vf-mono">full list of projects →</a>
+  </div>
+
+  <div class="s-work__viewport">
+    <div class="s-work__track js-work-track">
+      {specimens.map((project, i) => {
+        const href = project.demo || project.href;
+        const external = href.startsWith('http');
+        const serial = `#as-${String(i + 1).padStart(4, '0')}/${total}`;
+        return (
+          <a
+            class="s-work__item"
+            href={href}
+            target={external || project.demoNewTab ? '_blank' : undefined}
+            rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
+          >
+            <div class="s-work__meta vf-mono">
+              <span>{serial}</span>
+              {project.featured && <span class="s-work__tag">featured</span>}
+            </div>
+            <div class="s-work__media">
+              <img src={project.cover} alt="" loading="lazy" />
+            </div>
+            <h3 class="s-work__name vf-display">{project.title}</h3>
+            <p class="s-work__desc vf-serif">{project.desc}</p>
+            <p class="s-work__tech vf-mono">{project.tech.join(' · ')}</p>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<style>
+  .s-work {
+    padding: 4vh 0 12vh;
+  }
+  .s-work__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1.5rem 1.25rem 1rem;
+  }
+  .s-work__title {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+  .s-work__all {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    color: var(--vf-mark);
+  }
+  .s-work__viewport {
+    overflow: hidden;
+    perspective: 1200px;
+  }
+  .s-work__track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 1.25rem 3rem;
+    width: max-content;
+    will-change: transform;
+  }
+  .s-work__item {
+    flex: 0 0 min(78vw, 420px);
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid var(--vf-ink);
+    padding: 0.85rem;
+    background: var(--vf-field);
+    transition: background 0.2s, color 0.2s;
+  }
+  .s-work__item:hover {
+    background: var(--vf-ink);
+    color: var(--vf-field);
+  }
+  .s-work__item:hover .s-work__tag,
+  .s-work__item:hover .s-work__meta {
+    color: var(--vf-mark);
+  }
+  .s-work__meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    opacity: 0.8;
+  }
+  .s-work__tag {
+    color: var(--vf-mark);
+  }
+  .s-work__media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--vf-ink) 35%, transparent);
+    background: color-mix(in srgb, var(--vf-ink) 8%, transparent);
+  }
+  .s-work__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: contrast(1.05) saturate(0.9);
+  }
+  .s-work__name {
+    margin: 0.25rem 0 0;
+    font-size: clamp(1.4rem, 3vw, 1.85rem);
+    text-transform: lowercase;
+  }
+  .s-work__desc {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    opacity: 0.9;
+  }
+  .s-work__tech {
+    margin: 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+  }
+  @media (max-width: 767px) {
+    .s-work__track {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .s-work__item {
+      scroll-snap-align: start;
+      flex-basis: min(85vw, 360px);
+    }
+  }
+</style>

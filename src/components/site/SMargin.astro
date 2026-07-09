@@ -1,0 +1,143 @@
+---
+import { photos } from '../../data/photos';
+
+const picks = photos.slice(0, 9);
+---
+
+<section id="margin" class="s-margin" aria-label="Personal margin">
+  <div class="vf-band">margin · artifacts</div>
+  <div class="s-margin__head">
+    <h2 class="s-margin__title vf-display">off the record</h2>
+    <p class="s-margin__lede vf-serif">photos + ascii — the stuff that doesn’t fit a resume.</p>
+  </div>
+
+  <div class="s-margin__grid">
+    <article class="s-margin__ascii js-margin-card">
+      <p class="vf-mono s-margin__label">ascii self</p>
+      <pre class="s-margin__pre" data-ascii-src="/images/myascii.txt">loading signal…</pre>
+    </article>
+
+    {picks.map((photo, i) => (
+      <article
+        class={`s-margin__card js-margin-card s-margin__card--${(i % 3) + 1}`}
+        style={`--rot: ${(i % 2 === 0 ? -1 : 1) * (3 + i)}deg`}
+      >
+        <img src={photo.src} alt={photo.alt} loading="lazy" />
+        <span class="vf-mono">{photo.id}</span>
+      </article>
+    ))}
+  </div>
+</section>
+
+<script>
+  const pre = document.querySelector<HTMLElement>('.s-margin__pre');
+  if (pre) {
+    const src = pre.dataset.asciiSrc;
+    if (src) {
+      fetch(src)
+        .then((r) => r.text())
+        .then((t) => {
+          pre.textContent = t.trimEnd().split('\n').slice(0, 36).join('\n');
+        })
+        .catch(() => {
+          pre.textContent = 'ABDULLAH\nVOLTAGE\nFRAME';
+        });
+    }
+  }
+</script>
+
+<style>
+  .s-margin {
+    padding: 4vh 0 14vh;
+  }
+  .s-margin__head {
+    padding: 1.75rem 1.25rem 0.5rem;
+    max-width: 36rem;
+  }
+  .s-margin__title {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+  .s-margin__lede {
+    margin: 0.75rem 0 0;
+    font-size: 1.15rem;
+  }
+  .s-margin__grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1rem;
+    padding: 1.5rem 1.25rem 2rem;
+  }
+  .s-margin__ascii {
+    grid-column: span 5;
+    border: 1px solid var(--vf-ink);
+    padding: 0.75rem;
+    background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
+    min-height: 280px;
+  }
+  .s-margin__label {
+    margin: 0 0 0.5rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    color: var(--vf-mark);
+  }
+  .s-margin__pre {
+    margin: 0;
+    font-family: var(--vf-font-mono);
+    font-size: 5px;
+    line-height: 1.05;
+    overflow: hidden;
+    max-height: 320px;
+    color: var(--vf-ink);
+    opacity: 0.85;
+    white-space: pre;
+  }
+  .s-margin__card {
+    grid-column: span 3;
+    border: 1px solid var(--vf-ink);
+    padding: 0.5rem;
+    background: var(--vf-field);
+    transform: rotate(var(--rot, 0deg));
+    transition: transform 0.3s ease;
+  }
+  .s-margin__card:hover {
+    transform: rotate(0deg) scale(1.03);
+    z-index: 2;
+  }
+  .s-margin__card img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(0.15) contrast(1.05);
+  }
+  .s-margin__card span {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    opacity: 0.65;
+  }
+  .s-margin__card--1 { grid-column: span 4; }
+  .s-margin__card--2 { grid-column: span 3; }
+  .s-margin__card--3 { grid-column: span 4; }
+
+  @media (max-width: 900px) {
+    .s-margin__ascii { grid-column: span 12; }
+    .s-margin__card,
+    .s-margin__card--1,
+    .s-margin__card--2,
+    .s-margin__card--3 {
+      grid-column: span 6;
+    }
+  }
+  @media (max-width: 520px) {
+    .s-margin__card,
+    .s-margin__card--1,
+    .s-margin__card--2,
+    .s-margin__card--3 {
+      grid-column: span 12;
+      transform: none;
+    }
+  }
+</style>

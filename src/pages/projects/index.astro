@@ -1,72 +1,181 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
 import Analytics from '@vercel/analytics/astro';
-import ProjectsPage from '../../components/portfolio/ProjectsPage';
+import SiteHead from '../../components/site/SiteHead.astro';
+import SiteFoot from '../../components/site/SiteFoot.astro';
+import { PROJECTS } from '../../data/projects';
+import '../../styles/voltage.css';
+
+const total = String(PROJECTS.length).padStart(2, '0');
 ---
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Abdullah Sultan" />
-
     <AstroSeo
       title="Projects | Abdullah Sultan"
-      description="Student builder based in Riyadh, Saudi Arabia."
-      canonical="https://abdullahmsultan.me"
+      description="Archive of shipped work — tutoring, F1 media, quant tools, and the lab."
+      canonical="https://abdullahmsultan.me/projects"
       openGraph={{
-        url: 'https://abdullahmsultan.me',
+        url: 'https://abdullahmsultan.me/projects',
         title: 'Projects | Abdullah Sultan',
-        description: 'Student builder based in Riyadh, Saudi Arabia.',
+        description: 'Archive of shipped work — tutoring, F1 media, quant tools, and the lab.',
         site_name: 'Abdullah Sultan',
         images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'Abdullah Sultan portfolio' }],
       }}
     />
-
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/abdullah-apple-touch.png" />
-    <meta name="theme-color" content="#0e1116" />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#ff4d1a" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="preload" href="/NeueMontreal-Medium.otf" as="font" type="font/otf" crossorigin />
-
-    <style is:global>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html {
-        background-color: #0e1116;
-        overflow-x: hidden;
-        max-width: 100vw;
-        min-height: 100vh;
-      }
-
-      body {
-        margin: 0;
-        min-width: 320px;
-        background: transparent;
-        overflow-x: hidden;
-        min-height: 100vh;
-        width: 100%;
-        font-family: 'NeueMontreal', 'Avenir Next', sans-serif;
-      }
-
-      a {
-        color: inherit;
-        text-decoration: inherit;
-      }
-    </style>
-      <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <ProjectsPage client:only="react" />
+    <div class="site-wrapper" style="opacity: 1;">
+      <SiteHead />
+      <main class="archive">
+        <header class="archive__head">
+          <p class="vf-band">archive</p>
+          <h1 class="archive__title vf-display">projects</h1>
+          <p class="archive__lede vf-serif">everything shipped or in motion — specimens first.</p>
+        </header>
+        <ul class="archive__list">
+          {PROJECTS.map((project, i) => {
+            const href = project.demo || project.href;
+            const external = href.startsWith('http');
+            const serial = `#as-${String(i + 1).padStart(4, '0')}/${total}`;
+            return (
+              <li>
+                <a
+                  class="archive__row"
+                  href={href}
+                  target={external || project.demoNewTab ? '_blank' : undefined}
+                  rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}
+                >
+                  <div class="archive__copy">
+                    <p class="archive__serial vf-mono">
+                      {serial}
+                      {project.featured && <span> · featured</span>}
+                    </p>
+                    <h2 class="archive__name vf-display">{project.title}</h2>
+                    <p class="archive__desc vf-serif">{project.desc}</p>
+                    <p class="archive__tech vf-mono">{project.tech.join(' · ')}</p>
+                  </div>
+                  <div class="archive__media">
+                    <img src={project.cover} alt="" loading="lazy" />
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </main>
+      <SiteFoot />
+    </div>
+    <div class="site-contrast-mask js-contrast-mask" aria-hidden="true"></div>
+    <script>
+      const btn = document.querySelector('.js-contrast');
+      const mask = document.querySelector('.js-contrast-mask');
+      btn?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = !root.classList.contains('theme-contrasted');
+        if (mask) {
+          (mask as HTMLElement).style.transform = 'translate3d(0,0,0)';
+          requestAnimationFrame(() => {
+            root.classList.toggle('theme-contrasted', next);
+            localStorage.setItem('vf-theme', next ? 'contrasted' : 'default');
+            setTimeout(() => {
+              (mask as HTMLElement).style.transform = 'translate3d(100%,0,0)';
+              setTimeout(() => {
+                (mask as HTMLElement).style.transform = 'translate3d(-100%,0,0)';
+              }, 280);
+            }, 40);
+          });
+        } else {
+          root.classList.toggle('theme-contrasted', next);
+          localStorage.setItem('vf-theme', next ? 'contrasted' : 'default');
+        }
+      });
+      if (localStorage.getItem('vf-theme') === 'contrasted') {
+        document.documentElement.classList.add('theme-contrasted');
+      }
+      document.documentElement.classList.remove('is-scroll-blocked');
+    </script>
     <Analytics />
   </body>
 </html>
+
+<style>
+  .archive__head {
+    padding: 2rem 1.25rem 1rem;
+    max-width: 40rem;
+  }
+  .archive__title {
+    margin: 0;
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+  }
+  .archive__lede {
+    margin: 0.75rem 0 0;
+    font-size: 1.2rem;
+  }
+  .archive__list {
+    list-style: none;
+    margin: 0;
+    padding: 0 1.25rem 3rem;
+  }
+  .archive__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(140px, 0.7fr);
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.75rem 0;
+    border-top: 1px solid color-mix(in srgb, var(--vf-ink) 30%, transparent);
+    text-decoration: none;
+    color: inherit;
+  }
+  .archive__row:hover .archive__name {
+    color: var(--vf-mark);
+  }
+  .archive__serial {
+    margin: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--vf-mark);
+  }
+  .archive__name {
+    margin: 0.4rem 0 0;
+    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+    text-transform: lowercase;
+  }
+  .archive__desc {
+    margin: 0.6rem 0 0;
+    max-width: 36rem;
+  }
+  .archive__tech {
+    margin: 0.75rem 0 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    opacity: 0.65;
+  }
+  .archive__media {
+    border: 1px solid var(--vf-ink);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+  .archive__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 700px) {
+    .archive__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

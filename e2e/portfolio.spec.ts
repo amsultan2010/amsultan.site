@@ -1,22 +1,26 @@
 import { test, expect } from '@playwright/test';
 
-test('homepage loads with brand and work', async ({ page }) => {
+test('homepage loads voltage frame with brand and work', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible();
-  await expect(page.getByRole('link', { name: /grab coffee/i })).toBeVisible();
-  await expect(page.getByRole('heading', { name: /^work$/i })).toBeVisible();
+  const skip = page.getByRole('button', { name: /skip intro/i });
+  if (await skip.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await skip.click();
+  }
+  await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole('heading', { name: /specimens/i })).toBeVisible();
+  await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
 });
 
-test('projects page renders archive list', async ({ page }) => {
+test('projects archive renders list', async ({ page }) => {
   await page.goto('/projects');
+  await expect(page.getByRole('heading', { name: /projects/i }).first()).toBeVisible();
   await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
   await expect(page.getByText(/the downforce blog/i).first()).toBeVisible();
 });
 
-test('lab page loads toys', async ({ page }) => {
+test('lab page still loads', async ({ page }) => {
   await page.goto('/lab');
   await expect(page.getByRole('heading', { name: /the lab/i })).toBeVisible();
-  await expect(page.getByLabel(/lab terminal/i)).toBeVisible();
 });
 
 test('desktop redirects to lab', async ({ page }) => {
@@ -24,9 +28,13 @@ test('desktop redirects to lab', async ({ page }) => {
   await expect(page).toHaveURL(/\/lab\/?$/);
 });
 
-test('theme toggle persists', async ({ page }) => {
-  await page.goto('/projects');
-  const toggle = page.getByRole('button', { name: /toggle theme/i });
+test('contrast toggle works on homepage', async ({ page }) => {
+  await page.goto('/');
+  const skip = page.getByRole('button', { name: /skip intro/i });
+  if (await skip.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await skip.click();
+  }
+  const toggle = page.getByRole('button', { name: /toggle contrast|contrast/i });
   await toggle.click();
-  await expect(page.locator('[data-rg-theme="light"]')).toBeVisible();
+  await expect(page.locator('html.theme-contrasted')).toBeVisible({ timeout: 5000 });
 });

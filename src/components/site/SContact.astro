@@ -1,0 +1,98 @@
+---
+const talk = 'talk';
+---
+
+<section id="contact" class="s-contact" aria-label="Contact">
+  <div class="vf-band">contact</div>
+  <div class="s-contact__inner">
+    <p class="s-contact__kicker vf-mono">founders · recruiters · curious builders</p>
+    <a
+      href="mailto:abdullahmsultan1@gmail.com"
+      class="s-contact__go js-contact-go vf-display"
+    >
+      <span class="s-contact__go-label">GO</span>
+      <span class="s-contact__reveal js-contact-reveal" aria-hidden="true">
+        {[...talk].map((ch) => (
+          <span class="js-contact-letter">{ch}</span>
+        ))}
+      </span>
+    </a>
+    <p class="s-contact__email vf-mono">
+      <a href="mailto:abdullahmsultan1@gmail.com">abdullahmsultan1@gmail.com</a>
+    </p>
+    <p class="s-contact__sub vf-serif">
+      want to talk? email me. coffee chats welcome.
+    </p>
+  </div>
+</section>
+
+<style>
+  .s-contact {
+    padding: 4vh 0 10vh;
+  }
+  .s-contact__inner {
+    padding: 6rem 1.25rem 8rem;
+    text-align: center;
+    position: relative;
+  }
+  .s-contact__inner::before {
+    content: '';
+    position: absolute;
+    inset: 10% 15%;
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--vf-mark) 18%, transparent), transparent 70%);
+    pointer-events: none;
+  }
+  .s-contact__kicker {
+    position: relative;
+    margin: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    color: var(--vf-mark);
+  }
+  .s-contact__go {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+    text-decoration: none;
+    font-size: clamp(5rem, 18vw, 12rem);
+    line-height: 0.85;
+    color: var(--vf-ink);
+  }
+  .s-contact__go:hover .s-contact__go-label,
+  .s-contact__go:focus .s-contact__go-label {
+    color: var(--vf-mark);
+  }
+  .s-contact__reveal {
+    display: flex;
+    gap: 0.02em;
+    font-size: 0.28em;
+    letter-spacing: 0.12em;
+    margin-top: 0.15em;
+    min-height: 1.2em;
+  }
+  .js-contact-letter {
+    display: inline-block;
+  }
+  .s-contact__email {
+    position: relative;
+    margin: 1.5rem 0 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+  .s-contact__email a {
+    text-decoration: none;
+    border-bottom: 1px solid var(--vf-ink);
+  }
+  .s-contact__email a:hover {
+    color: var(--vf-mark);
+    border-color: var(--vf-mark);
+  }
+  .s-contact__sub {
+    position: relative;
+    margin: 1rem auto 0;
+    max-width: 28rem;
+    font-size: 1.15rem;
+  }
+</style>

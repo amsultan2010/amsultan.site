@@ -1,10 +1,20 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
 import Analytics from '@vercel/analytics/astro';
-import PortfolioApp from '../components/portfolio/PortfolioApp';
+import SiteHead from '../components/site/SiteHead.astro';
+import SiteFoot from '../components/site/SiteFoot.astro';
+import SHero from '../components/site/SHero.astro';
+import SAbout from '../components/site/SAbout.astro';
+import SWork from '../components/site/SWork.astro';
+import SMargin from '../components/site/SMargin.astro';
+import SContact from '../components/site/SContact.astro';
+import ASeparator from '../components/site/ASeparator.astro';
+import SRunway from '../components/site/SRunway.astro';
+import SStretch from '../components/site/SStretch.astro';
+import '../styles/voltage.css';
 ---
 
-<html lang="en">
+<html lang="en" class="is-scroll-blocked">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -26,43 +36,60 @@ import PortfolioApp from '../components/portfolio/PortfolioApp';
 
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/abdullah-apple-touch.png" />
-    <meta name="theme-color" content="#0e1116" />
+    <meta name="theme-color" content="#ff4d1a" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-    <link rel="preload" href="/NeueMontreal-Medium.otf" as="font" type="font/otf" crossorigin />
-    <link rel="preload" href="/images/myimage.jpg" as="image" type="image/jpeg" fetchpriority="high" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
 
-    <style is:global>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      html {
-        background-color: #0e1116;
-        overflow-x: hidden;
-        max-width: 100vw;
-        min-height: 100vh;
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        min-width: 320px;
-        background: transparent;
-        overflow-x: hidden;
-        min-height: 100vh;
-        width: 100%;
-        font-family: 'NeueMontreal', 'Avenir Next', sans-serif;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-      }
-      a { color: inherit; text-decoration: inherit; }
-      canvas { display: block !important; max-width: 100% !important; }
-    </style>
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://abdullahmsultan.me/og.jpg" />
   </head>
   <body>
-    <PortfolioApp client:only="react" />
+    <div id="top" class="site-wrapper js-site-wrapper" style="opacity: 0;">
+      <SiteHead />
+      <main>
+        <SHero />
+        <ASeparator />
+        <SRunway text="ship · prove · repeat" />
+        <SAbout />
+        <ASeparator phrases={['work', 'build', '////', 'live', 'urls', '####']} />
+        <SStretch word="WORK" />
+        <SRunway text="specimens on the tape" />
+        <SWork />
+        <ASeparator phrases={['margin', 'photos', 'ascii', '////', 'human']} />
+        <SRunway text="off the record" />
+        <SMargin />
+        <ASeparator phrases={['talk', 'go', '####', 'coffee', 'chat']} />
+        <SStretch word="TALK" />
+        <SRunway text="leave a note" />
+        <SContact />
+      </main>
+      <SiteFoot />
+    </div>
+
+    <div class="site-intro js-intro">
+      <div class="site-intro__lines" aria-hidden="true">
+        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
+        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
+        <div class="site-intro__line site-intro__line--v js-intro-line-v"></div>
+        <div class="site-intro__line site-intro__line--h js-intro-line-h"></div>
+        <div class="site-intro__line site-intro__line--h js-intro-line-h"></div>
+      </div>
+      <p class="site-intro__mark js-intro-mark">as · voltage</p>
+      <div class="site-intro__border site-intro__border--top js-intro-border"></div>
+      <div class="site-intro__border site-intro__border--left js-intro-border"></div>
+      <div class="site-intro__border site-intro__border--right js-intro-border"></div>
+      <button type="button" class="site-intro__skip js-intro-skip">skip intro</button>
+    </div>
+
+    <div class="site-contrast-mask js-contrast-mask" aria-hidden="true"></div>
+
+    <script src="../scripts/site.ts"></script>
     <Analytics />
   </body>
 </html>
