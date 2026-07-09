@@ -215,10 +215,11 @@ export function createVoltageTerrain({
     return null;
   }
 
-  const segs = isMobile ? 48 : 110;
+  // Lighter mesh on phones; slightly lighter on desktop too to keep scroll smooth
+  const segs = isMobile ? 40 : 90;
 
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.15 : 1.5));
   // Keep the canvas composited on iOS
   canvas.style.transform = 'translateZ(0)';
   canvas.style.setProperty('-webkit-transform', 'translateZ(0)');
@@ -285,6 +286,7 @@ export function createVoltageTerrain({
   let running = true;
   let raf = 0;
   let time = 0;
+  let frame = 0;
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   const applyTheme = (contrasted: boolean) => {
@@ -317,10 +319,14 @@ export function createVoltageTerrain({
   const tick = (t = performance.now()) => {
     if (!running) return;
     raf = requestAnimationFrame(tick);
+    frame += 1;
+    // Phones: render every other frame to keep scroll smooth
+    if (isMobile && frame % 2 === 1) return;
+
     time = t * 0.001;
 
-    // Ambient drift so phones get living terrain without a finger
-    if (!reducedMotion) {
+    // Ambient drift on touch only — desktop keeps pointer steering
+    if (!reducedMotion && isMobile) {
       mouse.tx = Math.sin(time * 0.35) * 0.55 + Math.sin(time * 0.11) * 0.2;
       mouse.ty = Math.cos(time * 0.28) * 0.4;
     }
@@ -334,7 +340,6 @@ export function createVoltageTerrain({
     shared.uPulse.value = pulse;
     shared.uMouse.value.set(mouse.x, mouse.y);
 
-    // Light follows mouse a bit
     uniforms.uLightDir.value.set(0.45 + mouse.x * 0.4, 1.0, 0.3 + mouse.y * 0.25).normalize();
 
     if (!reducedMotion) {
@@ -348,8 +353,7 @@ export function createVoltageTerrain({
   };
 
   const onPointer = (e: PointerEvent) => {
-    // Fine pointers still steer the peak; coarse keeps ambient drift
-    if (window.matchMedia('(pointer: coarse)').matches) return;
+    if (isMobile) return;
     mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
   };

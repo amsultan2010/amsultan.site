@@ -15,12 +15,30 @@ import SiteScrollbar from '../components/site/SiteScrollbar.astro';
 import '../styles/voltage.css';
 ---
 
-<html lang="en" class="is-scroll-blocked">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="author" content="Abdullah Sultan" />
+    <script is:inline>
+      (function () {
+        try {
+          var touch =
+            window.matchMedia('(pointer: coarse)').matches ||
+            window.matchMedia('(hover: none)').matches ||
+            (navigator.maxTouchPoints || 0) > 0 ||
+            window.innerWidth < 768;
+          if (touch) {
+            document.documentElement.classList.add('touch-ready');
+          } else {
+            document.documentElement.classList.add('is-scroll-blocked');
+          }
+        } catch (e) {
+          document.documentElement.classList.add('is-scroll-blocked');
+        }
+      })();
+    </script>
 
     <AstroSeo
       title="abdullah sultan · student builder"
@@ -95,6 +113,16 @@ import '../styles/voltage.css';
       <p class="site-intro__mark js-intro-mark">abdullah sultan</p>
       <button type="button" class="site-intro__skip js-intro-skip">skip</button>
     </div>
+    <script is:inline>
+      (function () {
+        try {
+          if (document.documentElement.classList.contains('touch-ready')) {
+            var intro = document.querySelector('.js-intro');
+            if (intro) intro.remove();
+          }
+        } catch (e) {}
+      })();
+    </script>
 
     <SiteScrollbar />
     <div class="site-contrast-mask js-contrast-mask" aria-hidden="true"></div>

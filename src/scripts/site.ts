@@ -19,8 +19,17 @@ function isCoarsePointer() {
 }
 
 function initLenis() {
-  // Same Lenis on every viewport. syncTouch off so iOS keeps native touch
-  // gestures; we force ScrollTrigger.update from native scroll + ticker.
+  // Touch/iOS: native scroll only. Lenis + per-frame ScrollTrigger.update
+  // made desktop laggy and still missed scrub updates on Safari.
+  if (isCoarsePointer() || window.innerWidth < 768) {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth');
+    const sync = () => ScrollTrigger.update();
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('touchmove', sync, { passive: true });
+    window.addEventListener('touchend', sync, { passive: true });
+    return null;
+  }
+
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -33,14 +42,8 @@ function initLenis() {
 
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
-    // Critical on iOS: scrubbed text warps must update every frame while
-    // the finger is scrolling (Lenis alone often misses native touch scroll).
-    ScrollTrigger.update();
   });
   gsap.ticker.lagSmoothing(0);
-
-  window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
-  window.addEventListener('touchmove', () => ScrollTrigger.update(), { passive: true });
 
   document.documentElement.classList.add('lenis', 'lenis-smooth');
 
@@ -60,10 +63,18 @@ function initTerrain() {
 
   if (!terrain) {
     canvas.remove();
+    // Keep CSS fallback topography visible when WebGL fails (common on iOS)
+    if (fallback) fallback.style.opacity = '1';
     return;
   }
 
-  fallback?.remove();
+  // On touch, keep a soft CSS wash under the canvas so phones never look blank
+  // if WebGL stalls; desktop can drop the fallback for a cleaner GL look.
+  if (isCoarsePointer() || window.innerWidth < 768) {
+    if (fallback) fallback.style.opacity = '0.55';
+  } else {
+    fallback?.remove();
+  }
 
   if (document.documentElement.classList.contains('theme-contrasted')) {
     terrain.setContrasted(true);
@@ -107,7 +118,14 @@ function runIntro(onDone: () => void) {
     return;
   }
 
-  if (prefersReducedMotion() || sessionStorage.getItem('vf-intro-seen') === '1') {
+  // Touch: skip wipe so the page never sits blank waiting on the GSAP bundle.
+  // All scroll/ambient motion still runs after this — only the intro chrome is skipped.
+  if (
+    prefersReducedMotion() ||
+    isCoarsePointer() ||
+    window.innerWidth < 768 ||
+    sessionStorage.getItem('vf-intro-seen') === '1'
+  ) {
     sessionStorage.setItem('vf-intro-seen', '1');
     revealSite();
     onDone();
@@ -632,7 +650,7 @@ function initSeparators() {
         char.classList.add('is-flip');
         window.setTimeout(() => char.classList.remove('is-flip'), 220);
       });
-    }, 100);
+    }, isCoarsePointer() ? 140 : 220);
   });
 }
 
@@ -820,59 +838,60 @@ function initWork() {
     ease: 'power3.out',
   });
 
-  // Card glow — ambient while in view (no tap/hover required)
+  // Card glow — pointer on desktop; ambient in-view on touch (no extra desktop load)
   if (!prefersReducedMotion()) {
+    const coarse = isCoarsePointer() || window.innerWidth < 768;
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
-      let hot = false;
-      ScrollTrigger.create({
-        trigger: item,
-        start: 'top 85%',
-        end: 'bottom 20%',
-        onEnter: () => {
-          hot = true;
-          item.classList.add('is-hot');
-        },
-        onEnterBack: () => {
-          hot = true;
-          item.classList.add('is-hot');
-        },
-        onLeave: () => {
-          hot = false;
-          item.classList.remove('is-hot');
-        },
-        onLeaveBack: () => {
-          hot = false;
-          item.classList.remove('is-hot');
-        },
-      });
-
-      // Drift the glow hotspot so it reads alive without a pointer
-      gsap.to(item, {
-        duration: 3.2 + (i % 3) * 0.4,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        onUpdate() {
-          if (!hot) return;
-          const t = this.progress();
-          item.style.setProperty('--mx', `${20 + t * 60}%`);
-          item.style.setProperty('--my', `${30 + (1 - t) * 40}%`);
-        },
-      });
-
-      if (!isCoarsePointer()) {
-        item.addEventListener('pointermove', (e) => {
-          const r = item.getBoundingClientRect();
-          const x = ((e.clientX - r.left) / r.width) * 100;
-          const y = ((e.clientY - r.top) / r.height) * 100;
-          item.style.setProperty('--mx', `${x}%`);
-          item.style.setProperty('--my', `${y}%`);
-          item.classList.add('is-hot');
+      if (coarse) {
+        let hot = false;
+        const drift = { t: 0 };
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 85%',
+          end: 'bottom 20%',
+          onEnter: () => {
+            hot = true;
+            item.classList.add('is-hot');
+          },
+          onEnterBack: () => {
+            hot = true;
+            item.classList.add('is-hot');
+          },
+          onLeave: () => {
+            hot = false;
+            item.classList.remove('is-hot');
+          },
+          onLeaveBack: () => {
+            hot = false;
+            item.classList.remove('is-hot');
+          },
         });
-        item.addEventListener('pointerleave', () => {
-          if (!hot) item.classList.remove('is-hot');
+        gsap.to(drift, {
+          t: 1,
+          duration: 3.2 + (i % 3) * 0.4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          onUpdate() {
+            if (!hot) return;
+            item.style.setProperty('--mx', `${20 + drift.t * 60}%`);
+            item.style.setProperty('--my', `${30 + (1 - drift.t) * 40}%`);
+          },
         });
+        return;
       }
+
+      item.addEventListener('pointermove', (e) => {
+        const r = item.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 100;
+        const y = ((e.clientY - r.top) / r.height) * 100;
+        item.style.setProperty('--mx', `${x}%`);
+        item.style.setProperty('--my', `${y}%`);
+        item.classList.add('is-hot');
+      });
+      item.addEventListener('pointerleave', () => {
+        item.classList.remove('is-hot');
+      });
     });
   }
 
@@ -1588,14 +1607,20 @@ function initLivingLabels() {
 }
 
 function boot() {
-  document.documentElement.classList.add('is-scroll-blocked');
+  const touch = isCoarsePointer() || window.innerWidth < 768;
+  if (touch) {
+    // Phones: content visible immediately; desktop still uses the wipe intro
+    revealSite();
+  } else {
+    document.documentElement.classList.add('is-scroll-blocked');
+  }
+
   initContrastToggle();
   initNav();
   initClock();
   initTerrain();
 
   const afterIntro = () => {
-    // Always unlock — even if a later init throws
     revealSite();
     try {
       initLenis();
@@ -1636,8 +1661,8 @@ function boot() {
     }
   };
 
-  // Shared failsafe: never leave the page blank if intro/GSAP stalls
-  window.setTimeout(revealSite, 2800);
+  // Failsafe: never leave the page blank
+  window.setTimeout(revealSite, touch ? 800 : 2800);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => runIntro(afterIntro), { once: true });

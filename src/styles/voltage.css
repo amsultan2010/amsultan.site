@@ -183,9 +183,21 @@ html.theme-contrasted .site-terrain {
   transition: opacity 0.35s ease;
 }
 
-/* Hide content during the shared intro wipe on every viewport */
-html.is-scroll-blocked .site-wrapper.js-site-wrapper {
+/* Hide content during desktop intro wipe only — phones stay visible */
+html.is-scroll-blocked:not(.touch-ready) .site-wrapper.js-site-wrapper {
   opacity: 0;
+}
+html.touch-ready .site-wrapper.js-site-wrapper {
+  opacity: 1 !important;
+}
+html.touch-ready .site-intro {
+  display: none !important;
+  pointer-events: none !important;
+}
+@media (max-width: 767px) {
+  .site-intro {
+    display: none !important;
+  }
 }
 
 .site-noise {
