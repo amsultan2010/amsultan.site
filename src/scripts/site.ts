@@ -12,13 +12,12 @@ function prefersReducedMotion() {
 }
 
 function initLenis() {
-  // Slow, heavy, smooth — less jitter than short duration + high wheel gain
+  // lerp mode (not duration) = buttery glide, less wheel jitter on high-Hz displays
   const lenis = new Lenis({
-    duration: 1.85,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    lerp: 0.075,
     smoothWheel: true,
-    wheelMultiplier: 0.72,
-    touchMultiplier: 1.05,
+    wheelMultiplier: 0.85,
+    touchMultiplier: 1.4,
     syncTouch: false,
   });
 
@@ -27,8 +26,9 @@ function initLenis() {
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
-  // Keep lag smoothing off so Lenis + ScrollTrigger stay in lockstep
   gsap.ticker.lagSmoothing(0);
+
+  document.documentElement.classList.add('lenis', 'lenis-smooth');
 
   (window as unknown as { lenis: Lenis }).lenis = lenis;
   return lenis;
@@ -166,7 +166,7 @@ function initProgress() {
       trigger: document.documentElement,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 0.3,
+      scrub: true,
     },
   });
 }
@@ -222,23 +222,8 @@ function initHero() {
   const hero = document.querySelector('.s-hero');
   const title = document.querySelector<HTMLElement>('.s-hero__title');
   if (hero && title && !prefersReducedMotion()) {
-    // Scroll warp on the title block (not chars) so magnetic can own char transforms
     gsap.to(title, {
-      yPercent: -14,
-      skewX: 6,
-      scale: 0.96,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 0.7,
-      },
-    });
-
-    gsap.to('.s-hero__lede, .s-hero__actions, .s-hero__ticks', {
-      y: -36,
-      opacity: 0.2,
+      yPercent: -10,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -248,37 +233,65 @@ function initHero() {
       },
     });
 
-    // Magnetic chars — document pointer so it always fires
+    gsap.to('.s-hero__lede, .s-hero__actions, .s-hero__ticks', {
+      y: -28,
+      opacity: 0.25,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+
+    // Magnetic via direct transforms (no GSAP per-char tweens fighting Lenis)
+    const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+    let magnetRaf = 0;
+    const magnetLoop = () => {
+      magnetRaf = requestAnimationFrame(magnetLoop);
+      allChars.forEach((char, i) => {
+        const o = offsets[i];
+        o.x += (o.tx - o.x) * 0.18;
+        o.y += (o.ty - o.y) * 0.18;
+        char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
+      });
+    };
+    magnetLoop();
+
     const onMove = (e: PointerEvent) => {
       const heroRect = hero.getBoundingClientRect();
       if (e.clientY < heroRect.top - 40 || e.clientY > heroRect.bottom + 40) {
-        gsap.to(allChars, { x: 0, y: 0, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        offsets.forEach((o) => {
+          o.tx = 0;
+          o.ty = 0;
+        });
         return;
       }
 
-      allChars.forEach((char) => {
+      allChars.forEach((char, i) => {
         const r = char.getBoundingClientRect();
-        const cx = r.left + r.width / 2;
-        const cy = r.top + r.height / 2;
+        const cx = r.left + r.width / 2 - offsets[i].x;
+        const cy = r.top + r.height / 2 - offsets[i].y;
         const dx = e.clientX - cx;
         const dy = e.clientY - cy;
         const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const radius = 240;
+        const radius = 220;
         if (dist < radius) {
-          const force = (1 - dist / radius) * 32;
-          gsap.to(char, {
-            x: (dx / dist) * force * -0.6,
-            y: (dy / dist) * force * -0.5,
-            duration: 0.22,
-            ease: 'power2.out',
-            overwrite: 'auto',
-          });
+          const force = (1 - dist / radius) * 26;
+          offsets[i].tx = (dx / dist) * force * -0.55;
+          offsets[i].ty = (dy / dist) * force * -0.45;
         } else {
-          gsap.to(char, { x: 0, y: 0, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+          offsets[i].tx = 0;
+          offsets[i].ty = 0;
         }
       });
     };
     window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
+      else magnetLoop();
+    });
   }
 }
 
@@ -292,25 +305,21 @@ function initTextWarp() {
     gsap.fromTo(
       chars,
       {
-        y: 70,
-        skewX: 18,
-        rotate: 4,
-        opacity: 0,
-        scaleY: 1.35,
+        y: 48,
+        skewX: 10,
+        opacity: 0.15,
       },
       {
         y: 0,
         skewX: 0,
-        rotate: 0,
         opacity: 1,
-        scaleY: 1,
         ease: 'none',
-        stagger: { each: 0.04, from: 'start' },
+        stagger: { each: 0.03, from: 'start' },
         scrollTrigger: {
           trigger: title,
-          start: 'top 95%',
-          end: 'top 35%',
-          scrub: 1,
+          start: 'top 90%',
+          end: 'top 40%',
+          scrub: true,
         },
       },
     );
@@ -441,7 +450,7 @@ function initWork() {
       trigger: section,
       start: 'top top',
       end: () => `+=${getScroll() + window.innerHeight * 1.1}`,
-      scrub: 1,
+      scrub: true,
       pin: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
@@ -529,7 +538,7 @@ function initMargin() {
           trigger: card,
           start: 'top 92%',
           end: 'top 58%',
-          scrub: 0.7,
+          scrub: true,
         },
       },
     );

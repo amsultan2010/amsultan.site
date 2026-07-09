@@ -36,6 +36,28 @@ html {
   scroll-behavior: auto;
 }
 
+/* Official Lenis CSS — prevents native/smooth fighting (jitter) */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
 html.is-scroll-blocked {
   overflow: hidden;
 }
@@ -142,14 +164,20 @@ html.theme-contrasted .site-terrain {
   min-height: 100vh;
 }
 
-/* Light wash only — terrain must stay visible */
+/* Minimal wash — topography should read clearly */
 .site-wrapper::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: color-mix(in srgb, var(--vf-field) 38%, transparent);
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--vf-field) 55%, transparent) 0%,
+      color-mix(in srgb, var(--vf-field) 18%, transparent) 45%,
+      color-mix(in srgb, var(--vf-field) 45%, transparent) 100%
+    );
 }
 
 /* Intro wipe */
