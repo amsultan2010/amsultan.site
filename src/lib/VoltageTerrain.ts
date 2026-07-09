@@ -193,18 +193,14 @@ export function createVoltageTerrain({
   canvas,
   reducedMotion = false,
 }: TerrainOpts): VoltageTerrainHandle | null {
-  const isMobile =
-    window.matchMedia('(max-width: 767px)').matches ||
-    window.matchMedia('(pointer: coarse)').matches;
-
   // Never probe getContext before Three — that steals the canvas on iOS Safari
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: !isMobile,
+      antialias: true,
       alpha: true,
-      powerPreference: isMobile ? 'default' : 'high-performance',
+      powerPreference: 'high-performance',
       failIfMajorPerformanceCaveat: false,
     });
   } catch {
@@ -215,11 +211,10 @@ export function createVoltageTerrain({
     return null;
   }
 
-  // Lighter mesh on phones; slightly lighter on desktop too to keep scroll smooth
-  const segs = isMobile ? 40 : 90;
+  const segs = 90;
 
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.15 : 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   // Keep the canvas composited on iOS
   canvas.style.transform = 'translateZ(0)';
   canvas.style.setProperty('-webkit-transform', 'translateZ(0)');
@@ -286,7 +281,6 @@ export function createVoltageTerrain({
   let running = true;
   let raf = 0;
   let time = 0;
-  let frame = 0;
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   const applyTheme = (contrasted: boolean) => {
@@ -319,17 +313,8 @@ export function createVoltageTerrain({
   const tick = (t = performance.now()) => {
     if (!running) return;
     raf = requestAnimationFrame(tick);
-    frame += 1;
-    // Phones: render every other frame to keep scroll smooth
-    if (isMobile && frame % 2 === 1) return;
 
     time = t * 0.001;
-
-    // Ambient drift on touch only — desktop keeps pointer steering
-    if (!reducedMotion && isMobile) {
-      mouse.tx = Math.sin(time * 0.35) * 0.55 + Math.sin(time * 0.11) * 0.2;
-      mouse.ty = Math.cos(time * 0.28) * 0.4;
-    }
 
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
@@ -353,7 +338,6 @@ export function createVoltageTerrain({
   };
 
   const onPointer = (e: PointerEvent) => {
-    if (isMobile) return;
     mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
   };

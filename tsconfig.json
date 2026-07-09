@@ -34,8 +34,6 @@
     "src/app/**/*.tsx",
     "src/components/site/**/*.ts",
     "src/components/site/**/*.tsx",
-    "src/components/ui/**/*.ts",
-    "src/components/ui/**/*.tsx",
     "src/components/FitnessCharts.tsx",
     "src/data/**/*.ts",
     "src/lib/**/*.ts",
@@ -46,15 +44,6 @@
   "exclude": [
     "node_modules",
     "dist",
-    "e2e",
-    "src/components/desktop",
-    "src/components/desktop-portfolio",
-    "src/components/portfolio",
-    "src/components/effects",
-    "src/components/shared",
-    "src/components/global",
-    "src/components/lab",
-    "src/components/nav",
-    "src/layouts"
+    "e2e"
   ]
 }

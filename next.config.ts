@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: '/portfolio', destination: '/', permanent: true },
+      { source: '/desktop', destination: '/', permanent: true },
+      { source: '/desktop/:path*', destination: '/', permanent: true },
+      { source: '/lab', destination: '/', permanent: true },
+      { source: '/lab/:path*', destination: '/', permanent: true },
       { source: '/contact', destination: '/#contact', permanent: false },
       { source: '/contact/', destination: '/#contact', permanent: false },
     ];
