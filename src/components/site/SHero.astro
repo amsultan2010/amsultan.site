@@ -124,6 +124,14 @@ import ASeparator from './ASeparator.astro';
   .s-hero__char.to-left .s-hero__char-inner {
     animation: hero-flip-left 0.85s cubic-bezier(0.83, 0, 0.17, 1) forwards;
   }
+  @media (max-width: 720px), (pointer: coarse) {
+    .s-hero__char.to-top .s-hero__char-inner,
+    .s-hero__char.to-right .s-hero__char-inner,
+    .s-hero__char.to-bottom .s-hero__char-inner,
+    .s-hero__char.to-left .s-hero__char-inner {
+      animation-duration: 0.7s;
+    }
+  }
   @keyframes hero-flip-top {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(0, -100%, 0); }

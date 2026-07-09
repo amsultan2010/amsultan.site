@@ -92,10 +92,11 @@ const ascii = fs.existsSync(asciiPath)
   .s-margin__card {
     --rx: 0deg;
     --ry: 0deg;
+    --float-y: 0px;
     border: 1px solid var(--vf-line);
     padding: 0.35rem;
     background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
-    transform: rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
+    transform: translateY(var(--float-y)) rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
     overflow: hidden;
     min-width: 0;
@@ -158,7 +159,7 @@ const ascii = fs.existsSync(asciiPath)
       grid-row: span 1;
     }
     .s-margin__card {
-      transform: rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
+      transform: translateY(var(--float-y)) rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
     }
   }
 </style>

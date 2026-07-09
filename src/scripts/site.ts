@@ -471,20 +471,23 @@ function initHero() {
 
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
   const flipTick = () => {
-    if (!allChars.length || Math.random() > 0.18) return;
+    if (!allChars.length) return;
+    // Phones: flip harder/more often so the glitch reads without a pointer
+    if (Math.random() > (coarse ? 0.55 : 0.18)) return;
     const start = Math.floor(Math.random() * allChars.length);
-    const count = 1 + Math.floor(Math.random() * 3);
+    const count = coarse
+      ? 2 + Math.floor(Math.random() * 4)
+      : 1 + Math.floor(Math.random() * 3);
     for (let n = 0; n < count; n += 1) {
       const char = allChars[(start + n) % allChars.length];
       if (dirs.some((d) => char.classList.contains(d))) continue;
       const dir = dirs[Math.floor(Math.random() * dirs.length)];
       char.classList.add(dir);
-      window.setTimeout(() => char.classList.remove(dir), 1000);
+      window.setTimeout(() => char.classList.remove(dir), coarse ? 1100 : 1000);
     }
   };
-  // Kick immediately so phones see flips without waiting
   flipTick();
-  window.setInterval(flipTick, coarse ? 90 : 120);
+  window.setInterval(flipTick, coarse ? 70 : 120);
 }
 
 function initTextWarp() {
@@ -633,32 +636,42 @@ function initSeparators() {
     if (!chars.length) return;
 
     let active = false;
+    const setActive = (on: boolean) => {
+      active = on;
+    };
     ScrollTrigger.create({
       trigger: sep,
       start: 'top bottom',
       end: 'bottom top',
-      onEnter: () => {
-        active = true;
-      },
-      onEnterBack: () => {
-        active = true;
-      },
-      onLeave: () => {
-        active = false;
-      },
-      onLeaveBack: () => {
-        active = false;
-      },
+      onEnter: () => setActive(true),
+      onEnterBack: () => setActive(true),
+      onLeave: () => setActive(false),
+      onLeaveBack: () => setActive(false),
+      onToggle: (self) => setActive(self.isActive),
     });
+    // IO backup — ST onEnter can miss on iOS address-bar resize
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => setActive(entry.isIntersecting));
+        },
+        { rootMargin: '20% 0px', threshold: 0 },
+      );
+      io.observe(sep);
+    }
+    // Kick if already on screen at boot
+    const r = sep.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) setActive(true);
 
+    const touch = isTouchMotion();
     window.setInterval(() => {
       if (!active) return;
       chars.forEach((char) => {
-        if (Math.random() > 0.16) return;
+        if (Math.random() > (touch ? 0.28 : 0.16)) return;
         char.classList.add('is-flip');
-        window.setTimeout(() => char.classList.remove('is-flip'), 220);
+        window.setTimeout(() => char.classList.remove('is-flip'), touch ? 320 : 220);
       });
-    }, isCoarsePointer() ? 140 : 220);
+    }, touch ? 90 : 220);
   });
 }
 
@@ -905,52 +918,18 @@ function initWork() {
 
   if (prefersReducedMotion()) return;
 
-  // Touch/mobile: CSS snap carousel — ScrollTrigger pin freezes iOS Safari.
-  // Desktop keeps the pinned scrub gallery.
-  if (isTouchMotion()) {
-    section.classList.add('is-touch-work');
-    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
-      gsap.from(item, {
-        y: 48,
-        rotateY: i % 2 === 0 ? -18 : 18,
-        scale: 0.92,
-        opacity: 0.2,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 95%',
-          end: 'top 55%',
-          scrub: true,
-        },
-      });
-      gsap.fromTo(
-        item.querySelector('.s-work__media img'),
-        { scale: 1.2, yPercent: 8 },
-        {
-          scale: 1,
-          yPercent: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 92%',
-            end: 'top 45%',
-            scrub: true,
-          },
-        },
-      );
-    });
-    return;
-  }
-
+  // Same horizontal pin/scrub gallery on every viewport (transform pin for iOS)
+  const touch = isTouchMotion();
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
     ease: 'none',
     scrollTrigger: {
       trigger: section,
       start: 'top top',
-      end: () => `+=${getScroll() + window.innerHeight * 1.1}`,
+      end: () => `+=${getScroll() + window.innerHeight * (touch ? 0.85 : 1.1)}`,
       scrub: true,
       pin: true,
+      pinType: touch ? 'transform' : 'fixed',
       anticipatePin: 1,
       invalidateOnRefresh: true,
     },
@@ -1049,10 +1028,10 @@ function initMargin() {
     gsap.fromTo(
       card,
       {
-        y: 90,
-        rotate: i % 2 === 0 ? -12 : 12,
-        scale: 0.88,
-        opacity: 0,
+        y: 110,
+        rotate: i % 2 === 0 ? -18 : 18,
+        scale: 0.82,
+        opacity: 0.15,
       },
       {
         y: 0,
@@ -1062,8 +1041,8 @@ function initMargin() {
         ease: 'none',
         scrollTrigger: {
           trigger: card,
-          start: 'top 94%',
-          end: 'top 52%',
+          start: 'top 96%',
+          end: 'top 48%',
           scrub: true,
         },
       },
@@ -1074,18 +1053,20 @@ function initMargin() {
 
   // Soft 3D tilt — ambient float on coarse; pointer on desktop
   cards.forEach((card, i) => {
-    if (isCoarsePointer()) {
-      const state = { rx: 0, ry: 0 };
+    if (isCoarsePointer() || isTouchMotion()) {
+      const state = { rx: 0, ry: 0, y: 0 };
       gsap.to(state, {
-        rx: i % 2 === 0 ? -8 : 8,
-        ry: i % 2 === 0 ? 10 : -10,
-        duration: 2.8 + (i % 3) * 0.35,
+        rx: i % 2 === 0 ? -14 : 14,
+        ry: i % 2 === 0 ? 16 : -16,
+        y: i % 2 === 0 ? -10 : 10,
+        duration: 2.2 + (i % 3) * 0.3,
         yoyo: true,
         repeat: -1,
         ease: 'sine.inOut',
         onUpdate: () => {
           card.style.setProperty('--rx', `${state.rx.toFixed(2)}deg`);
           card.style.setProperty('--ry', `${state.ry.toFixed(2)}deg`);
+          card.style.setProperty('--float-y', `${state.y.toFixed(2)}px`);
         },
       });
       return;
@@ -1146,8 +1127,8 @@ function initContact() {
   let pulse: gsap.core.Tween | null = null;
   if (!prefersReducedMotion() && label) {
     pulse = gsap.to(label, {
-      scale: 1.08,
-      duration: 1.6,
+      scale: isTouchMotion() ? 1.14 : 1.08,
+      duration: isTouchMotion() ? 1.15 : 1.6,
       yoyo: true,
       repeat: -1,
       ease: 'power1.inOut',
@@ -1162,13 +1143,13 @@ function initContact() {
     let mty = 0;
     let mraf = 0;
     let t = 0;
-    const coarse = isCoarsePointer();
+    const coarse = isCoarsePointer() || isTouchMotion();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
       t += 0.016;
       if (coarse) {
-        mtx = Math.sin(t * 1.1) * 14;
-        mty = Math.cos(t * 0.9) * 10;
+        mtx = Math.sin(t * 1.35) * 22;
+        mty = Math.cos(t * 1.05) * 16;
       }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
@@ -1217,23 +1198,40 @@ function initContact() {
     go.style.transform = '';
   };
 
-  // Auto-reveal GO letters when the section scrolls into view (no tap)
+  // Auto-reveal GO / "let's talk" when the section scrolls into view
   if (!prefersReducedMotion()) {
+    const reveal = () => enter();
     ScrollTrigger.create({
       trigger: section || hover,
-      start: 'top 70%',
-      end: 'bottom 30%',
-      onEnter: enter,
-      onEnterBack: enter,
+      start: 'top 85%',
+      end: 'bottom 20%',
+      onEnter: reveal,
+      onEnterBack: reveal,
       onLeave: leave,
       onLeaveBack: leave,
     });
+    // Kick immediately if already near viewport (short pages / fast scroll)
+    requestAnimationFrame(() => {
+      const r = (section || hover).getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.9 && r.bottom > window.innerHeight * 0.15) {
+        enter();
+      }
+    });
   }
 
-  hover.addEventListener('pointerenter', enter);
-  hover.addEventListener('focusin', enter);
-  hover.addEventListener('pointerleave', leave);
-  hover.addEventListener('focusout', leave);
+  // Desktop still gets hover; touch relies on scroll reveal above
+  if (!isCoarsePointer()) {
+    hover.addEventListener('pointerenter', enter);
+    hover.addEventListener('focusin', enter);
+    hover.addEventListener('pointerleave', leave);
+    hover.addEventListener('focusout', leave);
+  } else {
+    // Tap also toggles reveal on phones
+    hover.addEventListener('pointerdown', () => {
+      if (hover.classList.contains('is-active')) leave();
+      else enter();
+    });
+  }
 }
 
 function initScrollbar() {
@@ -1625,9 +1623,9 @@ function initLivingLabels() {
       },
     });
 
-    const cadence = isCoarsePointer() ? 1400 : 2400;
+    const cadence = isCoarsePointer() || isTouchMotion() ? 900 : 2400;
     window.setInterval(() => {
-      if (!active || Math.random() > (isCoarsePointer() ? 0.2 : 0.08) || tick) return;
+      if (!active || Math.random() > (isCoarsePointer() || isTouchMotion() ? 0.35 : 0.08) || tick) return;
       let frame = 0;
       const max = 6;
       tick = window.setInterval(() => {
