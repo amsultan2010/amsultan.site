@@ -2,12 +2,22 @@
   "redirects": [
     {
       "source": "/desktop",
-      "destination": "/lab",
+      "destination": "/",
       "permanent": true
     },
     {
-      "source": "/desktop/(.*)",
-      "destination": "/lab",
+      "source": "/desktop/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/lab",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/lab/:path*",
+      "destination": "/",
       "permanent": true
     }
   ],
@@ -18,24 +28,6 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/_astro/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
         }
       ]
     }

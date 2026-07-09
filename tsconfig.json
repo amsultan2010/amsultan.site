@@ -1,14 +1,60 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
   "include": [
-    ".astro/types.d.ts",
-    "**/*"
+    "next-env.d.ts",
+    "src/app/**/*.ts",
+    "src/app/**/*.tsx",
+    "src/components/site/**/*.ts",
+    "src/components/site/**/*.tsx",
+    "src/components/ui/**/*.ts",
+    "src/components/ui/**/*.tsx",
+    "src/components/FitnessCharts.tsx",
+    "src/data/**/*.ts",
+    "src/lib/**/*.ts",
+    "src/lib/**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "dist"
-  ],
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
-  }
+    "node_modules",
+    "dist",
+    "e2e",
+    "src/components/desktop",
+    "src/components/desktop-portfolio",
+    "src/components/portfolio",
+    "src/components/effects",
+    "src/components/shared",
+    "src/components/global",
+    "src/components/lab",
+    "src/components/nav",
+    "src/layouts"
+  ]
 }

@@ -1,8 +1,8 @@
 # build output
 dist/
-
-# generated types
-.astro/
+.next/
+out/
+tsconfig.tsbuildinfo
 
 # dependencies
 node_modules/
@@ -16,6 +16,8 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
+.env*.local
 
 # macOS-specific files
 .DS_Store
@@ -40,10 +42,6 @@ ENV/
 # Data output
 src/data/*.local.*
 *.csv
-
-# Next.js leftovers
-.next/
-next-env.d.ts
 
 # Archive/backup
 cool-interactive-reports/
