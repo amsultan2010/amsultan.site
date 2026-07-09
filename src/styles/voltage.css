@@ -167,6 +167,16 @@ html.theme-contrasted .site-terrain {
   color: var(--vf-ink);
   min-height: 100vh;
   overflow-x: clip;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+/* Desktop intro only — touch-ready always wins so phones never go blank */
+html.is-scroll-blocked:not(.touch-ready) .site-wrapper.js-site-wrapper {
+  opacity: 0;
+}
+html.touch-ready .site-wrapper.js-site-wrapper {
+  opacity: 1 !important;
 }
 
 .site-noise {
@@ -222,7 +232,7 @@ html.has-scrollbar .site-wrapper {
     );
 }
 
-/* Intro wipe */
+/* Intro wipe — desktop only; phones skip so content is never covered */
 .site-intro {
   position: fixed;
   inset: 0;
@@ -231,6 +241,16 @@ html.has-scrollbar .site-wrapper {
   display: grid;
   place-items: center;
   overflow: hidden;
+}
+html.touch-ready .site-intro {
+  display: none !important;
+  pointer-events: none !important;
+}
+@media (max-width: 767px) {
+  .site-intro {
+    display: none !important;
+    pointer-events: none !important;
+  }
 }
 
 .site-intro__panel {

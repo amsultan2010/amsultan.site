@@ -217,11 +217,31 @@ const total = String(featured.length).padStart(2, '0');
     word-break: normal;
   }
 
+  /* Touch/mobile: native horizontal snap carousel (same cards, no GSAP pin) */
+  :global(.s-work.is-touch-work) .s-work__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+  }
+  :global(.s-work.is-touch-work) .s-work__track {
+    display: flex;
+    width: max-content;
+    padding: 0.5rem var(--vf-pad) 1.5rem;
+    gap: 1.15rem;
+    transform: none !important;
+  }
+  :global(.s-work.is-touch-work) .s-work__item {
+    flex: 0 0 min(82vw, 420px);
+    scroll-snap-align: center;
+    text-align: left;
+  }
+
   @media (max-width: 767px) {
     .s-work__head {
       justify-content: space-between;
     }
-    /* Keep the same horizontal track as desktop — only size cards for the phone */
     .s-work__item {
       flex: 0 0 min(82vw, 420px);
       text-align: left;

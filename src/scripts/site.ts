@@ -11,14 +11,31 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isTouchDevice() {
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches ||
+    navigator.maxTouchPoints > 0
+  );
+}
+
+function isMobileViewport() {
+  return window.innerWidth < 768;
+}
+
 function initLenis() {
-  // Same Lenis on every viewport. syncTouch stays off so iOS/Android keep
-  // native touch scrolling while ScrollTrigger still updates from Lenis scroll.
+  // Lenis + ScrollTrigger pin freezes/breaks real iOS Safari. Keep Lenis desktop-only.
+  if (isTouchDevice() || isMobileViewport()) {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth');
+    window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
+    return null;
+  }
+
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
     wheelMultiplier: 0.85,
-    touchMultiplier: 1.5,
+    touchMultiplier: 1.4,
     syncTouch: false,
   });
 
@@ -28,9 +45,6 @@ function initLenis() {
     lenis.raf(time * 1000);
   });
   gsap.ticker.lagSmoothing(0);
-
-  // Also refresh ST on native touch scroll frames
-  window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
 
   document.documentElement.classList.add('lenis', 'lenis-smooth');
 
@@ -42,6 +56,12 @@ function initTerrain() {
   const canvas = document.querySelector<HTMLCanvasElement>('.js-terrain-canvas');
   const fallback = document.querySelector<HTMLElement>('.site-terrain__fallback');
   if (!canvas) return;
+
+  // WebGL stalls real phones — keep the CSS fallback topography on touch
+  if (isTouchDevice() || isMobileViewport()) {
+    canvas.remove();
+    return;
+  }
 
   terrain = createVoltageTerrain({
     canvas,
@@ -78,21 +98,40 @@ function initTerrain() {
   });
 }
 
+function revealSite() {
+  const wrapper = document.querySelector<HTMLElement>('.js-site-wrapper');
+  if (wrapper) {
+    wrapper.style.opacity = '1';
+    wrapper.style.visibility = 'visible';
+  }
+  document.documentElement.classList.remove('is-scroll-blocked');
+  document.querySelector('.js-intro')?.remove();
+}
+
 function runIntro(onDone: () => void) {
   const intro = document.querySelector<HTMLElement>('.js-intro');
   const wrapper = document.querySelector<HTMLElement>('.js-site-wrapper');
   if (!intro || !wrapper) {
+    revealSite();
     onDone();
     return;
   }
 
-  if (prefersReducedMotion() || sessionStorage.getItem('vf-intro-seen') === '1') {
-    intro.remove();
-    wrapper.style.opacity = '1';
-    document.documentElement.classList.remove('is-scroll-blocked');
+  // Touch/mobile: never run the wipe intro — page must stay visible
+  if (
+    prefersReducedMotion() ||
+    isTouchDevice() ||
+    isMobileViewport() ||
+    sessionStorage.getItem('vf-intro-seen') === '1'
+  ) {
+    sessionStorage.setItem('vf-intro-seen', '1');
+    revealSite();
     onDone();
     return;
   }
+
+  // Desktop-only: hide content for the wipe, then restore
+  document.documentElement.classList.add('is-scroll-blocked');
 
   const panel = intro.querySelector<HTMLElement>('.js-intro-panel');
   const mark = intro.querySelector<HTMLElement>('.js-intro-mark');
@@ -112,9 +151,7 @@ function runIntro(onDone: () => void) {
     if (done) return;
     done = true;
     sessionStorage.setItem('vf-intro-seen', '1');
-    wrapper.style.opacity = '1';
-    intro.remove();
-    document.documentElement.classList.remove('is-scroll-blocked');
+    revealSite();
     ScrollTrigger.refresh();
     onDone();
   };
@@ -751,7 +788,41 @@ function initWork() {
 
   if (prefersReducedMotion()) return;
 
-  // Same horizontal pin/scrub work gallery on every viewport
+  // Touch/mobile: CSS snap carousel (same horizontal feel, no ScrollTrigger pin —
+  // pin freezes Safari). Desktop keeps the pinned scrub gallery.
+  if (isTouchDevice() || isMobileViewport()) {
+    section.classList.add('is-touch-work');
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      gsap.from(item, {
+        y: 48,
+        opacity: 0,
+        rotateY: i % 2 === 0 ? -12 : 12,
+        duration: 0.75,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 88%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+      gsap.fromTo(
+        item.querySelector('.s-work__media img'),
+        { scale: 1.16 },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            end: 'top 40%',
+            scrub: true,
+          },
+        },
+      );
+    });
+    return;
+  }
+
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
     ease: 'none',
@@ -1367,46 +1438,62 @@ function initLivingLabels() {
 }
 
 function boot() {
-  document.documentElement.classList.add('is-scroll-blocked');
+  // Phones: content visible immediately. Desktop intro may block briefly.
+  if (isTouchDevice() || isMobileViewport()) {
+    document.documentElement.classList.add('touch-ready');
+    document.documentElement.classList.remove('is-scroll-blocked');
+    revealSite();
+  }
+
   initContrastToggle();
   initNav();
   initClock();
   initTerrain();
 
   const afterIntro = () => {
-    initLenis();
-    initProgress();
-    initScrollbar();
-    initCursor();
-    initMagneticButtons();
-    initScramble();
-    initNoisePulse();
-    initHero();
-    initFadeUps();
-    initTextWarp();
-    initRevealLines();
-    initRunways();
-    initStretch();
-    initSeparators();
-    initBands();
-    initChapters();
-    initRules();
-    initAbout();
-    initWork();
-    initClipReveals();
-    initProof();
-    initMargin();
-    initImageParallax();
-    initContact();
-    initLivingLabels();
-    initActiveNav();
-    ScrollTrigger.refresh();
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-    window.setTimeout(() => ScrollTrigger.refresh(), 400);
-    window.addEventListener('orientationchange', () => {
-      window.setTimeout(() => ScrollTrigger.refresh(), 250);
-    });
+    // Always unlock — even if a later init throws on Safari
+    revealSite();
+    try {
+      initLenis();
+      initProgress();
+      initScrollbar();
+      initCursor();
+      initMagneticButtons();
+      initScramble();
+      initNoisePulse();
+      initHero();
+      initFadeUps();
+      initTextWarp();
+      initRevealLines();
+      initRunways();
+      initStretch();
+      initSeparators();
+      initBands();
+      initChapters();
+      initRules();
+      initAbout();
+      initWork();
+      initClipReveals();
+      initProof();
+      initMargin();
+      initImageParallax();
+      initContact();
+      initLivingLabels();
+      initActiveNav();
+      ScrollTrigger.refresh();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.setTimeout(() => ScrollTrigger.refresh(), 400);
+      window.addEventListener('orientationchange', () => {
+        window.setTimeout(() => ScrollTrigger.refresh(), 250);
+      });
+    } catch (err) {
+      console.error('[voltage] init failed', err);
+      revealSite();
+    }
   };
+
+  // Hard failsafe: never leave the page blank longer than 1.5s
+  window.setTimeout(revealSite, 1500);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => runIntro(afterIntro), { once: true });
