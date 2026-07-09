@@ -86,11 +86,13 @@ const total = String(featured.length).padStart(2, '0');
     padding: 0.5rem var(--vf-pad) 2rem;
     width: max-content;
     will-change: transform;
-    perspective: 1200px;
+    perspective: 1400px;
+    transform-style: preserve-3d;
   }
   .s-work__item {
     --mx: 50%;
     --my: 50%;
+    --tilt: 0deg;
     flex: 0 0 min(78vw, 400px);
     display: flex;
     flex-direction: column;
@@ -101,11 +103,13 @@ const total = String(featured.length).padStart(2, '0');
     position: relative;
     min-width: 0;
     transform-style: preserve-3d;
+    transform: rotateY(var(--tilt));
     transition: border-color 0.25s, box-shadow 0.25s;
     text-align: center;
+    will-change: transform;
   }
   .s-work__item:hover {
-    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
   }
   .s-work__item.is-hot {
     border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));

@@ -3,52 +3,140 @@ interface Props {
   phrases?: string[];
   class?: string;
   reverse?: boolean;
+  style?: 'primary' | 'secondary';
 }
 const {
   phrases = ['tutoring', 'f1', 'quant', 'riyadh'],
   class: className = '',
   reverse = false,
+  style = 'primary',
 } = Astro.props;
 
-const strip = Array.from({ length: 28 }, (_, i) => phrases[i % phrases.length]).join('  ·  ');
+const strip = Array.from({ length: 18 }, (_, i) => phrases[i % phrases.length]);
 ---
 
-<div class={`a-sep js-sep ${reverse ? 'a-sep--reverse' : ''} ${className}`} aria-hidden="true">
-  <div class="a-sep__track vf-mono">{strip}  ·  {strip}</div>
+<div
+  class={`a-sep js-sep ${reverse ? 'a-sep--reverse' : ''} a-sep--${style} ${className}`}
+  aria-hidden="true"
+  data-intersect
+>
+  <span class="a-sep__tri a-sep__tri--l"></span>
+  <div class="a-sep__binaries vf-mono">
+    {strip.map((word) => (
+      <span class="a-sep__group">
+        <span class="a-sep__code js-sep-code">
+          {[...word].map((ch) => (
+            <span class="a-sep__char js-sep-char" data-ch={ch}>{ch}</span>
+          ))}
+        </span>
+        <span class="a-sep__stripes">////////////////</span>
+      </span>
+    ))}
+  </div>
+  <span class="a-sep__tri a-sep__tri--r"></span>
 </div>
 
 <style>
   .a-sep {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     overflow: hidden;
-    border: none;
-    background: transparent;
     color: var(--vf-mark);
-    padding: 0.85rem 0;
+    padding: 0 1rem;
+    height: 2.35rem;
     user-select: none;
-    transform-origin: center;
-    border-block: 1px solid color-mix(in srgb, var(--vf-ink) 16%, transparent);
+    border-block: 1px solid color-mix(in srgb, var(--vf-ink) 28%, transparent);
     text-align: center;
   }
-  .a-sep__track {
+  .a-sep--secondary {
+    background: var(--vf-mark);
+    color: var(--vf-field);
+    border-color: var(--vf-mark);
+  }
+  .a-sep__tri {
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    transform: translateY(-40%);
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+  }
+  .a-sep__tri--l {
+    left: 0.85rem;
+    border-left: 5px solid currentColor;
+  }
+  .a-sep__tri--r {
+    right: 0.85rem;
+    border-right: 5px solid currentColor;
+  }
+  .a-sep__binaries {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 1.1rem;
+    gap: 0.35rem;
+    overflow: hidden;
+  }
+  .a-sep__group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex: 0 0 auto;
+  }
+  .a-sep__code {
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
     white-space: nowrap;
-    font-size: 0.95rem;
-    letter-spacing: 0.1em;
-    animation: sep-marquee 26s linear infinite;
-    width: max-content;
   }
-  .a-sep--reverse .a-sep__track {
-    animation-name: sep-marquee-rev;
-    animation-duration: 30s;
+  .a-sep__char {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    min-width: 0.55em;
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s;
   }
-  @keyframes sep-marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+  .a-sep__char.is-flip {
+    transform: translateY(-100%);
+    opacity: 0.35;
   }
-  @keyframes sep-marquee-rev {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
+  .a-sep__stripes {
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    max-width: 4rem;
+    overflow: hidden;
+    font-size: 0.55rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    opacity: 0.55;
+    white-space: nowrap;
+  }
+  .a-sep--reverse .a-sep__binaries {
+    flex-direction: row-reverse;
+  }
+  @media (max-width: 720px) {
+    .a-sep {
+      height: 2.1rem;
+      padding: 0 0.65rem;
+    }
+    .a-sep__code:nth-child(n + 9) {
+      display: none;
+    }
+    .a-sep__stripes:nth-child(n + 10) {
+      display: none;
+    }
+    .a-sep__code {
+      font-size: 0.62rem;
+    }
   }
   @media (prefers-reduced-motion: reduce) {
-    .a-sep__track { animation: none; }
+    .a-sep__char {
+      transition: none;
+    }
   }
 </style>

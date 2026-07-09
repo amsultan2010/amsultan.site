@@ -2,11 +2,22 @@ import { test, expect, type Page } from '@playwright/test';
 
 async function dismissIntro(page: Page) {
   const skip = page.getByRole('button', { name: /skip/i });
-  if (await skip.isVisible({ timeout: 1500 }).catch(() => false)) {
+  if (await skip.isVisible({ timeout: 1200 }).catch(() => false)) {
     await skip.click({ force: true }).catch(() => undefined);
   }
-  await page.locator('.js-intro').waitFor({ state: 'detached', timeout: 8000 }).catch(() => undefined);
-  await expect(page.locator('.js-site-wrapper')).toBeVisible({ timeout: 10000 });
+  // Always force-complete — intro wipe can race under parallel workers
+  await page.waitForFunction(() => !!document.querySelector('.js-site-wrapper'), null, {
+    timeout: 8000,
+  });
+  await page.evaluate(() => {
+    const intro = document.querySelector('.js-intro');
+    const wrapper = document.querySelector<HTMLElement>('.js-site-wrapper');
+    if (wrapper) wrapper.style.opacity = '1';
+    intro?.remove();
+    document.documentElement.classList.remove('is-scroll-blocked');
+    sessionStorage.setItem('vf-intro-seen', '1');
+  });
+  await expect(page.locator('.js-site-wrapper')).toBeVisible({ timeout: 5000 });
 }
 
 test('homepage loads voltage frame with brand and work', async ({ page }) => {

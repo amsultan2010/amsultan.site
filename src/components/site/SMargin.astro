@@ -88,16 +88,20 @@ const ascii = fs.existsSync(asciiPath)
     width: 100%;
   }
   .s-margin__card {
+    --rx: 0deg;
+    --ry: 0deg;
     border: 1px solid var(--vf-line);
     padding: 0.22rem;
     background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
-    transform: rotate(var(--rot, 0deg));
-    transition: transform 0.3s ease;
+    transform: rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     min-width: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
   .s-margin__card:hover {
-    transform: rotate(0deg) scale(1.08);
+    transform: rotate(0deg) rotateX(0deg) rotateY(0deg) scale(1.08);
     z-index: 2;
   }
   .s-margin__card img {

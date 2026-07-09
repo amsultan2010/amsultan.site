@@ -174,9 +174,36 @@ html.theme-contrasted .site-terrain {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.045;
+  opacity: 0.055;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Framed instrument chrome — right edge is the custom scrollbar */
+.site-frame {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  border: 0.7rem solid var(--vf-mark);
+  border-right-width: 0;
+  mix-blend-mode: multiply;
+}
+html.theme-contrasted .site-frame {
+  mix-blend-mode: normal;
+  border-color: var(--vf-mark);
+}
+html.has-scrollbar .site-wrapper {
+  padding-right: 0.7rem;
+}
+@media (max-width: 720px) {
+  .site-frame {
+    border-width: 0.4rem;
+    border-right-width: 0;
+  }
+  html.has-scrollbar .site-wrapper {
+    padding-right: 0.4rem;
+  }
 }
 
 /* Minimal wash — topography should read clearly */
@@ -214,11 +241,41 @@ html.theme-contrasted .site-terrain {
   transform-origin: 50% 100%;
 }
 
+.site-intro__border {
+  position: absolute;
+  z-index: 1;
+  background: var(--vf-ink);
+  pointer-events: none;
+}
+.site-intro__border--top {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.7rem;
+  transform: scaleX(0);
+  transform-origin: 50% 50%;
+}
+.site-intro__border--left,
+.site-intro__border--right {
+  top: 0;
+  width: 0.7rem;
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+}
+.site-intro__border--left { left: 0; }
+.site-intro__border--right { right: 0; }
+@media (max-width: 720px) {
+  .site-intro__border--top { height: 0.4rem; }
+  .site-intro__border--left,
+  .site-intro__border--right { width: 0.4rem; }
+}
+
 .site-intro__mark {
   position: relative;
   z-index: 1;
   font-family: var(--vf-font-mono);
-  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
   letter-spacing: 0.18em;
   color: var(--vf-ink);
   opacity: 0;

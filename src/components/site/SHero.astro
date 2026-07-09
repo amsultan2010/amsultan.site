@@ -11,7 +11,7 @@ import ASeparator from './ASeparator.astro';
     <span class="js-clock">--:--</span>
   </div>
 
-  <ASeparator phrases={['tutoring', 'f1', 'quant', 'riyadh']} />
+  <ASeparator phrases={['abd', 'ullah', 'sul', 'tan']} />
 
   <div class="s-hero__stage js-hero-stage">
     <h1 class="s-hero__title vf-display js-hero-title">
@@ -21,13 +21,13 @@ import ASeparator from './ASeparator.astro';
     </h1>
   </div>
 
-  <ASeparator phrases={['tutoringbyabdullah', 'downforce', 'quantpy', 'x-combinator']} reverse />
+  <ASeparator phrases={['tutor', 'f1', 'quant', 'build']} reverse />
 
-  <p class="s-hero__lede vf-serif">
+  <p class="s-hero__lede vf-serif js-fade-up">
     tutoring, f1 media, and quant tools. open to coffee chats.
   </p>
 
-  <div class="s-hero__actions vf-mono">
+  <div class="s-hero__actions vf-mono js-fade-up">
     <a href="mailto:abdullahmsultan1@gmail.com" class="s-hero__btn s-hero__btn--solid js-magnetic js-scramble">grab coffee</a>
     <a href="#work" class="s-hero__btn js-magnetic js-scramble">see work</a>
   </div>
@@ -75,6 +75,7 @@ import ASeparator from './ASeparator.astro';
     will-change: transform;
     transform-style: preserve-3d;
     max-width: 100%;
+    cursor: default;
   }
   .s-hero__line {
     display: inline-flex;
@@ -82,7 +83,62 @@ import ASeparator from './ASeparator.astro';
   }
   .s-hero__char {
     display: inline-block;
+    position: relative;
+    overflow: hidden;
     will-change: transform;
+    clip-path: inset(0 0.01em);
+  }
+  .s-hero__char-inner {
+    display: inline-block;
+    position: relative;
+    will-change: transform;
+  }
+  .s-hero__char-inner::before {
+    content: attr(data-letter) attr(data-letter) attr(data-letter);
+    position: absolute;
+    inset: 0 auto auto 50%;
+    transform: translateX(-50%);
+    color: var(--vf-ink);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .s-hero__char-inner::after {
+    content: attr(data-letter) attr(data-letter) attr(data-letter);
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    color: var(--vf-ink);
+    word-break: break-all;
+    pointer-events: none;
+  }
+  .s-hero__char.to-top .s-hero__char-inner {
+    animation: hero-flip-top 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  }
+  .s-hero__char.to-right .s-hero__char-inner {
+    animation: hero-flip-right 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  }
+  .s-hero__char.to-bottom .s-hero__char-inner {
+    animation: hero-flip-bottom 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  }
+  .s-hero__char.to-left .s-hero__char-inner {
+    animation: hero-flip-left 1s cubic-bezier(0.83, 0, 0.17, 1) forwards;
+  }
+  @keyframes hero-flip-top {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, -100%, 0); }
+  }
+  @keyframes hero-flip-right {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(100%, 0, 0); }
+  }
+  @keyframes hero-flip-bottom {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(0, 100%, 0); }
+  }
+  @keyframes hero-flip-left {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-100%, 0, 0); }
   }
   .s-hero__star {
     color: var(--vf-mark);
@@ -121,7 +177,7 @@ import ASeparator from './ASeparator.astro';
     text-decoration: none;
     font-size: 1rem;
     letter-spacing: 0.08em;
-    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    transition: background 0.25s, color 0.25s, border-color 0.25s, transform 0.25s;
   }
   .s-hero__btn:hover {
     background: var(--vf-ink);
@@ -175,6 +231,15 @@ import ASeparator from './ASeparator.astro';
     }
     .s-hero__scroll {
       display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .s-hero__char.to-top .s-hero__char-inner,
+    .s-hero__char.to-right .s-hero__char-inner,
+    .s-hero__char.to-bottom .s-hero__char-inner,
+    .s-hero__char.to-left .s-hero__char-inner {
+      animation: none;
     }
   }
 </style>

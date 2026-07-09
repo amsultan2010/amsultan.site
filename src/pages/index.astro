@@ -11,6 +11,7 @@ import SMargin from '../components/site/SMargin.astro';
 import SContact from '../components/site/SContact.astro';
 import ASeparator from '../components/site/ASeparator.astro';
 import SStretch from '../components/site/SStretch.astro';
+import SiteScrollbar from '../components/site/SiteScrollbar.astro';
 import '../styles/voltage.css';
 ---
 
@@ -56,6 +57,7 @@ import '../styles/voltage.css';
       <span class="site-cursor__dot js-cursor-dot"></span>
     </div>
     <div class="site-noise js-noise" aria-hidden="true"></div>
+    <div class="site-frame" aria-hidden="true"></div>
 
     <div class="site-terrain js-terrain" aria-hidden="true">
       <div class="site-terrain__fallback"></div>
@@ -66,19 +68,19 @@ import '../styles/voltage.css';
       <SiteHead />
       <main>
         <SHero />
-        <ASeparator phrases={['about', 'riyadh', 'student', 'builder']} />
+        <ASeparator phrases={['about', 'riyadh', 'student', 'builder']} style="secondary" />
         <SStretch word="about" />
         <SAbout />
         <ASeparator phrases={['tutoringbyabdullah', 'downforce', 'quantpy']} reverse />
         <SStretch word="work" />
         <SWork />
-        <ASeparator phrases={['x-combinator', 'debate', 'tennis', 'stack']} />
+        <ASeparator phrases={['x-combinator', 'debate', 'tennis', 'stack']} style="secondary" />
         <SStretch word="proof" />
         <SProof />
         <ASeparator phrases={['photos', 'f1', 'tennis', 'weightlifting']} reverse />
         <SStretch word="photos" />
         <SMargin />
-        <ASeparator phrases={['email', 'github', 'linkedin', 'resume']} />
+        <ASeparator phrases={['email', 'github', 'linkedin', 'resume']} style="secondary" />
         <SStretch word="talk" />
         <SContact />
       </main>
@@ -87,10 +89,14 @@ import '../styles/voltage.css';
 
     <div class="site-intro js-intro">
       <div class="site-intro__panel js-intro-panel" aria-hidden="true"></div>
+      <div class="site-intro__border site-intro__border--top js-intro-border-t"></div>
+      <div class="site-intro__border site-intro__border--left js-intro-border-l"></div>
+      <div class="site-intro__border site-intro__border--right js-intro-border-r"></div>
       <p class="site-intro__mark js-intro-mark">abdullah sultan</p>
       <button type="button" class="site-intro__skip js-intro-skip">skip</button>
     </div>
 
+    <SiteScrollbar />
     <div class="site-contrast-mask js-contrast-mask" aria-hidden="true"></div>
 
     <script src="../scripts/site.ts"></script>

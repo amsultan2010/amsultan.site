@@ -1,20 +1,42 @@
 ---
-const talk = 'talk';
+const talkTop = ['l', 'e', 't', "'", 's'];
+const talkBot = ['t', 'a', 'l', 'k'];
 ---
 
 <section id="contact" class="s-contact" aria-label="contact">
-  <div class="s-contact__inner">
-    <a
-      href="mailto:abdullahmsultan1@gmail.com"
-      class="s-contact__go js-contact-go vf-display"
-    >
-      <span class="s-contact__go-label js-contact-go-label">go</span>
-      <span class="s-contact__reveal js-contact-reveal" aria-hidden="true">
-        {[...talk].map((ch) => (
-          <span class="js-contact-letter">{ch}</span>
-        ))}
-      </span>
-    </a>
+  <div class="s-contact__inner js-contact-inner">
+    <div class="s-contact__hover js-contact-hover">
+      <a
+        href="mailto:abdullahmsultan1@gmail.com"
+        class="s-contact__go js-contact-go vf-display"
+      >
+        <span class="s-contact__go-label js-contact-go-label">go</span>
+      </a>
+
+      <div class="s-contact__reveal-panel js-contact-panel" aria-hidden="true">
+        <div class="s-contact__cta-line s-contact__cta-line--top">
+          {talkTop.map((ch) => (
+            <span class="s-contact__cta-char">
+              <span class="s-contact__cta-slice">{ch}</span>
+              <span class="s-contact__cta-slice" aria-hidden="true">{ch}</span>
+            </span>
+          ))}
+        </div>
+        <div class="s-contact__cta-line s-contact__cta-line--bot">
+          {talkBot.map((ch) => (
+            <span class="s-contact__cta-char">
+              <span class="s-contact__cta-slice">{ch}</span>
+              <span class="s-contact__cta-slice" aria-hidden="true">{ch}</span>
+            </span>
+          ))}
+        </div>
+        <p class="s-contact__panel-email vf-mono">abdullahmsultan1@gmail.com</p>
+        <div class="s-contact__stars" aria-hidden="true">
+          <span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+    </div>
+
     <h2 class="s-contact__title vf-display">want to talk?</h2>
     <p class="s-contact__email vf-mono">
       <a href="mailto:abdullahmsultan1@gmail.com">abdullahmsultan1@gmail.com</a>
@@ -33,7 +55,7 @@ const talk = 'talk';
 <style>
   .s-contact {
     padding: 1vh 0 7vh;
-    min-height: 65vh;
+    min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,42 +74,112 @@ const talk = 'talk';
     flex-direction: column;
     align-items: center;
   }
-  .s-contact__inner::before {
-    content: '';
-    position: absolute;
-    inset: 8% 8%;
-    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--vf-mark) 20%, transparent), transparent 70%);
-    pointer-events: none;
+  .s-contact__hover {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: min(22rem, 70vw);
+    height: min(22rem, 70vw);
+    margin: 0 auto 0.5rem;
   }
   .s-contact__go {
     position: relative;
-    display: inline-flex;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    border: 1px solid var(--vf-ink);
+    border-radius: 50%;
+    font-size: clamp(4.5rem, 16vw, 9rem);
+    line-height: 0.85;
+    color: var(--vf-ink);
+    transition: color 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .s-contact__go-label {
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+  }
+  .s-contact__hover.is-active .s-contact__go {
+    border-color: transparent;
+    color: var(--vf-field);
+    transform: scale(0.92);
+  }
+  .s-contact__hover.is-active .s-contact__go-label {
+    color: var(--vf-field);
+    transform: scale(0.7);
+  }
+  .s-contact__reveal-panel {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    text-decoration: none;
-    font-size: clamp(5rem, 18vw, 14rem);
-    line-height: 0.82;
-    color: var(--vf-ink);
-    perspective: 900px;
-    transform-style: preserve-3d;
-    will-change: transform;
-    max-width: 100%;
-    min-height: 4rem;
+    justify-content: center;
+    gap: 0.15em;
+    border-radius: 50%;
+    background: var(--vf-mark);
+    color: var(--vf-field);
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
   }
-  .s-contact__go:hover .s-contact__go-label,
-  .s-contact__go:focus .s-contact__go-label {
-    color: var(--vf-mark);
+  .s-contact__hover.is-active .s-contact__reveal-panel {
+    clip-path: circle(72% at 50% 50%);
+    pointer-events: auto;
   }
-  .s-contact__reveal {
+  .s-contact__cta-line {
     display: flex;
-    gap: 0.02em;
-    font-size: 0.26em;
-    letter-spacing: 0.14em;
-    margin-top: 0.1em;
-    min-height: 1.2em;
+    gap: 0.04em;
+    font-family: var(--vf-font-display);
+    font-weight: 800;
+    font-size: clamp(1.8rem, 7vw, 3.2rem);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
   }
-  .js-contact-letter {
-    display: inline-block;
+  .s-contact__cta-char {
+    display: inline-grid;
+    overflow: hidden;
+  }
+  .s-contact__cta-slice {
+    display: block;
+  }
+  .s-contact__cta-slice:nth-child(2) {
+    opacity: 0.35;
+  }
+  .s-contact__panel-email {
+    margin: 0.85rem 0 0;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s 0.35s, transform 0.4s 0.35s;
+  }
+  .s-contact__hover.is-active .s-contact__panel-email {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+  .s-contact__stars {
+    position: absolute;
+    inset: 12% 12%;
+    pointer-events: none;
+  }
+  .s-contact__stars span {
+    position: absolute;
+    font-size: 0.9rem;
+    opacity: 0.7;
+    animation: contact-star 8s ease-in-out infinite;
+  }
+  .s-contact__stars span:nth-child(1) { top: 0; left: 50%; }
+  .s-contact__stars span:nth-child(2) { top: 50%; right: 0; animation-delay: -2s; }
+  .s-contact__stars span:nth-child(3) { bottom: 0; left: 50%; animation-delay: -4s; }
+  .s-contact__stars span:nth-child(4) { top: 50%; left: 0; animation-delay: -6s; }
+  @keyframes contact-star {
+    0%, 100% { transform: scale(0.85) rotate(0deg); opacity: 0.45; }
+    50% { transform: scale(1.15) rotate(40deg); opacity: 0.95; }
   }
   .s-contact__title {
     position: relative;
@@ -151,17 +243,18 @@ const talk = 'talk';
       min-height: auto;
       padding: 1vh 0 5vh;
     }
+    .s-contact__hover {
+      width: min(16.5rem, 78vw);
+      height: min(16.5rem, 78vw);
+    }
     .s-contact__go {
-      font-size: clamp(4.2rem, 28vw, 7rem);
+      font-size: clamp(3.6rem, 22vw, 5.5rem);
+    }
+    .s-contact__cta-line {
+      font-size: clamp(1.4rem, 8vw, 2.2rem);
     }
     .s-contact__title {
       font-size: 1.9rem;
-    }
-    .s-contact__email {
-      font-size: 1rem;
-    }
-    .s-contact__sub {
-      font-size: 1.25rem;
     }
     .s-contact__links {
       width: 100%;
@@ -173,7 +266,15 @@ const talk = 'talk';
     .s-contact__links a {
       width: 100%;
       min-height: 3.25rem;
-      font-size: 1.05rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .s-contact__reveal-panel,
+    .s-contact__go,
+    .s-contact__stars span {
+      transition: none;
+      animation: none;
     }
   }
 </style>

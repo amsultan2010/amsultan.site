@@ -1,0 +1,54 @@
+---
+---
+
+<div class="site-scrollbar" aria-hidden="true">
+  <div class="site-scrollbar__track"></div>
+  <div class="site-scrollbar__thumb js-scrollbar-thumb"></div>
+</div>
+
+<style>
+  .site-scrollbar {
+    --sb-w: 0.7rem;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 55;
+    width: var(--sb-w);
+    height: 100%;
+    pointer-events: none;
+  }
+  .site-scrollbar__track {
+    position: absolute;
+    inset: 0;
+    background: var(--vf-mark);
+  }
+  .site-scrollbar__thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--scrollbar-height, 20%);
+    transform: translate3d(0, var(--scrollbar-top, 0px), 0);
+    background: var(--vf-ink);
+    pointer-events: auto;
+    cursor: grab;
+    will-change: transform, height;
+  }
+  .site-scrollbar.is-dragging .site-scrollbar__thumb {
+    cursor: grabbing;
+    background: var(--vf-ink);
+  }
+  @media (max-width: 720px) {
+    .site-scrollbar {
+      --sb-w: 0.4rem;
+    }
+    .site-scrollbar__thumb {
+      pointer-events: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .site-scrollbar {
+      display: none;
+    }
+  }
+</style>
