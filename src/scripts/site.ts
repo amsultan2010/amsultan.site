@@ -11,26 +11,9 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function isTouchDevice() {
-  return (
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(hover: none)').matches ||
-    navigator.maxTouchPoints > 0
-  );
-}
-
-function isMobileViewport() {
-  return window.innerWidth < 768;
-}
-
 function initLenis() {
-  // Lenis + ScrollTrigger pin freezes/breaks real iOS Safari. Keep Lenis desktop-only.
-  if (isTouchDevice() || isMobileViewport()) {
-    document.documentElement.classList.remove('lenis', 'lenis-smooth');
-    window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
-    return null;
-  }
-
+  // Same Lenis on every viewport. syncTouch off so iOS keeps native touch
+  // gestures while ScrollTrigger still updates from Lenis scroll.
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -46,6 +29,8 @@ function initLenis() {
   });
   gsap.ticker.lagSmoothing(0);
 
+  window.addEventListener('scroll', () => ScrollTrigger.update(), { passive: true });
+
   document.documentElement.classList.add('lenis', 'lenis-smooth');
 
   (window as unknown as { lenis: Lenis }).lenis = lenis;
@@ -56,12 +41,6 @@ function initTerrain() {
   const canvas = document.querySelector<HTMLCanvasElement>('.js-terrain-canvas');
   const fallback = document.querySelector<HTMLElement>('.site-terrain__fallback');
   if (!canvas) return;
-
-  // WebGL stalls real phones — keep the CSS fallback topography on touch
-  if (isTouchDevice() || isMobileViewport()) {
-    canvas.remove();
-    return;
-  }
 
   terrain = createVoltageTerrain({
     canvas,
@@ -117,20 +96,13 @@ function runIntro(onDone: () => void) {
     return;
   }
 
-  // Touch/mobile: never run the wipe intro — page must stay visible
-  if (
-    prefersReducedMotion() ||
-    isTouchDevice() ||
-    isMobileViewport() ||
-    sessionStorage.getItem('vf-intro-seen') === '1'
-  ) {
+  if (prefersReducedMotion() || sessionStorage.getItem('vf-intro-seen') === '1') {
     sessionStorage.setItem('vf-intro-seen', '1');
     revealSite();
     onDone();
     return;
   }
 
-  // Desktop-only: hide content for the wipe, then restore
   document.documentElement.classList.add('is-scroll-blocked');
 
   const panel = intro.querySelector<HTMLElement>('.js-intro-panel');
@@ -788,41 +760,7 @@ function initWork() {
 
   if (prefersReducedMotion()) return;
 
-  // Touch/mobile: CSS snap carousel (same horizontal feel, no ScrollTrigger pin —
-  // pin freezes Safari). Desktop keeps the pinned scrub gallery.
-  if (isTouchDevice() || isMobileViewport()) {
-    section.classList.add('is-touch-work');
-    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
-      gsap.from(item, {
-        y: 48,
-        opacity: 0,
-        rotateY: i % 2 === 0 ? -12 : 12,
-        duration: 0.75,
-        ease: 'expo.out',
-        scrollTrigger: {
-          trigger: item,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-      gsap.fromTo(
-        item.querySelector('.s-work__media img'),
-        { scale: 1.16 },
-        {
-          scale: 1,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: item,
-            start: 'top 90%',
-            end: 'top 40%',
-            scrub: true,
-          },
-        },
-      );
-    });
-    return;
-  }
-
+  // Same horizontal pin/scrub work gallery on every viewport
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
     ease: 'none',
@@ -1438,20 +1376,14 @@ function initLivingLabels() {
 }
 
 function boot() {
-  // Phones: content visible immediately. Desktop intro may block briefly.
-  if (isTouchDevice() || isMobileViewport()) {
-    document.documentElement.classList.add('touch-ready');
-    document.documentElement.classList.remove('is-scroll-blocked');
-    revealSite();
-  }
-
+  document.documentElement.classList.add('is-scroll-blocked');
   initContrastToggle();
   initNav();
   initClock();
   initTerrain();
 
   const afterIntro = () => {
-    // Always unlock — even if a later init throws on Safari
+    // Always unlock — even if a later init throws
     revealSite();
     try {
       initLenis();
@@ -1492,8 +1424,8 @@ function boot() {
     }
   };
 
-  // Hard failsafe: never leave the page blank longer than 1.5s
-  window.setTimeout(revealSite, 1500);
+  // Shared failsafe: never leave the page blank if intro/GSAP stalls
+  window.setTimeout(revealSite, 2800);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => runIntro(afterIntro), { once: true });

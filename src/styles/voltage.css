@@ -171,12 +171,9 @@ html.theme-contrasted .site-terrain {
   transition: opacity 0.35s ease;
 }
 
-/* Desktop intro only — touch-ready always wins so phones never go blank */
-html.is-scroll-blocked:not(.touch-ready) .site-wrapper.js-site-wrapper {
+/* Hide content during the shared intro wipe on every viewport */
+html.is-scroll-blocked .site-wrapper.js-site-wrapper {
   opacity: 0;
-}
-html.touch-ready .site-wrapper.js-site-wrapper {
-  opacity: 1 !important;
 }
 
 .site-noise {
@@ -232,7 +229,7 @@ html.has-scrollbar .site-wrapper {
     );
 }
 
-/* Intro wipe — desktop only; phones skip so content is never covered */
+/* Intro wipe — same on every viewport */
 .site-intro {
   position: fixed;
   inset: 0;
@@ -241,16 +238,6 @@ html.has-scrollbar .site-wrapper {
   display: grid;
   place-items: center;
   overflow: hidden;
-}
-html.touch-ready .site-intro {
-  display: none !important;
-  pointer-events: none !important;
-}
-@media (max-width: 767px) {
-  .site-intro {
-    display: none !important;
-    pointer-events: none !important;
-  }
 }
 
 .site-intro__panel {
