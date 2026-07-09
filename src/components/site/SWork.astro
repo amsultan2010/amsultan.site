@@ -1,24 +1,24 @@
 ---
 import { PROJECTS } from '../../data/projects';
 
-const specimens = PROJECTS.filter((p) => p.id !== 'lab');
-const total = String(PROJECTS.length).padStart(2, '0');
+const featured = PROJECTS.filter((p) => p.id !== 'lab');
+const total = String(featured.length).padStart(2, '0');
 ---
 
 <section id="work" class="s-work js-work" aria-label="work">
   <div class="s-work__head">
     <p class="s-work__lede vf-serif">
-      live products and tools i’ve shipped. scroll sideways for the strip, or open the full list.
+      tutoring, f1 media, and a small quant suite.
     </p>
-    <a href="/projects" class="s-work__all vf-mono">full list of projects →</a>
+    <a href="/projects" class="s-work__all vf-mono">full archive →</a>
   </div>
 
   <div class="s-work__viewport">
     <div class="s-work__track js-work-track">
-      {specimens.map((project, i) => {
+      {featured.map((project, i) => {
         const href = project.demo || project.href;
         const external = href.startsWith('http');
-        const serial = `#as-${String(i + 1).padStart(4, '0')}/${total}`;
+        const serial = `${String(i + 1).padStart(2, '0')} / ${total}`;
         return (
           <article class="s-work__item">
             <div class="s-work__meta vf-mono">

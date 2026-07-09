@@ -4,17 +4,17 @@ import { photos } from '../../data/photos';
 const picks = photos.slice(0, 6);
 ---
 
-<section id="margin" class="s-margin" aria-label="personal margin">
+<section id="margin" class="s-margin" aria-label="photos">
   <div class="s-margin__head">
     <p class="s-margin__lede vf-serif">
-      photos and ascii. weightlifting, f1, tennis, vibecoding.
+      photos, ascii art, weightlifting, f1, tennis.
     </p>
   </div>
 
   <div class="s-margin__grid">
     <article class="s-margin__ascii js-margin-card">
-      <p class="vf-mono s-margin__label">ascii self</p>
-      <pre class="s-margin__pre" data-ascii-src="/images/myascii.txt">loading signal…</pre>
+      <p class="vf-mono s-margin__label">ascii</p>
+      <pre class="s-margin__pre" data-ascii-src="/images/myascii.txt">loading…</pre>
     </article>
 
     {picks.map((photo, i) => (
@@ -40,7 +40,7 @@ const picks = photos.slice(0, 6);
           pre.textContent = t.trimEnd().split('\n').slice(0, 36).join('\n');
         })
         .catch(() => {
-          pre.textContent = 'ABDULLAH\nVOLTAGE';
+          pre.textContent = 'abdullah';
         });
     }
   }

@@ -42,14 +42,14 @@ const total = String(PROJECTS.length).padStart(2, '0');
         <header class="archive__head">
           <p class="vf-band">archive</p>
           <h1 class="archive__title vf-display">projects</h1>
-          <p class="archive__lede vf-serif">everything shipped or in motion, with the detail that didn’t fit the homepage strip.</p>
+          <p class="archive__lede vf-serif">tutoring, f1 media, quant tools, and the lab.</p>
           <p class="archive__back"><a href="/#work" class="vf-mono">← back to work</a></p>
         </header>
         <ul class="archive__list">
           {PROJECTS.map((project, i) => {
             const href = project.demo || project.href;
             const external = href.startsWith('http');
-            const serial = `#as-${String(i + 1).padStart(4, '0')}/${total}`;
+            const serial = `${String(i + 1).padStart(2, '0')} / ${total}`;
             return (
               <li>
                 <a

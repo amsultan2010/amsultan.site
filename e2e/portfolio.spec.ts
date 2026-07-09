@@ -11,6 +11,7 @@ test('homepage loads voltage frame with brand and work', async ({ page }) => {
   await expect(page.locator('#work')).toBeVisible();
   await expect(page.locator('.js-stretch').filter({ hasText: /work/i }).first()).toBeAttached();
   await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
+  await expect(page.getByText(/building in public from riyadh/i).first()).toBeVisible();
   await expect(page.locator('#proof')).toBeVisible();
   await expect(page.locator('.js-contact-go')).toBeVisible();
 });

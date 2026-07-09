@@ -4,7 +4,7 @@ const talk = 'talk';
 
 <section id="contact" class="s-contact" aria-label="contact">
   <div class="s-contact__inner">
-    <p class="s-contact__kicker vf-mono">founders · recruiters · curious builders</p>
+    <p class="s-contact__kicker vf-mono">contact</p>
     <a
       href="mailto:abdullahmsultan1@gmail.com"
       class="s-contact__go js-contact-go vf-display"
@@ -16,15 +16,17 @@ const talk = 'talk';
         ))}
       </span>
     </a>
+    <h2 class="s-contact__title vf-display">want to talk?</h2>
     <p class="s-contact__email vf-mono">
       <a href="mailto:abdullahmsultan1@gmail.com">abdullahmsultan1@gmail.com</a>
     </p>
     <p class="s-contact__sub vf-serif">
-      want to talk? email me. coffee chats welcome.
+      founders, recruiters, curious builders. email me. coffee chats welcome.
     </p>
     <div class="s-contact__links vf-mono">
       <a href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer">github</a>
       <a href="https://www.linkedin.com/in/abdullah-sultan-4a264939a/" target="_blank" rel="noopener noreferrer">linkedin</a>
+      <a href="/lab">visit the lab</a>
       <a href="/resume.docx">resume</a>
     </div>
   </div>
@@ -83,9 +85,14 @@ const talk = 'talk';
   .js-contact-letter {
     display: inline-block;
   }
+  .s-contact__title {
+    position: relative;
+    margin: 1.25rem 0 0;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+  }
   .s-contact__email {
     position: relative;
-    margin: 1.5rem 0 0;
+    margin: 1.25rem 0 0;
     font-size: 0.75rem;
     letter-spacing: 0.1em;
   }

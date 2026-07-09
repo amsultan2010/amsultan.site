@@ -25,12 +25,12 @@ import '../styles/voltage.css';
 
     <AstroSeo
       title="abdullah sultan · student builder"
-      description="student builder in riyadh. shipping tutoring, f1 media, and a python quant suite."
+      description="student builder in riyadh. shipping tutoring, f1 media, and agent tools."
       canonical="https://abdullahmsultan.me"
       openGraph={{
         url: 'https://abdullahmsultan.me',
         title: 'abdullah sultan · student builder',
-        description: 'student builder in riyadh. shipping tutoring, f1 media, and a python quant suite.',
+        description: 'student builder in riyadh. shipping tutoring, f1 media, and agent tools.',
         site_name: 'abdullah sultan',
         images: [{ url: 'https://abdullahmsultan.me/og.jpg', width: 1200, height: 630, alt: 'abdullah sultan portfolio' }],
       }}
@@ -63,32 +63,28 @@ import '../styles/voltage.css';
       <SiteHead />
       <main>
         <SHero />
-        <ASeparator />
-        <SRunway text="ship · prove · repeat" />
-        <SChapter
-          index="01 · about"
-          title="about"
-          lede="student in riyadh. math track. shipping products that teach, automate, and prove."
-        />
+        <ASeparator phrases={['about', 'riyadh', 'student', 'builder']} />
+        <SRunway text="building in public from riyadh" />
+        <SChapter index="01 · about" title="about" />
         <SAbout />
-        <ASeparator phrases={['work', 'build', '////', 'live', 'urls', '####']} />
+        <ASeparator phrases={['tutoringbyabdullah', 'downforce', 'quantpy', 'lab']} />
         <SStretch word="work" />
-        <SRunway text="specimens on the tape" />
+        <SRunway text="what i've been building" />
         <p class="vf-section-index vf-mono">02 · work</p>
         <SWork />
-        <ASeparator phrases={['proof', 'numbers', '////', 'stack', '####']} />
+        <ASeparator phrases={['x-combinator', 'debate', 'tennis', 'stack']} />
         <SStretch word="proof" />
-        <SRunway text="what holds up" />
+        <SRunway text="leadership and stack" />
         <p class="vf-section-index vf-mono">03 · proof</p>
         <SProof />
-        <ASeparator phrases={['margin', 'photos', 'ascii', '////', 'human']} />
-        <SStretch word="margin" />
-        <SRunway text="off the record" />
-        <p class="vf-section-index vf-mono">04 · margin</p>
+        <ASeparator phrases={['photos', 'f1', 'tennis', 'weightlifting']} />
+        <SStretch word="photos" />
+        <SRunway text="outside the resume" />
+        <p class="vf-section-index vf-mono">04 · photos</p>
         <SMargin />
-        <ASeparator phrases={['talk', 'go', '####', 'coffee', 'chat']} />
+        <ASeparator phrases={['email', 'github', 'linkedin', 'resume']} />
         <SStretch word="talk" />
-        <SRunway text="leave a note" />
+        <SRunway text="want to talk?" />
         <SContact />
       </main>
       <SiteFoot />
