@@ -218,33 +218,19 @@ const total = String(featured.length).padStart(2, '0');
   }
 
   @media (max-width: 767px) {
-    .s-work {
-      text-align: center;
-    }
     .s-work__head {
-      justify-content: center;
+      justify-content: space-between;
     }
-    .s-work__viewport {
-      overflow: visible;
-    }
-    .s-work__track {
-      display: grid;
-      width: 100%;
-      max-width: none;
-      margin: 0;
-      padding: 0.25rem var(--vf-pad) 1rem;
-      gap: 1.15rem;
-      perspective: 900px;
-    }
+    /* Keep the same horizontal track as desktop — only size cards for the phone */
     .s-work__item {
-      flex: none;
-      width: 100%;
+      flex: 0 0 min(82vw, 420px);
       text-align: left;
-      --tilt: 0deg;
-      transform-style: preserve-3d;
     }
     .s-work__name {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
+    }
+    .s-work__desc {
+      font-size: 1.2rem;
     }
   }
 </style>

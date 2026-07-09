@@ -207,16 +207,16 @@ import ASeparator from './ASeparator.astro';
 
   @media (max-width: 720px) {
     .s-hero {
-      min-height: auto;
-      padding: 1.25rem 0 3.5rem;
-      justify-content: flex-start;
+      min-height: 100svh;
+      padding: 5rem 0 5vh;
+      justify-content: center;
     }
     .s-hero__title {
-      font-size: clamp(2.8rem, 16vw, 4.5rem);
+      font-size: clamp(3rem, 15vw, 5rem);
     }
     .s-hero__lede {
       font-size: 1.45rem;
-      max-width: 22rem;
+      max-width: 24rem;
     }
     .s-hero__actions {
       flex-direction: column;
@@ -230,14 +230,6 @@ import ASeparator from './ASeparator.astro';
       width: 100%;
       min-height: 3.4rem;
       font-size: 1.2rem;
-    }
-    .s-hero__scroll {
-      position: relative;
-      bottom: auto;
-      left: auto;
-      transform: none;
-      margin: 1.5rem auto 0;
-      opacity: 0.65;
     }
   }
 
