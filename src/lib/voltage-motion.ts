@@ -11,7 +11,35 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isCoarsePointer() {
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    window.matchMedia('(hover: none)').matches
+  );
+}
+
+/** Touch / narrow viewports need a different scroll driver than desktop Lenis. */
+function isTouchMotion() {
+  return isCoarsePointer() || window.innerWidth < 768;
+}
+
 function initLenis() {
+  // iOS keeps scroll on a separate thread — scrubbed GSAP looks frozen while
+  // the finger moves. normalizeScroll puts touch scrolling on the JS thread so
+  // stretch/warps paint live. Lenis stays desktop-only for buttery wheel feel.
+  if (isTouchMotion()) {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth');
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    ScrollTrigger.normalizeScroll({
+      allowNestedScroll: true,
+      type: 'touch,wheel',
+    });
+    gsap.ticker.add(() => ScrollTrigger.update());
+    gsap.ticker.lagSmoothing(0);
+    gsap.config({ force3D: true });
+    return null;
+  }
+
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -50,7 +78,12 @@ function initTerrain() {
     return;
   }
 
-  fallback?.remove();
+  // Soft CSS wash under the canvas on touch so phones never look blank if GL stalls
+  if (isTouchMotion()) {
+    if (fallback) fallback.style.opacity = '0.55';
+  } else {
+    fallback?.remove();
+  }
 
   if (document.documentElement.classList.contains('theme-contrasted')) {
     terrain.setContrasted(true);
@@ -94,8 +127,10 @@ function runIntro(onDone: () => void) {
     return;
   }
 
+  // Touch: skip wipe so the page never sits blank waiting on the GSAP bundle.
   if (
     prefersReducedMotion() ||
+    isTouchMotion() ||
     sessionStorage.getItem('vf-intro-seen') === '1'
   ) {
     sessionStorage.setItem('vf-intro-seen', '1');
@@ -348,16 +383,29 @@ function initHero() {
     });
   }
 
-  // Living hero type — pointer-driven on every device (touch + mouse)
+  // Living hero type — ambient wave on touch (always visible); pointer on desktop
   const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
   let tiltX = 0;
   let tiltY = 0;
   let tiltTX = 0;
   let tiltTY = 0;
   let magnetRaf = 0;
+  let ambientT = 0;
+  const touch = isTouchMotion();
 
   const magnetLoop = () => {
     magnetRaf = requestAnimationFrame(magnetLoop);
+    ambientT += 0.016;
+
+    if (touch) {
+      tiltTX = Math.sin(ambientT * 0.7) * 7;
+      tiltTY = Math.cos(ambientT * 0.55) * 9;
+      allChars.forEach((_, i) => {
+        const phase = ambientT * 1.4 + i * 0.35;
+        offsets[i].tx = Math.sin(phase) * 10;
+        offsets[i].ty = Math.cos(phase * 0.85) * 7;
+      });
+    }
 
     tiltX += (tiltTX - tiltX) * 0.08;
     tiltY += (tiltTY - tiltY) * 0.08;
@@ -372,45 +420,47 @@ function initHero() {
   };
   magnetLoop();
 
-  const onMove = (e: PointerEvent) => {
-    const heroRect = hero.getBoundingClientRect();
-    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
-    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
-    const inside =
-      e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
+  if (!touch) {
+    const onMove = (e: PointerEvent) => {
+      const heroRect = hero.getBoundingClientRect();
+      const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+      const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
+      const inside =
+        e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
 
-    if (!inside) {
-      tiltTX = 0;
-      tiltTY = 0;
-      offsets.forEach((o) => {
-        o.tx = 0;
-        o.ty = 0;
-      });
-      return;
-    }
-
-    tiltTX = ny * -9;
-    tiltTY = nx * 11;
-
-    allChars.forEach((char, i) => {
-      const r = char.getBoundingClientRect();
-      const cx = r.left + r.width / 2 - offsets[i].x;
-      const cy = r.top + r.height / 2 - offsets[i].y;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const radius = 320;
-      if (dist < radius) {
-        const force = (1 - dist / radius) * 38;
-        offsets[i].tx = (dx / dist) * force * -0.75;
-        offsets[i].ty = (dy / dist) * force * -0.58;
-      } else {
-        offsets[i].tx = 0;
-        offsets[i].ty = 0;
+      if (!inside) {
+        tiltTX = 0;
+        tiltTY = 0;
+        offsets.forEach((o) => {
+          o.tx = 0;
+          o.ty = 0;
+        });
+        return;
       }
-    });
-  };
-  window.addEventListener('pointermove', onMove, { passive: true });
+
+      tiltTX = ny * -9;
+      tiltTY = nx * 11;
+
+      allChars.forEach((char, i) => {
+        const r = char.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - offsets[i].x;
+        const cy = r.top + r.height / 2 - offsets[i].y;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const radius = 320;
+        if (dist < radius) {
+          const force = (1 - dist / radius) * 38;
+          offsets[i].tx = (dx / dist) * force * -0.75;
+          offsets[i].ty = (dy / dist) * force * -0.58;
+        } else {
+          offsets[i].tx = 0;
+          offsets[i].ty = 0;
+        }
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+  }
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
@@ -431,7 +481,7 @@ function initHero() {
     }
   };
   flipTick();
-  window.setInterval(flipTick, 120);
+  window.setInterval(flipTick, touch ? 90 : 120);
 }
 
 function initTextWarp() {
@@ -802,9 +852,49 @@ function initWork() {
     ease: 'power3.out',
   });
 
-  // Card glow — pointer-driven on every device (touch + mouse)
+  // Card glow — ambient in-view on touch; pointer on desktop
   if (!prefersReducedMotion()) {
-    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
+    const touch = isTouchMotion();
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      if (touch) {
+        let hot = false;
+        const drift = { t: 0 };
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 85%',
+          end: 'bottom 20%',
+          onEnter: () => {
+            hot = true;
+            item.classList.add('is-hot');
+          },
+          onEnterBack: () => {
+            hot = true;
+            item.classList.add('is-hot');
+          },
+          onLeave: () => {
+            hot = false;
+            item.classList.remove('is-hot');
+          },
+          onLeaveBack: () => {
+            hot = false;
+            item.classList.remove('is-hot');
+          },
+        });
+        gsap.to(drift, {
+          t: 1,
+          duration: 3.2 + (i % 3) * 0.4,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          onUpdate() {
+            if (!hot) return;
+            item.style.setProperty('--mx', `${20 + drift.t * 60}%`);
+            item.style.setProperty('--my', `${30 + (1 - drift.t) * 40}%`);
+          },
+        });
+        return;
+      }
+
       item.addEventListener('pointermove', (e) => {
         const r = item.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width) * 100;
@@ -820,6 +910,43 @@ function initWork() {
   }
 
   if (prefersReducedMotion()) return;
+
+  // Touch: CSS snap carousel — ScrollTrigger pin freezes iOS Safari.
+  // Desktop keeps the pinned scrub gallery.
+  if (isTouchMotion()) {
+    section.classList.add('is-touch-work');
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      gsap.from(item, {
+        y: 48,
+        rotateY: i % 2 === 0 ? -18 : 18,
+        scale: 0.92,
+        opacity: 0.2,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 95%',
+          end: 'top 55%',
+          scrub: true,
+        },
+      });
+      gsap.fromTo(
+        item.querySelector('.s-work__media img'),
+        { scale: 1.2, yPercent: 8 },
+        {
+          scale: 1,
+          yPercent: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 92%',
+            end: 'top 45%',
+            scrub: true,
+          },
+        },
+      );
+    });
+    return;
+  }
 
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
@@ -951,8 +1078,26 @@ function initMargin() {
 
   if (prefersReducedMotion()) return;
 
-  // Soft 3D tilt — pointer-driven on every device (touch + mouse)
-  cards.forEach((card) => {
+  // Soft 3D tilt — ambient float on touch; pointer on desktop
+  cards.forEach((card, i) => {
+    if (isTouchMotion()) {
+      const state = { rx: 0, ry: 0, y: 0 };
+      gsap.to(state, {
+        rx: i % 2 === 0 ? -14 : 14,
+        ry: i % 2 === 0 ? 16 : -16,
+        y: i % 2 === 0 ? -10 : 10,
+        duration: 2.2 + (i % 3) * 0.3,
+        yoyo: true,
+        repeat: -1,
+        ease: 'sine.inOut',
+        onUpdate: () => {
+          card.style.setProperty('--rx', `${state.rx.toFixed(2)}deg`);
+          card.style.setProperty('--ry', `${state.ry.toFixed(2)}deg`);
+          card.style.setProperty('--float-y', `${state.y.toFixed(2)}px`);
+        },
+      });
+      return;
+    }
     card.addEventListener(
       'pointermove',
       (e) => {
@@ -1017,15 +1162,22 @@ function initContact() {
     });
   }
 
-  // Magnetic pull on the GO circle — pointer-driven on every device
+  // Magnetic pull — ambient orbit on touch; pointer on desktop
   if (!prefersReducedMotion()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
     let mty = 0;
     let mraf = 0;
+    let t = 0;
+    const touch = isTouchMotion();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
+      t += 0.016;
+      if (touch) {
+        mtx = Math.sin(t * 1.1) * 14;
+        mty = Math.cos(t * 0.9) * 10;
+      }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
       if (!hover.classList.contains('is-active')) {
@@ -1033,19 +1185,21 @@ function initContact() {
       }
     };
     mloop();
-    hover.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = hover.getBoundingClientRect();
-        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
-        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
-      },
-      { passive: true },
-    );
-    hover.addEventListener('pointerleave', () => {
-      mtx = 0;
-      mty = 0;
-    });
+    if (!touch) {
+      hover.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = hover.getBoundingClientRect();
+          mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+          mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+        },
+        { passive: true },
+      );
+      hover.addEventListener('pointerleave', () => {
+        mtx = 0;
+        mty = 0;
+      });
+    }
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
       else mloop();
@@ -1070,6 +1224,18 @@ function initContact() {
     pulse?.play();
     go.style.transform = '';
   };
+
+  // Auto-reveal GO letters when the section scrolls into view on touch
+  if (isTouchMotion() && section) {
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 70%',
+      onEnter: enter,
+      onEnterBack: enter,
+      onLeave: leave,
+      onLeaveBack: leave,
+    });
+  }
 
   hover.addEventListener('pointerenter', enter);
   hover.addEventListener('focusin', enter);
@@ -1184,35 +1350,44 @@ function initCursor() {
 
 function initMagneticButtons() {
   if (prefersReducedMotion()) return;
+  const touch = isTouchMotion();
 
-  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el) => {
+  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el, i) => {
     let x = 0;
     let y = 0;
     let tx = 0;
     let ty = 0;
     let raf = 0;
+    let t = i * 0.7;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
+      t += 0.016;
+      if (touch) {
+        tx = Math.sin(t * 1.3 + i) * 6;
+        ty = Math.cos(t * 1.1 + i) * 4;
+      }
       x += (tx - x) * 0.16;
       y += (ty - y) * 0.16;
       el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
     };
     loop();
 
-    el.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = el.getBoundingClientRect();
-        tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
-        ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
-      },
-      { passive: true },
-    );
-    el.addEventListener('pointerleave', () => {
-      tx = 0;
-      ty = 0;
-    });
+    if (!touch) {
+      el.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = el.getBoundingClientRect();
+          tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
+          ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
+        },
+        { passive: true },
+      );
+      el.addEventListener('pointerleave', () => {
+        tx = 0;
+        ty = 0;
+      });
+    }
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
       else loop();
@@ -1455,9 +1630,9 @@ function initLivingLabels() {
       },
     });
 
-    const cadence = 2400;
+    const cadence = isTouchMotion() ? 1400 : 2400;
     window.setInterval(() => {
-      if (!active || Math.random() > 0.08 || tick) return;
+      if (!active || Math.random() > (isTouchMotion() ? 0.2 : 0.08) || tick) return;
       let frame = 0;
       const max = 6;
       tick = window.setInterval(() => {
