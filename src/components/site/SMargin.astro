@@ -158,12 +158,7 @@ const ascii = fs.existsSync(asciiPath)
       grid-row: span 1;
     }
     .s-margin__card {
-      /* Keep scroll/tilt transforms alive on mobile */
       transform: rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
-    }
-    .s-margin__card:active {
-      transform: rotate(0deg) rotateX(0deg) rotateY(0deg) scale(1.03);
-      z-index: 2;
     }
   }
 </style>

@@ -345,30 +345,42 @@ function initHero() {
     });
   }
 
-  // Magnetic letters + soft 3D tilt (desktop pointer); mobile keeps ambient flips + scroll
-  if (!isCoarsePointer()) {
-    const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
-    let tiltX = 0;
-    let tiltY = 0;
-    let tiltTX = 0;
-    let tiltTY = 0;
-    let magnetRaf = 0;
+  // Living hero type — pointer magnet on desktop, ambient wave on mobile
+  const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+  let tiltX = 0;
+  let tiltY = 0;
+  let tiltTX = 0;
+  let tiltTY = 0;
+  let magnetRaf = 0;
+  let ambientT = 0;
+  const mobileHero = isCoarsePointer() || isMobileViewport();
 
-    const magnetLoop = () => {
-      magnetRaf = requestAnimationFrame(magnetLoop);
-      tiltX += (tiltTX - tiltX) * 0.08;
-      tiltY += (tiltTY - tiltY) * 0.08;
-      title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
-
-      allChars.forEach((char, i) => {
-        const o = offsets[i];
-        o.x += (o.tx - o.x) * 0.16;
-        o.y += (o.ty - o.y) * 0.16;
-        char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
+  const magnetLoop = () => {
+    magnetRaf = requestAnimationFrame(magnetLoop);
+    if (mobileHero) {
+      ambientT += 0.016;
+      tiltTX = Math.sin(ambientT * 0.7) * 7;
+      tiltTY = Math.cos(ambientT * 0.55) * 9;
+      allChars.forEach((_, i) => {
+        const phase = ambientT * 1.4 + i * 0.35;
+        offsets[i].tx = Math.sin(phase) * 10;
+        offsets[i].ty = Math.cos(phase * 0.9) * 8;
       });
-    };
-    magnetLoop();
+    }
+    tiltX += (tiltTX - tiltX) * 0.08;
+    tiltY += (tiltTY - tiltY) * 0.08;
+    title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
 
+    allChars.forEach((char, i) => {
+      const o = offsets[i];
+      o.x += (o.tx - o.x) * 0.16;
+      o.y += (o.ty - o.y) * 0.16;
+      char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
+    });
+  };
+  magnetLoop();
+
+  if (!mobileHero) {
     const onMove = (e: PointerEvent) => {
       const heroRect = hero.getBoundingClientRect();
       const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
@@ -408,31 +420,19 @@ function initHero() {
       });
     };
     window.addEventListener('pointermove', onMove, { passive: true });
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
-      else magnetLoop();
-    });
-  } else {
-    // Mobile: gentle scroll-linked letter drift so the hero still feels alive
-    gsap.to(allChars, {
-      y: (i) => (i % 2 === 0 ? -10 : 10),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
   }
 
-  // Ambient letter flip — signature wodniack living type (desktop + mobile)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
+    else magnetLoop();
+  });
+
+  // Ambient letter flip — same intensity on mobile as desktop
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
-  const mobile = isCoarsePointer() || isMobileViewport();
   const flipTick = () => {
-    if (!allChars.length || Math.random() > (mobile ? 0.3 : 0.22)) return;
+    if (!allChars.length || Math.random() > 0.22) return;
     const start = Math.floor(Math.random() * allChars.length);
-    const count = mobile ? 1 : 1 + Math.floor(Math.random() * 2);
+    const count = 1 + Math.floor(Math.random() * 2);
     for (let n = 0; n < count; n += 1) {
       const char = allChars[(start + n) % allChars.length];
       if (dirs.some((d) => char.classList.contains(d))) continue;
@@ -441,7 +441,7 @@ function initHero() {
       window.setTimeout(() => char.classList.remove(dir), 1000);
     }
   };
-  window.setInterval(flipTick, mobile ? 180 : 120);
+  window.setInterval(flipTick, 120);
 }
 
 function initTextWarp() {
@@ -527,21 +527,14 @@ function initRunways() {
 function initStretch() {
   if (prefersReducedMotion()) return;
 
-  const mobile = isMobileViewport();
-
   document.querySelectorAll<HTMLElement>('.js-stretch').forEach((section) => {
     const letters = section.querySelectorAll<HTMLElement>('.js-stretch-letter');
     if (!letters.length) return;
 
+    // Same desktop-strength warp on mobile — scrub tracks scroll either way
     gsap.fromTo(
       letters,
-      {
-        scaleX: mobile ? 0.12 : 0.05,
-        scaleY: mobile ? 1.35 : 1.55,
-        opacity: 0.12,
-        skewX: mobile ? 10 : 14,
-        rotateY: mobile ? -18 : -35,
-      },
+      { scaleX: 0.05, scaleY: 1.55, opacity: 0.12, skewX: 14, rotateY: -35 },
       {
         scaleX: 1,
         scaleY: 1,
@@ -549,19 +542,19 @@ function initStretch() {
         skewX: 0,
         rotateY: 0,
         ease: 'none',
-        stagger: { each: mobile ? 0.05 : 0.06, from: 'center' },
+        stagger: { each: 0.06, from: 'center' },
         scrollTrigger: {
           trigger: section,
           start: 'top 96%',
-          end: mobile ? 'center 40%' : 'center 28%',
-          scrub: mobile ? 0.9 : 1.15,
+          end: 'center 28%',
+          scrub: 1.15,
         },
       },
     );
 
     gsap.to(letters, {
-      yPercent: (i) => (i % 2 === 0 ? (mobile ? -18 : -28) : mobile ? 18 : 28),
-      rotate: (i) => (i % 2 === 0 ? (mobile ? -4 : -6) : mobile ? 4 : 6),
+      yPercent: (i) => (i % 2 === 0 ? -28 : 28),
+      rotate: (i) => (i % 2 === 0 ? -6 : 6),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -619,11 +612,11 @@ function initSeparators() {
     window.setInterval(() => {
       if (!active) return;
       chars.forEach((char) => {
-        if (Math.random() > 0.18) return;
+        if (Math.random() > 0.16) return;
         char.classList.add('is-flip');
         window.setTimeout(() => char.classList.remove('is-flip'), 220);
       });
-    }, 110);
+    }, 100);
   });
 }
 
@@ -750,83 +743,137 @@ function initWork() {
 
   const getScroll = () => Math.max(0, track.scrollWidth - window.innerWidth + 80);
 
-  gsap.from('.s-work__item', {
-    scrollTrigger: {
-      trigger: section,
-      start: 'top 75%',
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.65,
-    stagger: 0.08,
-    ease: 'power3.out',
-  });
+  // Desktop entrance only — mobile uses scrubbed choreography below
+  if (!isMobileViewport()) {
+    gsap.from('.s-work__item', {
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 75%',
+      },
+      y: 50,
+      opacity: 0,
+      duration: 0.65,
+      stagger: 0.08,
+      ease: 'power3.out',
+    });
+  }
 
-  // Cursor / touch glow on work cards
+  // Card glow — pointer on desktop, auto ambient sweep when in view on mobile
   if (!prefersReducedMotion()) {
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
-      item.addEventListener('pointermove', (e) => {
-        const r = item.getBoundingClientRect();
-        const x = ((e.clientX - r.left) / r.width) * 100;
-        const y = ((e.clientY - r.top) / r.height) * 100;
-        item.style.setProperty('--mx', `${x}%`);
-        item.style.setProperty('--my', `${y}%`);
-        item.classList.add('is-hot');
-      });
-      item.addEventListener('pointerleave', () => {
-        item.classList.remove('is-hot');
-      });
-      item.addEventListener(
-        'pointerdown',
-        (e) => {
+      if (!isCoarsePointer()) {
+        item.addEventListener('pointermove', (e) => {
           const r = item.getBoundingClientRect();
           const x = ((e.clientX - r.left) / r.width) * 100;
           const y = ((e.clientY - r.top) / r.height) * 100;
           item.style.setProperty('--mx', `${x}%`);
           item.style.setProperty('--my', `${y}%`);
           item.classList.add('is-hot');
-        },
-        { passive: true },
-      );
+        });
+        item.addEventListener('pointerleave', () => {
+          item.classList.remove('is-hot');
+        });
+      } else {
+        let glowRaf = 0;
+        let glowT = 0;
+        let glowing = false;
+        const glowLoop = () => {
+          if (!glowing) return;
+          glowRaf = requestAnimationFrame(glowLoop);
+          glowT += 0.02;
+          const x = 50 + Math.sin(glowT) * 35;
+          const y = 50 + Math.cos(glowT * 0.8) * 28;
+          item.style.setProperty('--mx', `${x.toFixed(1)}%`);
+          item.style.setProperty('--my', `${y.toFixed(1)}%`);
+        };
+        ScrollTrigger.create({
+          trigger: item,
+          start: 'top 85%',
+          end: 'bottom 15%',
+          onEnter: () => {
+            glowing = true;
+            item.classList.add('is-hot');
+            glowLoop();
+          },
+          onEnterBack: () => {
+            glowing = true;
+            item.classList.add('is-hot');
+            glowLoop();
+          },
+          onLeave: () => {
+            glowing = false;
+            cancelAnimationFrame(glowRaf);
+            item.classList.remove('is-hot');
+          },
+          onLeaveBack: () => {
+            glowing = false;
+            cancelAnimationFrame(glowRaf);
+            item.classList.remove('is-hot');
+          },
+        });
+      }
     });
   }
 
-  // Mobile: vertical stack with scroll-scrubbed image zoom + soft yaw
   if (prefersReducedMotion()) return;
 
+  // Mobile: vertical stack with desktop-strength scroll choreography
   if (isMobileViewport()) {
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      const img = item.querySelector('.s-work__media img');
       gsap.fromTo(
-        item.querySelector('.s-work__media img'),
-        { scale: 1.16 },
+        img,
+        { scale: 1.22, yPercent: 8 },
         {
           scale: 1,
+          yPercent: 0,
           ease: 'none',
           scrollTrigger: {
             trigger: item,
-            start: 'top 90%',
-            end: 'top 35%',
-            scrub: true,
+            start: 'top 95%',
+            end: 'top 30%',
+            scrub: 0.8,
           },
         },
       );
 
       gsap.fromTo(
         item,
-        { y: 40, rotateY: i % 2 === 0 ? -8 : 8, opacity: 0.55 },
+        {
+          y: 70,
+          rotateY: i % 2 === 0 ? -18 : 18,
+          rotateX: 6,
+          opacity: 0.25,
+          scale: 0.92,
+        },
         {
           y: 0,
           rotateY: 0,
+          rotateX: 0,
           opacity: 1,
+          scale: 1,
           ease: 'none',
           scrollTrigger: {
             trigger: item,
-            start: 'top 92%',
-            end: 'top 55%',
-            scrub: true,
+            start: 'top 96%',
+            end: 'top 48%',
+            scrub: 0.85,
           },
         },
       );
+
+      const copy = item.querySelectorAll('.s-work__role, .s-work__name, .s-work__desc, .s-work__metrics');
+      gsap.from(copy, {
+        y: 28,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.07,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 70%',
+        },
+      });
     });
     return;
   }
@@ -937,32 +984,62 @@ function initMargin() {
 
   if (prefersReducedMotion()) return;
 
-  // Soft 3D tilt — pointer on desktop, touch-drag on mobile
-  cards.forEach((card) => {
-    card.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = card.getBoundingClientRect();
-        const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-        const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        const strength = isCoarsePointer() ? 8 : 14;
-        card.style.setProperty('--rx', `${(-ny * strength).toFixed(2)}deg`);
-        card.style.setProperty('--ry', `${(nx * (strength + 2)).toFixed(2)}deg`);
+  // Soft 3D tilt — pointer on desktop, ambient float when in view on mobile
+  cards.forEach((card, i) => {
+    if (!isCoarsePointer()) {
+      card.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = card.getBoundingClientRect();
+          const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+          const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
+          card.style.setProperty('--rx', `${(-ny * 14).toFixed(2)}deg`);
+          card.style.setProperty('--ry', `${(nx * 16).toFixed(2)}deg`);
+        },
+        { passive: true },
+      );
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      });
+      return;
+    }
+
+    let floatRaf = 0;
+    let floatT = i * 0.4;
+    let floating = false;
+    const floatLoop = () => {
+      if (!floating) return;
+      floatRaf = requestAnimationFrame(floatLoop);
+      floatT += 0.018;
+      card.style.setProperty('--rx', `${(Math.sin(floatT) * 8).toFixed(2)}deg`);
+      card.style.setProperty('--ry', `${(Math.cos(floatT * 0.85) * 10).toFixed(2)}deg`);
+    };
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 90%',
+      end: 'bottom 10%',
+      onEnter: () => {
+        floating = true;
+        floatLoop();
       },
-      { passive: true },
-    );
-    card.addEventListener('pointerleave', () => {
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-    });
-    card.addEventListener(
-      'pointerup',
-      () => {
+      onEnterBack: () => {
+        floating = true;
+        floatLoop();
+      },
+      onLeave: () => {
+        floating = false;
+        cancelAnimationFrame(floatRaf);
         card.style.setProperty('--rx', '0deg');
         card.style.setProperty('--ry', '0deg');
       },
-      { passive: true },
-    );
+      onLeaveBack: () => {
+        floating = false;
+        cancelAnimationFrame(floatRaf);
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      },
+    });
   });
 }
 
@@ -1012,15 +1089,22 @@ function initContact() {
     });
   }
 
-  // Magnetic pull on the GO circle (fine pointer only — touch uses tap reveal)
-  if (!prefersReducedMotion() && !isCoarsePointer()) {
+  // Magnetic / ambient pull on the GO circle
+  if (!prefersReducedMotion()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
     let mty = 0;
     let mraf = 0;
+    let ambientT = 0;
+    const mobileGo = isCoarsePointer();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
+      if (mobileGo && !hover.classList.contains('is-active')) {
+        ambientT += 0.02;
+        mtx = Math.sin(ambientT) * 10;
+        mty = Math.cos(ambientT * 0.8) * 8;
+      }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
       if (!hover.classList.contains('is-active')) {
@@ -1028,19 +1112,21 @@ function initContact() {
       }
     };
     mloop();
-    hover.addEventListener(
-      'pointermove',
-      (e) => {
-        const r = hover.getBoundingClientRect();
-        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
-        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
-      },
-      { passive: true },
-    );
-    hover.addEventListener('pointerleave', () => {
-      mtx = 0;
-      mty = 0;
-    });
+    if (!mobileGo) {
+      hover.addEventListener(
+        'pointermove',
+        (e) => {
+          const r = hover.getBoundingClientRect();
+          mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+          mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+        },
+        { passive: true },
+      );
+      hover.addEventListener('pointerleave', () => {
+        mtx = 0;
+        mty = 0;
+      });
+    }
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
       else mloop();
@@ -1066,32 +1152,24 @@ function initContact() {
     go.style.transform = '';
   };
 
-  hover.addEventListener('mouseenter', enter);
-  hover.addEventListener('focusin', enter);
-  hover.addEventListener('mouseleave', leave);
-  hover.addEventListener('focusout', leave);
-
-  // Mobile: first tap reveals "let's talk", second tap sends the mailto
+  // Desktop: hover. Mobile: auto-reveal when contact scrolls into view (no tap needed)
   if (isCoarsePointer()) {
-    go.addEventListener(
-      'click',
-      (e) => {
-        if (!hover.classList.contains('is-active')) {
-          e.preventDefault();
-          enter();
-        }
-      },
-      { passive: false },
-    );
-    document.addEventListener(
-      'pointerdown',
-      (e) => {
-        if (!hover.classList.contains('is-active')) return;
-        if (hover.contains(e.target as Node)) return;
-        leave();
-      },
-      { passive: true },
-    );
+    if (section && !prefersReducedMotion()) {
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 55%',
+        end: 'bottom 35%',
+        onEnter: enter,
+        onEnterBack: enter,
+        onLeave: leave,
+        onLeaveBack: leave,
+      });
+    }
+  } else {
+    hover.addEventListener('mouseenter', enter);
+    hover.addEventListener('focusin', enter);
+    hover.addEventListener('mouseleave', leave);
+    hover.addEventListener('focusout', leave);
   }
 }
 
@@ -1275,16 +1353,40 @@ function initScramble() {
       el.textContent = original;
     });
 
-    // Touch: scramble on press so mobile still gets the instrument chatter
-    el.addEventListener(
-      'pointerdown',
-      () => {
-        if (!isCoarsePointer()) return;
+    // Mobile: ambient scramble when the link scrolls into view — no tap needed
+    if (isCoarsePointer()) {
+      let active = false;
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 90%',
+        end: 'bottom 10%',
+        onEnter: () => {
+          active = true;
+          window.clearInterval(timer);
+          timer = runScramble(el, original);
+        },
+        onEnterBack: () => {
+          active = true;
+          window.clearInterval(timer);
+          timer = runScramble(el, original);
+        },
+        onLeave: () => {
+          active = false;
+          window.clearInterval(timer);
+          el.textContent = original;
+        },
+        onLeaveBack: () => {
+          active = false;
+          window.clearInterval(timer);
+          el.textContent = original;
+        },
+      });
+      window.setInterval(() => {
+        if (!active || Math.random() > 0.25) return;
         window.clearInterval(timer);
         timer = runScramble(el, original);
-      },
-      { passive: true },
-    );
+      }, 2800);
+    }
   });
 }
 
@@ -1362,18 +1464,21 @@ function initRevealLines() {
 function initClipReveals() {
   if (prefersReducedMotion()) return;
 
-  document.querySelectorAll<HTMLElement>('.js-proof-skill, .js-work-item').forEach((el) => {
+  // On mobile, work items already have heavy scrub choreography — only clip proof skills there
+  const selector = isMobileViewport() ? '.js-proof-skill' : '.js-proof-skill, .js-work-item';
+
+  document.querySelectorAll<HTMLElement>(selector).forEach((el) => {
     gsap.fromTo(
       el,
-      { clipPath: 'inset(12% 8% 12% 8%)', opacity: 0.35 },
+      { clipPath: 'inset(14% 10% 14% 10%)', opacity: 0.3 },
       {
         clipPath: 'inset(0% 0% 0% 0%)',
         opacity: 1,
         ease: 'none',
         scrollTrigger: {
           trigger: el,
-          start: 'top 92%',
-          end: 'top 55%',
+          start: 'top 94%',
+          end: 'top 52%',
           scrub: true,
         },
       },
