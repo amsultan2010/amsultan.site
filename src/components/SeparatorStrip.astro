@@ -1,0 +1,42 @@
+---
+interface Props {
+  phrases?: string[]
+  reverse?: boolean
+  style?: 'primary' | 'secondary'
+  class?: string
+}
+
+const {
+  phrases = ['tutoring', 'f1', 'quant', 'riyadh'],
+  reverse = false,
+  style = 'primary',
+  class: className = '',
+} = Astro.props
+
+const strip = Array.from({ length: 18 }, (_, i) => phrases[i % phrases.length])
+---
+
+<div
+  class:list={['a-sep', 'js-sep', reverse && 'a-sep--reverse', `a-sep--${style}`, className]}
+  aria-hidden="true"
+  data-intersect
+>
+  <span class="a-sep__tri a-sep__tri--l"></span>
+  <div class="a-sep__binaries vf-mono">
+    {
+      strip.map((word, i) => (
+        <span class="a-sep__group">
+          <span class="a-sep__code js-sep-code">
+            {[...word].map((ch) => (
+              <span class="a-sep__char js-sep-char" data-ch={ch}>
+                {ch}
+              </span>
+            ))}
+          </span>
+          <span class="a-sep__stripes">////////////////</span>
+        </span>
+      ))
+    }
+  </div>
+  <span class="a-sep__tri a-sep__tri--r"></span>
+</div>

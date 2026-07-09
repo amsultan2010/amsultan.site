@@ -1,7 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
+  "framework": "astro",
   "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "redirects": [
     {
       "source": "/desktop",
@@ -21,6 +22,16 @@
     {
       "source": "/lab/:path*",
       "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/fitness",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/pictures",
+      "destination": "/#margin",
       "permanent": true
     }
   ],

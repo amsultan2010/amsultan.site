@@ -1,0 +1,63 @@
+---
+import { PROJECTS } from '@/data/projects'
+
+const featured = PROJECTS
+const total = String(featured.length).padStart(2, '0')
+---
+
+<section id="work" class="s-work js-work" aria-label="work">
+  <div class="s-work__head">
+    <p class="s-work__count vf-mono">{total} projects</p>
+    <a href="/projects" class="s-work__all vf-mono js-magnetic js-scramble">full archive →</a>
+  </div>
+
+  <div class="s-work__viewport">
+    <div class="s-work__track js-work-track">
+      {
+        featured.map((project, i) => {
+          const href = project.demo || project.href
+          const external = href.startsWith('http')
+          const serial = `${String(i + 1).padStart(2, '0')} / ${total}`
+          const openNew = external || project.demoNewTab
+          return (
+            <article class="s-work__item js-work-item">
+              <div class="s-work__meta vf-mono">
+                <span>{serial}</span>
+                <span aria-hidden="true">·</span>
+                <span>{project.period}</span>
+              </div>
+              <a
+                class="s-work__media"
+                href={href}
+                target={openNew ? '_blank' : undefined}
+                rel={openNew ? 'noopener noreferrer' : undefined}
+              >
+                <img src={project.cover} alt="" loading="lazy" />
+              </a>
+              <div class="s-work__copy">
+                <p class="s-work__role vf-mono">{project.role}</p>
+                <h3 class="s-work__name vf-display">
+                  <a
+                    href={href}
+                    target={openNew ? '_blank' : undefined}
+                    rel={openNew ? 'noopener noreferrer' : undefined}
+                  >
+                    {project.title}
+                  </a>
+                </h3>
+                <p class="s-work__desc vf-serif">{project.desc}</p>
+                {project.metrics && (
+                  <ul class="s-work__metrics vf-mono">
+                    {project.metrics.slice(0, 2).map((m) => (
+                      <li>{m}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </article>
+          )
+        })
+      }
+    </div>
+  </div>
+</section>

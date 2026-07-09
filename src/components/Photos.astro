@@ -1,0 +1,44 @@
+---
+import fs from 'node:fs'
+import path from 'node:path'
+import { photos } from '@/data/photos'
+
+function loadAscii() {
+  const asciiPath = path.join(process.cwd(), 'public/images/myascii.txt')
+  if (fs.existsSync(asciiPath)) {
+    return fs.readFileSync(asciiPath, 'utf8').trimEnd()
+  }
+  return 'abdullah'
+}
+
+const ascii = loadAscii()
+---
+
+<section id="margin" class="s-margin" aria-label="photos">
+  <div class="s-margin__layout">
+    <article class="s-margin__ascii js-margin-card">
+      <p class="vf-mono s-margin__label">ascii</p>
+      <div class="s-margin__ascii-frame">
+        <pre class="s-margin__pre">{ascii}</pre>
+      </div>
+    </article>
+
+    <div class="s-margin__grid">
+      {
+        photos.map((photo, i) => (
+          <article
+            class:list={[
+              's-margin__card',
+              'js-margin-card',
+              i % 7 === 0 && 's-margin__card--wide',
+              i % 11 === 3 && 's-margin__card--tall',
+            ]}
+            style={`--rot: ${(i % 2 === 0 ? -1 : 1) * (1.2 + (i % 3) * 0.7)}deg`}
+          >
+            <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

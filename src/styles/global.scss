@@ -1,0 +1,9 @@
+/**
+ * Global style entry — Astro + SCSS + modern-normalize (wodniack stack)
+ */
+
+@use 'site/voltage';
+@use 'site/sections';
+@use 'utilities/visibility';
+
+@import 'modern-normalize/modern-normalize.css';

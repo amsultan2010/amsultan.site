@@ -1,0 +1,19 @@
+---
+interface Props {
+  word: string
+  class?: string
+}
+
+const { word, class: className = '' } = Astro.props
+const letters = [...word.toLowerCase()]
+---
+
+<section class:list={['s-stretch', 'js-stretch', className]} aria-hidden="true">
+  <div class="s-stretch__track js-stretch-track">
+    {
+      letters.map((ch) => (
+        <span class="s-stretch__letter js-stretch-letter">{ch === ' ' ? '\u00a0' : ch}</span>
+      ))
+    }
+  </div>
+</section>

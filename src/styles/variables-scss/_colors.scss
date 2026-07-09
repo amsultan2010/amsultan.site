@@ -1,0 +1,19 @@
+/**
+ * Voltage brand colors (SCSS map for helpers)
+ */
+@use 'sass:map';
+
+$theme-colors: (
+  default: (
+    primary: #ff4d1a,
+    secondary: #fffaf5,
+    shadow: #14110f,
+    white: #fffaf5,
+  ),
+  contrasted: (
+    primary: #fff8f1,
+    secondary: #14110f,
+    shadow: #ff4d1a,
+    white: #fffaf5,
+  ),
+);

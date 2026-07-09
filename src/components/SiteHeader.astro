@@ -1,0 +1,24 @@
+---
+const links = [
+  { id: 'about', label: 'about' },
+  { id: 'work', label: 'work' },
+  { id: 'proof', label: 'proof' },
+  { id: 'contact', label: 'contact' },
+]
+---
+
+<header class="site-head">
+  <a href="/#top" class="site-head__brand vf-mono js-magnetic">abdullah sultan</a>
+  <nav class="site-head__nav vf-mono" aria-label="primary">
+    {
+      links.map((link) => (
+        <a href={`/#${link.id}`} data-section={link.id} class="js-nav-link js-scramble">
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
+  <button type="button" class="site-head__contrast js-contrast vf-mono" aria-label="toggle contrast">
+    contrast
+  </button>
+</header>

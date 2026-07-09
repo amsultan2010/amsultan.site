@@ -1,44 +1,24 @@
-# abdullah portfolio
+# abdullah sultan — portfolio
 
-my portfolio site — the Voltage experience.
+Static portfolio built with the same stack as [wodniack.dev](https://wodniack.dev):
 
-**[github](https://github.com/amsultan2010)** · **[youtube music](https://music.youtube.com/@amsultan303)**
+- **Astro** (static)
+- **SCSS** + Autoprefixer + modern-normalize
+- **GSAP** + ScrollTrigger
+- **Lenis** smooth scroll
 
----
+Live: [www.abdullahmsultan.me](https://www.abdullahmsultan.me)
 
-## what's in here
-
-**main site (`/`)** — Voltage homepage with GSAP scroll motion, Lenis, and WebGL terrain
-
-**projects (`/projects`)** — project archive
-
-**pictures (`/pictures`)** — photo gallery
-
-**fitness (`/fitness`)** — run / lift charts
-
-Legacy routes (`/desktop`, `/lab`, `/portfolio`) redirect home.
-
----
-
-## tech
-
-- next.js 16 (app router)
-- react 19
-- gsap + scrolltrigger + lenis
-- three.js terrain
-- tailwind css 4
-- vercel deployment
-
----
-
-## local
+## Develop
 
 ```bash
 npm install
 npm run dev
 ```
 
+## Build
+
 ```bash
 npm run build
-npm run check
+npm run preview
 ```
