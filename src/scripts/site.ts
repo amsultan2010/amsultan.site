@@ -2,6 +2,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { createVoltageTerrain, type VoltageTerrainHandle } from './VoltageTerrain';
+import { bootMobile } from './mobileMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,26 +20,15 @@ function isCoarsePointer() {
 }
 
 function isTouchMotion() {
-  return isCoarsePointer() || window.innerWidth < 768;
+  return (
+    document.documentElement.classList.contains('touch-ready') ||
+    isCoarsePointer() ||
+    window.innerWidth < 768
+  );
 }
 
 function initLenis() {
-  // Touch/iOS: no Lenis (keeps desktop buttery). normalizeScroll moves touch
-  // scrolling onto the JS thread so scrubbed warps/stretch paint while the
-  // finger moves — without it, iOS only shows opacity fades after scroll ends.
-  if (isTouchMotion()) {
-    document.documentElement.classList.remove('lenis', 'lenis-smooth');
-    ScrollTrigger.config({ ignoreMobileResize: true });
-    ScrollTrigger.normalizeScroll({
-      allowNestedScroll: true,
-      type: 'touch,wheel',
-    });
-    gsap.ticker.add(() => ScrollTrigger.update());
-    gsap.ticker.lagSmoothing(0);
-    gsap.config({ force3D: true });
-    return null;
-  }
-
+  // Desktop only — mobile uses mobileMotion.ts (no Lenis / no ST scrub).
   const lenis = new Lenis({
     lerp: 0.075,
     smoothWheel: true,
@@ -1647,14 +1637,8 @@ function initLivingLabels() {
   });
 }
 
-function boot() {
-  const touch = isTouchMotion();
-  if (touch) {
-    // Phones: content visible immediately; desktop still uses the wipe intro
-    revealSite();
-  } else {
-    document.documentElement.classList.add('is-scroll-blocked');
-  }
+function bootDesktop() {
+  document.documentElement.classList.add('is-scroll-blocked');
 
   initContrastToggle();
   initNav();
@@ -1702,14 +1686,33 @@ function boot() {
     }
   };
 
-  // Failsafe: never leave the page blank
-  window.setTimeout(revealSite, touch ? 800 : 2800);
+  window.setTimeout(revealSite, 2800);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => runIntro(afterIntro), { once: true });
   } else {
     runIntro(afterIntro);
   }
+}
+
+function boot() {
+  // Hard split: phones never touch the desktop Lenis/ScrollTrigger stack.
+  if (isTouchMotion()) {
+    try {
+      bootMobile();
+      // Soft CSS terrain wash only — skip WebGL on phones
+      const fallback = document.querySelector<HTMLElement>('.site-terrain__fallback');
+      const canvas = document.querySelector<HTMLCanvasElement>('.js-terrain-canvas');
+      canvas?.remove();
+      if (fallback) fallback.style.opacity = '1';
+    } catch (err) {
+      console.error('[voltage] mobile boot failed', err);
+      revealSite();
+    }
+    return;
+  }
+
+  bootDesktop();
 }
 
 boot();
