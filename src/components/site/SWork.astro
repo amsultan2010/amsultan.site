@@ -137,6 +137,9 @@ const total = String(featured.length).padStart(2, '0');
   .s-work__item.is-hot .s-work__name a {
     color: var(--vf-mark);
   }
+  .s-work__item.is-hot .s-work__media img {
+    transform: scale(1.05);
+  }
   .s-work__meta {
     display: flex;
     justify-content: space-between;
@@ -231,16 +234,13 @@ const total = String(featured.length).padStart(2, '0');
       margin: 0;
       padding: 0.25rem var(--vf-pad) 1rem;
       gap: 1.15rem;
-      perspective: none;
+      perspective: 900px;
     }
     .s-work__item {
       flex: none;
       width: 100%;
-      transform: none !important;
       text-align: left;
-    }
-    .s-work__item:hover {
-      transform: none;
+      --tilt: 0deg;
     }
     .s-work__name {
       font-size: 1.6rem;

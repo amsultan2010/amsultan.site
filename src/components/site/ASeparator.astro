@@ -142,7 +142,8 @@ const strip = Array.from({ length: 18 }, (_, i) => phrases[i % phrases.length]);
       padding: 0 0.7rem;
     }
     .a-sep__binaries {
-      animation: none;
+      animation: sep-drift 18s linear infinite;
+      width: max(160%, 100%);
     }
     .a-sep__code {
       font-size: 0.9rem;

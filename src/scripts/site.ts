@@ -11,14 +11,25 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function isCoarsePointer() {
+  return window.matchMedia('(pointer: coarse)').matches;
+}
+
+function isMobileViewport() {
+  return window.innerWidth < 768;
+}
+
 function initLenis() {
+  const mobile = isMobileViewport() || isCoarsePointer();
   // lerp mode (not duration) = buttery glide, less wheel jitter on high-Hz displays
   const lenis = new Lenis({
-    lerp: 0.075,
+    lerp: mobile ? 0.12 : 0.075,
     smoothWheel: true,
     wheelMultiplier: 0.85,
-    touchMultiplier: 1.4,
-    syncTouch: false,
+    touchMultiplier: mobile ? 1.65 : 1.4,
+    // Keep touch scroll native-feeling but still feed ScrollTrigger
+    syncTouch: mobile,
+    syncTouchLerp: mobile ? 0.1 : undefined,
   });
 
   lenis.on('scroll', ScrollTrigger.update);
@@ -334,80 +345,94 @@ function initHero() {
     });
   }
 
-  // Magnetic letters + soft 3D tilt
-  const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
-  let tiltX = 0;
-  let tiltY = 0;
-  let tiltTX = 0;
-  let tiltTY = 0;
-  let magnetRaf = 0;
+  // Magnetic letters + soft 3D tilt (desktop pointer); mobile keeps ambient flips + scroll
+  if (!isCoarsePointer()) {
+    const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+    let tiltX = 0;
+    let tiltY = 0;
+    let tiltTX = 0;
+    let tiltTY = 0;
+    let magnetRaf = 0;
 
-  const magnetLoop = () => {
-    magnetRaf = requestAnimationFrame(magnetLoop);
-    tiltX += (tiltTX - tiltX) * 0.08;
-    tiltY += (tiltTY - tiltY) * 0.08;
-    title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
+    const magnetLoop = () => {
+      magnetRaf = requestAnimationFrame(magnetLoop);
+      tiltX += (tiltTX - tiltX) * 0.08;
+      tiltY += (tiltTY - tiltY) * 0.08;
+      title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
 
-    allChars.forEach((char, i) => {
-      const o = offsets[i];
-      o.x += (o.tx - o.x) * 0.16;
-      o.y += (o.ty - o.y) * 0.16;
-      char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
-    });
-  };
-  magnetLoop();
-
-  const onMove = (e: PointerEvent) => {
-    const heroRect = hero.getBoundingClientRect();
-    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
-    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
-    const inside =
-      e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
-
-    if (!inside) {
-      tiltTX = 0;
-      tiltTY = 0;
-      offsets.forEach((o) => {
-        o.tx = 0;
-        o.ty = 0;
+      allChars.forEach((char, i) => {
+        const o = offsets[i];
+        o.x += (o.tx - o.x) * 0.16;
+        o.y += (o.ty - o.y) * 0.16;
+        char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
       });
-      return;
-    }
+    };
+    magnetLoop();
 
-    tiltTX = ny * -9;
-    tiltTY = nx * 11;
+    const onMove = (e: PointerEvent) => {
+      const heroRect = hero.getBoundingClientRect();
+      const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+      const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
+      const inside =
+        e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
 
-    allChars.forEach((char, i) => {
-      const r = char.getBoundingClientRect();
-      const cx = r.left + r.width / 2 - offsets[i].x;
-      const cy = r.top + r.height / 2 - offsets[i].y;
-      const dx = e.clientX - cx;
-      const dy = e.clientY - cy;
-      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      const radius = 320;
-      if (dist < radius) {
-        const force = (1 - dist / radius) * 38;
-        offsets[i].tx = (dx / dist) * force * -0.75;
-        offsets[i].ty = (dy / dist) * force * -0.58;
-      } else {
-        offsets[i].tx = 0;
-        offsets[i].ty = 0;
+      if (!inside) {
+        tiltTX = 0;
+        tiltTY = 0;
+        offsets.forEach((o) => {
+          o.tx = 0;
+          o.ty = 0;
+        });
+        return;
       }
-    });
-  };
-  window.addEventListener('pointermove', onMove, { passive: true });
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
-    else magnetLoop();
-  });
 
-  // Ambient letter flip — signature wodniack living type
+      tiltTX = ny * -9;
+      tiltTY = nx * 11;
+
+      allChars.forEach((char, i) => {
+        const r = char.getBoundingClientRect();
+        const cx = r.left + r.width / 2 - offsets[i].x;
+        const cy = r.top + r.height / 2 - offsets[i].y;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const radius = 320;
+        if (dist < radius) {
+          const force = (1 - dist / radius) * 38;
+          offsets[i].tx = (dx / dist) * force * -0.75;
+          offsets[i].ty = (dy / dist) * force * -0.58;
+        } else {
+          offsets[i].tx = 0;
+          offsets[i].ty = 0;
+        }
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
+      else magnetLoop();
+    });
+  } else {
+    // Mobile: gentle scroll-linked letter drift so the hero still feels alive
+    gsap.to(allChars, {
+      y: (i) => (i % 2 === 0 ? -10 : 10),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  }
+
+  // Ambient letter flip — signature wodniack living type (desktop + mobile)
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
+  const mobile = isCoarsePointer() || isMobileViewport();
   const flipTick = () => {
-    if (!allChars.length || Math.random() > 0.22) return;
-    // Occasionally flip a small cluster — more "alive" without chaos
+    if (!allChars.length || Math.random() > (mobile ? 0.3 : 0.22)) return;
     const start = Math.floor(Math.random() * allChars.length);
-    const count = 1 + Math.floor(Math.random() * 2);
+    const count = mobile ? 1 : 1 + Math.floor(Math.random() * 2);
     for (let n = 0; n < count; n += 1) {
       const char = allChars[(start + n) % allChars.length];
       if (dirs.some((d) => char.classList.contains(d))) continue;
@@ -416,7 +441,7 @@ function initHero() {
       window.setTimeout(() => char.classList.remove(dir), 1000);
     }
   };
-  window.setInterval(flipTick, 120);
+  window.setInterval(flipTick, mobile ? 180 : 120);
 }
 
 function initTextWarp() {
@@ -502,13 +527,21 @@ function initRunways() {
 function initStretch() {
   if (prefersReducedMotion()) return;
 
+  const mobile = isMobileViewport();
+
   document.querySelectorAll<HTMLElement>('.js-stretch').forEach((section) => {
     const letters = section.querySelectorAll<HTMLElement>('.js-stretch-letter');
     if (!letters.length) return;
 
     gsap.fromTo(
       letters,
-      { scaleX: 0.05, scaleY: 1.55, opacity: 0.12, skewX: 14, rotateY: -35 },
+      {
+        scaleX: mobile ? 0.12 : 0.05,
+        scaleY: mobile ? 1.35 : 1.55,
+        opacity: 0.12,
+        skewX: mobile ? 10 : 14,
+        rotateY: mobile ? -18 : -35,
+      },
       {
         scaleX: 1,
         scaleY: 1,
@@ -516,19 +549,19 @@ function initStretch() {
         skewX: 0,
         rotateY: 0,
         ease: 'none',
-        stagger: { each: 0.06, from: 'center' },
+        stagger: { each: mobile ? 0.05 : 0.06, from: 'center' },
         scrollTrigger: {
           trigger: section,
-          start: 'top 94%',
-          end: 'center 28%',
-          scrub: 1.15,
+          start: 'top 96%',
+          end: mobile ? 'center 40%' : 'center 28%',
+          scrub: mobile ? 0.9 : 1.15,
         },
       },
     );
 
     gsap.to(letters, {
-      yPercent: (i) => (i % 2 === 0 ? -28 : 28),
-      rotate: (i) => (i % 2 === 0 ? -6 : 6),
+      yPercent: (i) => (i % 2 === 0 ? (mobile ? -18 : -28) : mobile ? 18 : 28),
+      rotate: (i) => (i % 2 === 0 ? (mobile ? -4 : -6) : mobile ? 4 : 6),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -729,7 +762,7 @@ function initWork() {
     ease: 'power3.out',
   });
 
-  // Cursor glow on work cards
+  // Cursor / touch glow on work cards
   if (!prefersReducedMotion()) {
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
       item.addEventListener('pointermove', (e) => {
@@ -743,11 +776,58 @@ function initWork() {
       item.addEventListener('pointerleave', () => {
         item.classList.remove('is-hot');
       });
+      item.addEventListener(
+        'pointerdown',
+        (e) => {
+          const r = item.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top) / r.height) * 100;
+          item.style.setProperty('--mx', `${x}%`);
+          item.style.setProperty('--my', `${y}%`);
+          item.classList.add('is-hot');
+        },
+        { passive: true },
+      );
     });
   }
 
-  // Mobile uses a vertical stack — no horizontal pin/scrub
-  if (prefersReducedMotion() || window.innerWidth < 768) {
+  // Mobile: vertical stack with scroll-scrubbed image zoom + soft yaw
+  if (prefersReducedMotion()) return;
+
+  if (isMobileViewport()) {
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      gsap.fromTo(
+        item.querySelector('.s-work__media img'),
+        { scale: 1.16 },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            end: 'top 35%',
+            scrub: true,
+          },
+        },
+      );
+
+      gsap.fromTo(
+        item,
+        { y: 40, rotateY: i % 2 === 0 ? -8 : 8, opacity: 0.55 },
+        {
+          y: 0,
+          rotateY: 0,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 92%',
+            end: 'top 55%',
+            scrub: true,
+          },
+        },
+      );
+    });
     return;
   }
 
@@ -855,8 +935,9 @@ function initMargin() {
     );
   });
 
-  // Soft 3D tilt toward pointer — SMyWay-lite
-  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+  if (prefersReducedMotion()) return;
+
+  // Soft 3D tilt — pointer on desktop, touch-drag on mobile
   cards.forEach((card) => {
     card.addEventListener(
       'pointermove',
@@ -864,8 +945,9 @@ function initMargin() {
         const r = card.getBoundingClientRect();
         const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
         const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        card.style.setProperty('--rx', `${(-ny * 14).toFixed(2)}deg`);
-        card.style.setProperty('--ry', `${(nx * 16).toFixed(2)}deg`);
+        const strength = isCoarsePointer() ? 8 : 14;
+        card.style.setProperty('--rx', `${(-ny * strength).toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${(nx * (strength + 2)).toFixed(2)}deg`);
       },
       { passive: true },
     );
@@ -873,6 +955,14 @@ function initMargin() {
       card.style.setProperty('--rx', '0deg');
       card.style.setProperty('--ry', '0deg');
     });
+    card.addEventListener(
+      'pointerup',
+      () => {
+        card.style.setProperty('--rx', '0deg');
+        card.style.setProperty('--ry', '0deg');
+      },
+      { passive: true },
+    );
   });
 }
 
@@ -922,8 +1012,8 @@ function initContact() {
     });
   }
 
-  // Magnetic pull on the GO circle
-  if (!prefersReducedMotion() && !window.matchMedia('(pointer: coarse)').matches) {
+  // Magnetic pull on the GO circle (fine pointer only — touch uses tap reveal)
+  if (!prefersReducedMotion() && !isCoarsePointer()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
@@ -980,8 +1070,28 @@ function initContact() {
   hover.addEventListener('focusin', enter);
   hover.addEventListener('mouseleave', leave);
   hover.addEventListener('focusout', leave);
-  if (window.matchMedia('(pointer: coarse)').matches) {
-    go.addEventListener('touchstart', enter, { passive: true });
+
+  // Mobile: first tap reveals "let's talk", second tap sends the mailto
+  if (isCoarsePointer()) {
+    go.addEventListener(
+      'click',
+      (e) => {
+        if (!hover.classList.contains('is-active')) {
+          e.preventDefault();
+          enter();
+        }
+      },
+      { passive: false },
+    );
+    document.addEventListener(
+      'pointerdown',
+      (e) => {
+        if (!hover.classList.contains('is-active')) return;
+        if (hover.contains(e.target as Node)) return;
+        leave();
+      },
+      { passive: true },
+    );
   }
 }
 
@@ -1045,7 +1155,7 @@ function initCursor() {
   const ring = document.querySelector<HTMLElement>('.js-cursor-ring');
   const dot = document.querySelector<HTMLElement>('.js-cursor-dot');
   if (!root || !ring || !dot) return;
-  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+  if (prefersReducedMotion() || isCoarsePointer()) return;
 
   document.body.classList.add('has-cursor');
   root.classList.add('is-on');
@@ -1090,7 +1200,7 @@ function initCursor() {
 }
 
 function initMagneticButtons() {
-  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+  if (prefersReducedMotion() || isCoarsePointer()) return;
 
   document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el) => {
     let x = 0;
@@ -1131,6 +1241,26 @@ function initScramble() {
   if (prefersReducedMotion()) return;
   const glyphs = 'abcdefghijklmnopqrstuvwxyz01##////<>';
 
+  const runScramble = (el: HTMLElement, original: string) => {
+    let frame = 0;
+    const max = 16;
+    const timer = window.setInterval(() => {
+      el.textContent = [...original]
+        .map((ch, i) => {
+          if (ch === ' ') return ' ';
+          if (frame / max > i / original.length) return original[i];
+          return glyphs[Math.floor(Math.random() * glyphs.length)];
+        })
+        .join('');
+      frame += 1;
+      if (frame > max) {
+        window.clearInterval(timer);
+        el.textContent = original;
+      }
+    }, 18);
+    return timer;
+  };
+
   document.querySelectorAll<HTMLElement>('.js-scramble').forEach((el) => {
     const original = (el.textContent ?? '').trim();
     if (!original) return;
@@ -1138,27 +1268,23 @@ function initScramble() {
     let timer = 0;
     el.addEventListener('mouseenter', () => {
       window.clearInterval(timer);
-      let frame = 0;
-      const max = 16;
-      timer = window.setInterval(() => {
-        el.textContent = [...original]
-          .map((ch, i) => {
-            if (ch === ' ') return ' ';
-            if (frame / max > i / original.length) return original[i];
-            return glyphs[Math.floor(Math.random() * glyphs.length)];
-          })
-          .join('');
-        frame += 1;
-        if (frame > max) {
-          window.clearInterval(timer);
-          el.textContent = original;
-        }
-      }, 18);
+      timer = runScramble(el, original);
     });
     el.addEventListener('mouseleave', () => {
       window.clearInterval(timer);
       el.textContent = original;
     });
+
+    // Touch: scramble on press so mobile still gets the instrument chatter
+    el.addEventListener(
+      'pointerdown',
+      () => {
+        if (!isCoarsePointer()) return;
+        window.clearInterval(timer);
+        timer = runScramble(el, original);
+      },
+      { passive: true },
+    );
   });
 }
 
