@@ -11,17 +11,6 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
-function isCoarsePointer() {
-  return (
-    window.matchMedia('(pointer: coarse)').matches ||
-    window.matchMedia('(hover: none)').matches
-  );
-}
-
-/**
- * Same scroll-linked motion on every device (wodniack.dev pattern):
- * Lenis + ScrollTrigger scrub. No mobile fade-only fork.
- */
 function motionST(
   trigger: gsap.DOMTarget,
   desktop: { start: string; end: string; scrub?: boolean | number },
@@ -39,15 +28,15 @@ function motionTween() {
 }
 
 function initLenis() {
-  // wodniack: Lenis on all devices, synced to GSAP ticker + ScrollTrigger
   ScrollTrigger.config({ ignoreMobileResize: true });
   gsap.config({ force3D: true });
 
   const lenis = new Lenis({
-    lerp: 0.1,
+    lerp: 0.075,
     smoothWheel: true,
-    syncTouch: true,
-    touchMultiplier: 1.2,
+    wheelMultiplier: 0.85,
+    touchMultiplier: 1.4,
+    syncTouch: false,
   });
 
   lenis.on('scroll', ScrollTrigger.update);
@@ -389,30 +378,16 @@ function initHero() {
     });
   }
 
-  // Living hero type — ambient on every device (no finger required)
+  // Living hero type — pointer magnet + ambient letter flips
   const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
   let tiltX = 0;
   let tiltY = 0;
   let tiltTX = 0;
   let tiltTY = 0;
   let magnetRaf = 0;
-  let ambientT = 0;
-  const coarse = isCoarsePointer();
 
   const magnetLoop = () => {
     magnetRaf = requestAnimationFrame(magnetLoop);
-    ambientT += 0.016;
-
-    if (coarse) {
-      // Auto wave so phones get the same living magnet feel without pointer
-      tiltTX = Math.sin(ambientT * 0.7) * 7;
-      tiltTY = Math.cos(ambientT * 0.55) * 9;
-      allChars.forEach((_, i) => {
-        const phase = ambientT * 1.4 + i * 0.35;
-        offsets[i].tx = Math.sin(phase) * 10;
-        offsets[i].ty = Math.cos(phase * 0.85) * 7;
-      });
-    }
 
     tiltX += (tiltTX - tiltX) * 0.08;
     tiltY += (tiltTY - tiltY) * 0.08;
@@ -427,47 +402,45 @@ function initHero() {
   };
   magnetLoop();
 
-  if (!coarse) {
-    const onMove = (e: PointerEvent) => {
-      const heroRect = hero.getBoundingClientRect();
-      const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
-      const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
-      const inside =
-        e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
+  const onMove = (e: PointerEvent) => {
+    const heroRect = hero.getBoundingClientRect();
+    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
+    const inside =
+      e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
 
-      if (!inside) {
-        tiltTX = 0;
-        tiltTY = 0;
-        offsets.forEach((o) => {
-          o.tx = 0;
-          o.ty = 0;
-        });
-        return;
-      }
-
-      tiltTX = ny * -9;
-      tiltTY = nx * 11;
-
-      allChars.forEach((char, i) => {
-        const r = char.getBoundingClientRect();
-        const cx = r.left + r.width / 2 - offsets[i].x;
-        const cy = r.top + r.height / 2 - offsets[i].y;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const radius = 320;
-        if (dist < radius) {
-          const force = (1 - dist / radius) * 38;
-          offsets[i].tx = (dx / dist) * force * -0.75;
-          offsets[i].ty = (dy / dist) * force * -0.58;
-        } else {
-          offsets[i].tx = 0;
-          offsets[i].ty = 0;
-        }
+    if (!inside) {
+      tiltTX = 0;
+      tiltTY = 0;
+      offsets.forEach((o) => {
+        o.tx = 0;
+        o.ty = 0;
       });
-    };
-    window.addEventListener('pointermove', onMove, { passive: true });
-  }
+      return;
+    }
+
+    tiltTX = ny * -9;
+    tiltTY = nx * 11;
+
+    allChars.forEach((char, i) => {
+      const r = char.getBoundingClientRect();
+      const cx = r.left + r.width / 2 - offsets[i].x;
+      const cy = r.top + r.height / 2 - offsets[i].y;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const radius = 320;
+      if (dist < radius) {
+        const force = (1 - dist / radius) * 38;
+        offsets[i].tx = (dx / dist) * force * -0.75;
+        offsets[i].ty = (dy / dist) * force * -0.58;
+      } else {
+        offsets[i].tx = 0;
+        offsets[i].ty = 0;
+      }
+    });
+  };
+  window.addEventListener('pointermove', onMove, { passive: true });
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
@@ -487,9 +460,8 @@ function initHero() {
       window.setTimeout(() => char.classList.remove(dir), 1000);
     }
   };
-  // Kick immediately so phones see flips without waiting
   flipTick();
-  window.setInterval(flipTick, coarse ? 90 : 120);
+  window.setInterval(flipTick, 120);
 }
 
 function initTextWarp() {
@@ -659,7 +631,7 @@ function initSeparators() {
         char.classList.add('is-flip');
         window.setTimeout(() => char.classList.remove('is-flip'), 220);
       });
-    }, isCoarsePointer() ? 140 : 220);
+    }, 220);
   });
 }
 
@@ -842,49 +814,8 @@ function initWork() {
     ease: 'power3.out',
   });
 
-  // Card glow — pointer on desktop; ambient in-view on touch (no extra desktop load)
   if (!prefersReducedMotion()) {
-    const coarse = isCoarsePointer();
-    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
-      if (coarse) {
-        let hot = false;
-        const drift = { t: 0 };
-        ScrollTrigger.create({
-          trigger: item,
-          start: 'top 85%',
-          end: 'bottom 20%',
-          onEnter: () => {
-            hot = true;
-            item.classList.add('is-hot');
-          },
-          onEnterBack: () => {
-            hot = true;
-            item.classList.add('is-hot');
-          },
-          onLeave: () => {
-            hot = false;
-            item.classList.remove('is-hot');
-          },
-          onLeaveBack: () => {
-            hot = false;
-            item.classList.remove('is-hot');
-          },
-        });
-        gsap.to(drift, {
-          t: 1,
-          duration: 3.2 + (i % 3) * 0.4,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-          onUpdate() {
-            if (!hot) return;
-            item.style.setProperty('--mx', `${20 + drift.t * 60}%`);
-            item.style.setProperty('--my', `${30 + (1 - drift.t) * 40}%`);
-          },
-        });
-        return;
-      }
-
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
       item.addEventListener('pointermove', (e) => {
         const r = item.getBoundingClientRect();
         const x = ((e.clientX - r.left) / r.width) * 100;
@@ -1029,24 +960,7 @@ function initMargin() {
 
   if (prefersReducedMotion()) return;
 
-  // Soft 3D tilt — ambient float on coarse; pointer on desktop
-  cards.forEach((card, i) => {
-    if (isCoarsePointer()) {
-      const state = { rx: 0, ry: 0 };
-      gsap.to(state, {
-        rx: i % 2 === 0 ? -8 : 8,
-        ry: i % 2 === 0 ? 10 : -10,
-        duration: 2.8 + (i % 3) * 0.35,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
-        onUpdate: () => {
-          card.style.setProperty('--rx', `${state.rx.toFixed(2)}deg`);
-          card.style.setProperty('--ry', `${state.ry.toFixed(2)}deg`);
-        },
-      });
-      return;
-    }
+  cards.forEach((card) => {
     card.addEventListener(
       'pointermove',
       (e) => {
@@ -1110,22 +1024,14 @@ function initContact() {
     });
   }
 
-  // Magnetic pull — ambient orbit on coarse; pointer on desktop
   if (!prefersReducedMotion()) {
     let mx = 0;
     let my = 0;
     let mtx = 0;
     let mty = 0;
     let mraf = 0;
-    let t = 0;
-    const coarse = isCoarsePointer();
     const mloop = () => {
       mraf = requestAnimationFrame(mloop);
-      t += 0.016;
-      if (coarse) {
-        mtx = Math.sin(t * 1.1) * 14;
-        mty = Math.cos(t * 0.9) * 10;
-      }
       mx += (mtx - mx) * 0.12;
       my += (mty - my) * 0.12;
       if (!hover.classList.contains('is-active')) {
@@ -1133,21 +1039,19 @@ function initContact() {
       }
     };
     mloop();
-    if (!coarse) {
-      hover.addEventListener(
-        'pointermove',
-        (e) => {
-          const r = hover.getBoundingClientRect();
-          mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
-          mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
-        },
-        { passive: true },
-      );
-      hover.addEventListener('pointerleave', () => {
-        mtx = 0;
-        mty = 0;
-      });
-    }
+    hover.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = hover.getBoundingClientRect();
+        mtx = (e.clientX - (r.left + r.width / 2)) * 0.18;
+        mty = (e.clientY - (r.top + r.height / 2)) * 0.18;
+      },
+      { passive: true },
+    );
+    hover.addEventListener('pointerleave', () => {
+      mtx = 0;
+      mty = 0;
+    });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(mraf);
       else mloop();
@@ -1172,19 +1076,6 @@ function initContact() {
     pulse?.play();
     go.style.transform = '';
   };
-
-  // Auto-reveal GO letters when the section scrolls into view (no tap)
-  if (!prefersReducedMotion()) {
-    ScrollTrigger.create({
-      trigger: section || hover,
-      start: 'top 70%',
-      end: 'bottom 30%',
-      onEnter: enter,
-      onEnterBack: enter,
-      onLeave: leave,
-      onLeaveBack: leave,
-    });
-  }
 
   hover.addEventListener('pointerenter', enter);
   hover.addEventListener('focusin', enter);
@@ -1252,8 +1143,7 @@ function initCursor() {
   const ring = document.querySelector<HTMLElement>('.js-cursor-ring');
   const dot = document.querySelector<HTMLElement>('.js-cursor-dot');
   if (!root || !ring || !dot) return;
-  // Custom cursor is pointer-only chrome; keep it off coarse touch UIs
-  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+  if (prefersReducedMotion()) return;
 
   document.body.classList.add('has-cursor');
   root.classList.add('is-on');
@@ -1299,44 +1189,35 @@ function initCursor() {
 
 function initMagneticButtons() {
   if (prefersReducedMotion()) return;
-  const touch = isCoarsePointer();
 
-  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el, i) => {
+  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el) => {
     let x = 0;
     let y = 0;
     let tx = 0;
     let ty = 0;
     let raf = 0;
-    let t = i * 0.7;
 
     const loop = () => {
       raf = requestAnimationFrame(loop);
-      t += 0.016;
-      if (touch) {
-        tx = Math.sin(t * 1.3 + i) * 6;
-        ty = Math.cos(t * 1.1 + i) * 4;
-      }
       x += (tx - x) * 0.16;
       y += (ty - y) * 0.16;
       el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
     };
     loop();
 
-    if (!touch) {
-      el.addEventListener(
-        'pointermove',
-        (e) => {
-          const r = el.getBoundingClientRect();
-          tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
-          ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
-        },
-        { passive: true },
-      );
-      el.addEventListener('pointerleave', () => {
-        tx = 0;
-        ty = 0;
-      });
-    }
+    el.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = el.getBoundingClientRect();
+        tx = (e.clientX - (r.left + r.width / 2)) * 0.45;
+        ty = (e.clientY - (r.top + r.height / 2)) * 0.45;
+      },
+      { passive: true },
+    );
+    el.addEventListener('pointerleave', () => {
+      tx = 0;
+      ty = 0;
+    });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
       else loop();
@@ -1576,9 +1457,9 @@ function initLivingLabels() {
       },
     });
 
-    const cadence = isCoarsePointer() ? 1400 : 2400;
+    const cadence = 2400;
     window.setInterval(() => {
-      if (!active || Math.random() > (isCoarsePointer() ? 0.2 : 0.08) || tick) return;
+      if (!active || Math.random() > 0.08 || tick) return;
       let frame = 0;
       const max = 6;
       tick = window.setInterval(() => {
@@ -1659,7 +1540,6 @@ function bootDesktop() {
 }
 
 export function initVoltageMotion() {
-  // One GSAP + Lenis + scrub stack on every device (wodniack.dev pattern).
   if ((window as unknown as { __vfMotion?: boolean }).__vfMotion) return;
   (window as unknown as { __vfMotion?: boolean }).__vfMotion = true;
   bootDesktop();

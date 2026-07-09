@@ -162,8 +162,7 @@ a {
   opacity: 0.85;
 }
 
-/* Phones: keep topography readable behind content */
-@media (max-width: 767px), (pointer: coarse) {
+@media (max-width: 767px) {
   .site-terrain {
     opacity: 1;
   }

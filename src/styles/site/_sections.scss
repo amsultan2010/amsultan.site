@@ -708,26 +708,6 @@
     transform-style: preserve-3d;
   }
 
-  /* Touch/mobile: native horizontal snap carousel (same cards, no GSAP pin) */
-  .s-work.is-touch-work .s-work__viewport {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
-  }
-  .s-work.is-touch-work .s-work__track {
-    display: flex;
-    width: max-content;
-    padding: 0.5rem var(--vf-pad) 1.5rem;
-    gap: 1.15rem;
-    transform: none !important;
-  }
-  .s-work.is-touch-work .s-work__item {
-    flex: 0 0 min(82vw, 420px);
-    scroll-snap-align: center;
-    text-align: left;
-  }
   .s-work__item {
     --mx: 50%;
     --my: 50%;
