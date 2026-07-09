@@ -162,12 +162,20 @@ a {
   opacity: 0.85;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px), (pointer: coarse) {
   .site-terrain {
     opacity: 1;
   }
   .site-terrain canvas {
+    opacity: 1;
+    mix-blend-mode: soft-light;
+  }
+  .site-terrain__fallback {
     opacity: 0.95;
+    background:
+      radial-gradient(ellipse 100% 80% at 30% 40%, color-mix(in srgb, var(--vf-ink) 42%, transparent), transparent 70%),
+      radial-gradient(ellipse 90% 70% at 75% 60%, color-mix(in srgb, #fffaf5 22%, transparent), transparent 65%),
+      radial-gradient(ellipse 80% 60% at 55% 70%, color-mix(in srgb, var(--vf-mark) 45%, transparent), transparent 60%);
   }
 }
 

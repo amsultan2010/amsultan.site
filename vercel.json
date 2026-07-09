@@ -2,7 +2,6 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "astro",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist",
   "redirects": [
     {
       "source": "/desktop",
@@ -38,6 +37,15 @@
   "headers": [
     {
       "source": "/",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
       "headers": [
         {
           "key": "Cache-Control",

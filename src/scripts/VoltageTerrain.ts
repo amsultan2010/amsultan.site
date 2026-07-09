@@ -193,14 +193,18 @@ export function createVoltageTerrain({
   canvas,
   reducedMotion = false,
 }: TerrainOpts): VoltageTerrainHandle | null {
+  const isMobile =
+    window.matchMedia('(max-width: 767px)').matches ||
+    window.matchMedia('(pointer: coarse)').matches;
+
   // Never probe getContext before Three — that steals the canvas on iOS Safari
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
-      powerPreference: 'high-performance',
+      powerPreference: isMobile ? 'default' : 'high-performance',
       failIfMajorPerformanceCaveat: false,
     });
   } catch {
@@ -211,10 +215,11 @@ export function createVoltageTerrain({
     return null;
   }
 
-  const segs = 90;
+  // Lighter mesh on phones; keep wireframe readable
+  const segs = isMobile ? 48 : 90;
 
   renderer.setClearColor(0x000000, 0);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5));
   canvas.style.transform = 'translateZ(0)';
   canvas.style.setProperty('-webkit-transform', 'translateZ(0)');
 
@@ -237,7 +242,7 @@ export function createVoltageTerrain({
     uValley: { value: new THREE.Color('#7a1806') },
     uMid: { value: new THREE.Color('#ff4d1a') },
     uLightDir: { value: new THREE.Vector3(0.55, 1.0, 0.35).normalize() },
-    uOpacity: { value: reducedMotion ? 0.55 : 0.92 },
+    uOpacity: { value: reducedMotion ? 0.55 : isMobile ? 1 : 0.92 },
   };
 
   const material = new THREE.ShaderMaterial({
@@ -263,7 +268,7 @@ export function createVoltageTerrain({
     uniforms: {
       ...shared,
       uWire: { value: new THREE.Color('#fffaf5') },
-      uOpacity: { value: 0.22 },
+      uOpacity: { value: isMobile ? 0.38 : 0.22 },
     },
     vertexShader: wireVert,
     fragmentShader: wireFrag,
@@ -280,6 +285,7 @@ export function createVoltageTerrain({
   let running = true;
   let raf = 0;
   let time = 0;
+  let frame = 0;
   const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
   const applyTheme = (contrasted: boolean) => {
@@ -294,9 +300,9 @@ export function createVoltageTerrain({
       uniforms.uPeak.value.set('#fffaf5');
       uniforms.uValley.value.set('#7a1806');
       uniforms.uMid.value.set('#ff4d1a');
-      uniforms.uOpacity.value = reducedMotion ? 0.55 : 0.92;
+      uniforms.uOpacity.value = reducedMotion ? 0.55 : isMobile ? 1 : 0.92;
       wireMat.uniforms.uWire.value.set('#fffaf5');
-      wireMat.uniforms.uOpacity.value = 0.22;
+      wireMat.uniforms.uOpacity.value = isMobile ? 0.38 : 0.22;
     }
   };
 
@@ -312,8 +318,16 @@ export function createVoltageTerrain({
   const tick = (t = performance.now()) => {
     if (!running) return;
     raf = requestAnimationFrame(tick);
+    frame += 1;
+    if (isMobile && frame % 2 === 1) return;
 
     time = t * 0.001;
+
+    // Ambient drift on phones so the field lives without a hovering finger
+    if (!reducedMotion && isMobile) {
+      mouse.tx = Math.sin(time * 0.35) * 0.55 + Math.sin(time * 0.11) * 0.2;
+      mouse.ty = Math.cos(time * 0.28) * 0.4;
+    }
 
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
@@ -337,6 +351,7 @@ export function createVoltageTerrain({
   };
 
   const onPointer = (e: PointerEvent) => {
+    if (isMobile) return;
     mouse.tx = (e.clientX / window.innerWidth) * 2 - 1;
     mouse.ty = -((e.clientY / window.innerHeight) * 2 - 1);
   };
