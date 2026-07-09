@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "../styles/voltage.css";
 @import "../styles/site-sections.css";
+@import "../styles/mobile-motion.css";
 
 @theme inline {
   --color-background: var(--vf-field);

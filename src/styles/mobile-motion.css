@@ -1,0 +1,317 @@
+/**
+ * Mobile-only motion. Driven by html.touch-ready + .is-in classes from
+ * mobileMotion.ts — no GSAP scrub/pin. Desktop ignores this file's gates.
+ */
+
+html.touch-ready {
+  scroll-behavior: auto;
+}
+
+html.touch-ready .site-cursor,
+html.touch-ready .site-scrollbar {
+  display: none !important;
+}
+
+/* ── Shared enter states ─────────────────────────────────────────── */
+html.touch-ready .mm-enter {
+  opacity: 0.12;
+  transform: translate3d(0, 2.4rem, 0) skewX(10deg);
+  filter: blur(1px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.7s ease;
+  will-change: transform, opacity;
+}
+
+html.touch-ready .mm-enter.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+html.touch-ready .mm-enter-delay-1 { transition-delay: 0.06s; }
+html.touch-ready .mm-enter-delay-2 { transition-delay: 0.12s; }
+html.touch-ready .mm-enter-delay-3 { transition-delay: 0.18s; }
+html.touch-ready .mm-enter-delay-4 { transition-delay: 0.24s; }
+
+/* ── Stretch letters ─────────────────────────────────────────────── */
+html.touch-ready .js-stretch-letter {
+  opacity: 0.15;
+  transform: scaleX(0.08) scaleY(1.45) skewX(14deg);
+  transform-origin: center bottom;
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+html.touch-ready .js-stretch.is-in .js-stretch-letter {
+  opacity: 1;
+  transform: none;
+  animation: mm-stretch-bob 2.6s ease-in-out infinite;
+}
+
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(even) {
+  animation-delay: 0.35s;
+  animation-name: mm-stretch-bob-alt;
+}
+
+@keyframes mm-stretch-bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-0.35em) rotate(2deg); }
+}
+@keyframes mm-stretch-bob-alt {
+  0%, 100% { transform: translateY(0) rotate(2deg); }
+  50% { transform: translateY(0.35em) rotate(-2deg); }
+}
+
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(1) { transition-delay: 0.02s; }
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(2) { transition-delay: 0.08s; }
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(3) { transition-delay: 0.14s; }
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(4) { transition-delay: 0.2s; }
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(5) { transition-delay: 0.26s; }
+html.touch-ready .js-stretch.is-in .js-stretch-letter:nth-child(6) { transition-delay: 0.32s; }
+
+/* ── Warp / reveal chars ─────────────────────────────────────────── */
+html.touch-ready .vf-warp-char {
+  display: inline-block;
+  opacity: 0.1;
+  transform: translate3d(0, 1.1em, 0) skewX(12deg);
+  transition:
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+html.touch-ready .mm-warp.is-in .vf-warp-char {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────── */
+html.touch-ready .s-hero__char {
+  opacity: 0;
+  transform: translate3d(0, 120%, 0);
+  transition:
+    opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.touch-ready .s-hero.is-in .s-hero__char {
+  opacity: 1;
+  transform: none;
+}
+
+html.touch-ready .s-hero__char.to-top .s-hero__char-inner,
+html.touch-ready .s-hero__char.to-right .s-hero__char-inner,
+html.touch-ready .s-hero__char.to-bottom .s-hero__char-inner,
+html.touch-ready .s-hero__char.to-left .s-hero__char-inner {
+  animation-duration: 0.65s !important;
+}
+
+html.touch-ready .s-hero__lede,
+html.touch-ready .s-hero__actions {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition: opacity 0.7s ease 0.35s, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s;
+}
+
+html.touch-ready .s-hero.is-in .s-hero__lede,
+html.touch-ready .s-hero.is-in .s-hero__actions {
+  opacity: 1;
+  transform: none;
+}
+
+html.touch-ready .js-hero-star {
+  animation: mm-star-spin 14s linear infinite;
+  transform-origin: center;
+}
+
+@keyframes mm-star-spin {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(360deg) scale(1.15); }
+}
+
+/* ── Separators: faster drift + louder flips ─────────────────────── */
+html.touch-ready .a-sep__binaries {
+  animation-duration: 10s !important;
+  animation-timing-function: linear !important;
+  animation-iteration-count: infinite !important;
+}
+
+html.touch-ready .a-sep__char.is-flip {
+  transform: translateY(-100%);
+  opacity: 0.2;
+  color: var(--vf-ink);
+}
+
+html.touch-ready .a-sep--secondary .a-sep__char.is-flip {
+  color: var(--vf-mark);
+}
+
+/* ── Work snap carousel ──────────────────────────────────────────── */
+html.touch-ready .s-work.is-touch-work .s-work__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  padding-bottom: 0.5rem;
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__track {
+  display: flex;
+  width: max-content;
+  gap: 1.15rem;
+  padding: 0.5rem var(--vf-pad) 1.5rem;
+  transform: none !important;
+  will-change: auto;
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__item {
+  flex: 0 0 min(82vw, 420px);
+  scroll-snap-align: center;
+  opacity: 0.25;
+  transform: translate3d(0, 2rem, 0) rotateY(-12deg) scale(0.94);
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__item.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__item.is-hot {
+  border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__media img {
+  transform: scale(1.12);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.touch-ready .s-work.is-touch-work .s-work__item.is-in .s-work__media img {
+  transform: scale(1);
+}
+
+/* ── Photos ──────────────────────────────────────────────────────── */
+html.touch-ready .js-margin-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --float-y: 0px;
+  opacity: 0.2;
+  transform: translate3d(0, 3rem, 0) rotate(calc(var(--rot, 0deg) + 10deg)) scale(0.88);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+html.touch-ready .js-margin-card.is-in {
+  opacity: 1;
+  transform: rotate(var(--rot, 0deg));
+  animation: mm-photo-float 3.2s ease-in-out infinite;
+}
+
+html.touch-ready .js-margin-card.is-in:nth-child(even) {
+  animation-delay: 0.5s;
+  animation-name: mm-photo-float-alt;
+}
+
+@keyframes mm-photo-float {
+  0%, 100% { transform: translateY(-6px) rotate(calc(var(--rot, 0deg) - 4deg)) rotateX(-8deg) rotateY(10deg); }
+  50% { transform: translateY(8px) rotate(calc(var(--rot, 0deg) + 4deg)) rotateX(8deg) rotateY(-10deg); }
+}
+@keyframes mm-photo-float-alt {
+  0%, 100% { transform: translateY(6px) rotate(calc(var(--rot, 0deg) + 5deg)) rotateX(8deg) rotateY(-12deg); }
+  50% { transform: translateY(-8px) rotate(calc(var(--rot, 0deg) - 5deg)) rotateX(-10deg) rotateY(12deg); }
+}
+
+html.touch-ready .js-margin-card.is-in img {
+  animation: mm-photo-zoom 5s ease-in-out infinite alternate;
+}
+
+@keyframes mm-photo-zoom {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+/* ── Contact GO / let's talk ─────────────────────────────────────── */
+html.touch-ready .js-contact-hover {
+  opacity: 0.35;
+  transform: scale(0.55) translate3d(0, 3rem, 0) rotate(-6deg);
+  transition:
+    opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.touch-ready .js-contact-hover.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+html.touch-ready .js-contact-go-label {
+  animation: mm-go-pulse 1.2s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes mm-go-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+html.touch-ready .js-contact-hover.is-in:not(.is-active) .js-contact-go {
+  animation: mm-go-orbit 3.5s ease-in-out infinite;
+}
+
+@keyframes mm-go-orbit {
+  0%, 100% { transform: translate3d(-10px, 6px, 0); }
+  50% { transform: translate3d(12px, -8px, 0); }
+}
+
+html.touch-ready .s-contact__title,
+html.touch-ready .s-contact__email,
+html.touch-ready .s-contact__sub,
+html.touch-ready .s-contact__links {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition: opacity 0.65s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.touch-ready .s-contact.is-in .s-contact__title { opacity: 1; transform: none; transition-delay: 0.1s; }
+html.touch-ready .s-contact.is-in .s-contact__email { opacity: 1; transform: none; transition-delay: 0.18s; }
+html.touch-ready .s-contact.is-in .s-contact__sub { opacity: 1; transform: none; transition-delay: 0.26s; }
+html.touch-ready .s-contact.is-in .s-contact__links { opacity: 1; transform: none; transition-delay: 0.34s; }
+
+/* ── Progress ────────────────────────────────────────────────────── */
+html.touch-ready .js-progress {
+  transform-origin: left center;
+  transform: scaleX(0);
+  will-change: transform;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html.touch-ready .mm-enter,
+  html.touch-ready .js-stretch-letter,
+  html.touch-ready .vf-warp-char,
+  html.touch-ready .s-hero__char,
+  html.touch-ready .s-work.is-touch-work .s-work__item,
+  html.touch-ready .js-margin-card,
+  html.touch-ready .js-contact-hover,
+  html.touch-ready .s-contact__title,
+  html.touch-ready .s-contact__email,
+  html.touch-ready .s-contact__sub,
+  html.touch-ready .s-contact__links {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

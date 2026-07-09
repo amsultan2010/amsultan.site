@@ -2,6 +2,7 @@ import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { createVoltageTerrain, type VoltageTerrainHandle } from './VoltageTerrain';
+import { bootMobile } from './mobileMotion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -1654,7 +1655,7 @@ function initLivingLabels() {
   });
 }
 
-export function initVoltageMotion() {
+function bootDesktop() {
   document.documentElement.classList.add('is-scroll-blocked');
 
   initContrastToggle();
@@ -1710,4 +1711,24 @@ export function initVoltageMotion() {
   } else {
     runIntro(afterIntro);
   }
+}
+
+export function initVoltageMotion() {
+  // Hard split: phones never touch Lenis / ScrollTrigger scrub (iOS freezes it).
+  // Mobile uses CSS + IntersectionObserver auto-play — no taps required.
+  if (isTouchMotion() || document.documentElement.classList.contains('touch-ready')) {
+    try {
+      bootMobile();
+      const fallback = document.querySelector<HTMLElement>('.site-terrain__fallback');
+      const canvas = document.querySelector<HTMLCanvasElement>('.js-terrain-canvas');
+      canvas?.remove();
+      if (fallback) fallback.style.opacity = '1';
+    } catch (err) {
+      console.error('[voltage] mobile boot failed', err);
+      revealSite();
+    }
+    return;
+  }
+
+  bootDesktop();
 }
