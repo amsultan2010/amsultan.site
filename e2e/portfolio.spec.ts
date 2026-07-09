@@ -8,9 +8,9 @@ test('homepage loads voltage frame with brand and work', async ({ page }) => {
   }
   await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible({ timeout: 10000 });
   await expect(page.locator('.js-terrain-canvas')).toBeAttached();
-  await expect(page.getByRole('heading', { name: /^work$/i }).first()).toBeVisible();
+  await expect(page.locator('.js-chapter-title', { hasText: /^work$/i })).toHaveCount(1);
   await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
-  await expect(page.getByRole('heading', { name: /^proof$/i }).first()).toBeVisible();
+  await expect(page.locator('.js-chapter-title', { hasText: /^proof$/i })).toHaveCount(1);
 });
 
 test('projects archive renders list', async ({ page }) => {

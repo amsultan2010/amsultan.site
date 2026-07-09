@@ -7,13 +7,9 @@ const total = String(PROJECTS.length).padStart(2, '0');
 
 <section id="work" class="s-work js-work" aria-label="work">
   <div class="s-work__head">
-    <div>
-      <div class="vf-band" style="margin-left: 0;">work</div>
-      <h2 class="s-work__title vf-display">work</h2>
-      <p class="s-work__lede vf-serif">
-        live products and tools I’ve shipped. scroll sideways for the strip, or open the full list.
-      </p>
-    </div>
+    <p class="s-work__lede vf-serif">
+      live products and tools i’ve shipped. scroll sideways for the strip, or open the full list.
+    </p>
     <a href="/projects" class="s-work__all vf-mono">full list of projects →</a>
   </div>
 
@@ -70,12 +66,8 @@ const total = String(PROJECTS.length).padStart(2, '0');
     padding: 0 var(--vf-pad) 1.5rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
-  .s-work__title {
-    margin: 0.75rem 0 0;
-    font-size: clamp(2rem, 5.5vw, 3.4rem);
-  }
   .s-work__lede {
-    margin: 0.75rem 0 0;
+    margin: 0;
     max-width: 34rem;
     font-size: 1.1rem;
   }
@@ -87,7 +79,6 @@ const total = String(PROJECTS.length).padStart(2, '0');
     color: var(--vf-mark);
     border-bottom: 1px solid var(--vf-mark);
     padding-bottom: 0.15rem;
-    margin-bottom: 0.35rem;
   }
   .s-work__viewport {
     overflow: hidden;
