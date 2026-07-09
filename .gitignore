@@ -56,3 +56,4 @@ plan.md
 # Playwright
 test-results/
 playwright-report/
+.vercel
