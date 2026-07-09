@@ -22,45 +22,20 @@ function isTouchMotion() {
   return isCoarsePointer() || window.innerWidth < 768;
 }
 
-/**
- * Desktop: scrub progress to scroll (Lenis keeps ST in sync).
- * Mobile: play automatically when the trigger enters view — iOS runs scroll
- * on a separate thread, so scrubbed timelines look frozen while finger-scrolling.
- */
-function motionST(
-  trigger: gsap.DOMTarget,
-  desktop: { start: string; end: string; scrub?: boolean | number },
-): ScrollTrigger.Vars {
-  if (isTouchMotion()) {
-    return {
-      trigger,
-      start: desktop.start,
-      toggleActions: 'play none none reverse',
-    };
-  }
-  return {
-    trigger,
-    start: desktop.start,
-    end: desktop.end,
-    scrub: desktop.scrub ?? true,
-  };
-}
-
-function motionTween() {
-  return isTouchMotion()
-    ? { duration: 0.95, ease: 'power3.out' as const }
-    : { ease: 'none' as const };
-}
-
 function initLenis() {
-  // Touch/iOS: native scroll only (Lenis stays desktop).
+  // Touch/iOS: no Lenis (keeps desktop buttery). normalizeScroll moves touch
+  // scrolling onto the JS thread so scrubbed warps/stretch paint while the
+  // finger moves — without it, iOS only shows opacity fades after scroll ends.
   if (isTouchMotion()) {
     document.documentElement.classList.remove('lenis', 'lenis-smooth');
     ScrollTrigger.config({ ignoreMobileResize: true });
-    const sync = () => ScrollTrigger.update();
-    window.addEventListener('scroll', sync, { passive: true });
-    window.addEventListener('touchmove', sync, { passive: true });
-    window.addEventListener('touchend', sync, { passive: true });
+    ScrollTrigger.normalizeScroll({
+      allowNestedScroll: true,
+      type: 'touch,wheel',
+    });
+    gsap.ticker.add(() => ScrollTrigger.update());
+    gsap.ticker.lagSmoothing(0);
+    gsap.config({ force3D: true });
     return null;
   }
 
@@ -349,70 +324,23 @@ function initHero() {
   const cue = document.querySelector<HTMLElement>('.js-scroll-cue');
   if (!hero || !title || prefersReducedMotion()) return;
 
-  // Hero exit: scrub on desktop; auto play as you leave on touch
-  if (isTouchMotion()) {
-    gsap.to(title, {
-      yPercent: -12,
-      scale: 0.94,
-      opacity: 0.55,
-      duration: 0.7,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        toggleActions: 'play none none reverse',
-      },
-    });
-    if (star) {
-      gsap.from(star, { rotate: 90, duration: 1.6, ease: 'expo.out', delay: 0.35 });
-      gsap.to(star, {
-        rotate: 160,
-        scale: 1.2,
-        duration: 0.7,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: hero,
-          start: '20% top',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    }
-    gsap.to('.s-hero__lede, .s-hero__actions', {
-      y: -24,
-      opacity: 0.35,
-      duration: 0.65,
-      ease: 'power2.out',
-      scrollTrigger: {
-        trigger: hero,
-        start: '15% top',
-        toggleActions: 'play none none reverse',
-      },
-    });
-    if (cue) {
-      gsap.to(cue, {
-        opacity: 0,
-        y: -12,
-        duration: 0.4,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: hero,
-          start: '8% top',
-          toggleActions: 'play none none reverse',
-        },
-      });
-      gsap.to(cue, {
-        y: 8,
-        duration: 1.1,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-    }
-  } else {
-    gsap.to(title, {
-      yPercent: -18,
-      scale: 0.9,
+  gsap.to(title, {
+    yPercent: -18,
+    scale: 0.9,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  if (star) {
+    gsap.from(star, { rotate: 90, duration: 1.6, ease: 'expo.out', delay: 0.35 });
+    gsap.to(star, {
+      rotate: 220,
+      scale: 1.35,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -421,54 +349,39 @@ function initHero() {
         scrub: true,
       },
     });
+  }
 
-    if (star) {
-      gsap.from(star, { rotate: 90, duration: 1.6, ease: 'expo.out', delay: 0.35 });
-      gsap.to(star, {
-        rotate: 220,
-        scale: 1.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }
+  gsap.to('.s-hero__lede, .s-hero__actions', {
+    y: -40,
+    opacity: 0.15,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
 
-    gsap.to('.s-hero__lede, .s-hero__actions', {
-      y: -40,
-      opacity: 0.15,
+  if (cue) {
+    gsap.to(cue, {
+      opacity: 0,
+      y: -12,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: 'bottom top',
+        end: '20% top',
         scrub: true,
       },
     });
-
-    if (cue) {
-      gsap.to(cue, {
-        opacity: 0,
-        y: -12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: '20% top',
-          scrub: true,
-        },
-      });
-      gsap.to(cue, {
-        y: 8,
-        duration: 1.1,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-    }
+    gsap.to(cue, {
+      y: 8,
+      duration: 1.1,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    });
   }
 
   // Living hero type — ambient on every device (no finger required)
@@ -576,7 +489,6 @@ function initHero() {
 
 function initTextWarp() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.js-warp').forEach((title) => {
     const chars = splitChars(title, 'vf-warp-char');
@@ -595,12 +507,14 @@ function initTextWarp() {
         skewX: 0,
         opacity: 1,
         scaleY: 1,
-        ...tw,
-        stagger: { each: isTouchMotion() ? 0.028 : 0.035, from: 'start' },
-        scrollTrigger: motionST(title, {
+        ease: 'none',
+        stagger: { each: 0.035, from: 'start' },
+        scrollTrigger: {
+          trigger: title,
           start: 'top 92%',
           end: 'top 38%',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -608,7 +522,6 @@ function initTextWarp() {
 
 function initRunways() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.js-runway').forEach((runway) => {
     const text = runway.querySelector<HTMLElement>('.js-runway-text');
@@ -620,14 +533,15 @@ function initRunways() {
       text,
       { yPercent: 40, scale: 0.86 },
       {
-        yPercent: isTouchMotion() ? 0 : -22,
+        yPercent: -22,
         scale: 1,
-        ...tw,
-        scrollTrigger: motionST(runway, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: runway,
           start: 'top 95%',
           end: 'bottom 20%',
           scrub: 0.85,
-        }),
+        },
       },
     );
 
@@ -639,12 +553,14 @@ function initRunways() {
           y: 0,
           skewX: 0,
           opacity: 1,
-          ...tw,
-          stagger: { each: isTouchMotion() ? 0.022 : 0.028, from: 'start' },
-          scrollTrigger: motionST(runway, {
+          ease: 'none',
+          stagger: { each: 0.028, from: 'start' },
+          scrollTrigger: {
+            trigger: runway,
             start: 'top 88%',
             end: 'center 45%',
-          }),
+            scrub: true,
+          },
         },
       );
     }
@@ -653,8 +569,6 @@ function initRunways() {
 
 function initStretch() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
-  const touch = isTouchMotion();
 
   document.querySelectorAll<HTMLElement>('.js-stretch').forEach((section) => {
     const letters = section.querySelectorAll<HTMLElement>('.js-stretch-letter');
@@ -669,52 +583,33 @@ function initStretch() {
         opacity: 1,
         skewX: 0,
         rotateY: 0,
-        ...tw,
-        stagger: { each: touch ? 0.05 : 0.06, from: 'center' },
-        scrollTrigger: motionST(section, {
+        ease: 'none',
+        stagger: { each: 0.06, from: 'center' },
+        scrollTrigger: {
+          trigger: section,
           start: 'top 96%',
           end: 'center 28%',
           scrub: 1.15,
-        }),
+        },
       },
     );
 
-    if (touch) {
-      // After reveal, keep a soft living bob without scrubbing to scroll
-      gsap.to(letters, {
-        yPercent: (i) => (i % 2 === 0 ? -10 : 10),
-        rotate: (i) => (i % 2 === 0 ? -3 : 3),
-        duration: 2.4,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
-        stagger: { each: 0.08, from: 'center' },
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 85%',
-          end: 'bottom top',
-          toggleActions: 'play pause resume pause',
-        },
-      });
-    } else {
-      gsap.to(letters, {
-        yPercent: (i) => (i % 2 === 0 ? -28 : 28),
-        rotate: (i) => (i % 2 === 0 ? -6 : 6),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    }
+    gsap.to(letters, {
+      yPercent: (i) => (i % 2 === 0 ? -28 : 28),
+      rotate: (i) => (i % 2 === 0 ? -6 : 6),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
   });
 }
 
 function initSeparators() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.js-sep').forEach((sep) => {
     gsap.fromTo(
@@ -723,11 +618,13 @@ function initSeparators() {
       {
         y: 0,
         opacity: 1,
-        ...tw,
-        scrollTrigger: motionST(sep, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sep,
           start: 'top 96%',
           end: 'top 60%',
-        }),
+          scrub: true,
+        },
       },
     );
 
@@ -767,7 +664,6 @@ function initSeparators() {
 
 function initBands() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.vf-band').forEach((band) => {
     gsap.fromTo(
@@ -776,11 +672,13 @@ function initBands() {
       {
         xPercent: 0,
         opacity: 1,
-        ...tw,
-        scrollTrigger: motionST(band, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: band,
           start: 'top 92%',
           end: 'top 55%',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -804,18 +702,19 @@ function initChapters() {
 }
 
 function initRules() {
-  const tw = motionTween();
   document.querySelectorAll<HTMLElement>('.js-rule').forEach((rule) => {
     gsap.fromTo(
       rule,
       { scaleX: 0 },
       {
         scaleX: 1,
-        ...tw,
-        scrollTrigger: motionST(rule, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: rule,
           start: 'top 90%',
           end: 'top 60%',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -824,10 +723,8 @@ function initRules() {
 function initAbout() {
   const section = document.querySelector('.js-about');
   if (!section) return;
-  const tw = motionTween();
-  const touch = isTouchMotion();
 
-  // Body copy: char warp — scrub on desktop, auto-play on touch scroll
+  // Body copy: scrubbed char warp (not a plain fade) on every viewport
   if (!prefersReducedMotion()) {
     document.querySelectorAll<HTMLElement>('.js-about-copy .s-about__body').forEach((p) => {
       const chars = splitChars(p, 'vf-warp-char');
@@ -840,12 +737,14 @@ function initAbout() {
           skewX: 0,
           opacity: 1,
           rotateX: 0,
-          ...tw,
-          stagger: { each: touch ? 0.01 : 0.012, from: 'start' },
-          scrollTrigger: motionST(p, {
+          ease: 'none',
+          stagger: { each: 0.012, from: 'start' },
+          scrollTrigger: {
+            trigger: p,
             start: 'top 90%',
             end: 'top 45%',
-          }),
+            scrub: true,
+          },
         },
       );
     });
@@ -861,12 +760,14 @@ function initAbout() {
           skewX: 0,
           opacity: 1,
           scaleY: 1,
-          ...tw,
-          stagger: { each: touch ? 0.016 : 0.02, from: 'start' },
-          scrollTrigger: motionST(title, {
+          ease: 'none',
+          stagger: { each: 0.02, from: 'start' },
+          scrollTrigger: {
+            trigger: title,
             start: 'top 92%',
             end: 'top 50%',
-          }),
+            scrub: true,
+          },
         },
       );
     });
@@ -913,11 +814,13 @@ function initAbout() {
         { scaleY: 0 },
         {
           scaleY: 1,
-          ...tw,
-          scrollTrigger: motionST(cred, {
+          ease: 'none',
+          scrollTrigger: {
+            trigger: cred,
             start: 'top 80%',
             end: 'bottom 40%',
-          }),
+            scrub: true,
+          },
         },
       );
     }
@@ -1006,30 +909,32 @@ function initWork() {
   // Desktop keeps the pinned scrub gallery.
   if (isTouchMotion()) {
     section.classList.add('is-touch-work');
-    const tw = motionTween();
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
       gsap.from(item, {
         y: 48,
-        opacity: 0,
-        rotateY: i % 2 === 0 ? -12 : 12,
-        duration: 0.75,
-        ease: 'expo.out',
+        rotateY: i % 2 === 0 ? -18 : 18,
+        scale: 0.92,
+        opacity: 0.2,
+        ease: 'none',
         scrollTrigger: {
           trigger: item,
-          start: 'top 88%',
-          toggleActions: 'play none none reverse',
+          start: 'top 95%',
+          end: 'top 55%',
+          scrub: true,
         },
       });
       gsap.fromTo(
         item.querySelector('.s-work__media img'),
-        { scale: 1.16 },
+        { scale: 1.2, yPercent: 8 },
         {
           scale: 1,
-          ...tw,
+          yPercent: 0,
+          ease: 'none',
           scrollTrigger: {
             trigger: item,
-            start: 'top 90%',
-            toggleActions: 'play none none reverse',
+            start: 'top 92%',
+            end: 'top 45%',
+            scrub: true,
           },
         },
       );
@@ -1085,8 +990,6 @@ function initWork() {
 function initProof() {
   const section = document.querySelector('.js-proof');
   if (!section) return;
-  const tw = motionTween();
-  const touch = isTouchMotion();
 
   if (!prefersReducedMotion()) {
     document.querySelectorAll<HTMLElement>('.s-proof__lead-title').forEach((title) => {
@@ -1100,12 +1003,14 @@ function initProof() {
           skewX: 0,
           opacity: 1,
           rotateX: 0,
-          ...tw,
-          stagger: { each: touch ? 0.014 : 0.018, from: 'start' },
-          scrollTrigger: motionST(title, {
+          ease: 'none',
+          stagger: { each: 0.018, from: 'start' },
+          scrollTrigger: {
+            trigger: title,
             start: 'top 92%',
             end: 'top 48%',
-          }),
+            scrub: true,
+          },
         },
       );
     });
@@ -1139,7 +1044,6 @@ function initProof() {
 function initMargin() {
   const cards = document.querySelectorAll<HTMLElement>('.js-margin-card');
   if (!cards.length) return;
-  const tw = motionTween();
 
   cards.forEach((card, i) => {
     gsap.fromTo(
@@ -1155,11 +1059,13 @@ function initMargin() {
         rotate: i % 2 === 0 ? -2.5 : 2.5,
         scale: 1,
         opacity: 1,
-        ...tw,
-        scrollTrigger: motionST(card, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: card,
           start: 'top 94%',
           end: 'top 52%',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -1211,15 +1117,16 @@ function initContact() {
 
   if (section && !prefersReducedMotion()) {
     gsap.from(hover, {
-      scrollTrigger: motionST(section, {
+      scrollTrigger: {
+        trigger: section,
         start: 'top 78%',
         end: 'top 35%',
-      }),
+        scrub: true,
+      },
       scale: 0.48,
       opacity: 0.15,
       y: 100,
       rotate: -8,
-      ...(isTouchMotion() ? { duration: 0.95, ease: 'power3.out' as const } : {}),
     });
 
     gsap.from('.s-contact__title, .s-contact__email, .s-contact__sub, .s-contact__links', {
@@ -1565,20 +1472,21 @@ function initActiveNav() {
 
 function initImageParallax() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.s-margin__card img').forEach((img) => {
     gsap.fromTo(
       img,
       { yPercent: -10, scale: 1.14 },
       {
-        yPercent: isTouchMotion() ? 0 : 10,
+        yPercent: 10,
         scale: 1,
-        ...tw,
-        scrollTrigger: motionST(img.parentElement, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: img.parentElement,
           start: 'top bottom',
           end: 'bottom top',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -1586,8 +1494,6 @@ function initImageParallax() {
 
 function initRevealLines() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
-  const touch = isTouchMotion();
 
   document.querySelectorAll<HTMLElement>('.js-reveal-lines').forEach((el) => {
     const chars = splitChars(el, 'vf-warp-char');
@@ -1600,12 +1506,14 @@ function initRevealLines() {
         opacity: 1,
         rotateX: 0,
         skewX: 0,
-        ...tw,
-        stagger: { each: touch ? 0.016 : 0.02, from: 'start' },
-        scrollTrigger: motionST(el, {
+        ease: 'none',
+        stagger: { each: 0.02, from: 'start' },
+        scrollTrigger: {
+          trigger: el,
           start: 'top 92%',
           end: 'top 42%',
-        }),
+          scrub: true,
+        },
       },
     );
   });
@@ -1613,7 +1521,6 @@ function initRevealLines() {
 
 function initClipReveals() {
   if (prefersReducedMotion()) return;
-  const tw = motionTween();
 
   document.querySelectorAll<HTMLElement>('.js-proof-skill, .js-work-item').forEach((el) => {
     gsap.fromTo(
@@ -1622,11 +1529,13 @@ function initClipReveals() {
       {
         clipPath: 'inset(0% 0% 0% 0%)',
         opacity: 1,
-        ...tw,
-        scrollTrigger: motionST(el, {
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
           start: 'top 92%',
           end: 'top 55%',
-        }),
+          scrub: true,
+        },
       },
     );
   });

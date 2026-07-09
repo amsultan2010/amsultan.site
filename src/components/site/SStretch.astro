@@ -32,6 +32,7 @@ const letters = [...word.toLowerCase()];
     padding: 0 0.35rem;
     will-change: transform;
     perspective: 900px;
+    transform-style: preserve-3d;
   }
   .s-stretch__letter {
     font-family: var(--vf-font-display);
@@ -43,7 +44,10 @@ const letters = [...word.toLowerCase()];
     flex: 1 1 0;
     text-align: center;
     transform-origin: center bottom;
-    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform, opacity;
     min-width: 0;
     text-shadow: 0 0.04em 0 color-mix(in srgb, var(--vf-mark) 35%, transparent);
   }
