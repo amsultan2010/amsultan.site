@@ -20,16 +20,20 @@ function isMobileViewport() {
 }
 
 function initLenis() {
-  const mobile = isMobileViewport() || isCoarsePointer();
+  // Mobile: native scroll only. Lenis syncTouch fights iOS/Android and starves
+  // ScrollTrigger scrub, which is why phone felt dead vs desktop.
+  if (isMobileViewport() || isCoarsePointer()) {
+    document.documentElement.classList.remove('lenis', 'lenis-smooth');
+    return null;
+  }
+
   // lerp mode (not duration) = buttery glide, less wheel jitter on high-Hz displays
   const lenis = new Lenis({
-    lerp: mobile ? 0.12 : 0.075,
+    lerp: 0.075,
     smoothWheel: true,
     wheelMultiplier: 0.85,
-    touchMultiplier: mobile ? 1.65 : 1.4,
-    // Keep touch scroll native-feeling but still feed ScrollTrigger
-    syncTouch: mobile,
-    syncTouchLerp: mobile ? 0.1 : undefined,
+    touchMultiplier: 1.4,
+    syncTouch: false,
   });
 
   lenis.on('scroll', ScrollTrigger.update);
@@ -43,6 +47,29 @@ function initLenis() {
 
   (window as unknown as { lenis: Lenis }).lenis = lenis;
   return lenis;
+}
+
+function whenVisible(
+  el: Element,
+  onShow: () => void,
+  onHide?: () => void,
+  threshold = 0.2,
+) {
+  if (!('IntersectionObserver' in window)) {
+    onShow();
+    return () => undefined;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) onShow();
+        else onHide?.();
+      });
+    },
+    { threshold, rootMargin: '8% 0px' },
+  );
+  io.observe(el);
+  return () => io.disconnect();
 }
 
 function initTerrain() {
@@ -527,30 +554,50 @@ function initRunways() {
 function initStretch() {
   if (prefersReducedMotion()) return;
 
+  const mobile = isMobileViewport() || isCoarsePointer();
+
   document.querySelectorAll<HTMLElement>('.js-stretch').forEach((section) => {
     const letters = section.querySelectorAll<HTMLElement>('.js-stretch-letter');
     if (!letters.length) return;
 
-    // Same desktop-strength warp on mobile — scrub tracks scroll either way
-    gsap.fromTo(
-      letters,
-      { scaleX: 0.05, scaleY: 1.55, opacity: 0.12, skewX: 14, rotateY: -35 },
-      {
-        scaleX: 1,
-        scaleY: 1,
-        opacity: 1,
-        skewX: 0,
-        rotateY: 0,
-        ease: 'none',
-        stagger: { each: 0.06, from: 'center' },
+    if (mobile) {
+      // Native mobile scroll: one-shot warp (reliable) + continuous drift
+      gsap.from(letters, {
+        scaleX: 0.06,
+        scaleY: 1.6,
+        opacity: 0,
+        skewX: 18,
+        rotateY: -45,
+        duration: 1.1,
+        stagger: { each: 0.05, from: 'center' },
+        ease: 'expo.out',
         scrollTrigger: {
           trigger: section,
-          start: 'top 96%',
-          end: 'center 28%',
-          scrub: 1.15,
+          start: 'top 88%',
+          toggleActions: 'play none none reverse',
         },
-      },
-    );
+      });
+    } else {
+      gsap.fromTo(
+        letters,
+        { scaleX: 0.05, scaleY: 1.55, opacity: 0.12, skewX: 14, rotateY: -35 },
+        {
+          scaleX: 1,
+          scaleY: 1,
+          opacity: 1,
+          skewX: 0,
+          rotateY: 0,
+          ease: 'none',
+          stagger: { each: 0.06, from: 'center' },
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 96%',
+            end: 'center 28%',
+            scrub: 1.15,
+          },
+        },
+      );
+    }
 
     gsap.to(letters, {
       yPercent: (i) => (i % 2 === 0 ? -28 : 28),
@@ -591,32 +638,25 @@ function initSeparators() {
     if (!chars.length) return;
 
     let active = false;
-    ScrollTrigger.create({
-      trigger: sep,
-      start: 'top bottom',
-      end: 'bottom top',
-      onEnter: () => {
+    whenVisible(
+      sep,
+      () => {
         active = true;
       },
-      onEnterBack: () => {
-        active = true;
-      },
-      onLeave: () => {
+      () => {
         active = false;
       },
-      onLeaveBack: () => {
-        active = false;
-      },
-    });
+      0.05,
+    );
 
     window.setInterval(() => {
       if (!active) return;
       chars.forEach((char) => {
-        if (Math.random() > 0.16) return;
+        if (Math.random() > 0.14) return;
         char.classList.add('is-flip');
-        window.setTimeout(() => char.classList.remove('is-flip'), 220);
+        window.setTimeout(() => char.classList.remove('is-flip'), 240);
       });
-    }, 100);
+    }, 90);
   });
 }
 
@@ -780,50 +820,55 @@ function initWork() {
         const glowLoop = () => {
           if (!glowing) return;
           glowRaf = requestAnimationFrame(glowLoop);
-          glowT += 0.02;
-          const x = 50 + Math.sin(glowT) * 35;
-          const y = 50 + Math.cos(glowT * 0.8) * 28;
+          glowT += 0.025;
+          const x = 50 + Math.sin(glowT) * 38;
+          const y = 45 + Math.cos(glowT * 0.85) * 32;
           item.style.setProperty('--mx', `${x.toFixed(1)}%`);
           item.style.setProperty('--my', `${y.toFixed(1)}%`);
         };
-        ScrollTrigger.create({
-          trigger: item,
-          start: 'top 85%',
-          end: 'bottom 15%',
-          onEnter: () => {
+        whenVisible(
+          item,
+          () => {
             glowing = true;
             item.classList.add('is-hot');
             glowLoop();
           },
-          onEnterBack: () => {
-            glowing = true;
-            item.classList.add('is-hot');
-            glowLoop();
-          },
-          onLeave: () => {
+          () => {
             glowing = false;
             cancelAnimationFrame(glowRaf);
             item.classList.remove('is-hot');
           },
-          onLeaveBack: () => {
-            glowing = false;
-            cancelAnimationFrame(glowRaf);
-            item.classList.remove('is-hot');
-          },
-        });
+          0.15,
+        );
       }
     });
   }
 
   if (prefersReducedMotion()) return;
 
-  // Mobile: vertical stack with desktop-strength scroll choreography
+  // Mobile: vertical stack — scrub + one-shot entrance so motion always reads
   if (isMobileViewport()) {
     document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
       const img = item.querySelector('.s-work__media img');
+
+      gsap.from(item, {
+        y: 80,
+        rotateY: i % 2 === 0 ? -22 : 22,
+        rotateX: 8,
+        opacity: 0,
+        scale: 0.9,
+        duration: 0.95,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 88%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+
       gsap.fromTo(
         img,
-        { scale: 1.22, yPercent: 8 },
+        { scale: 1.24, yPercent: 10 },
         {
           scale: 1,
           yPercent: 0,
@@ -831,47 +876,38 @@ function initWork() {
           scrollTrigger: {
             trigger: item,
             start: 'top 95%',
-            end: 'top 30%',
-            scrub: 0.8,
+            end: 'top 28%',
+            scrub: true,
           },
         },
       );
 
       gsap.fromTo(
         item,
+        { rotateY: i % 2 === 0 ? -14 : 14 },
         {
-          y: 70,
-          rotateY: i % 2 === 0 ? -18 : 18,
-          rotateX: 6,
-          opacity: 0.25,
-          scale: 0.92,
-        },
-        {
-          y: 0,
           rotateY: 0,
-          rotateX: 0,
-          opacity: 1,
-          scale: 1,
           ease: 'none',
           scrollTrigger: {
             trigger: item,
-            start: 'top 96%',
-            end: 'top 48%',
-            scrub: 0.85,
+            start: 'top 90%',
+            end: 'top 40%',
+            scrub: true,
           },
         },
       );
 
       const copy = item.querySelectorAll('.s-work__role, .s-work__name, .s-work__desc, .s-work__metrics');
       gsap.from(copy, {
-        y: 28,
+        y: 32,
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.07,
+        duration: 0.75,
+        stagger: 0.08,
         ease: 'expo.out',
         scrollTrigger: {
           trigger: item,
-          start: 'top 70%',
+          start: 'top 72%',
+          toggleActions: 'play none none reverse',
         },
       });
     });
@@ -1011,35 +1047,24 @@ function initMargin() {
     const floatLoop = () => {
       if (!floating) return;
       floatRaf = requestAnimationFrame(floatLoop);
-      floatT += 0.018;
-      card.style.setProperty('--rx', `${(Math.sin(floatT) * 8).toFixed(2)}deg`);
-      card.style.setProperty('--ry', `${(Math.cos(floatT * 0.85) * 10).toFixed(2)}deg`);
+      floatT += 0.022;
+      card.style.setProperty('--rx', `${(Math.sin(floatT) * 10).toFixed(2)}deg`);
+      card.style.setProperty('--ry', `${(Math.cos(floatT * 0.85) * 12).toFixed(2)}deg`);
     };
-    ScrollTrigger.create({
-      trigger: card,
-      start: 'top 90%',
-      end: 'bottom 10%',
-      onEnter: () => {
+    whenVisible(
+      card,
+      () => {
         floating = true;
         floatLoop();
       },
-      onEnterBack: () => {
-        floating = true;
-        floatLoop();
-      },
-      onLeave: () => {
+      () => {
         floating = false;
         cancelAnimationFrame(floatRaf);
         card.style.setProperty('--rx', '0deg');
         card.style.setProperty('--ry', '0deg');
       },
-      onLeaveBack: () => {
-        floating = false;
-        cancelAnimationFrame(floatRaf);
-        card.style.setProperty('--rx', '0deg');
-        card.style.setProperty('--ry', '0deg');
-      },
-    });
+      0.12,
+    );
   });
 }
 
@@ -1152,18 +1177,10 @@ function initContact() {
     go.style.transform = '';
   };
 
-  // Desktop: hover. Mobile: auto-reveal when contact scrolls into view (no tap needed)
+  // Desktop: hover. Mobile: auto-reveal when contact is on screen (no tap needed)
   if (isCoarsePointer()) {
     if (section && !prefersReducedMotion()) {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top 55%',
-        end: 'bottom 35%',
-        onEnter: enter,
-        onEnterBack: enter,
-        onLeave: leave,
-        onLeaveBack: leave,
-      });
+      whenVisible(section, enter, leave, 0.25);
     }
   } else {
     hover.addEventListener('mouseenter', enter);
@@ -1176,7 +1193,8 @@ function initContact() {
 function initScrollbar() {
   const bar = document.querySelector<HTMLElement>('.site-scrollbar');
   const thumb = document.querySelector<HTMLElement>('.js-scrollbar-thumb');
-  if (!bar || !thumb || prefersReducedMotion()) return;
+  // Custom scrollbar is a desktop instrument — skip on touch so native scroll stays clean
+  if (!bar || !thumb || prefersReducedMotion() || isCoarsePointer() || isMobileViewport()) return;
 
   document.documentElement.classList.add('has-scrollbar');
 
@@ -1353,39 +1371,28 @@ function initScramble() {
       el.textContent = original;
     });
 
-    // Mobile: ambient scramble when the link scrolls into view — no tap needed
+    // Mobile: ambient scramble when visible — no tap needed
     if (isCoarsePointer()) {
       let active = false;
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 90%',
-        end: 'bottom 10%',
-        onEnter: () => {
+      whenVisible(
+        el,
+        () => {
           active = true;
           window.clearInterval(timer);
           timer = runScramble(el, original);
         },
-        onEnterBack: () => {
-          active = true;
-          window.clearInterval(timer);
-          timer = runScramble(el, original);
-        },
-        onLeave: () => {
+        () => {
           active = false;
           window.clearInterval(timer);
           el.textContent = original;
         },
-        onLeaveBack: () => {
-          active = false;
-          window.clearInterval(timer);
-          el.textContent = original;
-        },
-      });
+        0.2,
+      );
       window.setInterval(() => {
-        if (!active || Math.random() > 0.25) return;
+        if (!active || Math.random() > 0.2) return;
         window.clearInterval(timer);
         timer = runScramble(el, original);
-      }, 2800);
+      }, 2200);
     }
   });
 }
@@ -1546,27 +1553,19 @@ function initLivingLabels() {
 
     let active = false;
     let tick = 0;
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 90%',
-      end: 'bottom 10%',
-      onEnter: () => {
+    whenVisible(
+      el,
+      () => {
         active = true;
       },
-      onEnterBack: () => {
-        active = true;
-      },
-      onLeave: () => {
+      () => {
         active = false;
         window.clearInterval(tick);
+        tick = 0;
         el.textContent = original;
       },
-      onLeaveBack: () => {
-        active = false;
-        window.clearInterval(tick);
-        el.textContent = original;
-      },
-    });
+      0.15,
+    );
 
     window.setInterval(() => {
       if (!active || Math.random() > 0.08 || tick) return;
@@ -1626,6 +1625,14 @@ function boot() {
     initLivingLabels();
     initActiveNav();
     ScrollTrigger.refresh();
+    // Native mobile scroll: refresh again after layout settles
+    if (isMobileViewport() || isCoarsePointer()) {
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      window.setTimeout(() => ScrollTrigger.refresh(), 400);
+      window.addEventListener('orientationchange', () => {
+        window.setTimeout(() => ScrollTrigger.refresh(), 250);
+      });
+    }
   };
 
   if (document.readyState === 'loading') {
