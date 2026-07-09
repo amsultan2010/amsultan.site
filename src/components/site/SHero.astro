@@ -28,7 +28,7 @@ import ASeparator from './ASeparator.astro';
   </p>
 
   <div class="s-hero__actions vf-mono">
-    <a href="mailto:abdullahmsultan1@gmail.com" class="s-hero__btn s-hero__btn--solid js-magnetic js-scramble">grab coffee</a>
+    <a href="mailto:abdullahmsultan1@gmail.com" class="s-hero__btn s-hero__btn--glow js-magnetic js-scramble">grab coffee</a>
     <a href="#work" class="s-hero__btn js-magnetic js-scramble">see work</a>
   </div>
 
@@ -41,7 +41,7 @@ import ASeparator from './ASeparator.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 5rem 0 10vh;
+    padding: 6rem 0 12vh;
     position: relative;
     overflow: hidden;
   }
@@ -49,8 +49,9 @@ import ASeparator from './ASeparator.astro';
     padding: 0 var(--vf-pad) 1rem;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.5rem;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 0.14em;
     color: var(--vf-mark);
   }
@@ -64,9 +65,9 @@ import ASeparator from './ASeparator.astro';
     align-items: center;
     justify-content: center;
     gap: 0.08em 0.18em;
-    margin: 0.5rem 0;
+    margin: 0.35rem 0;
     padding: 0 0.5rem;
-    font-size: clamp(2.8rem, 13vw, 9.5rem);
+    font-size: clamp(2.8rem, 13vw, 9.2rem);
     text-align: center;
     will-change: transform;
     transform-style: preserve-3d;
@@ -87,49 +88,55 @@ import ASeparator from './ASeparator.astro';
     transform: translateY(0.12em);
     display: inline-block;
     will-change: transform;
+    filter: drop-shadow(0 0 12px var(--vf-glow));
   }
   .s-hero__lede {
-    max-width: 34rem;
-    margin: 1.5rem auto 0;
+    max-width: 32rem;
+    margin: 1.6rem auto 0;
     padding: 0 var(--vf-pad);
     text-align: center;
-    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
-    line-height: 1.45;
+    font-size: clamp(1.15rem, 2.4vw, 1.45rem);
+    line-height: 1.5;
     overflow-wrap: anywhere;
+    color: color-mix(in srgb, var(--vf-ink) 88%, transparent);
   }
   .s-hero__actions {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.85rem;
-    margin-top: 2rem;
+    margin-top: 2.1rem;
     padding: 0 var(--vf-pad);
   }
   .s-hero__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 3.1rem;
+    min-height: 3.15rem;
     min-width: 9.5rem;
-    padding: 0.95rem 1.45rem;
+    padding: 0.95rem 1.5rem;
     border: 1px solid var(--vf-ink);
+    border-radius: 999px;
     text-decoration: none;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
-    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+    transition: background 0.25s, color 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s;
   }
   .s-hero__btn:hover {
     background: var(--vf-ink);
     color: var(--vf-field);
   }
-  .s-hero__btn--solid {
-    background: var(--vf-ink);
-    color: var(--vf-field);
-  }
-  .s-hero__btn--solid:hover {
+  .s-hero__btn--glow {
     background: var(--vf-mark);
     border-color: var(--vf-mark);
-    color: var(--vf-field);
+    color: #fffaf5;
+    box-shadow: 0 0 0 transparent;
+  }
+  .s-hero__btn--glow:hover {
+    background: var(--vf-mark);
+    border-color: var(--vf-mark);
+    color: #fffaf5;
+    box-shadow: 0 0 22px var(--vf-glow);
   }
   .s-hero__scroll {
     position: absolute;
@@ -137,8 +144,8 @@ import ASeparator from './ASeparator.astro';
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.2em;
-    opacity: 0.55;
+    opacity: 0.5;
   }
 </style>

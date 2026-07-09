@@ -45,8 +45,10 @@ const ascii = fs.existsSync(asciiPath)
   }
   .s-margin__ascii {
     border: 1px solid var(--vf-line);
+    border-radius: 1.1rem;
     padding: 0.65rem;
-    background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+    background: color-mix(in srgb, var(--vf-field) 55%, #fff);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--vf-ink) 5%, transparent);
     min-width: 0;
     container-type: inline-size;
     align-self: start;
@@ -80,8 +82,9 @@ const ascii = fs.existsSync(asciiPath)
   }
   .s-margin__card {
     border: 1px solid var(--vf-line);
-    padding: 0.22rem;
-    background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
+    border-radius: 0.55rem;
+    padding: 0.2rem;
+    background: color-mix(in srgb, var(--vf-field) 55%, #fff);
     transform: rotate(var(--rot, 0deg));
     transition: transform 0.3s ease;
     overflow: hidden;

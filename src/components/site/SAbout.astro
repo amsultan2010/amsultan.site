@@ -91,14 +91,23 @@ import { EDUCATION } from '../../data/education';
     text-decoration: none;
     letter-spacing: 0.1em;
     font-size: 0.72rem;
-    border-bottom: 1px solid var(--vf-mark);
-    color: var(--vf-mark);
+    color: #fffaf5;
+    background: var(--vf-mark);
+    border: 1px solid var(--vf-mark);
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+    transition: box-shadow 0.25s;
+  }
+  .s-about__resume a:hover {
+    box-shadow: 0 0 18px var(--vf-glow);
   }
   .s-about__aside {
     border: 1px solid var(--vf-line);
+    border-radius: 1.1rem;
     padding: 1.15rem;
     align-self: start;
-    background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+    background: color-mix(in srgb, var(--vf-field) 55%, #fff);
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--vf-ink) 5%, transparent);
   }
   .s-about__aside-label {
     margin: 0 0 0.85rem;

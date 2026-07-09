@@ -1,27 +1,30 @@
-/* Voltage: orange field, white ink. */
+/* Daylight × Wodniack: paper field, olive ink, orange glow accent. */
 
 :root {
-  --vf-field: #ff4d1a;
-  --vf-ink: #fffaf5;
-  --vf-mark: #14110f;
-  --vf-muted: color-mix(in srgb, var(--vf-ink) 58%, transparent);
-  --vf-soft: color-mix(in srgb, var(--vf-ink) 14%, transparent);
-  --vf-line: color-mix(in srgb, var(--vf-ink) 28%, transparent);
+  --vf-field: #f7f1ea;
+  --vf-ink: #17190f;
+  --vf-mark: #ff4d1a;
+  --vf-muted: color-mix(in srgb, var(--vf-ink) 52%, transparent);
+  --vf-soft: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+  --vf-line: color-mix(in srgb, var(--vf-ink) 16%, transparent);
+  --vf-glow: rgba(255, 77, 26, 0.45);
   --vf-font-display: 'Unbounded', 'Arial Black', Impact, sans-serif;
   --vf-font-body: 'Newsreader', Georgia, 'Times New Roman', serif;
   --vf-font-mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
   --vf-max: 1120px;
-  --vf-pad: clamp(1.1rem, 3vw, 2rem);
+  --vf-pad: clamp(1.25rem, 3.5vw, 2.5rem);
   color-scheme: light;
 }
 
+/* Contrast = voltage orange field (wodniack energy mode) */
 html.theme-contrasted {
-  --vf-field: #fff8f1;
-  --vf-ink: #14110f;
-  --vf-mark: #ff4d1a;
-  --vf-muted: color-mix(in srgb, var(--vf-ink) 48%, transparent);
-  --vf-soft: color-mix(in srgb, var(--vf-ink) 8%, transparent);
-  --vf-line: color-mix(in srgb, var(--vf-ink) 22%, transparent);
+  --vf-field: #ff4d1a;
+  --vf-ink: #fffaf5;
+  --vf-mark: #17190f;
+  --vf-muted: color-mix(in srgb, var(--vf-ink) 58%, transparent);
+  --vf-soft: color-mix(in srgb, var(--vf-ink) 10%, transparent);
+  --vf-line: color-mix(in srgb, var(--vf-ink) 24%, transparent);
+  --vf-glow: rgba(23, 25, 15, 0.35);
   color-scheme: light;
 }
 
@@ -36,7 +39,6 @@ html {
   scroll-behavior: auto;
 }
 
-/* Official Lenis CSS — prevents native/smooth fighting (jitter) */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -70,13 +72,12 @@ body {
   color: var(--vf-ink);
   font-family: var(--vf-font-body);
   font-size: 1.125rem;
-  line-height: 1.55;
+  line-height: 1.6;
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
 
-/* No uppercase anywhere on the voltage site */
 body *,
 body *::before,
 body *::after {
@@ -127,7 +128,6 @@ a {
   display: none;
 }
 
-/* Living WebGL topography behind content */
 .site-terrain {
   position: fixed;
   inset: 0;
@@ -135,7 +135,11 @@ a {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 1;
+  opacity: 0.42;
+}
+
+html.theme-contrasted .site-terrain {
+  opacity: 0.85;
 }
 
 .site-terrain canvas {
@@ -148,13 +152,9 @@ a {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 90% 70% at 35% 45%, color-mix(in srgb, var(--vf-ink) 28%, transparent), transparent 68%),
-    radial-gradient(ellipse 80% 60% at 70% 55%, color-mix(in srgb, var(--vf-mark) 35%, transparent), transparent 62%);
-  opacity: 0.85;
-}
-
-html.theme-contrasted .site-terrain {
-  opacity: 0.75;
+    radial-gradient(ellipse 80% 60% at 20% 20%, color-mix(in srgb, var(--vf-mark) 12%, transparent), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 70%, color-mix(in srgb, var(--vf-ink) 8%, transparent), transparent 65%);
+  opacity: 0.9;
 }
 
 .site-wrapper {
@@ -171,12 +171,16 @@ html.theme-contrasted .site-terrain {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Minimal wash — topography should read clearly */
+html.theme-contrasted .site-noise {
+  mix-blend-mode: soft-light;
+  opacity: 0.05;
+}
+
 .site-wrapper::before {
   content: '';
   position: fixed;
@@ -186,13 +190,12 @@ html.theme-contrasted .site-terrain {
   background:
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--vf-field) 55%, transparent) 0%,
-      color-mix(in srgb, var(--vf-field) 18%, transparent) 45%,
-      color-mix(in srgb, var(--vf-field) 45%, transparent) 100%
+      color-mix(in srgb, var(--vf-field) 88%, transparent) 0%,
+      color-mix(in srgb, var(--vf-field) 55%, transparent) 40%,
+      color-mix(in srgb, var(--vf-field) 82%, transparent) 100%
     );
 }
 
-/* Intro wipe */
 .site-intro {
   position: fixed;
   inset: 0;
@@ -245,17 +248,16 @@ html.theme-contrasted .site-terrain {
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: #fff8f1;
+  background: #ff4d1a;
   transform: translate3d(-100%, 0, 0);
   pointer-events: none;
   will-change: transform;
 }
 
 html.theme-contrasted .site-contrast-mask {
-  background: #ff4d1a;
+  background: #f7f1ea;
 }
 
-/* Scroll progress — Zeigarnik: incomplete path keeps attention */
 .site-progress {
   position: fixed;
   top: 0;
@@ -269,14 +271,12 @@ html.theme-contrasted .site-contrast-mask {
   pointer-events: none;
 }
 
-/* Custom cursor — Von Restorff for interactive targets */
 .site-cursor {
   position: fixed;
   inset: 0;
   z-index: 80;
   pointer-events: none;
   opacity: 0;
-  mix-blend-mode: difference;
 }
 
 .site-cursor.is-on {
@@ -293,25 +293,27 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .site-cursor__ring {
-  width: 42px;
-  height: 42px;
-  margin: -21px 0 0 -21px;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
   border: 1.5px solid var(--vf-ink);
-  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background 0.25s ease;
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background 0.25s ease, border-color 0.25s ease;
 }
 
 .site-cursor__dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
-  background: var(--vf-ink);
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  background: var(--vf-mark);
 }
 
 .site-cursor.is-hot .site-cursor__ring {
-  width: 64px;
-  height: 64px;
-  margin: -32px 0 0 -32px;
-  background: color-mix(in srgb, var(--vf-ink) 12%, transparent);
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-color: var(--vf-mark);
+  background: color-mix(in srgb, var(--vf-mark) 12%, transparent);
+  box-shadow: 0 0 18px var(--vf-glow);
 }
 
 @media (pointer: coarse), (max-width: 900px) {
@@ -351,13 +353,13 @@ html.theme-contrasted .site-contrast-mask {
 
 .vf-rule {
   height: 1px;
-  margin: 0 var(--vf-pad);
+  margin: 0;
   background: var(--vf-line);
   transform-origin: left center;
 }
 
 .vf-runway {
-  min-height: 52vh;
+  min-height: 48vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -368,7 +370,7 @@ html.theme-contrasted .site-contrast-mask {
 .vf-runway__text {
   font-family: var(--vf-font-display);
   font-weight: 800;
-  font-size: clamp(2rem, 8vw, 5.5rem);
+  font-size: clamp(2rem, 8vw, 5.2rem);
   letter-spacing: -0.045em;
   line-height: 0.9;
   text-align: center;
@@ -379,7 +381,7 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .vf-chapter {
-  min-height: 36vh;
+  min-height: 32vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -399,7 +401,7 @@ html.theme-contrasted .site-contrast-mask {
   margin: 0;
   font-family: var(--vf-font-display);
   font-weight: 700;
-  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  font-size: clamp(2.2rem, 7vw, 5rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
   max-width: 14ch;
@@ -431,13 +433,12 @@ html.theme-contrasted .site-contrast-mask {
   color: var(--vf-mark);
 }
 
-/* Section rhythm — Law of Proximity: content clusters, air between chapters */
 #about,
 #work,
 #proof,
 #margin,
 #contact {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 5.5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -448,7 +449,7 @@ html.theme-contrasted .site-contrast-mask {
     overflow: auto;
   }
   .site-terrain {
-    opacity: 0.35;
+    opacity: 0.2;
   }
   .site-cursor {
     display: none !important;

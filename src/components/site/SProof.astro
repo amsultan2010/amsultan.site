@@ -94,9 +94,11 @@ import { LEADERSHIP, SKILL_GROUPS } from '../../data/proof';
   }
   .s-proof__skill {
     border: 1px solid var(--vf-line);
+    border-radius: 1rem;
     padding: 1rem;
     min-width: 0;
-    background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
+    background: color-mix(in srgb, var(--vf-field) 55%, #fff);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--vf-ink) 4%, transparent);
   }
   .s-proof__skill-label {
     margin: 0;
@@ -116,7 +118,8 @@ import { LEADERSHIP, SKILL_GROUPS } from '../../data/proof';
     font-size: 0.95rem;
     line-height: 1.2;
     border: 1px solid var(--vf-line);
-    padding: 0.35rem 0.5rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.65rem;
   }
   @media (max-width: 560px) {
     .s-proof__skills {
