@@ -10,7 +10,6 @@ import SProof from '../components/site/SProof.astro';
 import SMargin from '../components/site/SMargin.astro';
 import SContact from '../components/site/SContact.astro';
 import ASeparator from '../components/site/ASeparator.astro';
-import SRunway from '../components/site/SRunway.astro';
 import SStretch from '../components/site/SStretch.astro';
 import '../styles/voltage.css';
 ---
@@ -56,6 +55,7 @@ import '../styles/voltage.css';
       <span class="site-cursor__ring js-cursor-ring"></span>
       <span class="site-cursor__dot js-cursor-dot"></span>
     </div>
+    <div class="site-noise js-noise" aria-hidden="true"></div>
 
     <div class="site-terrain js-terrain" aria-hidden="true">
       <div class="site-terrain__fallback"></div>
@@ -67,23 +67,19 @@ import '../styles/voltage.css';
       <main>
         <SHero />
         <ASeparator phrases={['about', 'riyadh', 'student', 'builder']} />
-        <SRunway text="building in public from riyadh" />
+        <SStretch word="about" />
         <SAbout />
         <ASeparator phrases={['tutoringbyabdullah', 'downforce', 'quantpy', 'lab']} reverse />
         <SStretch word="work" />
-        <SRunway text="what i've been building" />
         <SWork />
         <ASeparator phrases={['x-combinator', 'debate', 'tennis', 'stack']} />
         <SStretch word="proof" />
-        <SRunway text="leadership and stack" />
         <SProof />
         <ASeparator phrases={['photos', 'f1', 'tennis', 'weightlifting']} reverse />
         <SStretch word="photos" />
-        <SRunway text="outside the resume" />
         <SMargin />
         <ASeparator phrases={['email', 'github', 'linkedin', 'resume']} />
         <SStretch word="talk" />
-        <SRunway text="want to talk?" />
         <SContact />
       </main>
       <SiteFoot />

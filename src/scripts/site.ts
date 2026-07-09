@@ -590,10 +590,10 @@ function initAbout() {
       trigger: section,
       start: 'top 75%',
     },
-    y: 36,
+    y: 40,
     opacity: 0,
-    duration: 0.7,
-    stagger: 0.08,
+    duration: 0.75,
+    stagger: 0.09,
     ease: 'power3.out',
   });
 
@@ -602,22 +602,40 @@ function initAbout() {
       trigger: section,
       start: 'top 70%',
     },
-    x: 30,
+    x: 36,
     opacity: 0,
-    duration: 0.7,
+    duration: 0.75,
     ease: 'power3.out',
   });
 
-  gsap.from('.js-about-cred', {
-    scrollTrigger: {
-      trigger: '.s-about__creds',
-      start: 'top 80%',
-    },
-    y: 50,
-    opacity: 0,
-    duration: 0.65,
-    stagger: 0.12,
-    ease: 'power3.out',
+  document.querySelectorAll<HTMLElement>('.js-about-cred').forEach((cred) => {
+    const line = cred.querySelector('.s-about__cred-line');
+    gsap.from(cred.querySelector('.s-about__cred-body'), {
+      scrollTrigger: {
+        trigger: cred,
+        start: 'top 85%',
+      },
+      y: 40,
+      opacity: 0,
+      duration: 0.7,
+      ease: 'power3.out',
+    });
+    if (line && !prefersReducedMotion()) {
+      gsap.fromTo(
+        line,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: cred,
+            start: 'top 80%',
+            end: 'bottom 40%',
+            scrub: true,
+          },
+        },
+      );
+    }
   });
 }
 
@@ -679,7 +697,7 @@ function initWork() {
   document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item) => {
     gsap.fromTo(
       item.querySelector('.s-work__media img'),
-      { scale: 1.1 },
+      { scale: 1.12 },
       {
         scale: 1,
         ease: 'none',
@@ -688,6 +706,23 @@ function initWork() {
           containerAnimation: scrollTween,
           start: 'left 90%',
           end: 'left 40%',
+          scrub: true,
+        },
+      },
+    );
+
+    gsap.fromTo(
+      item,
+      { rotateY: 14, z: -50 },
+      {
+        rotateY: 0,
+        z: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: item,
+          containerAnimation: scrollTween,
+          start: 'left 98%',
+          end: 'left 50%',
           scrub: true,
         },
       },
@@ -1041,7 +1076,6 @@ function initActiveNav() {
 function initImageParallax() {
   if (prefersReducedMotion()) return;
 
-  // Margin photos only — work strip already has its own pin/scrub motion
   document.querySelectorAll<HTMLElement>('.s-margin__card img').forEach((img) => {
     gsap.fromTo(
       img,
@@ -1058,6 +1092,80 @@ function initImageParallax() {
         },
       },
     );
+  });
+}
+
+function initRevealLines() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-reveal-lines').forEach((el) => {
+    const chars = splitChars(el, 'vf-warp-char');
+    if (!chars.length) return;
+    gsap.fromTo(
+      chars,
+      { yPercent: 110, opacity: 0, rotateX: -40 },
+      {
+        yPercent: 0,
+        opacity: 1,
+        rotateX: 0,
+        ease: 'power3.out',
+        stagger: 0.02,
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 82%',
+        },
+      },
+    );
+  });
+}
+
+function initClipReveals() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-proof-stat, .js-proof-skill, .js-work-item').forEach((el) => {
+    gsap.fromTo(
+      el,
+      { clipPath: 'inset(12% 8% 12% 8%)', opacity: 0.35 },
+      {
+        clipPath: 'inset(0% 0% 0% 0%)',
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 92%',
+          end: 'top 55%',
+          scrub: true,
+        },
+      },
+    );
+  });
+}
+
+function initNoisePulse() {
+  const noise = document.querySelector<HTMLElement>('.js-noise');
+  if (!noise || prefersReducedMotion()) return;
+
+  gsap.to(noise, {
+    opacity: 0.08,
+    duration: 2.4,
+    yoyo: true,
+    repeat: -1,
+    ease: 'sine.inOut',
+  });
+}
+
+function initMarqueeSpeed() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-sep').forEach((sep) => {
+    const track = sep.querySelector<HTMLElement>('.a-sep__track');
+    if (!track) return;
+    sep.addEventListener('mouseenter', () => {
+      track.style.animationDuration = '10s';
+    });
+    sep.addEventListener('mouseleave', () => {
+      track.style.animationDuration = '';
+    });
   });
 }
 
@@ -1092,8 +1200,11 @@ function boot() {
     initCursor();
     initMagneticButtons();
     initScramble();
+    initNoisePulse();
+    initMarqueeSpeed();
     initHero();
     initTextWarp();
+    initRevealLines();
     initRunways();
     initStretch();
     initSeparators();
@@ -1102,6 +1213,7 @@ function boot() {
     initRules();
     initAbout();
     initWork();
+    initClipReveals();
     initProof();
     initMargin();
     initImageParallax();

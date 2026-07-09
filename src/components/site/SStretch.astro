@@ -17,23 +17,23 @@ const letters = [...word.toLowerCase()];
 
 <style>
   .s-stretch {
-    min-height: 72vh;
+    min-height: 58vh;
     display: flex;
     align-items: center;
     overflow: hidden;
-    padding: 10vh 0;
+    padding: 8vh 0;
   }
   .s-stretch__track {
     display: flex;
     width: 100%;
     justify-content: space-between;
-    padding: 0 0.2rem;
+    padding: 0 0.15rem;
     will-change: transform;
   }
   .s-stretch__letter {
     font-family: var(--vf-font-display);
     font-weight: 800;
-    font-size: clamp(5rem, 22vw, 18rem);
+    font-size: clamp(3.8rem, 18vw, 14rem);
     line-height: 0.75;
     letter-spacing: -0.07em;
     color: var(--vf-ink);
@@ -41,5 +41,6 @@ const letters = [...word.toLowerCase()];
     text-align: center;
     transform-origin: center;
     will-change: transform;
+    min-width: 0;
   }
 </style>

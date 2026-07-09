@@ -4,7 +4,6 @@ const talk = 'talk';
 
 <section id="contact" class="s-contact" aria-label="contact">
   <div class="s-contact__inner">
-    <p class="s-contact__kicker vf-mono">contact</p>
     <a
       href="mailto:abdullahmsultan1@gmail.com"
       class="s-contact__go js-contact-go vf-display"
@@ -24,54 +23,49 @@ const talk = 'talk';
       founders, recruiters, curious builders. email me. coffee chats welcome.
     </p>
     <div class="s-contact__links vf-mono">
-      <a href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer">github</a>
-      <a href="https://www.linkedin.com/in/abdullah-sultan-4a264939a/" target="_blank" rel="noopener noreferrer">linkedin</a>
-      <a href="/lab">visit the lab</a>
-      <a href="/resume.docx">resume</a>
+      <a href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer" class="js-scramble">github</a>
+      <a href="https://www.linkedin.com/in/abdullah-sultan-4a264939a/" target="_blank" rel="noopener noreferrer" class="js-scramble">linkedin</a>
+      <a href="/lab" class="js-scramble">visit the lab</a>
+      <a href="/resume.docx" class="js-scramble">resume</a>
     </div>
   </div>
 </section>
 
 <style>
   .s-contact {
-    padding: 4vh 0 12vh;
-    min-height: 85vh;
+    padding: 2vh 0 12vh;
+    min-height: 80vh;
     display: flex;
     align-items: center;
+    overflow-x: clip;
   }
   .s-contact__inner {
     width: 100%;
-    padding: 4rem var(--vf-pad) 6rem;
+    padding: 3rem var(--vf-pad) 5rem;
     text-align: center;
     position: relative;
+    min-width: 0;
   }
   .s-contact__inner::before {
     content: '';
     position: absolute;
-    inset: 8% 10%;
+    inset: 8% 8%;
     background: radial-gradient(ellipse at center, color-mix(in srgb, var(--vf-mark) 20%, transparent), transparent 70%);
     pointer-events: none;
-  }
-  .s-contact__kicker {
-    position: relative;
-    margin: 0;
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
-    color: var(--vf-mark);
   }
   .s-contact__go {
     position: relative;
     display: inline-flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 0.75rem;
     text-decoration: none;
-    font-size: clamp(5.5rem, 22vw, 15rem);
+    font-size: clamp(4.5rem, 18vw, 14rem);
     line-height: 0.82;
     color: var(--vf-ink);
     perspective: 900px;
     transform-style: preserve-3d;
     will-change: transform;
+    max-width: 100%;
   }
   .s-contact__go:hover .s-contact__go-label,
   .s-contact__go:focus .s-contact__go-label {
@@ -90,14 +84,16 @@ const talk = 'talk';
   }
   .s-contact__title {
     position: relative;
-    margin: 1.25rem 0 0;
-    font-size: clamp(1.8rem, 5vw, 3rem);
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.5rem, 4.5vw, 2.6rem);
+    overflow-wrap: anywhere;
   }
   .s-contact__email {
     position: relative;
-    margin: 1.25rem 0 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
+    margin: 1.1rem 0 0;
+    font-size: clamp(0.62rem, 2.2vw, 0.75rem);
+    letter-spacing: 0.08em;
+    overflow-wrap: anywhere;
   }
   .s-contact__email a {
     text-decoration: none;
@@ -111,20 +107,24 @@ const talk = 'talk';
     position: relative;
     margin: 1rem auto 0;
     max-width: 28rem;
-    font-size: 1.15rem;
+    font-size: clamp(1.05rem, 2.4vw, 1.15rem);
+    padding: 0 0.5rem;
   }
   .s-contact__links {
     position: relative;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1.25rem;
+    gap: 1rem 1.25rem;
     margin-top: 1.75rem;
     font-size: 0.65rem;
     letter-spacing: 0.12em;
   }
   .s-contact__links a {
     text-decoration: none;
+    min-height: 2.5rem;
+    display: inline-flex;
+    align-items: center;
   }
   .s-contact__links a:hover {
     color: var(--vf-mark);

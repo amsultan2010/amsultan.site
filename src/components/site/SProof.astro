@@ -3,12 +3,6 @@ import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
 ---
 
 <section id="proof" class="s-proof js-proof" aria-label="proof and leadership">
-  <div class="s-proof__intro">
-    <p class="s-proof__lede vf-serif">
-      numbers from tutoring and leadership, plus the stack i actually use.
-    </p>
-  </div>
-
   <ul class="s-proof__stats">
     {PROOF_STATS.map((stat) => (
       <li class="s-proof__stat js-proof-stat">
@@ -19,55 +13,57 @@ import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
     ))}
   </ul>
 
-  <div class="vf-band" style="margin-top: 3.5rem;">leadership</div>
-  <ul class="s-proof__lead">
-    {LEADERSHIP.map((item) => (
-      <li class="s-proof__lead-item js-proof-lead">
-        <div class="s-proof__lead-meta vf-mono">
-          <span>{item.org}</span>
-          <span>{item.period}</span>
-        </div>
-        <h3 class="s-proof__lead-title vf-display">{item.title}</h3>
-        <p class="s-proof__lead-body vf-serif">{item.body}</p>
-      </li>
-    ))}
-  </ul>
+  <div class="s-proof__block">
+    <p class="vf-mono s-proof__block-label">leadership</p>
+    <div class="vf-rule js-rule"></div>
+    <ul class="s-proof__lead">
+      {LEADERSHIP.map((item) => (
+        <li class="s-proof__lead-item js-proof-lead">
+          <div class="s-proof__lead-meta vf-mono">
+            <span>{item.org}</span>
+            <span>{item.period}</span>
+          </div>
+          <h3 class="s-proof__lead-title vf-display">{item.title}</h3>
+          <p class="s-proof__lead-body vf-serif">{item.body}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
 
-  <div class="vf-band" style="margin-top: 3.5rem;">stack</div>
-  <div class="s-proof__skills">
-    {SKILL_GROUPS.map((group) => (
-      <div class="s-proof__skill js-proof-skill">
-        <p class="s-proof__skill-label vf-mono">{group.label}</p>
-        <p class="s-proof__skill-items vf-serif">{group.items.join(' · ')}</p>
-      </div>
-    ))}
+  <div class="s-proof__block">
+    <p class="vf-mono s-proof__block-label">stack</p>
+    <div class="vf-rule js-rule"></div>
+    <div class="s-proof__skills">
+      {SKILL_GROUPS.map((group) => (
+        <div class="s-proof__skill js-proof-skill">
+          <p class="s-proof__skill-label vf-mono">{group.label}</p>
+          <ul class="s-proof__skill-list vf-serif">
+            {group.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
   </div>
 </section>
 
 <style>
   .s-proof {
-    padding: 2vh 0 10vh;
-  }
-  .s-proof__intro {
-    padding: 0.25rem var(--vf-pad) 0;
-    max-width: 40rem;
-  }
-  .s-proof__lede {
-    margin: 0;
-    font-size: 1.15rem;
+    padding: 1vh 0 10vh;
+    overflow-x: clip;
   }
   .s-proof__stats {
     list-style: none;
-    margin: 2.25rem 0 0;
+    margin: 0;
     padding: 0 var(--vf-pad);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
+    gap: 1rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-proof__stat {
     border-top: 2px solid var(--vf-mark);
-    padding: 1.15rem 0.15rem 0.5rem;
+    padding: 1rem 0.1rem 0.35rem;
+    min-width: 0;
     transition: transform 0.35s ease;
   }
   .s-proof__stat:hover {
@@ -75,61 +71,75 @@ import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
   }
   .s-proof__value {
     margin: 0;
-    font-size: clamp(2.4rem, 5.5vw, 3.6rem);
-    color: var(--vf-ink);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 0.95;
+    overflow-wrap: anywhere;
   }
   .s-proof__label {
-    margin: 0.5rem 0 0;
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
+    margin: 0.55rem 0 0;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
     color: var(--vf-mark);
   }
   .s-proof__note {
-    margin: 0.55rem 0 0;
-    font-size: 0.95rem;
-    line-height: 1.4;
-    opacity: 0.9;
+    margin: 0.45rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.35;
+    opacity: 0.88;
+  }
+  .s-proof__block {
+    margin-top: 3.25rem;
+    padding: 0 var(--vf-pad);
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+  }
+  .s-proof__block-label {
+    margin: 0 0 0.75rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--vf-mark);
   }
   .s-proof__lead {
     list-style: none;
     margin: 1rem 0 0;
-    padding: 0 var(--vf-pad);
+    padding: 0;
     display: grid;
     gap: 0;
-    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-proof__lead-item {
-    padding: 1.5rem 0;
+    padding: 1.35rem 0;
     border-bottom: 1px solid var(--vf-line);
+    min-width: 0;
   }
   .s-proof__lead-meta {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
     flex-wrap: wrap;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     letter-spacing: 0.1em;
     opacity: 0.75;
   }
   .s-proof__lead-title {
-    margin: 0.55rem 0 0;
-    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.25rem, 2.8vw, 1.75rem);
+    overflow-wrap: anywhere;
   }
   .s-proof__lead-body {
-    margin: 0.65rem 0 0;
-    max-width: 42rem;
-    font-size: 1.05rem;
+    margin: 0.55rem 0 0;
+    max-width: 40rem;
+    font-size: 1.02rem;
   }
   .s-proof__skills {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 1.5rem;
-    padding: 1.25rem var(--vf-pad) 0;
-    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    gap: 1rem;
+    margin-top: 1.15rem;
   }
   .s-proof__skill {
     border: 1px solid var(--vf-line);
     padding: 1rem;
+    min-width: 0;
+    background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
   }
   .s-proof__skill-label {
     margin: 0;
@@ -137,10 +147,19 @@ import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
     letter-spacing: 0.14em;
     color: var(--vf-mark);
   }
-  .s-proof__skill-items {
-    margin: 0.55rem 0 0;
-    font-size: 1.05rem;
-    line-height: 1.45;
+  .s-proof__skill-list {
+    list-style: none;
+    margin: 0.7rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .s-proof__skill-list li {
+    font-size: 0.95rem;
+    line-height: 1.2;
+    border: 1px solid var(--vf-line);
+    padding: 0.35rem 0.5rem;
   }
   @media (max-width: 900px) {
     .s-proof__stats {

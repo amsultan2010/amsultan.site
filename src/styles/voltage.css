@@ -73,6 +73,7 @@ body {
   line-height: 1.55;
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 /* No uppercase anywhere on the voltage site */
@@ -162,6 +163,17 @@ html.theme-contrasted .site-terrain {
   background: transparent;
   color: var(--vf-ink);
   min-height: 100vh;
+  overflow-x: clip;
+}
+
+.site-noise {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Minimal wash — topography should read clearly */
@@ -345,22 +357,24 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .vf-runway {
-  min-height: 68vh;
+  min-height: 52vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14vh var(--vf-pad);
+  padding: 10vh var(--vf-pad);
   overflow: hidden;
 }
 
 .vf-runway__text {
   font-family: var(--vf-font-display);
   font-weight: 800;
-  font-size: clamp(2.6rem, 11vw, 7.2rem);
+  font-size: clamp(2rem, 8vw, 5.5rem);
   letter-spacing: -0.045em;
-  line-height: 0.88;
+  line-height: 0.9;
   text-align: center;
-  max-width: 14ch;
+  max-width: min(12ch, 92vw);
+  overflow-wrap: anywhere;
+  word-break: break-word;
   will-change: transform, opacity;
 }
 

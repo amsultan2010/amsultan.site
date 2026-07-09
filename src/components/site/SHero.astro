@@ -63,13 +63,14 @@ import ASeparator from './ASeparator.astro';
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 0.12em 0.22em;
+    gap: 0.08em 0.18em;
     margin: 0.5rem 0;
-    padding: 0 0.75rem;
-    font-size: clamp(3.6rem, 15vw, 10rem);
+    padding: 0 0.5rem;
+    font-size: clamp(2.8rem, 13vw, 9.5rem);
     text-align: center;
     will-change: transform;
     transform-style: preserve-3d;
+    max-width: 100%;
   }
   .s-hero__line {
     display: inline-flex;
@@ -92,8 +93,9 @@ import ASeparator from './ASeparator.astro';
     margin: 1.5rem auto 0;
     padding: 0 var(--vf-pad);
     text-align: center;
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.1rem, 2.4vw, 1.4rem);
     line-height: 1.45;
+    overflow-wrap: anywhere;
   }
   .s-hero__actions {
     display: flex;

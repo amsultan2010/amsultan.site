@@ -124,7 +124,11 @@ const total = String(PROJECTS.length).padStart(2, '0');
   }
   .archive__title {
     margin: 0;
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    font-size: clamp(2.2rem, 7vw, 4.2rem);
+    overflow-wrap: anywhere;
+  }
+  .archive__copy {
+    min-width: 0;
   }
   .archive__lede {
     margin: 0.75rem 0 0;
@@ -165,8 +169,10 @@ const total = String(PROJECTS.length).padStart(2, '0');
   }
   .archive__name {
     margin: 0.4rem 0 0;
-    font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-    text-transform: lowercase;
+    font-size: clamp(1.35rem, 3.2vw, 2rem);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
   .archive__desc {
     margin: 0.6rem 0 0;

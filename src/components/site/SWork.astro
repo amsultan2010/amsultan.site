@@ -7,10 +7,7 @@ const total = String(featured.length).padStart(2, '0');
 
 <section id="work" class="s-work js-work" aria-label="work">
   <div class="s-work__head">
-    <p class="s-work__lede vf-serif">
-      tutoring, f1 media, and a small quant suite.
-    </p>
-    <a href="/projects" class="s-work__all vf-mono">full archive →</a>
+    <a href="/projects" class="s-work__all vf-mono js-magnetic js-scramble">full archive →</a>
   </div>
 
   <div class="s-work__viewport">
@@ -20,7 +17,7 @@ const total = String(featured.length).padStart(2, '0');
         const external = href.startsWith('http');
         const serial = `${String(i + 1).padStart(2, '0')} / ${total}`;
         return (
-          <article class="s-work__item">
+          <article class="s-work__item js-work-item">
             <div class="s-work__meta vf-mono">
               <span>{serial}</span>
               <span>{project.period}</span>
@@ -33,20 +30,20 @@ const total = String(featured.length).padStart(2, '0');
             >
               <img src={project.cover} alt="" loading="lazy" />
             </a>
-            <p class="s-work__role vf-mono">{project.role}</p>
-            <h3 class="s-work__name vf-display">
-              <a href={href} target={external || project.demoNewTab ? '_blank' : undefined} rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}>
-                {project.title}
-              </a>
-            </h3>
-            <p class="s-work__desc vf-serif">{project.desc}</p>
-            <p class="s-work__detail vf-serif">{project.detail}</p>
-            {project.metrics && (
-              <ul class="s-work__metrics vf-mono">
-                {project.metrics.map((m) => <li>{m}</li>)}
-              </ul>
-            )}
-            <p class="s-work__tech vf-mono">{project.tech.join(' · ')}</p>
+            <div class="s-work__copy">
+              <p class="s-work__role vf-mono">{project.role}</p>
+              <h3 class="s-work__name vf-display">
+                <a href={href} target={external || project.demoNewTab ? '_blank' : undefined} rel={external || project.demoNewTab ? 'noopener noreferrer' : undefined}>
+                  {project.title}
+                </a>
+              </h3>
+              <p class="s-work__desc vf-serif">{project.desc}</p>
+              {project.metrics && (
+                <ul class="s-work__metrics vf-mono">
+                  {project.metrics.slice(0, 2).map((m) => <li>{m}</li>)}
+                </ul>
+              )}
+            </div>
           </article>
         );
       })}
@@ -56,23 +53,16 @@ const total = String(featured.length).padStart(2, '0');
 
 <style>
   .s-work {
-    padding: 2vh 0 10vh;
+    padding: 1vh 0 10vh;
+    overflow-x: clip;
   }
   .s-work__head {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 1.5rem;
-    padding: 0 var(--vf-pad) 1.75rem;
+    justify-content: flex-end;
+    padding: 0 var(--vf-pad) 1.25rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
-  .s-work__lede {
-    margin: 0;
-    max-width: 28rem;
-    font-size: 1.2rem;
-  }
   .s-work__all {
-    flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
@@ -81,37 +71,38 @@ const total = String(featured.length).padStart(2, '0');
     text-decoration: none;
     color: var(--vf-mark);
     border-bottom: 1px solid var(--vf-mark);
-    padding-bottom: 0.15rem;
   }
   .s-work__viewport {
     overflow: hidden;
   }
   .s-work__track {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     padding: 0.5rem var(--vf-pad) 2.5rem;
     width: max-content;
     will-change: transform;
+    perspective: 1200px;
   }
   .s-work__item {
     --mx: 50%;
     --my: 50%;
-    flex: 0 0 min(84vw, 460px);
+    flex: 0 0 min(78vw, 380px);
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.65rem;
     border: 1px solid var(--vf-line);
-    padding: 1.15rem;
+    padding: 0.9rem;
     background: color-mix(in srgb, var(--vf-ink) 5%, transparent);
     position: relative;
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.35s ease;
+    min-width: 0;
+    transform-style: preserve-3d;
+    transition: border-color 0.25s, box-shadow 0.25s;
   }
   .s-work__item:hover {
     transform: translateY(-6px);
   }
   .s-work__item.is-hot {
     border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--vf-mark) 25%, transparent);
   }
   .s-work__item.is-hot::after {
     content: '';
@@ -119,7 +110,7 @@ const total = String(featured.length).padStart(2, '0');
     inset: 0;
     pointer-events: none;
     background: radial-gradient(
-      280px circle at var(--mx) var(--my),
+      240px circle at var(--mx) var(--my),
       color-mix(in srgb, var(--vf-ink) 14%, transparent),
       transparent 55%
     );
@@ -127,7 +118,8 @@ const total = String(featured.length).padStart(2, '0');
   .s-work__meta {
     display: flex;
     justify-content: space-between;
-    font-size: 0.6rem;
+    gap: 0.75rem;
+    font-size: 0.58rem;
     letter-spacing: 0.1em;
     opacity: 0.75;
   }
@@ -143,20 +135,28 @@ const total = String(featured.length).padStart(2, '0');
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s ease;
+    transition: transform 0.55s ease;
   }
   .s-work__item:hover .s-work__media img {
-    transform: scale(1.04);
+    transform: scale(1.06);
+  }
+  .s-work__copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.35rem;
   }
   .s-work__role {
-    margin: 0.35rem 0 0;
+    margin: 0;
     font-size: 0.58rem;
     letter-spacing: 0.12em;
     color: var(--vf-mark);
   }
   .s-work__name {
     margin: 0;
-    font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+    font-size: clamp(1.15rem, 2.4vw, 1.55rem);
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
   .s-work__name a {
     text-decoration: none;
@@ -165,42 +165,28 @@ const total = String(featured.length).padStart(2, '0');
     color: var(--vf-mark);
   }
   .s-work__desc {
-    margin: 0.15rem 0 0;
-    font-size: 1.05rem;
+    margin: 0;
+    font-size: 1rem;
     line-height: 1.4;
-  }
-  .s-work__detail {
-    margin: 0.15rem 0 0;
-    font-size: 0.95rem;
-    line-height: 1.45;
-    opacity: 0.88;
   }
   .s-work__metrics {
     list-style: none;
-    margin: 0.5rem 0 0;
+    margin: 0.25rem 0 0;
     padding: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
   .s-work__metrics li {
-    font-size: 0.58rem;
-    letter-spacing: 0.08em;
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
     border: 1px solid var(--vf-line);
-    padding: 0.3rem 0.45rem;
+    padding: 0.28rem 0.4rem;
     color: var(--vf-mark);
-  }
-  .s-work__tech {
-    margin: 0.35rem 0 0;
-    font-size: 0.58rem;
-    letter-spacing: 0.08em;
-    opacity: 0.65;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   @media (max-width: 767px) {
-    .s-work__head {
-      flex-direction: column;
-      align-items: flex-start;
-    }
     .s-work__track {
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -208,7 +194,7 @@ const total = String(featured.length).padStart(2, '0');
     }
     .s-work__item {
       scroll-snap-align: start;
-      flex-basis: min(88vw, 380px);
+      flex-basis: min(86vw, 340px);
     }
   }
 </style>
