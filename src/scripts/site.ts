@@ -19,11 +19,16 @@ function isCoarsePointer() {
 }
 
 function initLenis() {
-  // Touch/iOS: native scroll only. Lenis + per-frame ScrollTrigger.update
-  // made desktop laggy and still missed scrub updates on Safari.
+  // Touch/iOS: native scroll only (Lenis stays desktop). Scrubbed warps must
+  // still update every frame — iOS batches scroll events and skips touchmove
+  // during momentum, so event-only sync leaves animations frozen mid-scrub.
   if (isCoarsePointer() || window.innerWidth < 768) {
     document.documentElement.classList.remove('lenis', 'lenis-smooth');
+    ScrollTrigger.config({ ignoreMobileResize: true });
     const sync = () => ScrollTrigger.update();
+    // Per-frame ST sync is touch-only — desktop Lenis path is untouched.
+    gsap.ticker.add(sync);
+    gsap.ticker.lagSmoothing(0);
     window.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('touchmove', sync, { passive: true });
     window.addEventListener('touchend', sync, { passive: true });
@@ -897,7 +902,41 @@ function initWork() {
 
   if (prefersReducedMotion()) return;
 
-  // Same horizontal pin/scrub work gallery on every viewport
+  // Touch/mobile: CSS snap carousel — ScrollTrigger pin freezes iOS Safari.
+  // Desktop keeps the pinned scrub gallery.
+  if (isCoarsePointer() || window.innerWidth < 768) {
+    section.classList.add('is-touch-work');
+    document.querySelectorAll<HTMLElement>('.s-work__item').forEach((item, i) => {
+      gsap.from(item, {
+        y: 48,
+        opacity: 0,
+        rotateY: i % 2 === 0 ? -12 : 12,
+        duration: 0.75,
+        ease: 'expo.out',
+        scrollTrigger: {
+          trigger: item,
+          start: 'top 88%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+      gsap.fromTo(
+        item.querySelector('.s-work__media img'),
+        { scale: 1.16 },
+        {
+          scale: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: item,
+            start: 'top 90%',
+            end: 'top 40%',
+            scrub: true,
+          },
+        },
+      );
+    });
+    return;
+  }
+
   const scrollTween = gsap.to(track, {
     x: () => -getScroll(),
     ease: 'none',
