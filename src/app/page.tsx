@@ -16,7 +16,7 @@ export default function HomePage() {
   return (
     <VoltageExperience>
       <Script id="vf-boot-gate" strategy="beforeInteractive">
-        {`(function(){try{var t=window.matchMedia('(pointer:coarse)').matches||window.matchMedia('(hover:none)').matches||window.innerWidth<768;if(t){document.documentElement.classList.add('touch-ready');}else{document.documentElement.classList.add('is-scroll-blocked');}}catch(e){document.documentElement.classList.add('is-scroll-blocked');}})();`}
+        {`(function(){try{var t=window.matchMedia('(pointer:coarse)').matches||window.matchMedia('(hover:none)').matches||window.innerWidth<768;if(!t){document.documentElement.classList.add('is-scroll-blocked');}}catch(e){document.documentElement.classList.add('is-scroll-blocked');}})();`}
       </Script>
       <div className="site-progress js-progress" aria-hidden="true" />
       <div className="site-cursor js-cursor" aria-hidden="true">
