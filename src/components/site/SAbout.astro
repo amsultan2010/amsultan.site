@@ -41,7 +41,7 @@ import { EDUCATION } from '../../data/education';
         <div class="s-about__cred-body">
           <div class="s-about__cred-top">
             <span class="s-about__cred-years vf-mono">{entry.years}</span>
-            <img class="s-about__cred-logo" src={entry.logo} alt="" width="32" height="32" loading="lazy" />
+            <img class="s-about__cred-logo" src={entry.logo} alt="" width="36" height="36" loading="lazy" />
           </div>
           <h3 class="s-about__cred-school vf-display">{entry.short ?? entry.school}</h3>
           <p class="s-about__cred-loc vf-mono">{entry.location}</p>
@@ -57,53 +57,64 @@ import { EDUCATION } from '../../data/education';
 
 <style>
   .s-about {
-    padding: 1vh 0 6vh;
+    padding: 1vh 0 5vh;
     overflow-x: clip;
+    text-align: center;
   }
   .s-about__grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(13rem, 0.55fr);
-    gap: clamp(1.25rem, 3vw, 2.25rem);
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
     padding: 0 var(--vf-pad);
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    margin: 0 auto;
+    justify-items: center;
+  }
+  .s-about__copy {
+    max-width: 40rem;
   }
   .s-about__title {
-    margin: 0;
-    font-size: clamp(2.1rem, 5.8vw, 3.9rem);
-    max-width: 11ch;
+    margin: 0 auto;
+    font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+    max-width: 12ch;
     overflow-wrap: anywhere;
     word-break: break-word;
     hyphens: auto;
+    text-align: center;
   }
   .s-about__body {
-    margin: 0.9rem 0 0;
-    font-size: clamp(1.15rem, 2.3vw, 1.35rem);
-    line-height: 1.5;
-    max-width: 38rem;
+    margin: 1rem auto 0;
+    font-size: clamp(1.3rem, 2.6vw, 1.55rem);
+    line-height: 1.45;
+    max-width: 36rem;
+    text-align: center;
   }
   .s-about__resume {
-    margin: 1.15rem 0 0;
+    margin: 1.25rem 0 0;
   }
   .s-about__resume a {
     display: inline-flex;
     align-items: center;
-    min-height: 2.75rem;
+    justify-content: center;
+    min-height: var(--vf-tap);
     text-decoration: none;
-    letter-spacing: 0.08em;
-    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    font-size: 1.05rem;
     border-bottom: 1px solid var(--vf-mark);
     color: var(--vf-mark);
+    padding: 0.35rem 0.15rem;
   }
   .s-about__aside {
     border: 1px solid var(--vf-line);
-    padding: 1rem 1.1rem;
-    align-self: start;
+    padding: 1.15rem 1.35rem;
     background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
+    width: 100%;
+    max-width: 28rem;
   }
   .s-about__aside-label {
-    margin: 0 0 0.7rem;
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
+    margin: 0 0 0.75rem;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
     color: var(--vf-mark);
   }
   .s-about__now {
@@ -113,24 +124,28 @@ import { EDUCATION } from '../../data/education';
     display: grid;
     gap: 0.55rem;
     font-family: var(--vf-font-mono);
-    font-size: 0.82rem;
+    font-size: 1.05rem;
     letter-spacing: 0.02em;
     line-height: 1.4;
   }
   .s-about__edu-head {
-    margin: 2.25rem 0 0;
+    margin: 2.5rem auto 0;
     padding: 0 var(--vf-pad);
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.55rem;
   }
   .s-about__edu-label {
-    margin: 0 0 0.55rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
     color: var(--vf-mark);
   }
   .s-about__timeline {
     list-style: none;
-    margin: 1rem 0 0;
+    margin: 1.25rem auto 0;
     padding: 0 var(--vf-pad);
     display: grid;
     gap: 0;
@@ -140,7 +155,11 @@ import { EDUCATION } from '../../data/education';
     display: grid;
     grid-template-columns: 1.25rem minmax(0, 1fr);
     gap: 0.85rem;
-    padding: 0 0 1.25rem;
+    padding: 0 0 1.35rem;
+    text-align: center;
+    max-width: 40rem;
+    margin: 0 auto;
+    width: 100%;
   }
   .s-about__cred-rail {
     position: relative;
@@ -149,12 +168,12 @@ import { EDUCATION } from '../../data/education';
     align-items: center;
   }
   .s-about__cred-dot {
-    width: 0.65rem;
-    height: 0.65rem;
+    width: 0.7rem;
+    height: 0.7rem;
     border-radius: 50%;
     background: var(--vf-mark);
     flex-shrink: 0;
-    margin-top: 0.35rem;
+    margin-top: 0.4rem;
   }
   .s-about__cred-line {
     flex: 1;
@@ -166,55 +185,86 @@ import { EDUCATION } from '../../data/education';
   .s-about__cred-body {
     min-width: 0;
     border-top: 1px solid var(--vf-line);
-    padding-top: 0.75rem;
+    padding-top: 0.85rem;
   }
   .s-about__cred-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.45rem;
+    gap: 0.85rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
   }
   .s-about__cred-years {
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    opacity: 0.8;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
   }
   .s-about__cred-logo {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
     filter: grayscale(0.2);
   }
   .s-about__cred-school {
     margin: 0;
-    font-size: clamp(1.4rem, 3.2vw, 2rem);
+    font-size: clamp(1.65rem, 3.6vw, 2.35rem);
     line-height: 1.1;
     overflow-wrap: anywhere;
   }
   .s-about__cred-loc {
-    margin: 0.3rem 0 0;
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    opacity: 0.75;
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
   }
   .s-about__cred-focus {
-    margin: 0.55rem 0 0;
-    font-size: 1.1rem;
+    margin: 0.65rem auto 0;
+    font-size: 1.25rem;
     opacity: 0.95;
-    max-width: 42rem;
+    max-width: 36rem;
   }
   .s-about__cred-list {
-    margin: 0.65rem 0 0;
-    padding-left: 1.15rem;
-    font-size: 1.05rem;
+    margin: 0.75rem auto 0;
+    padding: 0;
+    list-style: none;
+    font-size: 1.15rem;
     display: grid;
-    gap: 0.3rem;
-    max-width: 42rem;
+    gap: 0.4rem;
+    max-width: 36rem;
   }
-  @media (max-width: 860px) {
-    .s-about__grid {
+  .s-about__cred-list li::before {
+    content: '· ';
+    color: var(--vf-mark);
+  }
+
+  @media (max-width: 720px) {
+    .s-about__cred {
       grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .s-about__cred-rail {
+      display: none;
+    }
+    .s-about__title {
+      font-size: clamp(2.2rem, 11vw, 3rem);
+    }
+    .s-about__body {
+      font-size: 1.25rem;
+    }
+    .s-about__resume a {
+      font-size: 1.05rem;
+      min-height: 3.1rem;
+    }
+    .s-about__now {
+      font-size: 1.05rem;
+    }
+    .s-about__cred-school {
+      font-size: 1.7rem;
+    }
+    .s-about__cred-focus,
+    .s-about__cred-list {
+      font-size: 1.15rem;
     }
   }
 </style>

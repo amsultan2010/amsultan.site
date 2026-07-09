@@ -23,15 +23,16 @@ const strip = Array.from({ length: 28 }, (_, i) => phrases[i % phrases.length]).
     border: none;
     background: transparent;
     color: var(--vf-mark);
-    padding: 0.9rem 0;
+    padding: 0.85rem 0;
     user-select: none;
     transform-origin: center;
     border-block: 1px solid color-mix(in srgb, var(--vf-ink) 16%, transparent);
+    text-align: center;
   }
   .a-sep__track {
     white-space: nowrap;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
+    font-size: 0.95rem;
+    letter-spacing: 0.1em;
     animation: sep-marquee 26s linear infinite;
     width: max-content;
   }

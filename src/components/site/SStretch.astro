@@ -17,11 +17,13 @@ const letters = [...word.toLowerCase()];
 
 <style>
   .s-stretch {
-    min-height: 42vh;
+    min-height: 36vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow: hidden;
-    padding: 5vh 0;
+    padding: 4vh 0;
+    text-align: center;
   }
   .s-stretch__track {
     display: flex;
@@ -33,7 +35,7 @@ const letters = [...word.toLowerCase()];
   .s-stretch__letter {
     font-family: var(--vf-font-display);
     font-weight: 800;
-    font-size: clamp(3.8rem, 18vw, 14rem);
+    font-size: clamp(3.4rem, 16vw, 12rem);
     line-height: 0.75;
     letter-spacing: -0.07em;
     color: var(--vf-ink);
@@ -42,5 +44,15 @@ const letters = [...word.toLowerCase()];
     transform-origin: center;
     will-change: transform;
     min-width: 0;
+  }
+
+  @media (max-width: 720px) {
+    .s-stretch {
+      min-height: 22vh;
+      padding: 2.5vh 0;
+    }
+    .s-stretch__letter {
+      font-size: clamp(2.6rem, 14vw, 4.5rem);
+    }
   }
 </style>

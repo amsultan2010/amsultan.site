@@ -602,7 +602,7 @@ function initAbout() {
       trigger: section,
       start: 'top 70%',
     },
-    x: 36,
+    y: 28,
     opacity: 0,
     duration: 0.75,
     ease: 'power3.out',
@@ -675,8 +675,8 @@ function initWork() {
     });
   }
 
+  // Mobile uses a vertical stack — no horizontal pin/scrub
   if (prefersReducedMotion() || window.innerWidth < 768) {
-    track.style.overflowX = 'auto';
     return;
   }
 

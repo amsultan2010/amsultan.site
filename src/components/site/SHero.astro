@@ -41,22 +41,26 @@ import ASeparator from './ASeparator.astro';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 4rem 0 7vh;
+    align-items: center;
+    padding: 5.5rem 0 6vh;
     position: relative;
     overflow: hidden;
+    text-align: center;
   }
   .s-hero__meta {
     padding: 0 var(--vf-pad) 0.75rem;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.5rem;
-    font-size: 0.82rem;
-    letter-spacing: 0.12em;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
     color: var(--vf-mark);
   }
   .s-hero__stage {
     perspective: 1200px;
     transform-style: preserve-3d;
+    width: 100%;
   }
   .s-hero__title {
     display: flex;
@@ -66,7 +70,7 @@ import ASeparator from './ASeparator.astro';
     gap: 0.08em 0.18em;
     margin: 0.5rem 0;
     padding: 0 0.5rem;
-    font-size: clamp(2.8rem, 13vw, 9.5rem);
+    font-size: clamp(3.2rem, 14vw, 9.5rem);
     text-align: center;
     will-change: transform;
     transform-style: preserve-3d;
@@ -89,11 +93,11 @@ import ASeparator from './ASeparator.astro';
     will-change: transform;
   }
   .s-hero__lede {
-    max-width: 36rem;
-    margin: 1.15rem auto 0;
+    max-width: 34rem;
+    margin: 1.25rem auto 0;
     padding: 0 var(--vf-pad);
     text-align: center;
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.35rem, 3vw, 1.75rem);
     line-height: 1.4;
     overflow-wrap: anywhere;
   }
@@ -102,20 +106,21 @@ import ASeparator from './ASeparator.astro';
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.85rem;
-    margin-top: 1.5rem;
+    margin-top: 1.75rem;
     padding: 0 var(--vf-pad);
+    width: 100%;
   }
   .s-hero__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 3.1rem;
-    min-width: 9.5rem;
-    padding: 0.95rem 1.45rem;
+    min-height: 3.25rem;
+    min-width: 10rem;
+    padding: 1rem 1.5rem;
     border: 1px solid var(--vf-ink);
     text-decoration: none;
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
     transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
   }
   .s-hero__btn:hover {
@@ -133,12 +138,43 @@ import ASeparator from './ASeparator.astro';
   }
   .s-hero__scroll {
     position: absolute;
-    bottom: 1.5rem;
+    bottom: 1.25rem;
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
     opacity: 0.55;
+  }
+
+  @media (max-width: 720px) {
+    .s-hero {
+      min-height: auto;
+      padding: 1.25rem 0 3.5rem;
+      justify-content: flex-start;
+    }
+    .s-hero__title {
+      font-size: clamp(2.8rem, 16vw, 4.5rem);
+    }
+    .s-hero__lede {
+      font-size: 1.3rem;
+      max-width: 22rem;
+    }
+    .s-hero__actions {
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 20rem;
+      margin-left: auto;
+      margin-right: auto;
+      gap: 0.65rem;
+    }
+    .s-hero__btn {
+      width: 100%;
+      min-height: 3.4rem;
+      font-size: 1.05rem;
+    }
+    .s-hero__scroll {
+      display: none;
+    }
   }
 </style>

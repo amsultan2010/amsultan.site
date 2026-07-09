@@ -118,88 +118,107 @@ const total = String(PROJECTS.length).padStart(2, '0');
 </html>
 
 <style>
+  .archive {
+    text-align: center;
+  }
   .archive__head {
-    padding: 2rem var(--vf-pad) 1rem;
+    padding: 2rem var(--vf-pad) 1.25rem;
     max-width: 40rem;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
   .archive__title {
-    margin: 0;
-    font-size: clamp(2.2rem, 7vw, 4.2rem);
+    margin: 0.5rem 0 0;
+    font-size: clamp(2.6rem, 8vw, 4.6rem);
     overflow-wrap: anywhere;
   }
   .archive__copy {
     min-width: 0;
+    display: grid;
+    justify-items: center;
   }
   .archive__lede {
-    margin: 0.75rem 0 0;
-    font-size: 1.2rem;
+    margin: 0.85rem 0 0;
+    font-size: 1.4rem;
   }
   .archive__back {
-    margin: 1rem 0 0;
+    margin: 1.1rem 0 0;
   }
   .archive__back a {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
     text-decoration: none;
     color: var(--vf-mark);
+    min-height: var(--vf-tap);
+    display: inline-flex;
+    align-items: center;
   }
   .archive__list {
     list-style: none;
-    margin: 0;
+    margin: 0 auto;
     padding: 0 var(--vf-pad) 3rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .archive__row {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(140px, 0.7fr);
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1.15rem;
     align-items: center;
+    justify-items: center;
     padding: 1.75rem 0;
     border-top: 1px solid color-mix(in srgb, var(--vf-ink) 30%, transparent);
     text-decoration: none;
     color: inherit;
+    text-align: center;
   }
   .archive__row:hover .archive__name {
     color: var(--vf-mark);
   }
   .archive__serial {
     margin: 0;
-    font-size: 0.62rem;
-    letter-spacing: 0.1em;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
     color: var(--vf-mark);
   }
   .archive__name {
-    margin: 0.4rem 0 0;
-    font-size: clamp(1.35rem, 3.2vw, 2rem);
+    margin: 0.5rem 0 0;
+    font-size: clamp(1.6rem, 3.6vw, 2.35rem);
     line-height: 1.05;
     overflow-wrap: anywhere;
     word-break: break-word;
   }
   .archive__desc {
-    margin: 0.6rem 0 0;
+    margin: 0.7rem auto 0;
     max-width: 36rem;
+    font-size: 1.25rem;
   }
   .archive__detail {
-    margin: 0.5rem 0 0;
-    max-width: 38rem;
+    margin: 0.55rem auto 0;
+    max-width: 36rem;
     opacity: 0.88;
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
   .archive__metrics {
-    margin: 0.65rem 0 0;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
+    margin: 0.75rem 0 0;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
     color: var(--vf-mark);
   }
   .archive__tech {
     margin: 0.55rem 0 0;
-    font-size: 0.6rem;
-    letter-spacing: 0.08em;
-    opacity: 0.65;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
   }
   .archive__media {
     border: 1px solid var(--vf-ink);
     aspect-ratio: 16 / 10;
     overflow: hidden;
+    width: 100%;
+    max-width: 28rem;
   }
   .archive__media img {
     width: 100%;
@@ -207,9 +226,16 @@ const total = String(PROJECTS.length).padStart(2, '0');
     object-fit: cover;
     display: block;
   }
-  @media (max-width: 700px) {
+  @media (max-width: 720px) {
     .archive__row {
-      grid-template-columns: 1fr;
+      padding: 1.35rem 0;
+    }
+    .archive__name {
+      font-size: 1.7rem;
+    }
+    .archive__desc,
+    .archive__detail {
+      font-size: 1.15rem;
     }
   }
 </style>

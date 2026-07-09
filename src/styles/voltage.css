@@ -10,8 +10,9 @@
   --vf-font-display: 'Unbounded', 'Arial Black', Impact, sans-serif;
   --vf-font-body: 'Newsreader', Georgia, 'Times New Roman', serif;
   --vf-font-mono: 'IBM Plex Mono', 'SF Mono', Menlo, monospace;
-  --vf-max: 1120px;
-  --vf-pad: clamp(1.1rem, 3vw, 2rem);
+  --vf-max: 920px;
+  --vf-pad: clamp(1.15rem, 4vw, 2.25rem);
+  --vf-tap: 2.75rem;
   color-scheme: light;
 }
 
@@ -69,11 +70,13 @@ body {
   background: var(--vf-field);
   color: var(--vf-ink);
   font-family: var(--vf-font-body);
-  font-size: 1.2rem;
+  font-size: clamp(1.2rem, 2.4vw, 1.4rem);
   line-height: 1.5;
+  text-align: center;
   text-transform: lowercase;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
+  -webkit-tap-highlight-color: color-mix(in srgb, var(--vf-mark) 25%, transparent);
 }
 
 /* No uppercase anywhere on the voltage site */
@@ -83,9 +86,9 @@ body *::after {
   text-transform: lowercase !important;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   body {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
   }
 }
 
@@ -331,13 +334,14 @@ html.theme-contrasted .site-contrast-mask {
 .vf-band {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  margin: 0 0 0 var(--vf-pad);
+  margin: 0 auto;
   padding: 0;
   background: transparent;
   color: var(--vf-mark);
   font-family: var(--vf-font-mono);
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   letter-spacing: 0.1em;
   border: none;
 }
@@ -351,9 +355,10 @@ html.theme-contrasted .site-contrast-mask {
 
 .vf-rule {
   height: 1px;
-  margin: 0 var(--vf-pad);
+  width: min(12rem, 40vw);
+  margin: 0 auto;
   background: var(--vf-line);
-  transform-origin: left center;
+  transform-origin: center;
 }
 
 .vf-runway {
@@ -383,8 +388,10 @@ html.theme-contrasted .site-contrast-mask {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  align-items: center;
   padding: 5vh var(--vf-pad) 1.25rem;
   overflow: hidden;
+  text-align: center;
 }
 
 .vf-chapter__index {
@@ -418,17 +425,19 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .vf-chapter__lede {
-  margin: 0.85rem 0 0;
+  margin: 0.85rem auto 0;
   max-width: 36rem;
-  font-size: clamp(1.15rem, 2.1vw, 1.35rem);
+  font-size: clamp(1.3rem, 2.4vw, 1.55rem);
   opacity: 0.9;
+  text-align: center;
 }
 
 .vf-section-index {
-  margin: 0 var(--vf-pad) 0.35rem;
-  font-size: 0.82rem;
+  margin: 0 auto 0.35rem;
+  font-size: 0.95rem;
   letter-spacing: 0.1em;
   color: var(--vf-mark);
+  text-align: center;
 }
 
 /* Section rhythm — Law of Proximity: content clusters, air between chapters */
@@ -437,7 +446,17 @@ html.theme-contrasted .site-contrast-mask {
 #proof,
 #margin,
 #contact {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6.5rem;
+}
+
+@media (max-width: 720px) {
+  #about,
+  #work,
+  #proof,
+  #margin,
+  #contact {
+    scroll-margin-top: 7.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

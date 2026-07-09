@@ -33,33 +33,40 @@ const ascii = fs.existsSync(asciiPath)
 
 <style>
   .s-margin {
-    padding: 1vh 0 6vh;
+    padding: 1vh 0 5vh;
     overflow-x: clip;
+    text-align: center;
   }
   .s-margin__layout {
     display: grid;
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
     padding: 0.5rem var(--vf-pad) 1rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    margin: 0 auto;
+    justify-items: center;
   }
   .s-margin__ascii {
     border: 1px solid var(--vf-line);
-    padding: 0.65rem;
+    padding: 0.75rem;
     background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
     min-width: 0;
+    width: 100%;
+    max-width: 28rem;
     container-type: inline-size;
-    align-self: start;
   }
   .s-margin__label {
-    margin: 0 0 0.45rem;
-    font-size: 0.75rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
     letter-spacing: 0.1em;
     color: var(--vf-mark);
+    text-align: center;
   }
   .s-margin__ascii-frame {
     overflow: hidden;
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
   .s-margin__pre {
     margin: 0;
@@ -71,12 +78,14 @@ const ascii = fs.existsSync(asciiPath)
     white-space: pre;
     width: max-content;
     max-width: none;
+    text-align: left;
   }
   .s-margin__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-    gap: 0.45rem;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
     align-content: start;
+    width: 100%;
   }
   .s-margin__card {
     border: 1px solid var(--vf-line);
@@ -99,20 +108,19 @@ const ascii = fs.existsSync(asciiPath)
     filter: grayscale(0.08) contrast(1.05);
   }
 
-  @media (max-width: 900px) {
-    .s-margin__layout {
-      grid-template-columns: 1fr;
-    }
-    .s-margin__grid {
-      grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
-    }
-  }
-  @media (max-width: 520px) {
+  @media (max-width: 720px) {
     .s-margin__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.4rem;
     }
     .s-margin__card {
       transform: none;
+    }
+    .s-margin__card:hover {
+      transform: none;
+    }
+    .s-margin__ascii {
+      max-width: 100%;
     }
   }
 </style>

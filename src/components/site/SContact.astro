@@ -32,18 +32,25 @@ const talk = 'talk';
 
 <style>
   .s-contact {
-    padding: 1vh 0 8vh;
-    min-height: 70vh;
+    padding: 1vh 0 7vh;
+    min-height: 65vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     overflow-x: clip;
+    text-align: center;
   }
   .s-contact__inner {
     width: 100%;
-    padding: 2rem var(--vf-pad) 3.5rem;
+    max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
+    margin: 0 auto;
+    padding: 2rem var(--vf-pad) 3rem;
     text-align: center;
     position: relative;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .s-contact__inner::before {
     content: '';
@@ -58,13 +65,14 @@ const talk = 'talk';
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    font-size: clamp(4.5rem, 18vw, 14rem);
+    font-size: clamp(5rem, 18vw, 14rem);
     line-height: 0.82;
     color: var(--vf-ink);
     perspective: 900px;
     transform-style: preserve-3d;
     will-change: transform;
     max-width: 100%;
+    min-height: 4rem;
   }
   .s-contact__go:hover .s-contact__go-label,
   .s-contact__go:focus .s-contact__go-label {
@@ -83,20 +91,24 @@ const talk = 'talk';
   }
   .s-contact__title {
     position: relative;
-    margin: 0.9rem 0 0;
-    font-size: clamp(1.7rem, 4.5vw, 2.8rem);
+    margin: 1rem 0 0;
+    font-size: clamp(2rem, 5vw, 3.2rem);
     overflow-wrap: anywhere;
   }
   .s-contact__email {
     position: relative;
-    margin: 0.9rem 0 0;
-    font-size: clamp(0.8rem, 2.2vw, 0.95rem);
-    letter-spacing: 0.06em;
+    margin: 1rem 0 0;
+    font-size: clamp(1rem, 2.4vw, 1.2rem);
+    letter-spacing: 0.04em;
     overflow-wrap: anywhere;
   }
   .s-contact__email a {
     text-decoration: none;
     border-bottom: 1px solid var(--vf-ink);
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--vf-tap);
+    padding: 0.25rem 0;
   }
   .s-contact__email a:hover {
     color: var(--vf-mark);
@@ -104,9 +116,9 @@ const talk = 'talk';
   }
   .s-contact__sub {
     position: relative;
-    margin: 0.85rem auto 0;
+    margin: 0.9rem auto 0;
     max-width: 28rem;
-    font-size: clamp(1.15rem, 2.4vw, 1.3rem);
+    font-size: clamp(1.3rem, 2.6vw, 1.5rem);
     padding: 0 0.5rem;
   }
   .s-contact__links {
@@ -114,18 +126,54 @@ const talk = 'talk';
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 1rem 1.25rem;
-    margin-top: 1.35rem;
-    font-size: 0.8rem;
-    letter-spacing: 0.1em;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.08em;
   }
   .s-contact__links a {
     text-decoration: none;
-    min-height: 2.5rem;
+    min-height: var(--vf-tap);
+    min-width: 5.5rem;
+    padding: 0.45rem 0.75rem;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--vf-ink) 28%, transparent);
   }
   .s-contact__links a:hover {
     color: var(--vf-mark);
+    border-color: var(--vf-mark);
+  }
+
+  @media (max-width: 720px) {
+    .s-contact {
+      min-height: auto;
+      padding: 1vh 0 5vh;
+    }
+    .s-contact__go {
+      font-size: clamp(4.2rem, 28vw, 7rem);
+    }
+    .s-contact__title {
+      font-size: 1.9rem;
+    }
+    .s-contact__email {
+      font-size: 1rem;
+    }
+    .s-contact__sub {
+      font-size: 1.25rem;
+    }
+    .s-contact__links {
+      width: 100%;
+      max-width: 20rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.55rem;
+    }
+    .s-contact__links a {
+      width: 100%;
+      min-height: 3.25rem;
+      font-size: 1.05rem;
+    }
   }
 </style>
