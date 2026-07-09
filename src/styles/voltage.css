@@ -70,7 +70,7 @@ body {
   background: var(--vf-field);
   color: var(--vf-ink);
   font-family: var(--vf-font-body);
-  font-size: clamp(1.2rem, 2.4vw, 1.4rem);
+  font-size: clamp(1.35rem, 2.6vw, 1.65rem);
   line-height: 1.5;
   text-align: left;
   text-transform: lowercase;
@@ -88,7 +88,7 @@ body *::after {
 
 @media (max-width: 720px) {
   body {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 }
 
@@ -275,7 +275,7 @@ html.has-scrollbar .site-wrapper {
   position: relative;
   z-index: 1;
   font-family: var(--vf-font-mono);
-  font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+  font-size: clamp(1.15rem, 2.8vw, 1.45rem);
   letter-spacing: 0.18em;
   color: var(--vf-ink);
   opacity: 0;
@@ -287,7 +287,7 @@ html.has-scrollbar .site-wrapper {
   right: 1.5rem;
   z-index: 2;
   font-family: var(--vf-font-mono);
-  font-size: 0.78rem;
+  font-size: 1rem;
   letter-spacing: 0.08em;
   background: transparent;
   border: 1px solid var(--vf-ink);
@@ -392,13 +392,13 @@ html.theme-contrasted .site-contrast-mask {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   margin: 0 auto;
   padding: 0;
   background: transparent;
   color: var(--vf-mark);
   font-family: var(--vf-font-mono);
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   letter-spacing: 0.1em;
   border: none;
 }
@@ -458,7 +458,7 @@ html.theme-contrasted .site-contrast-mask {
 
 .vf-chapter__index {
   font-family: var(--vf-font-mono);
-  font-size: 0.82rem;
+  font-size: 1.1rem;
   letter-spacing: 0.1em;
   color: var(--vf-mark);
   margin: 0 0 0.6rem;
@@ -491,14 +491,14 @@ html.theme-contrasted .site-contrast-mask {
 .vf-chapter__lede {
   margin: 0.85rem auto 0;
   max-width: 48rem;
-  font-size: clamp(1.3rem, 2.4vw, 1.55rem);
+  font-size: clamp(1.45rem, 2.6vw, 1.75rem);
   opacity: 0.9;
   text-align: center;
 }
 
 .vf-section-index {
   margin: 0 0 0.35rem;
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   letter-spacing: 0.1em;
   color: var(--vf-mark);
   text-align: left;

@@ -21,8 +21,8 @@ const ascii = fs.existsSync(asciiPath)
     <div class="s-margin__grid">
       {photos.map((photo, i) => (
         <article
-          class="s-margin__card js-margin-card"
-          style={`--rot: ${(i % 2 === 0 ? -1 : 1) * (1 + (i % 3) * 0.6)}deg`}
+          class={`s-margin__card js-margin-card ${i % 7 === 0 ? 's-margin__card--wide' : ''} ${i % 11 === 3 ? 's-margin__card--tall' : ''}`}
+          style={`--rot: ${(i % 2 === 0 ? -1 : 1) * (1.2 + (i % 3) * 0.7)}deg`}
         >
           <img src={photo.src} alt={photo.alt} loading="lazy" decoding="async" />
         </article>
@@ -39,8 +39,8 @@ const ascii = fs.existsSync(asciiPath)
   }
   .s-margin__layout {
     display: grid;
-    grid-template-columns: minmax(14rem, 0.85fr) minmax(0, 1.6fr);
-    gap: 1.25rem;
+    grid-template-columns: minmax(16rem, 0.75fr) minmax(0, 1.8fr);
+    gap: 1.5rem;
     padding: 0.5rem var(--vf-pad) 1rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
     margin: 0 auto;
@@ -48,16 +48,18 @@ const ascii = fs.existsSync(asciiPath)
   }
   .s-margin__ascii {
     border: 1px solid var(--vf-line);
-    padding: 0.75rem;
+    padding: 1rem;
     background: color-mix(in srgb, var(--vf-ink) 6%, transparent);
     min-width: 0;
     width: 100%;
     max-width: none;
     container-type: inline-size;
+    position: sticky;
+    top: 6.5rem;
   }
   .s-margin__label {
-    margin: 0 0 0.5rem;
-    font-size: 0.95rem;
+    margin: 0 0 0.65rem;
+    font-size: 1.15rem;
     letter-spacing: 0.1em;
     color: var(--vf-mark);
     text-align: center;
@@ -71,7 +73,7 @@ const ascii = fs.existsSync(asciiPath)
   .s-margin__pre {
     margin: 0;
     font-family: var(--vf-font-mono);
-    font-size: 1.05cqi;
+    font-size: 1.2cqi;
     line-height: 1.05;
     color: var(--vf-ink);
     opacity: 0.9;
@@ -82,8 +84,8 @@ const ascii = fs.existsSync(asciiPath)
   }
   .s-margin__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 0.55rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
     align-content: start;
     width: 100%;
   }
@@ -91,37 +93,69 @@ const ascii = fs.existsSync(asciiPath)
     --rx: 0deg;
     --ry: 0deg;
     border: 1px solid var(--vf-line);
-    padding: 0.22rem;
+    padding: 0.35rem;
     background: color-mix(in srgb, var(--vf-ink) 4%, transparent);
     transform: rotate(var(--rot, 0deg)) rotateX(var(--rx)) rotateY(var(--ry));
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
     overflow: hidden;
     min-width: 0;
     transform-style: preserve-3d;
     will-change: transform;
   }
+  .s-margin__card--wide {
+    grid-column: span 2;
+  }
+  .s-margin__card--tall {
+    grid-row: span 2;
+    height: 100%;
+  }
   .s-margin__card:hover {
-    transform: rotate(0deg) rotateX(0deg) rotateY(0deg) scale(1.08);
+    transform: rotate(0deg) rotateX(0deg) rotateY(0deg) scale(1.04);
     z-index: 2;
+    border-color: color-mix(in srgb, var(--vf-mark) 55%, var(--vf-line));
   }
   .s-margin__card img {
     width: 100%;
     aspect-ratio: 1;
     object-fit: cover;
     display: block;
-    filter: grayscale(0.08) contrast(1.05);
+    filter: grayscale(0.05) contrast(1.06);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s;
+  }
+  .s-margin__card--tall img {
+    height: 100%;
+    aspect-ratio: auto;
+    min-height: 100%;
+    object-fit: cover;
+  }
+  .s-margin__card:hover img {
+    transform: scale(1.08);
+    filter: grayscale(0) contrast(1.08);
   }
 
+  @media (max-width: 1100px) {
+    .s-margin__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
   @media (max-width: 900px) {
     .s-margin__layout {
       grid-template-columns: 1fr;
       justify-items: stretch;
     }
+    .s-margin__ascii {
+      position: static;
+    }
   }
   @media (max-width: 720px) {
     .s-margin__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.4rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+    .s-margin__card--wide,
+    .s-margin__card--tall {
+      grid-column: span 1;
+      grid-row: span 1;
     }
     .s-margin__card {
       transform: none;

@@ -1,14 +1,15 @@
 import { test, expect, type Page } from '@playwright/test';
 
 async function dismissIntro(page: Page) {
-  const skip = page.getByRole('button', { name: /skip/i });
-  if (await skip.isVisible({ timeout: 1200 }).catch(() => false)) {
-    await skip.click({ force: true }).catch(() => undefined);
-  }
+  await page.waitForLoadState('domcontentloaded');
   // Always force-complete — intro wipe can race under parallel workers
   await page.waitForFunction(() => !!document.querySelector('.js-site-wrapper'), null, {
-    timeout: 8000,
+    timeout: 15000,
   });
+  const skip = page.getByRole('button', { name: /skip/i });
+  if (await skip.isVisible({ timeout: 800 }).catch(() => false)) {
+    await skip.click({ force: true }).catch(() => undefined);
+  }
   await page.evaluate(() => {
     const intro = document.querySelector('.js-intro');
     const wrapper = document.querySelector<HTMLElement>('.js-site-wrapper');

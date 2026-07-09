@@ -404,14 +404,14 @@ function initHero() {
   // Ambient letter flip — signature wodniack living type
   const dirs = ['to-top', 'to-right', 'to-bottom', 'to-left'];
   const flipTick = () => {
-    if (!allChars.length || Math.random() > 0.35) return;
+    if (!allChars.length || Math.random() > 0.28) return;
     const char = allChars[Math.floor(Math.random() * allChars.length)];
     if (dirs.some((d) => char.classList.contains(d))) return;
     const dir = dirs[Math.floor(Math.random() * dirs.length)];
     char.classList.add(dir);
     window.setTimeout(() => char.classList.remove(dir), 1000);
   };
-  window.setInterval(flipTick, 180);
+  window.setInterval(flipTick, 140);
 }
 
 function initTextWarp() {
@@ -503,26 +503,27 @@ function initStretch() {
 
     gsap.fromTo(
       letters,
-      { scaleX: 0.08, scaleY: 1.35, opacity: 0.15, skewX: 8 },
+      { scaleX: 0.05, scaleY: 1.55, opacity: 0.12, skewX: 14, rotateY: -35 },
       {
         scaleX: 1,
         scaleY: 1,
         opacity: 1,
         skewX: 0,
+        rotateY: 0,
         ease: 'none',
-        stagger: { each: 0.055, from: 'center' },
+        stagger: { each: 0.06, from: 'center' },
         scrollTrigger: {
           trigger: section,
-          start: 'top 92%',
-          end: 'center 32%',
-          scrub: 1.1,
+          start: 'top 94%',
+          end: 'center 28%',
+          scrub: 1.15,
         },
       },
     );
 
     gsap.to(letters, {
-      yPercent: (i) => (i % 2 === 0 ? -22 : 22),
-      rotate: (i) => (i % 2 === 0 ? -4 : 4),
+      yPercent: (i) => (i % 2 === 0 ? -28 : 28),
+      rotate: (i) => (i % 2 === 0 ? -6 : 6),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -580,11 +581,11 @@ function initSeparators() {
     window.setInterval(() => {
       if (!active) return;
       chars.forEach((char) => {
-        if (Math.random() > 0.12) return;
+        if (Math.random() > 0.18) return;
         char.classList.add('is-flip');
-        window.setTimeout(() => char.classList.remove('is-flip'), 180);
+        window.setTimeout(() => char.classList.remove('is-flip'), 220);
       });
-    }, 140);
+    }, 110);
   });
 }
 
@@ -784,7 +785,7 @@ function initWork() {
       end: 'left 20%',
       scrub: true,
       onUpdate: (self) => {
-        const tilt = (0.5 - self.progress) * 22;
+        const tilt = (0.5 - self.progress) * 30;
         item.style.setProperty('--tilt', `${tilt.toFixed(2)}deg`);
       },
     });
@@ -828,19 +829,21 @@ function initMargin() {
     gsap.fromTo(
       card,
       {
-        y: 70,
-        rotate: i % 2 === 0 ? -8 : 8,
+        y: 90,
+        rotate: i % 2 === 0 ? -12 : 12,
+        scale: 0.88,
         opacity: 0,
       },
       {
         y: 0,
-        rotate: i % 2 === 0 ? -2 : 2,
+        rotate: i % 2 === 0 ? -2.5 : 2.5,
+        scale: 1,
         opacity: 1,
         ease: 'none',
         scrollTrigger: {
           trigger: card,
-          start: 'top 92%',
-          end: 'top 58%',
+          start: 'top 94%',
+          end: 'top 52%',
           scrub: true,
         },
       },
@@ -856,8 +859,8 @@ function initMargin() {
         const r = card.getBoundingClientRect();
         const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
         const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
-        card.style.setProperty('--rx', `${(-ny * 10).toFixed(2)}deg`);
-        card.style.setProperty('--ry', `${(nx * 12).toFixed(2)}deg`);
+        card.style.setProperty('--rx', `${(-ny * 14).toFixed(2)}deg`);
+        card.style.setProperty('--ry', `${(nx * 16).toFixed(2)}deg`);
       },
       { passive: true },
     );
@@ -1054,8 +1057,8 @@ function initMagneticButtons() {
       'pointermove',
       (e) => {
         const r = el.getBoundingClientRect();
-        tx = (e.clientX - (r.left + r.width / 2)) * 0.28;
-        ty = (e.clientY - (r.top + r.height / 2)) * 0.28;
+        tx = (e.clientX - (r.left + r.width / 2)) * 0.38;
+        ty = (e.clientY - (r.top + r.height / 2)) * 0.38;
       },
       { passive: true },
     );
@@ -1072,7 +1075,7 @@ function initMagneticButtons() {
 
 function initScramble() {
   if (prefersReducedMotion()) return;
-  const glyphs = 'abcdefghijklmnopqrstuvwxyz####////';
+  const glyphs = 'abcdefghijklmnopqrstuvwxyz01##////<>';
 
   document.querySelectorAll<HTMLElement>('.js-scramble').forEach((el) => {
     const original = (el.textContent ?? '').trim();
@@ -1082,7 +1085,7 @@ function initScramble() {
     el.addEventListener('mouseenter', () => {
       window.clearInterval(timer);
       let frame = 0;
-      const max = 10;
+      const max = 14;
       timer = window.setInterval(() => {
         el.textContent = [...original]
           .map((ch, i) => {
@@ -1096,7 +1099,7 @@ function initScramble() {
           window.clearInterval(timer);
           el.textContent = original;
         }
-      }, 28);
+      }, 22);
     });
     el.addEventListener('mouseleave', () => {
       window.clearInterval(timer);
