@@ -227,11 +227,11 @@ export function createVoltageTerrain({
 
   const uniforms = {
     ...shared,
-    uPeak: { value: new THREE.Color('#ff4d1a') },
-    uValley: { value: new THREE.Color('#e4d8cb') },
-    uMid: { value: new THREE.Color('#c9b8a4') },
+    uPeak: { value: new THREE.Color('#fffaf5') },
+    uValley: { value: new THREE.Color('#7a1806') },
+    uMid: { value: new THREE.Color('#ff4d1a') },
     uLightDir: { value: new THREE.Vector3(0.55, 1.0, 0.35).normalize() },
-    uOpacity: { value: reducedMotion ? 0.35 : 0.55 },
+    uOpacity: { value: reducedMotion ? 0.5 : 0.78 },
   };
 
   const material = new THREE.ShaderMaterial({
@@ -256,8 +256,8 @@ export function createVoltageTerrain({
   const wireMat = new THREE.ShaderMaterial({
     uniforms: {
       ...shared,
-      uWire: { value: new THREE.Color('#17190f') },
-      uOpacity: { value: 0.12 },
+      uWire: { value: new THREE.Color('#fffaf5') },
+      uOpacity: { value: 0.18 },
     },
     vertexShader: wireVert,
     fragmentShader: wireFrag,
@@ -278,21 +278,19 @@ export function createVoltageTerrain({
 
   const applyTheme = (contrasted: boolean) => {
     if (contrasted) {
-      // Voltage orange field
+      uniforms.uPeak.value.set('#ff4d1a');
+      uniforms.uValley.value.set('#d4c4b0');
+      uniforms.uMid.value.set('#fff8f1');
+      uniforms.uOpacity.value = 0.55;
+      wireMat.uniforms.uWire.value.set('#14110f');
+      wireMat.uniforms.uOpacity.value = 0.14;
+    } else {
       uniforms.uPeak.value.set('#fffaf5');
       uniforms.uValley.value.set('#7a1806');
       uniforms.uMid.value.set('#ff4d1a');
-      uniforms.uOpacity.value = reducedMotion ? 0.55 : 0.9;
+      uniforms.uOpacity.value = reducedMotion ? 0.5 : 0.78;
       wireMat.uniforms.uWire.value.set('#fffaf5');
-      wireMat.uniforms.uOpacity.value = 0.2;
-    } else {
-      // Daylight paper field
-      uniforms.uPeak.value.set('#ff4d1a');
-      uniforms.uValley.value.set('#e4d8cb');
-      uniforms.uMid.value.set('#c9b8a4');
-      uniforms.uOpacity.value = reducedMotion ? 0.35 : 0.55;
-      wireMat.uniforms.uWire.value.set('#17190f');
-      wireMat.uniforms.uOpacity.value = 0.12;
+      wireMat.uniforms.uOpacity.value = 0.18;
     }
   };
 

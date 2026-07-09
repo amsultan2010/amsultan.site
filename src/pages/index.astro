@@ -36,7 +36,7 @@ import '../styles/voltage.css';
 
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/icons/abdullah-apple-touch.png" />
-    <meta name="theme-color" content="#f7f1ea" />
+    <meta name="theme-color" content="#ff4d1a" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,11 +51,6 @@ import '../styles/voltage.css';
   </head>
   <body>
     <div class="site-progress js-progress" aria-hidden="true"></div>
-    <div class="site-cursor js-cursor" aria-hidden="true">
-      <span class="site-cursor__ring js-cursor-ring"></span>
-      <span class="site-cursor__dot js-cursor-dot"></span>
-    </div>
-    <div class="site-noise js-noise" aria-hidden="true"></div>
 
     <div class="site-terrain js-terrain" aria-hidden="true">
       <div class="site-terrain__fallback"></div>
@@ -67,16 +62,13 @@ import '../styles/voltage.css';
       <main>
         <SHero />
         <ASeparator phrases={['about', 'riyadh', 'student', 'builder']} />
-        <SStretch word="about" />
         <SAbout />
         <ASeparator phrases={['tutoringbyabdullah', 'downforce', 'quantpy']} reverse />
         <SStretch word="work" />
         <SWork />
         <ASeparator phrases={['x-combinator', 'debate', 'tennis', 'stack']} />
-        <SStretch word="proof" />
         <SProof />
         <ASeparator phrases={['photos', 'f1', 'tennis', 'weightlifting']} reverse />
-        <SStretch word="photos" />
         <SMargin />
         <ASeparator phrases={['email', 'github', 'linkedin', 'resume']} />
         <SStretch word="talk" />

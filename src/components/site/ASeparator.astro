@@ -10,7 +10,7 @@ const {
   reverse = false,
 } = Astro.props;
 
-const strip = Array.from({ length: 28 }, (_, i) => phrases[i % phrases.length]).join('  ·  ');
+const strip = Array.from({ length: 24 }, (_, i) => phrases[i % phrases.length]).join('  ·  ');
 ---
 
 <div class={`a-sep js-sep ${reverse ? 'a-sep--reverse' : ''} ${className}`} aria-hidden="true">
@@ -20,32 +20,24 @@ const strip = Array.from({ length: 28 }, (_, i) => phrases[i % phrases.length]).
 <style>
   .a-sep {
     overflow: hidden;
-    border: none;
-    background: transparent;
-    color: color-mix(in srgb, var(--vf-mark) 75%, var(--vf-ink));
-    padding: 1.15rem 0;
+    color: var(--vf-mark);
+    padding: 1rem 0;
     user-select: none;
-    transform-origin: center;
     border-block: 1px solid var(--vf-line);
   }
   .a-sep__track {
     white-space: nowrap;
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     letter-spacing: 0.16em;
-    animation: sep-marquee 30s linear infinite;
+    animation: sep-marquee 36s linear infinite;
     width: max-content;
   }
   .a-sep--reverse .a-sep__track {
-    animation-name: sep-marquee-rev;
-    animation-duration: 34s;
+    animation-direction: reverse;
   }
   @keyframes sep-marquee {
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
-  }
-  @keyframes sep-marquee-rev {
-    from { transform: translateX(-50%); }
-    to { transform: translateX(0); }
   }
   @media (prefers-reduced-motion: reduce) {
     .a-sep__track { animation: none; }
