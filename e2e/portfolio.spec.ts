@@ -7,6 +7,7 @@ test('homepage loads voltage frame with brand and work', async ({ page }) => {
     await skip.click();
   }
   await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible({ timeout: 10000 });
+  await expect(page.locator('.js-terrain-canvas')).toBeAttached();
   await expect(page.getByRole('heading', { name: /^work$/i }).first()).toBeVisible();
   await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: /^proof$/i }).first()).toBeVisible();

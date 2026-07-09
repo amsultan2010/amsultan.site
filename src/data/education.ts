@@ -9,27 +9,27 @@ export type EducationEntry = {
 
 export const EDUCATION: EducationEntry[] = [
   {
-    school: 'American International School in Riyadh',
+    school: 'american international school in riyadh',
     years: '2025-present',
-    location: 'Riyadh, Saudi Arabia',
+    location: 'riyadh, saudi arabia',
     logo: '/images/logosicons/aisr.png',
-    focus: 'Analysis & Approaches SL · AP CompSci A · AP Psych · AP Precalc',
+    focus: 'analysis & approaches sl · ap compsci a · ap psych · ap precalc',
     highlights: [
-      'Aspiring Doctors Club lead, tech-in-medicine track',
-      'Founded X-Combinator student incubator',
-      '#2 varsity tennis seed · JV badminton',
+      'aspiring doctors club lead, tech-in-medicine track',
+      'founded x-combinator student incubator',
+      '#2 varsity tennis seed · jv badminton',
     ],
   },
   {
-    school: 'The Pingry School',
+    school: 'the pingry school',
     years: '2021-2025',
-    location: 'Basking Ridge, NJ',
+    location: 'basking ridge, nj',
     logo: '/images/logosicons/pingry.png',
-    focus: 'GPA 3.86-W · AP CompSci Principles 5/5 (self-study)',
+    focus: 'gpa 3.86-w · ap compsci principles 5/5 (self-study)',
     highlights: [
-      'Public Forum Debate, 1st at Horace Mann Juniors (5-0)',
-      'Boys’ swim, 1st exhibition 50m free at Lawrenceville State Champs',
-      'PRIME engineering club · Muslim Affinity leadership',
+      'public forum debate, 1st at horace mann juniors (5-0)',
+      'boys’ swim, 1st exhibition 50m free at lawrenceville state champs',
+      'prime engineering club · muslim affinity leadership',
     ],
   },
 ];

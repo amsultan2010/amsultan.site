@@ -12,9 +12,14 @@ function prefersReducedMotion() {
 }
 
 function initLenis() {
+  // Slow, heavy, smooth — less jitter than short duration + high wheel gain
   const lenis = new Lenis({
-    duration: 1.2,
+    duration: 1.85,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
+    wheelMultiplier: 0.72,
+    touchMultiplier: 1.05,
+    syncTouch: false,
   });
 
   lenis.on('scroll', ScrollTrigger.update);
@@ -22,6 +27,7 @@ function initLenis() {
   gsap.ticker.add((time) => {
     lenis.raf(time * 1000);
   });
+  // Keep lag smoothing off so Lenis + ScrollTrigger stay in lockstep
   gsap.ticker.lagSmoothing(0);
 
   (window as unknown as { lenis: Lenis }).lenis = lenis;
@@ -182,7 +188,7 @@ function initClock() {
 }
 
 function splitChars(el: HTMLElement, className: string) {
-  const text = el.textContent ?? '';
+  const text = (el.textContent ?? '').toLowerCase();
   el.textContent = '';
   el.setAttribute('aria-label', text);
   const spans: HTMLElement[] = [];
@@ -202,7 +208,7 @@ function initHero() {
 
   const allChars: HTMLElement[] = [];
   lines.forEach((line) => {
-    allChars.push(...splitChars(line, 's-hero__char'));
+    allChars.push(...splitChars(line, 's-hero__char js-magnet-char'));
   });
 
   gsap.from(allChars, {
@@ -214,20 +220,25 @@ function initHero() {
   });
 
   const hero = document.querySelector('.s-hero');
-  if (hero && !prefersReducedMotion()) {
-    gsap.to('.s-hero__title', {
-      yPercent: -12,
+  const title = document.querySelector<HTMLElement>('.s-hero__title');
+  if (hero && title && !prefersReducedMotion()) {
+    // Scroll warp on the title block (not chars) so magnetic can own char transforms
+    gsap.to(title, {
+      yPercent: -14,
+      skewX: 6,
+      scale: 0.96,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 0.7,
       },
     });
+
     gsap.to('.s-hero__lede, .s-hero__actions, .s-hero__ticks', {
-      y: -40,
-      opacity: 0.15,
+      y: -36,
+      opacity: 0.2,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -237,39 +248,37 @@ function initHero() {
       },
     });
 
-    // Magnetic hover on hero name
-    const title = document.querySelector<HTMLElement>('.s-hero__title');
-    if (title) {
-      const onMove = (e: PointerEvent) => {
-        const rect = title.getBoundingClientRect();
-        allChars.forEach((char) => {
-          const r = char.getBoundingClientRect();
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          const dx = e.clientX - cx;
-          const dy = e.clientY - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const radius = Math.min(rect.width, 280) * 0.55;
-          if (dist < radius && dist > 0.5) {
-            const force = (1 - dist / radius) * 14;
-            gsap.to(char, {
-              x: (dx / dist) * force * -0.35,
-              y: (dy / dist) * force * -0.35,
-              duration: 0.35,
-              ease: 'power2.out',
-              overwrite: 'auto',
-            });
-          } else if (dist >= radius) {
-            gsap.to(char, { x: 0, y: 0, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
-          }
-        });
-      };
-      const onLeave = () => {
-        gsap.to(allChars, { x: 0, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.01 });
-      };
-      title.addEventListener('pointermove', onMove);
-      title.addEventListener('pointerleave', onLeave);
-    }
+    // Magnetic chars — document pointer so it always fires
+    const onMove = (e: PointerEvent) => {
+      const heroRect = hero.getBoundingClientRect();
+      if (e.clientY < heroRect.top - 40 || e.clientY > heroRect.bottom + 40) {
+        gsap.to(allChars, { x: 0, y: 0, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        return;
+      }
+
+      allChars.forEach((char) => {
+        const r = char.getBoundingClientRect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const radius = 240;
+        if (dist < radius) {
+          const force = (1 - dist / radius) * 32;
+          gsap.to(char, {
+            x: (dx / dist) * force * -0.6,
+            y: (dy / dist) * force * -0.5,
+            duration: 0.22,
+            ease: 'power2.out',
+            overwrite: 'auto',
+          });
+        } else {
+          gsap.to(char, { x: 0, y: 0, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        }
+      });
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
   }
 }
 
@@ -280,26 +289,28 @@ function initTextWarp() {
     const chars = splitChars(title, 'vf-warp-char');
     if (!chars.length) return;
 
-    const isContact = title.classList.contains('js-contact-title');
-
     gsap.fromTo(
       chars,
       {
-        y: isContact ? 40 : 48,
-        skewX: isContact ? -10 : 12,
-        opacity: 0.15,
+        y: 70,
+        skewX: 18,
+        rotate: 4,
+        opacity: 0,
+        scaleY: 1.35,
       },
       {
         y: 0,
         skewX: 0,
+        rotate: 0,
         opacity: 1,
+        scaleY: 1,
         ease: 'none',
-        stagger: { each: 0.03, from: 'start' },
+        stagger: { each: 0.04, from: 'start' },
         scrollTrigger: {
           trigger: title,
-          start: 'top 92%',
-          end: 'top 42%',
-          scrub: 0.85,
+          start: 'top 95%',
+          end: 'top 35%',
+          scrub: 1,
         },
       },
     );
@@ -310,10 +321,9 @@ function initChapters() {
   document.querySelectorAll<HTMLElement>('.js-chapter').forEach((chapter) => {
     const parts = chapter.querySelectorAll('.js-chapter-index, .js-chapter-lede');
     gsap.from(parts, {
-      y: 40,
+      y: 36,
       opacity: 0,
-      filter: 'blur(6px)',
-      duration: 0.85,
+      duration: 0.75,
       stagger: 0.08,
       ease: 'power3.out',
       scrollTrigger: {
@@ -352,10 +362,9 @@ function initAbout() {
       trigger: section,
       start: 'top 75%',
     },
-    y: 40,
+    y: 36,
     opacity: 0,
-    filter: 'blur(4px)',
-    duration: 0.75,
+    duration: 0.7,
     stagger: 0.08,
     ease: 'power3.out',
   });
@@ -467,10 +476,9 @@ function initProof() {
       trigger: '.s-proof__stats',
       start: 'top 80%',
     },
-    y: 40,
+    y: 36,
     opacity: 0,
-    filter: 'blur(4px)',
-    duration: 0.65,
+    duration: 0.6,
     stagger: 0.1,
     ease: 'power3.out',
   });
@@ -568,10 +576,11 @@ function boot() {
   initContrastToggle();
   initNav();
   initClock();
+  // Terrain boots immediately so the first paint isn't a flat orange void
+  initTerrain();
 
   const afterIntro = () => {
     initLenis();
-    initTerrain();
     initProgress();
     initHero();
     initTextWarp();
