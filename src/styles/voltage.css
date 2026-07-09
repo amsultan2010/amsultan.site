@@ -243,7 +243,7 @@ html.theme-contrasted .site-contrast-mask {
   background: #ff4d1a;
 }
 
-/* Scroll progress */
+/* Scroll progress — Zeigarnik: incomplete path keeps attention */
 .site-progress {
   position: fixed;
   top: 0;
@@ -255,6 +255,65 @@ html.theme-contrasted .site-contrast-mask {
   transform: scaleX(0);
   background: var(--vf-mark);
   pointer-events: none;
+}
+
+/* Custom cursor — Von Restorff for interactive targets */
+.site-cursor {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: difference;
+}
+
+.site-cursor.is-on {
+  opacity: 1;
+}
+
+.site-cursor__ring,
+.site-cursor__dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.site-cursor__ring {
+  width: 42px;
+  height: 42px;
+  margin: -21px 0 0 -21px;
+  border: 1.5px solid var(--vf-ink);
+  transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, background 0.25s ease;
+}
+
+.site-cursor__dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--vf-ink);
+}
+
+.site-cursor.is-hot .site-cursor__ring {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: color-mix(in srgb, var(--vf-ink) 12%, transparent);
+}
+
+@media (pointer: coarse), (max-width: 900px) {
+  .site-cursor {
+    display: none;
+  }
+}
+
+@media (pointer: fine) and (min-width: 901px) {
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button {
+    cursor: none;
+  }
 }
 
 .vf-band {
@@ -286,18 +345,18 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .vf-runway {
-  min-height: 78vh;
+  min-height: 68vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18vh var(--vf-pad);
+  padding: 14vh var(--vf-pad);
   overflow: hidden;
 }
 
 .vf-runway__text {
   font-family: var(--vf-font-display);
   font-weight: 800;
-  font-size: clamp(2.8rem, 12vw, 8rem);
+  font-size: clamp(2.6rem, 11vw, 7.2rem);
   letter-spacing: -0.045em;
   line-height: 0.88;
   text-align: center;
@@ -306,11 +365,11 @@ html.theme-contrasted .site-contrast-mask {
 }
 
 .vf-chapter {
-  min-height: 48vh;
+  min-height: 36vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 12vh var(--vf-pad) 2rem;
+  padding: 8vh var(--vf-pad) 1.5rem;
   overflow: hidden;
 }
 
@@ -358,6 +417,15 @@ html.theme-contrasted .site-contrast-mask {
   color: var(--vf-mark);
 }
 
+/* Section rhythm — Law of Proximity: content clusters, air between chapters */
+#about,
+#work,
+#proof,
+#margin,
+#contact {
+  scroll-margin-top: 5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site-intro {
     display: none !important;
@@ -367,5 +435,13 @@ html.theme-contrasted .site-contrast-mask {
   }
   .site-terrain {
     opacity: 0.35;
+  }
+  .site-cursor {
+    display: none !important;
+  }
+  body.has-cursor,
+  body.has-cursor a,
+  body.has-cursor button {
+    cursor: auto;
   }
 }

@@ -212,19 +212,36 @@ function initHero() {
   });
 
   gsap.from(allChars, {
-    yPercent: 110,
+    yPercent: 120,
+    rotateX: -55,
     opacity: 0,
-    duration: 0.85,
+    duration: 1,
     ease: 'power4.out',
-    stagger: 0.025,
+    stagger: 0.028,
   });
 
-  const hero = document.querySelector('.s-hero');
-  const title = document.querySelector<HTMLElement>('.s-hero__title');
-  const star = document.querySelector<HTMLElement>('.s-hero__star');
-  if (hero && title && !prefersReducedMotion()) {
-    gsap.to(title, {
-      yPercent: -14,
+  const hero = document.querySelector<HTMLElement>('.s-hero');
+  const title = document.querySelector<HTMLElement>('.js-hero-title');
+  const star = document.querySelector<HTMLElement>('.js-hero-star');
+  const cue = document.querySelector<HTMLElement>('.js-scroll-cue');
+  if (!hero || !title || prefersReducedMotion()) return;
+
+  gsap.to(title, {
+    yPercent: -18,
+    scale: 0.92,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  if (star) {
+    gsap.to(star, {
+      rotate: 220,
+      scale: 1.45,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -233,111 +250,132 @@ function initHero() {
         scrub: true,
       },
     });
+  }
 
-    if (star) {
-      gsap.to(star, {
-        rotate: 180,
-        scale: 1.35,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
+  gsap.to('.s-hero__lede, .s-hero__actions', {
+    y: -48,
+    opacity: 0.1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
+
+  if (cue) {
+    gsap.to(cue, {
+      opacity: 0,
+      y: -12,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: '20% top',
+        scrub: true,
+      },
+    });
+    gsap.to(cue, {
+      y: 8,
+      duration: 1.1,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    });
+  }
+
+  hero.querySelectorAll<HTMLElement>('.js-sep').forEach((sep, i) => {
+    gsap.to(sep, {
+      xPercent: i % 2 === 0 ? -12 : 12,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  });
+
+  // Magnetic letters + 3D title tilt (wodniack depth)
+  const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
+  let tiltX = 0;
+  let tiltY = 0;
+  let tiltTX = 0;
+  let tiltTY = 0;
+  let magnetRaf = 0;
+
+  const magnetLoop = () => {
+    magnetRaf = requestAnimationFrame(magnetLoop);
+    tiltX += (tiltTX - tiltX) * 0.08;
+    tiltY += (tiltTY - tiltY) * 0.08;
+    title.style.transform = `rotateX(${tiltX.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg)`;
+
+    allChars.forEach((char, i) => {
+      const o = offsets[i];
+      o.x += (o.tx - o.x) * 0.16;
+      o.y += (o.ty - o.y) * 0.16;
+      const z = Math.abs(o.x) + Math.abs(o.y);
+      char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, ${z.toFixed(1)}px)`;
+    });
+  };
+  magnetLoop();
+
+  const onMove = (e: PointerEvent) => {
+    const heroRect = hero.getBoundingClientRect();
+    const nx = ((e.clientX - heroRect.left) / heroRect.width - 0.5) * 2;
+    const ny = ((e.clientY - heroRect.top) / heroRect.height - 0.5) * 2;
+    const inside =
+      e.clientY >= heroRect.top - 40 && e.clientY <= heroRect.bottom + 40;
+
+    if (!inside) {
+      tiltTX = 0;
+      tiltTY = 0;
+      offsets.forEach((o) => {
+        o.tx = 0;
+        o.ty = 0;
       });
+      return;
     }
 
-    gsap.to('.s-hero__lede, .s-hero__actions', {
-      y: -40,
-      opacity: 0.15,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
+    tiltTX = ny * -8;
+    tiltTY = nx * 10;
 
-    // Parallax marquees inside hero
-    hero.querySelectorAll<HTMLElement>('.js-sep').forEach((sep, i) => {
-      gsap.to(sep, {
-        xPercent: i % 2 === 0 ? -8 : 8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      });
-    });
-
-    // Magnetic via direct transforms (no GSAP per-char tweens fighting Lenis)
-    const offsets = allChars.map(() => ({ x: 0, y: 0, tx: 0, ty: 0 }));
-    let magnetRaf = 0;
-    const magnetLoop = () => {
-      magnetRaf = requestAnimationFrame(magnetLoop);
-      allChars.forEach((char, i) => {
-        const o = offsets[i];
-        o.x += (o.tx - o.x) * 0.18;
-        o.y += (o.ty - o.y) * 0.18;
-        char.style.transform = `translate3d(${o.x.toFixed(2)}px, ${o.y.toFixed(2)}px, 0)`;
-      });
-    };
-    magnetLoop();
-
-    const onMove = (e: PointerEvent) => {
-      const heroRect = hero.getBoundingClientRect();
-      if (e.clientY < heroRect.top - 40 || e.clientY > heroRect.bottom + 40) {
-        offsets.forEach((o) => {
-          o.tx = 0;
-          o.ty = 0;
-        });
-        return;
+    allChars.forEach((char, i) => {
+      const r = char.getBoundingClientRect();
+      const cx = r.left + r.width / 2 - offsets[i].x;
+      const cy = r.top + r.height / 2 - offsets[i].y;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const radius = 280;
+      if (dist < radius) {
+        const force = (1 - dist / radius) * 42;
+        offsets[i].tx = (dx / dist) * force * -0.7;
+        offsets[i].ty = (dy / dist) * force * -0.55;
+      } else {
+        offsets[i].tx = 0;
+        offsets[i].ty = 0;
       }
-
-      allChars.forEach((char, i) => {
-        const r = char.getBoundingClientRect();
-        const cx = r.left + r.width / 2 - offsets[i].x;
-        const cy = r.top + r.height / 2 - offsets[i].y;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const radius = 260;
-        if (dist < radius) {
-          const force = (1 - dist / radius) * 34;
-          offsets[i].tx = (dx / dist) * force * -0.65;
-          offsets[i].ty = (dy / dist) * force * -0.5;
-        } else {
-          offsets[i].tx = 0;
-          offsets[i].ty = 0;
-        }
-      });
-    };
-    window.addEventListener('pointermove', onMove, { passive: true });
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
-      else magnetLoop();
     });
+  };
+  window.addEventListener('pointermove', onMove, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
+    else magnetLoop();
+  });
 
-    // Ambient letter jitter (wodniack-style living type)
-    window.setInterval(() => {
-      if (prefersReducedMotion() || !allChars.length) return;
-      const el = allChars[Math.floor(Math.random() * allChars.length)];
-      const i = allChars.indexOf(el);
-      if (i < 0) return;
-      offsets[i].tx += (Math.random() - 0.5) * 10;
-      offsets[i].ty += (Math.random() - 0.5) * 10;
-      window.setTimeout(() => {
-        if (Math.abs(offsets[i].tx) < 12) {
-          offsets[i].tx *= 0.2;
-          offsets[i].ty *= 0.2;
-        }
-      }, 280);
-    }, 1800);
-  }
+  window.setInterval(() => {
+    if (!allChars.length) return;
+    const i = Math.floor(Math.random() * allChars.length);
+    offsets[i].tx += (Math.random() - 0.5) * 14;
+    offsets[i].ty += (Math.random() - 0.5) * 14;
+    window.setTimeout(() => {
+      offsets[i].tx *= 0.15;
+      offsets[i].ty *= 0.15;
+    }, 320);
+  }, 1400);
 }
 
 function initTextWarp() {
@@ -429,24 +467,26 @@ function initStretch() {
 
     gsap.fromTo(
       letters,
-      { scaleX: 0.12, opacity: 0.2 },
+      { scaleX: 0.08, scaleY: 1.35, opacity: 0.15, skewX: 8 },
       {
         scaleX: 1,
+        scaleY: 1,
         opacity: 1,
+        skewX: 0,
         ease: 'none',
-        stagger: { each: 0.05, from: 'center' },
+        stagger: { each: 0.055, from: 'center' },
         scrollTrigger: {
           trigger: section,
-          start: 'top 90%',
-          end: 'center 35%',
-          scrub: 1,
+          start: 'top 92%',
+          end: 'center 32%',
+          scrub: 1.1,
         },
       },
     );
 
     gsap.to(letters, {
-      yPercent: (i) => (i % 2 === 0 ? -18 : 18),
-      rotate: (i) => (i % 2 === 0 ? -3 : 3),
+      yPercent: (i) => (i % 2 === 0 ? -22 : 22),
+      rotate: (i) => (i % 2 === 0 ? -4 : 4),
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -664,21 +704,49 @@ function initProof() {
       trigger: '.s-proof__stats',
       start: 'top 80%',
     },
-    y: 36,
+    y: 48,
     opacity: 0,
-    duration: 0.6,
-    stagger: 0.1,
+    duration: 0.7,
+    stagger: 0.12,
     ease: 'power3.out',
   });
+
+  // Peak-End: big numbers land hard when they enter
+  if (!prefersReducedMotion()) {
+    document.querySelectorAll<HTMLElement>('.s-proof__value[data-value]').forEach((el) => {
+      const raw = el.dataset.value ?? el.textContent ?? '';
+      const match = raw.match(/([\d.]+)/);
+      if (!match) return;
+      const target = Number.parseFloat(match[1]);
+      if (!Number.isFinite(target)) return;
+      const prefix = raw.slice(0, raw.indexOf(match[1]));
+      const suffix = raw.slice(raw.indexOf(match[1]) + match[1].length);
+      const state = { v: 0 };
+      gsap.to(state, {
+        v: target,
+        duration: 1.4,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          once: true,
+        },
+        onUpdate: () => {
+          const decimals = match[1].includes('.') ? 2 : 0;
+          el.textContent = `${prefix}${state.v.toFixed(decimals)}${suffix}`;
+        },
+      });
+    });
+  }
 
   gsap.from('.js-proof-lead', {
     scrollTrigger: {
       trigger: '.s-proof__lead',
       start: 'top 80%',
     },
-    y: 30,
+    y: 36,
     opacity: 0,
-    duration: 0.6,
+    duration: 0.65,
     stagger: 0.1,
     ease: 'power3.out',
   });
@@ -688,7 +756,7 @@ function initProof() {
       trigger: '.s-proof__skills',
       start: 'top 85%',
     },
-    y: 24,
+    y: 28,
     opacity: 0,
     duration: 0.55,
     stagger: 0.08,
@@ -728,48 +796,269 @@ function initContact() {
   const section = document.querySelector('.s-contact');
   const go = document.querySelector<HTMLElement>('.js-contact-go');
   const reveal = document.querySelector<HTMLElement>('.js-contact-reveal');
+  const label = document.querySelector<HTMLElement>('.js-contact-go-label');
   if (!go || !reveal) return;
 
   if (section && !prefersReducedMotion()) {
-    gsap.from('.js-contact-go-label', {
+    gsap.from(label, {
       scrollTrigger: {
         trigger: section,
-        start: 'top 70%',
-        end: 'top 30%',
+        start: 'top 75%',
+        end: 'top 28%',
         scrub: true,
       },
-      scale: 0.55,
-      opacity: 0.2,
-      y: 90,
+      scale: 0.4,
+      opacity: 0.15,
+      y: 120,
+      rotate: -6,
+    });
+
+    gsap.from('.s-contact__title, .s-contact__email, .s-contact__sub, .s-contact__links', {
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 65%',
+      },
+      y: 36,
+      opacity: 0,
+      duration: 0.7,
+      stagger: 0.08,
+      ease: 'power3.out',
     });
   }
 
   const letters = reveal.querySelectorAll('.js-contact-letter');
-  gsap.set(letters, { y: 20, opacity: 0 });
+  gsap.set(letters, { y: 24, opacity: 0, rotateX: -40 });
+
+  let goTiltX = 0;
+  let goTiltY = 0;
+  let goTX = 0;
+  let goTY = 0;
+  let goRaf = 0;
+
+  if (!prefersReducedMotion()) {
+    const loop = () => {
+      goRaf = requestAnimationFrame(loop);
+      goTiltX += (goTX - goTiltX) * 0.1;
+      goTiltY += (goTY - goTiltY) * 0.1;
+      go.style.transform = `rotateX(${goTiltX.toFixed(2)}deg) rotateY(${goTiltY.toFixed(2)}deg)`;
+    };
+    loop();
+
+    go.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = go.getBoundingClientRect();
+        const nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        const ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        goTX = ny * -12;
+        goTY = nx * 14;
+      },
+      { passive: true },
+    );
+    go.addEventListener('pointerleave', () => {
+      goTX = 0;
+      goTY = 0;
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(goRaf);
+      else loop();
+    });
+  }
 
   const enter = () => {
     gsap.to(letters, {
       y: 0,
       opacity: 1,
-      duration: 0.35,
-      stagger: 0.03,
+      rotateX: 0,
+      duration: 0.4,
+      stagger: 0.04,
       ease: 'power3.out',
     });
+    if (label) gsap.to(label, { color: 'var(--vf-mark)', duration: 0.25 });
   };
   const leave = () => {
     gsap.to(letters, {
-      y: 20,
+      y: 24,
       opacity: 0,
-      duration: 0.25,
+      rotateX: -40,
+      duration: 0.28,
       stagger: 0.02,
       ease: 'power2.in',
     });
+    if (label) gsap.to(label, { color: 'var(--vf-ink)', duration: 0.25 });
   };
 
   go.addEventListener('mouseenter', enter);
   go.addEventListener('focus', enter);
   go.addEventListener('mouseleave', leave);
   go.addEventListener('blur', leave);
+}
+
+function initCursor() {
+  const root = document.querySelector<HTMLElement>('.js-cursor');
+  const ring = document.querySelector<HTMLElement>('.js-cursor-ring');
+  const dot = document.querySelector<HTMLElement>('.js-cursor-dot');
+  if (!root || !ring || !dot) return;
+  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.body.classList.add('has-cursor');
+  root.classList.add('is-on');
+
+  let x = window.innerWidth / 2;
+  let y = window.innerHeight / 2;
+  let rx = x;
+  let ry = y;
+  let raf = 0;
+
+  const loop = () => {
+    raf = requestAnimationFrame(loop);
+    rx += (x - rx) * 0.18;
+    ry += (y - ry) * 0.18;
+    ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+    dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+  };
+  loop();
+
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      x = e.clientX;
+      y = e.clientY;
+    },
+    { passive: true },
+  );
+
+  const hot = 'a, button, .js-magnetic, .s-work__item, .js-contact-go, .js-scramble';
+  document.querySelectorAll(hot).forEach((el) => {
+    el.addEventListener('mouseenter', () => root.classList.add('is-hot'));
+    el.addEventListener('mouseleave', () => root.classList.remove('is-hot'));
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
+    else loop();
+  });
+}
+
+function initMagneticButtons() {
+  if (prefersReducedMotion() || window.matchMedia('(pointer: coarse)').matches) return;
+
+  document.querySelectorAll<HTMLElement>('.js-magnetic').forEach((el) => {
+    let x = 0;
+    let y = 0;
+    let tx = 0;
+    let ty = 0;
+    let raf = 0;
+
+    const loop = () => {
+      raf = requestAnimationFrame(loop);
+      x += (tx - x) * 0.16;
+      y += (ty - y) * 0.16;
+      el.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+    };
+    loop();
+
+    el.addEventListener(
+      'pointermove',
+      (e) => {
+        const r = el.getBoundingClientRect();
+        tx = (e.clientX - (r.left + r.width / 2)) * 0.28;
+        ty = (e.clientY - (r.top + r.height / 2)) * 0.28;
+      },
+      { passive: true },
+    );
+    el.addEventListener('pointerleave', () => {
+      tx = 0;
+      ty = 0;
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState !== 'visible') cancelAnimationFrame(raf);
+      else loop();
+    });
+  });
+}
+
+function initScramble() {
+  if (prefersReducedMotion()) return;
+  const glyphs = 'abcdefghijklmnopqrstuvwxyz####////';
+
+  document.querySelectorAll<HTMLElement>('.js-scramble').forEach((el) => {
+    const original = (el.textContent ?? '').trim();
+    if (!original) return;
+
+    let timer = 0;
+    el.addEventListener('mouseenter', () => {
+      window.clearInterval(timer);
+      let frame = 0;
+      const max = 10;
+      timer = window.setInterval(() => {
+        el.textContent = [...original]
+          .map((ch, i) => {
+            if (ch === ' ') return ' ';
+            if (frame / max > i / original.length) return original[i];
+            return glyphs[Math.floor(Math.random() * glyphs.length)];
+          })
+          .join('');
+        frame += 1;
+        if (frame > max) {
+          window.clearInterval(timer);
+          el.textContent = original;
+        }
+      }, 28);
+    });
+    el.addEventListener('mouseleave', () => {
+      window.clearInterval(timer);
+      el.textContent = original;
+    });
+  });
+}
+
+function initActiveNav() {
+  const links = document.querySelectorAll<HTMLAnchorElement>('.js-nav-link');
+  if (!links.length) return;
+
+  const sections = ['about', 'work', 'proof', 'contact']
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => !!el);
+
+  const setActive = (id: string) => {
+    links.forEach((link) => {
+      link.classList.toggle('is-active', link.dataset.section === id);
+    });
+  };
+
+  sections.forEach((section) => {
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top 45%',
+      end: 'bottom 45%',
+      onEnter: () => setActive(section.id),
+      onEnterBack: () => setActive(section.id),
+    });
+  });
+}
+
+function initImageParallax() {
+  if (prefersReducedMotion()) return;
+
+  // Margin photos only — work strip already has its own pin/scrub motion
+  document.querySelectorAll<HTMLElement>('.s-margin__card img').forEach((img) => {
+    gsap.fromTo(
+      img,
+      { yPercent: -10, scale: 1.14 },
+      {
+        yPercent: 10,
+        scale: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: img.parentElement,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      },
+    );
+  });
 }
 
 function initNav() {
@@ -784,7 +1073,7 @@ function initNav() {
       if (href.startsWith('/#') && window.location.pathname !== '/') return;
       e.preventDefault();
       const lenis = (window as unknown as { lenis?: Lenis }).lenis;
-      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -20 });
+      if (lenis) lenis.scrollTo(target as HTMLElement, { offset: -48 });
       else target.scrollIntoView({ behavior: 'smooth' });
     });
   });
@@ -795,12 +1084,14 @@ function boot() {
   initContrastToggle();
   initNav();
   initClock();
-  // Terrain boots immediately so the first paint isn't a flat orange void
   initTerrain();
 
   const afterIntro = () => {
     initLenis();
     initProgress();
+    initCursor();
+    initMagneticButtons();
+    initScramble();
     initHero();
     initTextWarp();
     initRunways();
@@ -813,7 +1104,9 @@ function boot() {
     initWork();
     initProof();
     initMargin();
+    initImageParallax();
     initContact();
+    initActiveNav();
     ScrollTrigger.refresh();
   };
 

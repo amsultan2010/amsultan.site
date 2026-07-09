@@ -66,9 +66,12 @@ const talk = 'talk';
     align-items: center;
     margin-top: 0.75rem;
     text-decoration: none;
-    font-size: clamp(5.5rem, 20vw, 14rem);
+    font-size: clamp(5.5rem, 22vw, 15rem);
     line-height: 0.82;
     color: var(--vf-ink);
+    perspective: 900px;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
   .s-contact__go:hover .s-contact__go-label,
   .s-contact__go:focus .s-contact__go-label {

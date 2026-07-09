@@ -58,20 +58,24 @@ import { LEADERSHIP, PROOF_STATS, SKILL_GROUPS } from '../../data/proof';
   }
   .s-proof__stats {
     list-style: none;
-    margin: 2rem 0 0;
+    margin: 2.25rem 0 0;
     padding: 0 var(--vf-pad);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1rem;
+    gap: 1.25rem;
     max-width: calc(var(--vf-max) + 2 * var(--vf-pad));
   }
   .s-proof__stat {
     border-top: 2px solid var(--vf-mark);
-    padding: 1rem 0.15rem 0.5rem;
+    padding: 1.15rem 0.15rem 0.5rem;
+    transition: transform 0.35s ease;
+  }
+  .s-proof__stat:hover {
+    transform: translateY(-4px);
   }
   .s-proof__value {
     margin: 0;
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-size: clamp(2.4rem, 5.5vw, 3.6rem);
     color: var(--vf-ink);
   }
   .s-proof__label {
