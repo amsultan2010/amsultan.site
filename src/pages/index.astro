@@ -10,6 +10,9 @@ import SProof from '../components/site/SProof.astro';
 import SMargin from '../components/site/SMargin.astro';
 import SContact from '../components/site/SContact.astro';
 import SChapter from '../components/site/SChapter.astro';
+import ASeparator from '../components/site/ASeparator.astro';
+import SRunway from '../components/site/SRunway.astro';
+import SStretch from '../components/site/SStretch.astro';
 import '../styles/voltage.css';
 ---
 
@@ -60,35 +63,32 @@ import '../styles/voltage.css';
       <SiteHead />
       <main>
         <SHero />
-        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <ASeparator />
+        <SRunway text="ship · prove · repeat" />
         <SChapter
           index="01 · about"
           title="about"
           lede="student in riyadh. math track. shipping products that teach, automate, and prove."
         />
         <SAbout />
-        <div class="vf-rule js-rule" aria-hidden="true"></div>
-        <SChapter
-          index="02 · work"
-          title="work"
-          lede="tutoring, f1 media, and a three-app quant suite with real metrics."
-        />
+        <ASeparator phrases={['work', 'build', '////', 'live', 'urls', '####']} />
+        <SStretch word="work" />
+        <SRunway text="specimens on the tape" />
+        <p class="vf-section-index vf-mono">02 · work</p>
         <SWork />
-        <div class="vf-rule js-rule" aria-hidden="true"></div>
-        <SChapter
-          index="03 · proof"
-          title="proof"
-          lede="grade lift, incubator, debate record, and the stack behind the builds."
-        />
+        <ASeparator phrases={['proof', 'numbers', '////', 'stack', '####']} />
+        <SStretch word="proof" />
+        <SRunway text="what holds up" />
+        <p class="vf-section-index vf-mono">03 · proof</p>
         <SProof />
-        <div class="vf-rule js-rule" aria-hidden="true"></div>
-        <SChapter
-          index="04 · margin"
-          title="margin"
-          lede="ascii, photos, and hobbies that don’t fit a resume line."
-        />
+        <ASeparator phrases={['margin', 'photos', 'ascii', '////', 'human']} />
+        <SStretch word="margin" />
+        <SRunway text="off the record" />
+        <p class="vf-section-index vf-mono">04 · margin</p>
         <SMargin />
-        <div class="vf-rule js-rule" aria-hidden="true"></div>
+        <ASeparator phrases={['talk', 'go', '####', 'coffee', 'chat']} />
+        <SStretch word="talk" />
+        <SRunway text="leave a note" />
         <SContact />
       </main>
       <SiteFoot />

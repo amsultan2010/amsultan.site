@@ -8,7 +8,7 @@ interface Props {
 const { index, title, lede, id } = Astro.props;
 ---
 
-<header class="vf-chapter js-chapter" id={id} aria-hidden={!lede ? 'true' : undefined}>
+<header class="vf-chapter js-chapter" id={id}>
   <p class="vf-chapter__index js-chapter-index">{index}</p>
   <h2 class="vf-chapter__title js-chapter-title js-warp">{title}</h2>
   {lede && <p class="vf-chapter__lede vf-serif js-chapter-lede">{lede}</p>}

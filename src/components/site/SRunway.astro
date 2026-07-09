@@ -1,0 +1,11 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className = '' } = Astro.props;
+---
+
+<div class={`vf-runway js-runway ${className}`} aria-hidden="true">
+  <p class="vf-runway__text js-runway-text">{text}</p>
+</div>

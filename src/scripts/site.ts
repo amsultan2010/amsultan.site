@@ -221,9 +221,10 @@ function initHero() {
 
   const hero = document.querySelector('.s-hero');
   const title = document.querySelector<HTMLElement>('.s-hero__title');
+  const star = document.querySelector<HTMLElement>('.s-hero__star');
   if (hero && title && !prefersReducedMotion()) {
     gsap.to(title, {
-      yPercent: -10,
+      yPercent: -14,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -233,9 +234,23 @@ function initHero() {
       },
     });
 
-    gsap.to('.s-hero__lede, .s-hero__actions, .s-hero__ticks', {
-      y: -28,
-      opacity: 0.25,
+    if (star) {
+      gsap.to(star, {
+        rotate: 180,
+        scale: 1.35,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
+    }
+
+    gsap.to('.s-hero__lede, .s-hero__actions', {
+      y: -40,
+      opacity: 0.15,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
@@ -243,6 +258,20 @@ function initHero() {
         end: 'bottom top',
         scrub: true,
       },
+    });
+
+    // Parallax marquees inside hero
+    hero.querySelectorAll<HTMLElement>('.js-sep').forEach((sep, i) => {
+      gsap.to(sep, {
+        xPercent: i % 2 === 0 ? -8 : 8,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        },
+      });
     });
 
     // Magnetic via direct transforms (no GSAP per-char tweens fighting Lenis)
@@ -276,11 +305,11 @@ function initHero() {
         const dx = e.clientX - cx;
         const dy = e.clientY - cy;
         const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const radius = 220;
+        const radius = 260;
         if (dist < radius) {
-          const force = (1 - dist / radius) * 26;
-          offsets[i].tx = (dx / dist) * force * -0.55;
-          offsets[i].ty = (dy / dist) * force * -0.45;
+          const force = (1 - dist / radius) * 34;
+          offsets[i].tx = (dx / dist) * force * -0.65;
+          offsets[i].ty = (dy / dist) * force * -0.5;
         } else {
           offsets[i].tx = 0;
           offsets[i].ty = 0;
@@ -292,6 +321,22 @@ function initHero() {
       if (document.visibilityState !== 'visible') cancelAnimationFrame(magnetRaf);
       else magnetLoop();
     });
+
+    // Ambient letter jitter (wodniack-style living type)
+    window.setInterval(() => {
+      if (prefersReducedMotion() || !allChars.length) return;
+      const el = allChars[Math.floor(Math.random() * allChars.length)];
+      const i = allChars.indexOf(el);
+      if (i < 0) return;
+      offsets[i].tx += (Math.random() - 0.5) * 10;
+      offsets[i].ty += (Math.random() - 0.5) * 10;
+      window.setTimeout(() => {
+        if (Math.abs(offsets[i].tx) < 12) {
+          offsets[i].tx *= 0.2;
+          offsets[i].ty *= 0.2;
+        }
+      }, 280);
+    }, 1800);
   }
 }
 
@@ -305,20 +350,154 @@ function initTextWarp() {
     gsap.fromTo(
       chars,
       {
-        y: 48,
-        skewX: 10,
-        opacity: 0.15,
+        y: 70,
+        skewX: 16,
+        opacity: 0.1,
+        scaleY: 1.25,
       },
       {
         y: 0,
         skewX: 0,
         opacity: 1,
+        scaleY: 1,
         ease: 'none',
-        stagger: { each: 0.03, from: 'start' },
+        stagger: { each: 0.035, from: 'start' },
         scrollTrigger: {
           trigger: title,
+          start: 'top 92%',
+          end: 'top 38%',
+          scrub: true,
+        },
+      },
+    );
+  });
+}
+
+function initRunways() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-runway').forEach((runway) => {
+    const text = runway.querySelector<HTMLElement>('.js-runway-text');
+    if (!text) return;
+
+    const chars = splitChars(text, 'vf-warp-char');
+
+    gsap.fromTo(
+      text,
+      { yPercent: 40, scale: 0.86 },
+      {
+        yPercent: -22,
+        scale: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: runway,
+          start: 'top 95%',
+          end: 'bottom 20%',
+          scrub: 0.85,
+        },
+      },
+    );
+
+    if (chars.length) {
+      gsap.fromTo(
+        chars,
+        { y: 50, skewX: 12, opacity: 0.15 },
+        {
+          y: 0,
+          skewX: 0,
+          opacity: 1,
+          ease: 'none',
+          stagger: { each: 0.028, from: 'start' },
+          scrollTrigger: {
+            trigger: runway,
+            start: 'top 88%',
+            end: 'center 45%',
+            scrub: true,
+          },
+        },
+      );
+    }
+  });
+}
+
+function initStretch() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-stretch').forEach((section) => {
+    const letters = section.querySelectorAll<HTMLElement>('.js-stretch-letter');
+    if (!letters.length) return;
+
+    gsap.fromTo(
+      letters,
+      { scaleX: 0.12, opacity: 0.2 },
+      {
+        scaleX: 1,
+        opacity: 1,
+        ease: 'none',
+        stagger: { each: 0.05, from: 'center' },
+        scrollTrigger: {
+          trigger: section,
           start: 'top 90%',
-          end: 'top 40%',
+          end: 'center 35%',
+          scrub: 1,
+        },
+      },
+    );
+
+    gsap.to(letters, {
+      yPercent: (i) => (i % 2 === 0 ? -18 : 18),
+      rotate: (i) => (i % 2 === 0 ? -3 : 3),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
+    });
+  });
+}
+
+function initSeparators() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.js-sep').forEach((sep) => {
+    // Hero marquees already get parallax in initHero
+    if (sep.closest('.s-hero')) return;
+
+    gsap.fromTo(
+      sep,
+      { y: 28, opacity: 0.2 },
+      {
+        y: 0,
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sep,
+          start: 'top 96%',
+          end: 'top 60%',
+          scrub: true,
+        },
+      },
+    );
+  });
+}
+
+function initBands() {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('.vf-band').forEach((band) => {
+    gsap.fromTo(
+      band,
+      { xPercent: -6, opacity: 0.35 },
+      {
+        xPercent: 0,
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: band,
+          start: 'top 92%',
+          end: 'top 55%',
           scrub: true,
         },
       },
@@ -547,19 +726,50 @@ function initMargin() {
 
 function initContact() {
   const section = document.querySelector('.s-contact');
-  if (!section || prefersReducedMotion()) return;
+  const go = document.querySelector<HTMLElement>('.js-contact-go');
+  const reveal = document.querySelector<HTMLElement>('.js-contact-reveal');
+  if (!go || !reveal) return;
 
-  gsap.from('.s-contact__sub, .s-contact__go, .s-contact__email, .s-contact__links', {
-    scrollTrigger: {
-      trigger: section,
-      start: 'top 75%',
-    },
-    y: 40,
-    opacity: 0,
-    duration: 0.7,
-    stagger: 0.08,
-    ease: 'power3.out',
-  });
+  if (section && !prefersReducedMotion()) {
+    gsap.from('.js-contact-go-label', {
+      scrollTrigger: {
+        trigger: section,
+        start: 'top 70%',
+        end: 'top 30%',
+        scrub: true,
+      },
+      scale: 0.55,
+      opacity: 0.2,
+      y: 90,
+    });
+  }
+
+  const letters = reveal.querySelectorAll('.js-contact-letter');
+  gsap.set(letters, { y: 20, opacity: 0 });
+
+  const enter = () => {
+    gsap.to(letters, {
+      y: 0,
+      opacity: 1,
+      duration: 0.35,
+      stagger: 0.03,
+      ease: 'power3.out',
+    });
+  };
+  const leave = () => {
+    gsap.to(letters, {
+      y: 20,
+      opacity: 0,
+      duration: 0.25,
+      stagger: 0.02,
+      ease: 'power2.in',
+    });
+  };
+
+  go.addEventListener('mouseenter', enter);
+  go.addEventListener('focus', enter);
+  go.addEventListener('mouseleave', leave);
+  go.addEventListener('blur', leave);
 }
 
 function initNav() {
@@ -593,6 +803,10 @@ function boot() {
     initProgress();
     initHero();
     initTextWarp();
+    initRunways();
+    initStretch();
+    initSeparators();
+    initBands();
     initChapters();
     initRules();
     initAbout();

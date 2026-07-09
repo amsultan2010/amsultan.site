@@ -8,9 +8,11 @@ test('homepage loads voltage frame with brand and work', async ({ page }) => {
   }
   await expect(page.getByRole('heading', { name: /abdullah/i }).first()).toBeVisible({ timeout: 10000 });
   await expect(page.locator('.js-terrain-canvas')).toBeAttached();
-  await expect(page.locator('.js-chapter-title', { hasText: /^work$/i })).toHaveCount(1);
+  await expect(page.locator('#work')).toBeVisible();
+  await expect(page.locator('.js-stretch').filter({ hasText: /work/i }).first()).toBeAttached();
   await expect(page.getByText(/tutoringbyabdullah/i).first()).toBeVisible();
-  await expect(page.locator('.js-chapter-title', { hasText: /^proof$/i })).toHaveCount(1);
+  await expect(page.locator('#proof')).toBeVisible();
+  await expect(page.locator('.js-contact-go')).toBeVisible();
 });
 
 test('projects archive renders list', async ({ page }) => {

@@ -1,0 +1,45 @@
+---
+interface Props {
+  word: string;
+  class?: string;
+}
+const { word, class: className = '' } = Astro.props;
+const letters = [...word.toLowerCase()];
+---
+
+<section class={`s-stretch js-stretch ${className}`} aria-hidden="true">
+  <div class="s-stretch__track js-stretch-track">
+    {letters.map((ch) => (
+      <span class="s-stretch__letter js-stretch-letter">{ch === ' ' ? '\u00a0' : ch}</span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .s-stretch {
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding: 12vh 0;
+  }
+  .s-stretch__track {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 0.2rem;
+    will-change: transform;
+  }
+  .s-stretch__letter {
+    font-family: var(--vf-font-display);
+    font-weight: 800;
+    font-size: clamp(5rem, 22vw, 18rem);
+    line-height: 0.75;
+    letter-spacing: -0.07em;
+    color: var(--vf-ink);
+    flex: 1 1 0;
+    text-align: center;
+    transform-origin: center;
+    will-change: transform;
+  }
+</style>

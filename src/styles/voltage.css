@@ -285,12 +285,32 @@ html.theme-contrasted .site-contrast-mask {
   transform-origin: left center;
 }
 
+.vf-runway {
+  min-height: 78vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18vh var(--vf-pad);
+  overflow: hidden;
+}
+
+.vf-runway__text {
+  font-family: var(--vf-font-display);
+  font-weight: 800;
+  font-size: clamp(2.8rem, 12vw, 8rem);
+  letter-spacing: -0.045em;
+  line-height: 0.88;
+  text-align: center;
+  max-width: 14ch;
+  will-change: transform, opacity;
+}
+
 .vf-chapter {
-  min-height: 42vh;
+  min-height: 48vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 10vh var(--vf-pad) 2rem;
+  padding: 12vh var(--vf-pad) 2rem;
   overflow: hidden;
 }
 
@@ -329,6 +349,13 @@ html.theme-contrasted .site-contrast-mask {
   max-width: 36rem;
   font-size: clamp(1.05rem, 2vw, 1.25rem);
   opacity: 0.9;
+}
+
+.vf-section-index {
+  margin: 0 var(--vf-pad) 0.35rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--vf-mark);
 }
 
 @media (prefers-reduced-motion: reduce) {
