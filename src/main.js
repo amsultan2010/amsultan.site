@@ -363,7 +363,8 @@ function initMotion() {
     });
 
     $$(".project-card").forEach((card) => {
-      const visual = $(".project-visual > img, .project-poster", card);
+      const visual = $(".project-visual > img", card);
+      if (!visual) return;
       gsap.fromTo(
         visual,
         { scale: 1.08 },
