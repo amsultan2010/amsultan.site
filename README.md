@@ -1,11 +1,10 @@
 # abdullah sultan — portfolio
 
-Static portfolio built with the same stack as [wodniack.dev](https://wodniack.dev):
+Static, motion-led portfolio built with:
 
-- **Astro** (static)
-- **SCSS** + Autoprefixer + modern-normalize
+- **HTML**, **CSS**, and vanilla **JavaScript**
 - **GSAP** + ScrollTrigger
-- **Lenis** smooth scroll
+- **Vite** for local development and production builds
 
 Live: [www.abdullahmsultan.me](https://www.abdullahmsultan.me)
 

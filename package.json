@@ -6,26 +6,16 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check && npm run build"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "npm run build"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.5.0",
-    "astro": "^5.7.13",
-    "autoprefixer": "^10.4.21",
-    "gsap": "^3.13.0",
-    "lenis": "^1.3.3",
-    "modern-normalize": "^3.0.1",
-    "sass": "^1.89.0",
-    "three": "^0.183.2"
+    "gsap": "^3.13.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@types/three": "^0.183.1",
-    "typescript": "^5.9.3"
+    "vite": "^8.1.4"
   }
 }
