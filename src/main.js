@@ -372,22 +372,11 @@ function initMotion() {
         start: "top 84%",
       },
     });
-
-    gsap.to(title, {
-      xPercent: -4,
-      ease: "none",
-      scrollTrigger: {
-        trigger: title,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
   });
 
   $$(".experience-item").forEach((item) => {
     gsap.from(item, {
-      y: 50,
+      y: 36,
       autoAlpha: 0,
       duration: 0.7,
       ease: "power3.out",
@@ -396,21 +385,6 @@ function initMotion() {
         start: "top 86%",
       },
     });
-
-    gsap.fromTo(
-      item,
-      { x: -24 },
-      {
-        x: 24,
-        ease: "none",
-        scrollTrigger: {
-          trigger: item,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
-    );
   });
 
   gsap.from(".stack-cloud span", {

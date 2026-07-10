@@ -309,10 +309,10 @@ button:focus-visible {
   position: relative;
   z-index: 1;
   display: flex;
-  min-height: 33rem;
+  min-height: min(58svh, 28rem);
   flex-direction: column;
   justify-content: center;
-  padding: 2rem var(--gutter) 3rem;
+  padding: 1.5rem var(--gutter) 2rem;
 }
 
 .hero-title {
@@ -409,6 +409,10 @@ button:focus-visible {
   opacity: 0.55;
 }
 
+section[id] {
+  scroll-margin-top: calc(var(--header-height) + 0.5rem);
+}
+
 .section-kicker {
   margin: 0;
   padding: 1.5rem var(--gutter) 0;
@@ -428,14 +432,14 @@ button:focus-visible {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 0.85fr);
   gap: 0;
-  min-height: 78svh;
+  min-height: 0;
 }
 
 .about-lead {
   display: grid;
-  align-content: center;
-  gap: 1.75rem;
-  padding: clamp(3rem, 6vw, 6rem) var(--gutter);
+  align-content: start;
+  gap: 1.5rem;
+  padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter);
   border-right: 1px solid var(--ink);
 }
 
@@ -469,7 +473,7 @@ button:focus-visible {
   display: grid;
   margin: 0;
   padding: var(--gutter);
-  align-content: center;
+  align-content: start;
   background:
     linear-gradient(135deg, transparent 48%, rgba(20, 17, 15, 0.08) 48% 52%, transparent 52%),
     var(--orange);
@@ -490,7 +494,7 @@ button:focus-visible {
   height: 120%;
   object-fit: cover;
   object-position: 50% 18%;
-  filter: saturate(0.7) contrast(1.08);
+  filter: saturate(1.28) contrast(1.12) brightness(1.04);
   will-change: transform;
 }
 
@@ -559,14 +563,16 @@ button:focus-visible {
 
 .section-title {
   margin: 0;
-  padding: clamp(2.5rem, 5vw, 4.5rem) var(--gutter) 1.75rem;
-  font-size: clamp(3rem, 7.2vw, 8rem);
-  line-height: 0.84;
+  max-width: 100%;
+  padding: clamp(2.25rem, 4.5vw, 3.75rem) var(--gutter) 1.5rem;
+  overflow: visible;
+  font-size: clamp(2.1rem, 6.8vw, 5rem);
+  line-height: 1.05;
 }
 
 .work-viewport {
   display: flex;
-  min-height: calc(100svh - var(--header-height));
+  min-height: calc(100svh - var(--header-height) - 6rem);
   align-items: center;
   overflow: visible;
 }
@@ -575,7 +581,7 @@ button:focus-visible {
   display: flex;
   width: max-content;
   align-items: stretch;
-  padding: 2rem max(var(--gutter), calc((100vw - 100rem) / 2));
+  padding: 1.5rem max(var(--gutter), calc((100vw - 100rem) / 2));
   perspective: 1200px;
   will-change: transform;
 }
@@ -606,13 +612,13 @@ button:focus-visible {
   height: 100%;
   object-fit: cover;
   object-position: top center;
-  filter: saturate(0.75);
+  filter: none;
   transition: filter 450ms ease;
   will-change: transform;
 }
 
 .project-card:hover .project-visual > img {
-  filter: saturate(1);
+  filter: saturate(1.05);
 }
 
 .project-copy {
@@ -678,6 +684,7 @@ button:focus-visible {
 }
 
 .proof {
+  overflow: visible;
   border-bottom: 1px solid var(--ink);
   background: var(--orange);
 }
@@ -694,8 +701,8 @@ button:focus-visible {
 
 .experience-item {
   display: grid;
-  min-height: 11rem;
-  grid-template-columns: minmax(7rem, 0.65fr) 1.35fr 1fr;
+  min-height: 0;
+  grid-template-columns: minmax(6.5rem, 8rem) minmax(14rem, 1fr) minmax(16rem, 1.15fr);
   align-items: center;
   border-bottom: 1px solid var(--ink);
   transition: color 250ms ease, background 250ms ease;
@@ -712,8 +719,11 @@ button:focus-visible {
 
 .experience-number {
   align-self: stretch;
+  display: grid;
+  place-items: center start;
   border-right: 1px solid currentColor;
-  font-size: clamp(3rem, 5vw, 5rem);
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
+  line-height: 1;
 }
 
 .experience-item h3 {
@@ -727,8 +737,9 @@ button:focus-visible {
 }
 
 .experience-item > p {
-  font-size: 1.35rem;
-  line-height: 1.1;
+  max-width: 36rem;
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
+  line-height: 1.2;
 }
 
 .stack {
@@ -762,7 +773,7 @@ button:focus-visible {
 .field-notes {
   position: relative;
   overflow: hidden;
-  padding: 0 0 3.5rem;
+  padding: 1.25rem 0 2.5rem;
   color: var(--orange);
   background: var(--cream);
 }
@@ -806,7 +817,7 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.8) contrast(1.04);
+  filter: none;
   will-change: transform;
 }
 
@@ -846,21 +857,20 @@ button:focus-visible {
 .contact {
   position: relative;
   display: grid;
-  min-height: 88svh;
+  min-height: 62svh;
   overflow: hidden;
   align-content: center;
-  gap: 2rem;
-  padding: var(--gutter);
+  gap: 1.35rem;
+  padding: clamp(2rem, 4vw, 3.25rem) var(--gutter);
   color: var(--orange);
-  background: var(--cream);
+  background: #ffffff;
 }
 
 .contact-bg {
   position: absolute;
-  inset: -12%;
-  opacity: 0.12;
-  background: url("/images/wallpaper/wallpaper.png") center / cover;
-  mix-blend-mode: multiply;
+  inset: 0;
+  opacity: 0.85;
+  background: url("/images/wallpaper/wallpaper-orange.png") center / cover no-repeat;
   pointer-events: none;
   will-change: transform;
 }
@@ -877,8 +887,10 @@ button:focus-visible {
   position: relative;
   z-index: 1;
   margin: 0;
-  font-size: clamp(4rem, 14vw, 14rem);
-  line-height: 0.8;
+  max-width: 100%;
+  overflow: visible;
+  font-size: clamp(3rem, 11vw, 9rem);
+  line-height: 0.86;
 }
 
 .contact-link .split-char {
@@ -1020,7 +1032,7 @@ button:focus-visible {
   }
 
   .hero-title-wrap {
-    min-height: 27rem;
+    min-height: min(52svh, 22rem);
     padding-inline: 0.75rem;
   }
 
@@ -1099,8 +1111,9 @@ button:focus-visible {
   }
 
   .section-title {
-    padding: 3rem 0.75rem 1.5rem;
-    font-size: clamp(2.85rem, 15vw, 5rem);
+    padding: 2.5rem 0.75rem 1.25rem;
+    font-size: clamp(2.2rem, 12vw, 4.2rem);
+    white-space: normal;
   }
 
   .work {
@@ -1190,12 +1203,13 @@ button:focus-visible {
   }
 
   .contact {
-    min-height: 85svh;
-    padding: 1.25rem 0.75rem;
+    min-height: 70svh;
+    padding: 2rem 0.75rem;
   }
 
   .contact-title {
-    font-size: clamp(3.7rem, 16vw, 6rem);
+    font-size: clamp(3rem, 14vw, 5.5rem);
+    white-space: normal;
   }
 
   .contact-foot {
