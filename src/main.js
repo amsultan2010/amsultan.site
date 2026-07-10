@@ -231,8 +231,7 @@ function initMotion() {
       },
       0.28,
     )
-    .from(".hero-orbit", { scale: 0.45, rotation: -80, autoAlpha: 0, duration: 1.1 }, 0.5)
-    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.75);
+    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.55);
 
   gsap.to(".scroll-progress", {
     scaleX: 1,
@@ -274,42 +273,8 @@ function initMotion() {
       },
     })
     .to(".hero-title", { yPercent: -22, scale: 0.88, transformOrigin: "50% 0%" }, 0)
-    .to(".hero-orbit", { rotation: 240, scale: 1.35 }, 0)
     .to(".hero-meta", { y: -40, autoAlpha: 0 }, 0)
     .to(".hero-foot", { y: -50, autoAlpha: 0 }, 0);
-
-  // Runway stretch words
-  $$("[data-runway]").forEach((text) => {
-    const runway = text.closest(".runway");
-    gsap.fromTo(
-      text,
-      { scaleX: 0.08, scaleY: 1.45, opacity: 0.2, skewX: 12 },
-      {
-        scaleX: 1,
-        scaleY: 1,
-        opacity: 1,
-        skewX: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: runway,
-          start: "top 90%",
-          end: "center 35%",
-          scrub: 1,
-        },
-      },
-    );
-
-    gsap.to(text, {
-      yPercent: -18,
-      ease: "none",
-      scrollTrigger: {
-        trigger: runway,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-  });
 
   // About statement word reveal + scrub
   $$("[data-reveal-lines]").forEach((element) => {
@@ -328,23 +293,24 @@ function initMotion() {
     });
   });
 
-  gsap.from(".about-details > *", {
-    y: 36,
+  gsap.from(".about-bio, .about-actions, .about-kicker", {
+    y: 28,
     autoAlpha: 0,
-    duration: 0.75,
-    stagger: 0.1,
+    duration: 0.7,
+    stagger: 0.08,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".about-details",
-      start: "top 85%",
+      trigger: ".about-lead",
+      start: "top 80%",
     },
   });
 
   gsap.fromTo(
-    ".portrait-card",
-    { clipPath: "inset(14% 12% 14% 12%)", autoAlpha: 0.3 },
+    ".portrait-window",
+    { clipPath: "inset(12% 10% 12% 10%)", rotate: -8, autoAlpha: 0.35 },
     {
       clipPath: "inset(0% 0% 0% 0%)",
+      rotate: -2.5,
       autoAlpha: 1,
       ease: "none",
       scrollTrigger: {
@@ -357,7 +323,7 @@ function initMotion() {
   );
 
   gsap.to(".portrait-window img", {
-    yPercent: -18,
+    yPercent: -14,
     scale: 1.08,
     ease: "none",
     scrollTrigger: {
@@ -368,15 +334,27 @@ function initMotion() {
     },
   });
 
-  gsap.from(".now-list li", {
-    x: 40,
+  gsap.from(".portrait-stamp", {
+    y: 20,
+    rotate: -8,
     autoAlpha: 0,
     duration: 0.65,
+    ease: "back.out(1.4)",
+    scrollTrigger: {
+      trigger: ".portrait-card",
+      start: "top 70%",
+    },
+  });
+
+  gsap.from(".focus-card", {
+    y: 48,
+    autoAlpha: 0,
+    duration: 0.7,
     stagger: 0.08,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".now-list",
-      start: "top 80%",
+      trigger: ".focus-board",
+      start: "top 85%",
     },
   });
 
