@@ -111,11 +111,46 @@ function initMagneticLinks() {
 }
 
 function initNavigation() {
+  const nav = $(".primary-nav");
+  const toggle = $(".menu-toggle");
+  const header = $(".site-header");
+  const mq = window.matchMedia("(max-width: 960px)");
+
+  const placeNav = () => {
+    if (!nav || !header) return;
+    if (mq.matches) {
+      header.insertAdjacentElement("afterend", nav);
+    } else if (nav.previousElementSibling !== header.querySelector(".brand")) {
+      const cta = $(".header-cta", header);
+      header.insertBefore(nav, cta);
+    }
+  };
+
+  const setMenuOpen = (open) => {
+    if (!nav || !toggle) return;
+    nav.classList.toggle("is-open", open);
+    toggle.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    document.body.classList.toggle("menu-open", open && mq.matches);
+  };
+
+  placeNav();
+  toggle?.addEventListener("click", () => {
+    setMenuOpen(!nav.classList.contains("is-open"));
+  });
+
+  mq.addEventListener("change", () => {
+    setMenuOpen(false);
+    placeNav();
+  });
+
   $$('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
       const target = $(link.getAttribute("href"));
       if (!target) return;
       event.preventDefault();
+      setMenuOpen(false);
       target.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   });
@@ -274,10 +309,20 @@ function initMotion() {
   }
 
   const heroCharacters = $$(".hero-title .split-char");
-  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
+  const intro = gsap.timeline({
+    defaults: { ease: "expo.out" },
+    onComplete: () => {
+      gsap.set(".site-header, .hero-meta", { clearProps: "transform" });
+    },
+  });
+
+  const isCompact = window.matchMedia("(max-width: 960px)").matches;
+
+  if (!isCompact) {
+    intro.from(".site-header", { yPercent: -100, duration: 0.8 });
+  }
 
   intro
-    .from(".site-header", { yPercent: -100, duration: 0.8 })
     .from(".hero-meta", { scaleX: 0, transformOrigin: "left", duration: 0.75 }, 0.12)
     .from(
       heroCharacters,
@@ -366,10 +411,10 @@ function initMotion() {
 
   gsap.fromTo(
     ".portrait-window",
-    { clipPath: "inset(12% 10% 12% 10%)", rotate: -8, autoAlpha: 0.35 },
+    { clipPath: "inset(12% 10% 12% 10%)", rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -8), autoAlpha: 0.35 },
     {
       clipPath: "inset(0% 0% 0% 0%)",
-      rotate: -2.5,
+      rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -2.5),
       autoAlpha: 1,
       ease: "none",
       scrollTrigger: {
@@ -395,7 +440,7 @@ function initMotion() {
 
   gsap.from(".portrait-stamp", {
     y: 20,
-    rotate: -8,
+    rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -8),
     autoAlpha: 0,
     duration: 0.65,
     ease: "back.out(1.4)",
@@ -624,15 +669,18 @@ function initMotion() {
   });
 
   responsive.add("(max-width: 700px)", () => {
+    gsap.set(".project-card", { clearProps: "transform" });
+    gsap.set(".project-visual", { clearProps: "opacity" });
+
     $$(".project-card").forEach((card) => {
       gsap.from(card, {
-        y: 50,
+        y: 36,
         autoAlpha: 0,
-        duration: 0.75,
+        duration: 0.7,
         ease: "power3.out",
         scrollTrigger: {
           trigger: card,
-          start: "top 88%",
+          start: "top 90%",
         },
       });
 
@@ -641,7 +689,7 @@ function initMotion() {
 
       gsap.fromTo(
         visual,
-        { scale: 1.12 },
+        { scale: 1.08 },
         {
           scale: 1,
           ease: "none",

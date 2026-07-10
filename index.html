@@ -37,9 +37,9 @@
     <header class="site-header">
       <a class="brand magnetic" href="#top" aria-label="Abdullah Sultan, back to top">
         <span class="brand-mark" aria-hidden="true">AS</span>
-        <span>Abdullah Sultan</span>
+        <span class="brand-name">Abdullah Sultan</span>
       </a>
-      <nav aria-label="Primary navigation">
+      <nav class="primary-nav" id="primary-nav" aria-label="Primary navigation">
         <a href="#about" data-section="about">About</a>
         <a href="#work" data-section="work">Work</a>
         <a href="#photos" data-section="photos">Photos</a>
@@ -48,6 +48,16 @@
       <a class="header-cta magnetic" href="mailto:abdullahmsultan1@gmail.com">
         Grab coffee <span aria-hidden="true">↗</span>
       </a>
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label="Open menu"
+      >
+        <span class="menu-toggle-bars" aria-hidden="true"></span>
+        <span class="menu-toggle-label">Menu</span>
+      </button>
     </header>
 
     <main id="main">
@@ -140,6 +150,7 @@
       <section class="work" id="work" aria-labelledby="work-title">
         <div class="work-heading">
           <h2 id="work-title" class="section-title display" data-split>Projects.</h2>
+          <p class="work-hint mono" aria-hidden="true">Swipe →</p>
         </div>
 
         <div class="work-viewport">
