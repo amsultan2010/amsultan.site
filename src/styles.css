@@ -594,39 +594,31 @@ button:focus-visible {
 }
 
 .project-card {
-  --card-width: min(72vw, 67rem);
+  --card-width: min(78vw, 58rem);
   display: grid;
   width: var(--card-width);
-  height: min(72svh, 58rem);
+  height: min(78svh, 52rem);
   flex: 0 0 var(--card-width);
-  grid-template-columns: 1.3fr 0.7fr;
-  grid-template-rows: auto 1fr;
-  margin-right: 2rem;
+  grid-template-columns: 1fr;
+  grid-template-rows: minmax(0, 1fr) auto;
+  margin-right: 1.5rem;
   border: 1px solid var(--cream);
   background: var(--ink);
   transform-style: preserve-3d;
-}
-
-.project-top {
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: space-between;
-  padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--cream);
 }
 
 .project-visual {
   display: block;
   min-height: 0;
   overflow: hidden;
-  border-right: 1px solid var(--cream);
 }
 
 .project-visual > img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.65);
+  object-position: top center;
+  filter: saturate(0.7);
   transition: filter 450ms ease;
   will-change: transform;
 }
@@ -637,18 +629,33 @@ button:focus-visible {
 
 .project-copy {
   display: flex;
-  flex-direction: column;
-  padding: 1.25rem;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--cream);
 }
 
-.project-copy > p:first-child {
-  margin: 0 0 auto;
+.project-copy-main {
+  min-width: 0;
+}
+
+.project-copy-main .mono {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0 0 0.35rem;
+}
+
+.project-copy-main .mono span:not(:last-child)::after {
+  content: "·";
+  margin-left: 0.55rem;
 }
 
 .project-copy h3 {
-  margin: 2rem 0 1rem;
-  font-size: clamp(2rem, 3.4vw, 4rem);
-  line-height: 0.92;
+  margin: 0;
+  font-size: clamp(1.15rem, 1.8vw, 1.7rem);
+  line-height: 1;
 }
 
 .project-copy h3 a {
@@ -664,17 +671,19 @@ button:focus-visible {
   background-size: 100% 2px;
 }
 
-.project-copy > p:not(:first-child) {
-  margin: 0 0 2rem;
-  font-size: 1.45rem;
-  line-height: 1.08;
+.project-copy .serif {
+  margin: 0.4rem 0 0;
+  max-width: 34rem;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  line-height: 1.2;
 }
 
 .project-link {
+  flex: 0 0 auto;
   width: fit-content;
-  margin-top: auto;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.15rem;
   border-bottom: 1px solid currentColor;
+  white-space: nowrap;
 }
 
 .proof .section-title {
@@ -745,47 +754,86 @@ button:focus-visible {
 }
 
 .field-notes {
+  position: relative;
   overflow: hidden;
-  padding: 3rem 0;
+  padding: 2.5rem 0 3.5rem;
   color: var(--ink);
   background: var(--cream);
+}
+
+.photo-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.75rem;
+}
+
+.photo-viewport {
+  overflow: hidden;
+  min-width: 0;
 }
 
 .photo-rail {
   display: flex;
   width: max-content;
-  align-items: flex-start;
-  gap: 1.25rem;
-  padding: 0 var(--gutter);
+  align-items: center;
+  gap: 1rem;
   will-change: transform;
 }
 
 .photo {
-  width: min(46vw, 42rem);
+  width: min(68vw, 52rem);
+  flex: 0 0 min(68vw, 52rem);
   margin: 0;
-}
-
-.photo-tall {
-  width: min(31vw, 27rem);
 }
 
 .photo-window {
   overflow: hidden;
-  height: min(60vh, 38rem);
+  height: min(68vh, 42rem);
   border: 1px solid var(--ink);
   background: var(--ink);
 }
 
-.photo-tall .photo-window {
-  height: min(72vh, 46rem);
-}
-
 .photo img {
   width: 100%;
-  height: 120%;
+  height: 100%;
   object-fit: cover;
-  filter: saturate(0.7) contrast(1.04);
+  filter: saturate(0.75) contrast(1.04);
   will-change: transform;
+}
+
+.photo-nav {
+  z-index: 3;
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  background: var(--cream);
+  font-family: var(--mono);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease;
+}
+
+.photo-nav:hover,
+.photo-nav:focus-visible {
+  color: var(--cream);
+  background: var(--ink);
+}
+
+.photo-nav:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.photo-count {
+  grid-column: 1 / -1;
+  justify-self: end;
+  margin: 0.35rem 0.5rem 0;
 }
 
 .contact {
@@ -904,11 +952,7 @@ button:focus-visible {
 
   .project-card {
     --card-width: 84vw;
-    height: min(68svh, 48rem);
-  }
-
-  .project-visual {
-    min-height: 0;
+    height: min(74svh, 46rem);
   }
 }
 
@@ -1040,24 +1084,24 @@ button:focus-visible {
   }
 
   .project-card {
-    display: block;
+    display: grid;
     width: 100%;
     height: auto;
     margin: 0 0 1.5rem;
   }
 
   .project-visual {
-    min-height: 20rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--cream);
+    min-height: 22rem;
+    aspect-ratio: 16 / 10;
   }
 
-  .project-copy > p:first-child {
-    margin-bottom: 3rem;
+  .project-copy {
+    align-items: start;
+    flex-direction: column;
   }
 
   .project-copy h3 {
-    font-size: 2.35rem;
+    font-size: 1.35rem;
   }
 
   .experience-item {
@@ -1080,26 +1124,48 @@ button:focus-visible {
   }
 
   .field-notes {
-    padding: 1.5rem 0;
+    padding: 1.5rem 0 2.5rem;
+  }
+
+  .photo-stage {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .photo-nav {
+    position: absolute;
+    top: 42%;
+    z-index: 4;
+  }
+
+  .photo-nav-prev {
+    left: 0.75rem;
+  }
+
+  .photo-nav-next {
+    right: 0.75rem;
+  }
+
+  .photo-viewport {
+    overflow: hidden;
   }
 
   .photo-rail {
-    overflow-x: auto;
-    width: auto;
-    padding-inline: 0.75rem;
-    scroll-snap-type: x mandatory;
+    width: max-content;
   }
 
-  .photo,
-  .photo-tall {
-    width: 82vw;
-    flex: 0 0 82vw;
-    scroll-snap-align: start;
+  .photo {
+    width: 86vw;
+    flex: 0 0 86vw;
   }
 
-  .photo-window,
-  .photo-tall .photo-window {
+  .photo-window {
     height: 58vh;
+  }
+
+  .photo-count {
+    position: static;
+    justify-self: center;
   }
 
   .contact {

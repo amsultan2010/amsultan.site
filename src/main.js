@@ -133,12 +133,84 @@ function initNavigation() {
   });
 }
 
+function initPhotoCarousel() {
+  const rail = $(".photo-rail");
+  const photos = $$(".photo");
+  const prev = $(".photo-nav-prev");
+  const next = $(".photo-nav-next");
+  const indexLabel = $("[data-photo-index]");
+  if (!rail || !photos.length || !prev || !next) return;
+
+  let index = 0;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const maxIndex = () => {
+    const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
+    const step = photos[0].offsetWidth + gap;
+    const visible = Math.max(1, Math.floor(($(".photo-viewport")?.clientWidth || window.innerWidth) / step));
+    return Math.max(0, photos.length - visible);
+  };
+
+  const update = (animate = true) => {
+    const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
+    const step = photos[0].offsetWidth + gap;
+    const clamped = Math.min(Math.max(index, 0), maxIndex());
+    index = clamped;
+
+    const vars = {
+      x: -index * step,
+      ease: "power3.out",
+      duration: reduceMotion || !animate ? 0 : 0.65,
+      overwrite: true,
+    };
+    gsap.to(rail, vars);
+
+    if (indexLabel) {
+      indexLabel.textContent = String(index + 1).padStart(2, "0");
+    }
+    prev.disabled = index <= 0;
+    next.disabled = index >= maxIndex();
+  };
+
+  prev.addEventListener("click", () => {
+    index -= 1;
+    update();
+  });
+  next.addEventListener("click", () => {
+    index += 1;
+    update();
+  });
+
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      const section = $(".field-notes");
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
+      if (!inView) return;
+      if (event.key === "ArrowLeft") {
+        index -= 1;
+        update();
+      }
+      if (event.key === "ArrowRight") {
+        index += 1;
+        update();
+      }
+    },
+  );
+
+  window.addEventListener("resize", () => update(false), { passive: true });
+  update(false);
+}
+
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
+    initPhotoCarousel();
     return;
   }
 
@@ -379,39 +451,31 @@ function initMotion() {
   $$(".photo").forEach((photo, index) => {
     const image = $("img", photo);
 
-    gsap.fromTo(
-      photo,
-      {
-        y: index % 2 ? 120 : 60,
-        rotate: index % 2 ? 4 : -4,
-        autoAlpha: 0,
+    gsap.from(photo, {
+      y: 40,
+      autoAlpha: 0,
+      duration: 0.7,
+      delay: Math.min(index, 4) * 0.04,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".field-notes",
+        start: "top 80%",
       },
-      {
-        y: 0,
-        rotate: index % 2 ? 1.5 : -1.5,
-        autoAlpha: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: photo,
-          start: "top 95%",
-          end: "top 55%",
-          scrub: true,
-        },
-      },
-    );
+    });
 
     gsap.to(image, {
-      yPercent: -18,
-      scale: 1.12,
+      scale: 1.06,
       ease: "none",
       scrollTrigger: {
-        trigger: photo,
+        trigger: ".field-notes",
         start: "top bottom",
         end: "bottom top",
         scrub: true,
       },
     });
   });
+
+  initPhotoCarousel();
 
   gsap.from(".contact-link .split-char", {
     yPercent: 120,
@@ -467,16 +531,15 @@ function initMotion() {
       if (visual) {
         gsap.fromTo(
           visual,
-          { scale: 1.16, rotate: -2 },
+          { scale: 1.12 },
           {
             scale: 1,
-            rotate: 0,
             ease: "none",
             scrollTrigger: {
               trigger: card,
               containerAnimation: horizontal,
               start: "left 95%",
-              end: "left 35%",
+              end: "left 40%",
               scrub: true,
             },
           },
@@ -486,7 +549,7 @@ function initMotion() {
       if (copy) {
         gsap.fromTo(
           copy,
-          { y: 40, autoAlpha: 0.35 },
+          { y: 18, autoAlpha: 0.4 },
           {
             y: 0,
             autoAlpha: 1,
@@ -495,50 +558,13 @@ function initMotion() {
               trigger: card,
               containerAnimation: horizontal,
               start: "left 90%",
-              end: "left 45%",
+              end: "left 50%",
               scrub: true,
             },
           },
         );
       }
-
-      gsap.fromTo(
-        card,
-        { rotateY: 8 },
-        {
-          rotateY: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            containerAnimation: horizontal,
-            start: "left right",
-            end: "center center",
-            scrub: true,
-          },
-        },
-      );
     });
-
-    // Pinned photo rail with horizontal scrub
-    const photoRail = $(".photo-rail");
-    const photosSection = $(".field-notes");
-    if (photoRail && photosSection) {
-      const photoDistance = () => Math.max(0, photoRail.scrollWidth - window.innerWidth + 64);
-
-      gsap.to(photoRail, {
-        x: () => -photoDistance(),
-        ease: "none",
-        scrollTrigger: {
-          trigger: photosSection,
-          start: "top top",
-          end: () => `+=${photoDistance() + window.innerHeight * 0.4}`,
-          pin: true,
-          scrub: 0.8,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-        },
-      });
-    }
 
     // Contact wallpaper parallax
     gsap.fromTo(
