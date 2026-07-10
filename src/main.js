@@ -135,8 +135,7 @@ function initNavigation() {
 
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const splitElements = $$("[data-split]");
-  splitElements.forEach(splitCharacters);
+  $$("[data-split]").forEach(splitCharacters);
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -149,7 +148,6 @@ function initMotion() {
   intro
     .from(".site-header", { yPercent: -100, duration: 0.8 })
     .from(".hero-meta", { scaleX: 0, transformOrigin: "left", duration: 0.75 }, 0.12)
-    .from(".hero-kicker", { autoAlpha: 0, y: 20, duration: 0.65 }, 0.3)
     .from(
       heroCharacters,
       {
@@ -159,10 +157,10 @@ function initMotion() {
         duration: 1.05,
         stagger: 0.035,
       },
-      0.36,
+      0.28,
     )
-    .from(".hero-orbit", { scale: 0.45, rotation: -80, autoAlpha: 0, duration: 1.1 }, 0.55)
-    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.82);
+    .from(".hero-orbit", { scale: 0.45, rotation: -80, autoAlpha: 0, duration: 1.1 }, 0.5)
+    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.75);
 
   gsap.to(".scroll-progress", {
     scaleX: 1,
@@ -182,52 +180,74 @@ function initMotion() {
     ease: "none",
   });
 
-  gsap.to(".hero-orbit", {
-    rotation: 210,
-    scale: 1.2,
+  gsap.to(".grain", {
+    opacity: 0.09,
     ease: "none",
     scrollTrigger: {
-      trigger: ".hero",
+      trigger: document.documentElement,
       start: "top top",
-      end: "bottom top",
+      end: "bottom bottom",
       scrub: true,
     },
   });
 
-  gsap.to(".hero-title", {
-    yPercent: -16,
-    scale: 0.92,
-    transformOrigin: "50% 0%",
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".hero",
-      start: "top top",
-      end: "bottom top",
-      scrub: true,
-    },
+  // Hero exit scrub
+  gsap
+    .timeline({
+      scrollTrigger: {
+        trigger: ".hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: true,
+      },
+    })
+    .to(".hero-title", { yPercent: -22, scale: 0.88, transformOrigin: "50% 0%" }, 0)
+    .to(".hero-orbit", { rotation: 240, scale: 1.35 }, 0)
+    .to(".hero-meta", { y: -40, autoAlpha: 0 }, 0)
+    .to(".hero-foot", { y: -50, autoAlpha: 0 }, 0);
+
+  // Runway stretch words
+  $$("[data-runway]").forEach((text) => {
+    const runway = text.closest(".runway");
+    gsap.fromTo(
+      text,
+      { scaleX: 0.08, scaleY: 1.45, opacity: 0.2, skewX: 12 },
+      {
+        scaleX: 1,
+        scaleY: 1,
+        opacity: 1,
+        skewX: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: runway,
+          start: "top 90%",
+          end: "center 35%",
+          scrub: 1,
+        },
+      },
+    );
+
+    gsap.to(text, {
+      yPercent: -18,
+      ease: "none",
+      scrollTrigger: {
+        trigger: runway,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
+      },
+    });
   });
 
-  ScrollTrigger.batch(".reveal", {
-    start: "top 88%",
-    once: true,
-    onEnter: (elements) =>
-      gsap.from(elements, {
-        y: 38,
-        autoAlpha: 0,
-        duration: 0.8,
-        stagger: 0.08,
-        ease: "power3.out",
-      }),
-  });
-
+  // About statement word reveal + scrub
   $$("[data-reveal-lines]").forEach((element) => {
     const words = splitWords(element);
     gsap.from(words, {
-      yPercent: 105,
-      rotateX: -35,
+      yPercent: 110,
+      rotateX: -40,
       autoAlpha: 0,
-      duration: 0.8,
-      stagger: 0.025,
+      duration: 0.85,
+      stagger: 0.04,
       ease: "power3.out",
       scrollTrigger: {
         trigger: element,
@@ -236,35 +256,37 @@ function initMotion() {
     });
   });
 
-  $$(".section-title").forEach((title) => {
-    const characters = $$(".split-char", title);
-    gsap.from(characters, {
-      yPercent: 115,
-      rotateZ: 4,
-      autoAlpha: 0,
-      duration: 0.75,
-      stagger: 0.025,
-      ease: "expo.out",
-      scrollTrigger: {
-        trigger: title,
-        start: "top 84%",
-      },
-    });
-  });
-
-  gsap.from(".portrait-card", {
-    clipPath: "inset(12% 10% 12% 10%)",
-    autoAlpha: 0.35,
-    duration: 1.1,
+  gsap.from(".about-details > *", {
+    y: 36,
+    autoAlpha: 0,
+    duration: 0.75,
+    stagger: 0.1,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".portrait-card",
-      start: "top 82%",
+      trigger: ".about-details",
+      start: "top 85%",
     },
   });
 
+  gsap.fromTo(
+    ".portrait-card",
+    { clipPath: "inset(14% 12% 14% 12%)", autoAlpha: 0.3 },
+    {
+      clipPath: "inset(0% 0% 0% 0%)",
+      autoAlpha: 1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".portrait-card",
+        start: "top 90%",
+        end: "top 45%",
+        scrub: true,
+      },
+    },
+  );
+
   gsap.to(".portrait-window img", {
-    yPercent: -16,
+    yPercent: -18,
+    scale: 1.08,
     ease: "none",
     scrollTrigger: {
       trigger: ".portrait-card",
@@ -274,27 +296,80 @@ function initMotion() {
     },
   });
 
-  $$(".experience-item").forEach((item, index) => {
-    gsap.from(item.children, {
-      x: index % 2 === 0 ? -32 : 32,
+  gsap.from(".now-list li", {
+    x: 40,
+    autoAlpha: 0,
+    duration: 0.65,
+    stagger: 0.08,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".now-list",
+      start: "top 80%",
+    },
+  });
+
+  $$(".section-title").forEach((title) => {
+    const characters = $$(".split-char", title);
+    gsap.from(characters, {
+      yPercent: 120,
+      rotateZ: 6,
       autoAlpha: 0,
-      duration: 0.72,
-      stagger: 0.07,
-      ease: "power3.out",
+      duration: 0.8,
+      stagger: 0.03,
+      ease: "expo.out",
       scrollTrigger: {
-        trigger: item,
+        trigger: title,
         start: "top 84%",
+      },
+    });
+
+    gsap.to(title, {
+      xPercent: -4,
+      ease: "none",
+      scrollTrigger: {
+        trigger: title,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true,
       },
     });
   });
 
+  $$(".experience-item").forEach((item) => {
+    gsap.from(item, {
+      y: 50,
+      autoAlpha: 0,
+      duration: 0.7,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: item,
+        start: "top 86%",
+      },
+    });
+
+    gsap.fromTo(
+      item,
+      { x: -24 },
+      {
+        x: 24,
+        ease: "none",
+        scrollTrigger: {
+          trigger: item,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
+    );
+  });
+
   gsap.from(".stack-cloud span", {
-    y: 20,
-    scale: 0.9,
+    y: 24,
+    scale: 0.85,
     autoAlpha: 0,
-    duration: 0.5,
-    stagger: 0.04,
-    ease: "back.out(1.5)",
+    duration: 0.45,
+    stagger: 0.035,
+    ease: "back.out(1.4)",
     scrollTrigger: {
       trigger: ".stack-cloud",
       start: "top 88%",
@@ -303,20 +378,31 @@ function initMotion() {
 
   $$(".photo").forEach((photo, index) => {
     const image = $("img", photo);
-    gsap.from(photo, {
-      y: index % 2 ? 90 : 50,
-      rotate: index % 2 ? 2.5 : -2.5,
-      autoAlpha: 0,
-      duration: 0.9,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: photo,
-        start: "top 90%",
+
+    gsap.fromTo(
+      photo,
+      {
+        y: index % 2 ? 120 : 60,
+        rotate: index % 2 ? 4 : -4,
+        autoAlpha: 0,
       },
-    });
+      {
+        y: 0,
+        rotate: index % 2 ? 1.5 : -1.5,
+        autoAlpha: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: photo,
+          start: "top 95%",
+          end: "top 55%",
+          scrub: true,
+        },
+      },
+    );
 
     gsap.to(image, {
-      yPercent: -15,
+      yPercent: -18,
+      scale: 1.12,
       ease: "none",
       scrollTrigger: {
         trigger: photo,
@@ -340,6 +426,18 @@ function initMotion() {
     },
   });
 
+  gsap.from(".contact-foot > *", {
+    y: 30,
+    autoAlpha: 0,
+    duration: 0.7,
+    stagger: 0.1,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".contact-foot",
+      start: "top 90%",
+    },
+  });
+
   const responsive = gsap.matchMedia();
 
   responsive.add("(min-width: 701px)", () => {
@@ -354,9 +452,9 @@ function initMotion() {
       scrollTrigger: {
         trigger: viewport,
         start: "top top",
-        end: () => `+=${distance() + window.innerHeight * 0.7}`,
+        end: () => `+=${distance() + window.innerHeight * 0.85}`,
         pin: true,
-        scrub: 0.7,
+        scrub: 0.65,
         invalidateOnRefresh: true,
         anticipatePin: 1,
       },
@@ -364,12 +462,51 @@ function initMotion() {
 
     $$(".project-card").forEach((card) => {
       const visual = $(".project-visual > img", card);
-      if (!visual) return;
+      const copy = $(".project-copy", card);
+
+      if (visual) {
+        gsap.fromTo(
+          visual,
+          { scale: 1.16, rotate: -2 },
+          {
+            scale: 1,
+            rotate: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              containerAnimation: horizontal,
+              start: "left 95%",
+              end: "left 35%",
+              scrub: true,
+            },
+          },
+        );
+      }
+
+      if (copy) {
+        gsap.fromTo(
+          copy,
+          { y: 40, autoAlpha: 0.35 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              containerAnimation: horizontal,
+              start: "left 90%",
+              end: "left 45%",
+              scrub: true,
+            },
+          },
+        );
+      }
+
       gsap.fromTo(
-        visual,
-        { scale: 1.08 },
+        card,
+        { rotateY: 8 },
         {
-          scale: 1,
+          rotateY: 0,
           ease: "none",
           scrollTrigger: {
             trigger: card,
@@ -382,23 +519,43 @@ function initMotion() {
       );
     });
 
+    // Pinned photo rail with horizontal scrub
     const photoRail = $(".photo-rail");
-    if (photoRail) {
-      gsap.fromTo(
-        photoRail,
-        { xPercent: 4 },
-        {
-          xPercent: -14,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".field-notes",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: 1,
-          },
+    const photosSection = $(".field-notes");
+    if (photoRail && photosSection) {
+      const photoDistance = () => Math.max(0, photoRail.scrollWidth - window.innerWidth + 64);
+
+      gsap.to(photoRail, {
+        x: () => -photoDistance(),
+        ease: "none",
+        scrollTrigger: {
+          trigger: photosSection,
+          start: "top top",
+          end: () => `+=${photoDistance() + window.innerHeight * 0.4}`,
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
         },
-      );
+      });
     }
+
+    // Contact wallpaper parallax
+    gsap.fromTo(
+      ".contact-bg",
+      { yPercent: -12, scale: 1.12 },
+      {
+        yPercent: 12,
+        scale: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".contact",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
+    );
   });
 
   responsive.add("(max-width: 700px)", () => {
@@ -413,6 +570,24 @@ function initMotion() {
           start: "top 88%",
         },
       });
+
+      const visual = $(".project-visual > img", card);
+      if (!visual) return;
+
+      gsap.fromTo(
+        visual,
+        { scale: 1.12 },
+        {
+          scale: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: card,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
     });
   });
 
