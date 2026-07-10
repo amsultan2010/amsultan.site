@@ -598,6 +598,9 @@ section[id] {
   border: 1px solid var(--ink);
   color: var(--ink);
   background: var(--cream);
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .project-visual {
@@ -797,6 +800,7 @@ section[id] {
   width: max-content;
   align-items: center;
   gap: 1rem;
+  perspective: 1400px;
   will-change: transform;
 }
 
@@ -804,6 +808,9 @@ section[id] {
   width: min(68vw, 52rem);
   flex: 0 0 min(68vw, 52rem);
   margin: 0;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
 }
 
 .photo-window {
@@ -818,6 +825,7 @@ section[id] {
   height: 100%;
   object-fit: cover;
   filter: none;
+  transform-origin: center center;
   will-change: transform;
 }
 
@@ -852,6 +860,11 @@ section[id] {
   justify-self: end;
   margin: 0.35rem 0.5rem 0;
   color: var(--orange);
+  overflow: hidden;
+}
+
+.photo-count [data-photo-index] {
+  display: inline-block;
 }
 
 .contact {

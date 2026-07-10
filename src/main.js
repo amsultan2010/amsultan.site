@@ -135,20 +135,75 @@ function initNavigation() {
 
 function initPhotoCarousel() {
   const rail = $(".photo-rail");
+  const viewport = $(".photo-viewport");
   const photos = $$(".photo");
   const prev = $(".photo-nav-prev");
   const next = $(".photo-nav-next");
   const indexLabel = $("[data-photo-index]");
-  if (!rail || !photos.length || !prev || !next) return;
+  if (!rail || !viewport || !photos.length || !prev || !next) return;
 
   let index = 0;
+  let prevIndex = 0;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const maxIndex = () => {
     const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
     const step = photos[0].offsetWidth + gap;
-    const visible = Math.max(1, Math.floor(($(".photo-viewport")?.clientWidth || window.innerWidth) / step));
+    const visible = Math.max(1, Math.floor((viewport.clientWidth || window.innerWidth) / step));
     return Math.max(0, photos.length - visible);
+  };
+
+  const syncFocus = () => {
+    if (reduceMotion) {
+      gsap.set(photos, { scale: 1, opacity: 1, rotateY: 0 });
+      gsap.set(
+        photos.map((photo) => $("img", photo)).filter(Boolean),
+        { xPercent: 0, scale: 1 },
+      );
+      return;
+    }
+
+    const bounds = viewport.getBoundingClientRect();
+    const center = bounds.left + bounds.width / 2;
+
+    photos.forEach((photo) => {
+      const rect = photo.getBoundingClientRect();
+      const photoCenter = rect.left + rect.width / 2;
+      const norm = (photoCenter - center) / Math.max(rect.width, 1);
+      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.9);
+
+      gsap.set(photo, {
+        scale: 0.92 + focus * 0.08,
+        opacity: 0.5 + focus * 0.5,
+        rotateY: gsap.utils.clamp(-7, 7, -norm * 8),
+      });
+
+      const img = $("img", photo);
+      if (img) {
+        gsap.set(img, {
+          xPercent: gsap.utils.clamp(-10, 10, -norm * 12),
+          scale: 1.08 - focus * 0.08,
+        });
+      }
+    });
+  };
+
+  const animateIndexLabel = (nextValue) => {
+    if (!indexLabel) return;
+    const label = String(nextValue + 1).padStart(2, "0");
+    if (reduceMotion) {
+      indexLabel.textContent = label;
+      return;
+    }
+
+    const direction = nextValue >= prevIndex ? 1 : -1;
+    gsap.killTweensOf(indexLabel);
+    indexLabel.textContent = label;
+    gsap.fromTo(
+      indexLabel,
+      { yPercent: direction * 110, autoAlpha: 0 },
+      { yPercent: 0, autoAlpha: 1, duration: 0.38, ease: "power3.out", overwrite: true },
+    );
   };
 
   const update = (animate = true) => {
@@ -157,19 +212,23 @@ function initPhotoCarousel() {
     const clamped = Math.min(Math.max(index, 0), maxIndex());
     index = clamped;
 
-    const vars = {
+    const duration = reduceMotion || !animate ? 0 : 0.75;
+    gsap.to(rail, {
       x: -index * step,
       ease: "power3.out",
-      duration: reduceMotion || !animate ? 0 : 0.65,
+      duration,
       overwrite: true,
-    };
-    gsap.to(rail, vars);
+      onUpdate: syncFocus,
+      onComplete: syncFocus,
+    });
+    if (duration === 0) syncFocus();
 
-    if (indexLabel) {
-      indexLabel.textContent = String(index + 1).padStart(2, "0");
-    }
+    if (animate) animateIndexLabel(index);
+    else if (indexLabel) indexLabel.textContent = String(index + 1).padStart(2, "0");
+
     prev.disabled = index <= 0;
     next.disabled = index >= maxIndex();
+    prevIndex = index;
   };
 
   prev.addEventListener("click", () => {
@@ -459,9 +518,32 @@ function initMotion() {
   responsive.add("(min-width: 701px)", () => {
     const track = $(".work-track");
     const viewport = $(".work-viewport");
+    const cards = $$(".project-card");
     if (!track || !viewport) return;
 
     const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+    const syncProjectFocus = () => {
+      const center = window.innerWidth / 2;
+      cards.forEach((card) => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const norm = (cardCenter - center) / (window.innerWidth * 0.55);
+        const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm));
+
+        gsap.set(card, {
+          scale: 0.93 + focus * 0.07,
+          rotateY: gsap.utils.clamp(-10, 10, -norm * 12),
+          z: focus * 48,
+        });
+
+        const visual = $(".project-visual", card);
+        if (visual) {
+          gsap.set(visual, { opacity: 0.5 + focus * 0.5 });
+        }
+      });
+    };
+
     const horizontal = gsap.to(track, {
       x: () => -distance(),
       ease: "none",
@@ -473,25 +555,30 @@ function initMotion() {
         scrub: 0.65,
         invalidateOnRefresh: true,
         anticipatePin: 1,
+        onUpdate: syncProjectFocus,
+        onRefresh: syncProjectFocus,
       },
     });
 
-    $$(".project-card").forEach((card) => {
+    syncProjectFocus();
+
+    cards.forEach((card) => {
       const visual = $(".project-visual > img", card);
       const copy = $(".project-copy", card);
 
       if (visual) {
         gsap.fromTo(
           visual,
-          { scale: 1.12 },
+          { scale: 1.14, xPercent: -4 },
           {
             scale: 1,
+            xPercent: 0,
             ease: "none",
             scrollTrigger: {
               trigger: card,
               containerAnimation: horizontal,
               start: "left 95%",
-              end: "left 40%",
+              end: "left 35%",
               scrub: true,
             },
           },
@@ -501,7 +588,7 @@ function initMotion() {
       if (copy) {
         gsap.fromTo(
           copy,
-          { y: 18, autoAlpha: 0.4 },
+          { y: 22, autoAlpha: 0.35 },
           {
             y: 0,
             autoAlpha: 1,
@@ -510,7 +597,7 @@ function initMotion() {
               trigger: card,
               containerAnimation: horizontal,
               start: "left 90%",
-              end: "left 50%",
+              end: "left 48%",
               scrub: true,
             },
           },
