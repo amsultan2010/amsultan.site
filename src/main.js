@@ -409,12 +409,95 @@ function initLoader(onDone) {
   });
 }
 
+function initHeroMotion() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const topo = $(".hero-topo");
+  const layers = $$(".topo-layer");
+  const paths = $$(".hero-topo path");
+  const shapes = $$(".hero-shape");
+  if (!topo || reduceMotion) return;
+
+  paths.forEach((path, index) => {
+    const length = typeof path.getTotalLength === "function" ? path.getTotalLength() : 800;
+    gsap.set(path, {
+      strokeDasharray: length,
+      strokeDashoffset: length * 0.12,
+    });
+    gsap.to(path, {
+      strokeDashoffset: length * -0.18,
+      duration: 14 + index * 1.3,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+  });
+
+  layers.forEach((layer, index) => {
+    gsap.to(layer, {
+      y: index % 2 === 0 ? 16 : -12,
+      duration: 7 + index * 2,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+    });
+  });
+
+  gsap.to(topo, {
+    scale: 1.045,
+    duration: 16,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+  });
+
+  const bounce = [
+    { y: -26, x: 8, rotate: 6, duration: 2.5 },
+    { y: -34, x: -10, rotate: -5, duration: 3.1 },
+    { y: -16, x: 12, rotate: 3, duration: 2.2 },
+    { y: -20, x: -14, rotate: -10, duration: 2.8 },
+    { y: -38, x: 6, rotate: 8, duration: 2.6 },
+  ];
+
+  shapes.forEach((shape, index) => {
+    const motion = bounce[index % bounce.length];
+    gsap.to(shape, {
+      y: motion.y,
+      x: motion.x,
+      rotate: motion.rotate,
+      duration: motion.duration,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
+      delay: index * 0.12,
+    });
+  });
+
+  if (!window.matchMedia("(pointer: fine)").matches) return;
+
+  const hero = $(".hero");
+  const moveX = gsap.quickTo(topo, "x", { duration: 0.85, ease: "power3.out" });
+  const moveY = gsap.quickTo(topo, "y", { duration: 0.85, ease: "power3.out" });
+
+  hero?.addEventListener(
+    "pointermove",
+    (event) => {
+      const rect = hero.getBoundingClientRect();
+      const nx = (event.clientX - rect.left) / rect.width - 0.5;
+      const ny = (event.clientY - rect.top) / rect.height - 0.5;
+      moveX(nx * -24);
+      moveY(ny * -16);
+    },
+    { passive: true },
+  );
+}
+
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
 
   initWorkPreview();
   initPhotoCarousel();
+  initHeroMotion();
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -440,8 +523,8 @@ function initMotion() {
     )
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
     .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
-    .from(".hero-deco-ring", { scale: 0.7, autoAlpha: 0, duration: 0.9 }, 0.18)
-    .from(".hero-deco-block", { scale: 0.7, autoAlpha: 0, duration: 0.9 }, 0.22);
+    .from(".hero-topo", { autoAlpha: 0, duration: 1.1 }, 0.1)
+    .from(".hero-shape", { scale: 0.6, autoAlpha: 0, duration: 0.75, stagger: 0.08 }, 0.2);
 
   gsap.to(".scroll-progress", {
     scaleX: 1,
@@ -461,7 +544,6 @@ function initMotion() {
     ease: "none",
   });
 
-  // gentle hero exit — keep it simple so it doesn't fight Lenis
   gsap
     .timeline({
       scrollTrigger: {
@@ -472,9 +554,8 @@ function initMotion() {
       },
     })
     .to(".hero-title", { yPercent: -12, opacity: 0.35 }, 0)
-    .to(".hero-rail, .hero-foot, .hero-orbit", { opacity: 0, y: -24 }, 0)
-    .to(".hero-deco-ring", { x: 60, opacity: 0.1 }, 0)
-    .to(".hero-deco-block", { x: -40, opacity: 0.05 }, 0);
+    .to(".hero-rail, .hero-foot, .hero-orbit, .hero-kicker", { opacity: 0, y: -24 }, 0)
+    .to(".hero-bg", { yPercent: 18, opacity: 0.35 }, 0);
 
   $$("[data-reveal-lines]").forEach((element) => {
     const words = splitWords(element);
