@@ -122,7 +122,7 @@ function initCursor() {
     { passive: true },
   );
 
-  $$("a, button, .work-row, .photo, .verb-strip li, .lead-item").forEach((target) => {
+  $$("a, button, .work-row, .photo, .verb-strip li, .lead-item, .contact-card").forEach((target) => {
     target.addEventListener("pointerenter", () => cursor.classList.add("is-hovering"));
     target.addEventListener("pointerleave", () => cursor.classList.remove("is-hovering"));
   });
@@ -748,33 +748,18 @@ function initMotion() {
     },
   });
 
-  gsap.from(".contact-kicker, .contact-row > *", {
-    y: 24,
+  gsap.from(".contact-top > *, .contact-pitch, .contact-card", {
+    y: 28,
     autoAlpha: 0,
     duration: 0.6,
-    stagger: 0.08,
+    stagger: 0.07,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".contact",
-      start: "top 80%",
+      trigger: ".contact-frame",
+      start: "top 82%",
       toggleActions: "play none none none",
     },
   });
-
-  gsap.fromTo(
-    ".contact-slash",
-    { xPercent: -12 },
-    {
-      xPercent: 10,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".contact",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 0.5,
-      },
-    },
-  );
 
   document.fonts.ready.then(() => {
     ScrollTrigger.refresh();
