@@ -272,7 +272,11 @@ function initPhotoCarousel() {
 
   const syncFocus = () => {
     if (reduceMotion) {
-      gsap.set(photos, { scale: 1, opacity: 1, rotateY: 0 });
+      gsap.set(photos, { opacity: 1, scale: 1 });
+      photos.forEach((photo) => {
+        const img = $("img", photo);
+        if (img) gsap.set(img, { clearProps: "transform" });
+      });
       return;
     }
 
@@ -283,21 +287,16 @@ function initPhotoCarousel() {
       const rect = photo.getBoundingClientRect();
       const photoCenter = rect.left + rect.width / 2;
       const norm = (photoCenter - center) / Math.max(rect.width, 1);
-      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.85);
+      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.9);
 
       gsap.set(photo, {
-        scale: 0.92 + focus * 0.08,
-        opacity: 0.45 + focus * 0.55,
-        rotateY: gsap.utils.clamp(-6, 6, -norm * 7),
+        opacity: 0.55 + focus * 0.45,
+        scale: 1,
+        rotateY: 0,
       });
 
       const img = $("img", photo);
-      if (img) {
-        gsap.set(img, {
-          xPercent: gsap.utils.clamp(-8, 8, -norm * 10),
-          scale: 1.06 - focus * 0.06,
-        });
-      }
+      if (img) gsap.set(img, { clearProps: "transform" });
     });
   };
 

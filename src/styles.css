@@ -954,7 +954,6 @@ button:focus-visible {
   display: flex;
   width: max-content;
   gap: 1rem;
-  perspective: 1600px;
   will-change: transform;
 }
 
@@ -962,13 +961,14 @@ button:focus-visible {
   width: min(68vw, 48rem);
   flex: 0 0 min(68vw, 48rem);
   margin: 0;
-  transform-style: preserve-3d;
-  will-change: transform, opacity;
+  will-change: opacity;
 }
 
 .photo-frame {
   overflow: hidden;
-  height: min(62vh, 38rem);
+  aspect-ratio: 16 / 10;
+  height: auto;
+  max-height: min(62vh, 38rem);
   border: 2px solid var(--ink);
   background: var(--orange);
 }
@@ -977,7 +977,7 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  will-change: transform;
+  object-position: center;
 }
 
 .photo-nav {
@@ -1341,7 +1341,8 @@ section[id] {
   }
 
   .photo-frame {
-    height: min(48vh, 20rem);
+    aspect-ratio: 4 / 3;
+    max-height: min(48vh, 20rem);
   }
 
   .contact {
