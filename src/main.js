@@ -412,30 +412,28 @@ function initLoader(onDone) {
 function initHeroMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const topo = $(".hero-topo");
+  const drift = $(".topo-drift");
   const layers = $$(".topo-layer");
-  const paths = $$(".hero-topo path");
-  const shapes = $$(".hero-shape");
+  const shapes = $$("[data-shape]");
   if (!topo || reduceMotion) return;
 
-  paths.forEach((path, index) => {
-    const length = typeof path.getTotalLength === "function" ? path.getTotalLength() : 800;
-    gsap.set(path, {
-      strokeDasharray: length,
-      strokeDashoffset: length * 0.12,
-    });
-    gsap.to(path, {
-      strokeDashoffset: length * -0.18,
-      duration: 14 + index * 1.3,
+  // solid contour drift — no dashoffset (that was chopping the lines)
+  if (drift) {
+    gsap.to(drift, {
+      x: 36,
+      y: -18,
+      duration: 12,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
     });
-  });
+  }
 
   layers.forEach((layer, index) => {
     gsap.to(layer, {
-      y: index % 2 === 0 ? 16 : -12,
-      duration: 7 + index * 2,
+      x: index % 2 === 0 ? -22 : 26,
+      y: index % 2 === 0 ? 14 : -16,
+      duration: 8 + index * 2.5,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
@@ -443,40 +441,48 @@ function initHeroMotion() {
   });
 
   gsap.to(topo, {
-    scale: 1.045,
-    duration: 16,
+    opacity: 0.42,
+    duration: 5,
     repeat: -1,
     yoyo: true,
     ease: "sine.inOut",
   });
 
   const bounce = [
-    { y: -26, x: 8, rotate: 6, duration: 2.5 },
-    { y: -34, x: -10, rotate: -5, duration: 3.1 },
-    { y: -16, x: 12, rotate: 3, duration: 2.2 },
-    { y: -20, x: -14, rotate: -10, duration: 2.8 },
-    { y: -38, x: 6, rotate: 8, duration: 2.6 },
+    { y: -28, x: 10, rotate: 8, duration: 2.4 },
+    { y: -18, x: -12, rotate: -6, duration: 2.9 },
+    { y: -34, x: 8, rotate: 4, duration: 3.2 },
+    { y: -22, x: -16, rotate: -10, duration: 2.6 },
+    { y: -30, x: 14, rotate: 12, duration: 2.8 },
+    { y: -16, x: -8, rotate: -4, duration: 2.3 },
+    { y: -26, x: 12, rotate: 16, duration: 3.0 },
+    { y: -20, x: -14, rotate: -14, duration: 2.7 },
+    { y: -36, x: 6, rotate: 7, duration: 3.3 },
+    { y: -14, x: -10, rotate: -8, duration: 2.1 },
+    { y: -24, x: 16, rotate: 11, duration: 2.85 },
+    { y: -32, x: -6, rotate: -9, duration: 3.1 },
   ];
 
   shapes.forEach((shape, index) => {
     const motion = bounce[index % bounce.length];
+    gsap.set(shape, { transformOrigin: "50% 50%" });
     gsap.to(shape, {
       y: motion.y,
       x: motion.x,
-      rotate: motion.rotate,
+      rotate: `+=${motion.rotate}`,
       duration: motion.duration,
       repeat: -1,
       yoyo: true,
       ease: "sine.inOut",
-      delay: index * 0.12,
+      delay: index * 0.1,
     });
   });
 
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
   const hero = $(".hero");
-  const moveX = gsap.quickTo(topo, "x", { duration: 0.85, ease: "power3.out" });
-  const moveY = gsap.quickTo(topo, "y", { duration: 0.85, ease: "power3.out" });
+  const moveX = gsap.quickTo(topo, "x", { duration: 0.9, ease: "power3.out" });
+  const moveY = gsap.quickTo(topo, "y", { duration: 0.9, ease: "power3.out" });
 
   hero?.addEventListener(
     "pointermove",
@@ -484,8 +490,8 @@ function initHeroMotion() {
       const rect = hero.getBoundingClientRect();
       const nx = (event.clientX - rect.left) / rect.width - 0.5;
       const ny = (event.clientY - rect.top) / rect.height - 0.5;
-      moveX(nx * -24);
-      moveY(ny * -16);
+      moveX(nx * -30);
+      moveY(ny * -20);
     },
     { passive: true },
   );
@@ -497,7 +503,6 @@ function initMotion() {
 
   initWorkPreview();
   initPhotoCarousel();
-  initHeroMotion();
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -506,7 +511,10 @@ function initMotion() {
   }
 
   const heroChars = $$(".hero-title .split-char");
-  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
+  const intro = gsap.timeline({
+    defaults: { ease: "expo.out" },
+    onComplete: () => initHeroMotion(),
+  });
 
   intro
     .from(".site-header", { y: -72, autoAlpha: 0, duration: 0.65 }, 0)
@@ -523,8 +531,7 @@ function initMotion() {
     )
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
     .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
-    .from(".hero-topo", { autoAlpha: 0, duration: 1.1 }, 0.1)
-    .from(".hero-shape", { scale: 0.6, autoAlpha: 0, duration: 0.75, stagger: 0.08 }, 0.2);
+    .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12);
 
   gsap.to(".scroll-progress", {
     scaleX: 1,

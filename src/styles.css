@@ -373,15 +373,15 @@ button:focus-visible {
 
 .hero-topo {
   position: absolute;
-  inset: -8%;
-  width: 116%;
-  height: 116%;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
   color: var(--ink);
-  opacity: 0.22;
+  opacity: 0.34;
 }
 
-.topo-layer path {
-  vector-effect: non-scaling-stroke;
+.topo-drift {
+  transform-origin: 50% 50%;
 }
 
 .topo-layer-soft {
@@ -400,56 +400,128 @@ button:focus-visible {
 }
 
 .shape-ring {
-  top: 18%;
-  right: 8%;
-  width: min(22vw, 11rem);
-  height: min(22vw, 11rem);
+  top: 16%;
+  right: 7%;
+  width: min(20vw, 10rem);
+  height: min(20vw, 10rem);
   border-radius: 50%;
   background: transparent;
   opacity: 0.55;
 }
 
+.shape-ring-sm {
+  top: 62%;
+  left: 22%;
+  right: auto;
+  width: min(9vw, 4.2rem);
+  height: min(9vw, 4.2rem);
+  opacity: 0.4;
+}
+
 .shape-block {
-  bottom: 22%;
-  left: 7%;
-  width: min(16vw, 7.5rem);
-  height: min(16vw, 7.5rem);
+  bottom: 20%;
+  left: 6%;
+  width: min(15vw, 7rem);
+  height: min(15vw, 7rem);
   background: var(--cream);
-  opacity: 0.55;
+  opacity: 0.6;
   box-shadow: 0.35rem 0.35rem 0 var(--ink);
 }
 
+.shape-block-sm {
+  top: 22%;
+  left: auto;
+  right: 24%;
+  bottom: auto;
+  width: min(8vw, 3.6rem);
+  height: min(8vw, 3.6rem);
+  opacity: 0.45;
+  box-shadow: 0.22rem 0.22rem 0 var(--ink);
+}
+
 .shape-pill {
-  top: 28%;
-  left: 12%;
-  width: min(14vw, 6.5rem);
-  height: 1.65rem;
+  top: 30%;
+  left: 10%;
+  width: min(13vw, 6rem);
+  height: 1.55rem;
   border-radius: 999px;
   background: var(--ink);
-  opacity: 0.35;
+  opacity: 0.32;
+}
+
+.shape-pill-tall {
+  top: auto;
+  bottom: 34%;
+  left: auto;
+  right: 8%;
+  width: 1.55rem;
+  height: min(12vw, 5.5rem);
+  opacity: 0.28;
 }
 
 .shape-slash {
-  top: 58%;
-  right: 18%;
-  width: min(18vw, 9rem);
+  top: 56%;
+  right: 16%;
+  width: min(16vw, 8rem);
   height: 2px;
   border: 0;
   background: var(--ink);
-  opacity: 0.45;
+  opacity: 0.5;
   transform: rotate(-28deg);
   transform-origin: center;
 }
 
+.shape-slash-b {
+  top: 24%;
+  left: 28%;
+  right: auto;
+  width: min(12vw, 5.5rem);
+  transform: rotate(18deg);
+  opacity: 0.35;
+}
+
 .shape-dot {
-  bottom: 30%;
-  right: 12%;
-  width: 1.1rem;
-  height: 1.1rem;
+  bottom: 28%;
+  right: 11%;
+  width: 1.05rem;
+  height: 1.05rem;
   border-radius: 50%;
   background: var(--cream);
   box-shadow: 0.2rem 0.2rem 0 var(--ink);
-  opacity: 0.8;
+  opacity: 0.85;
+}
+
+.shape-dot-b {
+  top: 42%;
+  left: 5%;
+  right: auto;
+  bottom: auto;
+  width: 0.75rem;
+  height: 0.75rem;
+  opacity: 0.7;
+}
+
+.shape-square {
+  top: 68%;
+  right: 30%;
+  width: min(6vw, 2.8rem);
+  height: min(6vw, 2.8rem);
+  background: transparent;
+  opacity: 0.45;
+  transform: rotate(12deg);
+}
+
+.shape-tri {
+  top: 38%;
+  right: 4%;
+  width: 0;
+  height: 0;
+  border: 0;
+  border-left: 1.1rem solid transparent;
+  border-right: 1.1rem solid transparent;
+  border-bottom: 1.9rem solid var(--ink);
+  background: transparent;
+  opacity: 0.28;
 }
 
 .hero-rail {
@@ -1249,7 +1321,13 @@ section[id] {
   }
 
   .shape-pill,
-  .shape-slash {
+  .shape-slash,
+  .shape-tri,
+  .shape-square,
+  .shape-ring-sm,
+  .shape-block-sm,
+  .shape-pill-tall,
+  .shape-slash-b {
     display: none;
   }
 
