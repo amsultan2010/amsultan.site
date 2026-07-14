@@ -1,11 +1,49 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import "./styles.css";
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+
+let lenis;
+
+function initSmoothScroll() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return null;
+
+  lenis = new Lenis({
+    autoRaf: false,
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    touchMultiplier: 1.2,
+  });
+
+  lenis.on("scroll", ScrollTrigger.update);
+
+  const tick = (time) => {
+    lenis.raf(time * 1000);
+  };
+
+  gsap.ticker.add(tick);
+  gsap.ticker.lagSmoothing(0);
+
+  return lenis;
+}
+
+function scrollToTarget(target) {
+  if (!target) return;
+  if (lenis) {
+    lenis.scrollTo(target, { offset: -24, duration: 1.2 });
+  } else {
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 
 function splitCharacters(element) {
   if (!element || element.dataset.splitReady) return $$(".split-char", element);
@@ -71,8 +109,8 @@ function initCursor() {
   if (!cursor) return;
 
   gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-  const moveX = gsap.quickTo(cursor, "x", { duration: 0.25, ease: "power3" });
-  const moveY = gsap.quickTo(cursor, "y", { duration: 0.25, ease: "power3" });
+  const moveX = gsap.quickTo(cursor, "x", { duration: 0.18, ease: "power3" });
+  const moveY = gsap.quickTo(cursor, "y", { duration: 0.18, ease: "power3" });
 
   window.addEventListener(
     "pointermove",
@@ -84,23 +122,23 @@ function initCursor() {
     { passive: true },
   );
 
-  $$("a, button, .project-card, .photo").forEach((target) => {
+  $$("a, button, .work-row, .photo, .verb-strip li, .lead-item").forEach((target) => {
     target.addEventListener("pointerenter", () => cursor.classList.add("is-hovering"));
     target.addEventListener("pointerleave", () => cursor.classList.remove("is-hovering"));
   });
 }
 
-function initMagneticLinks() {
+function initMagnetic() {
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
   $$(".magnetic").forEach((element) => {
-    const moveX = gsap.quickTo(element, "x", { duration: 0.35, ease: "power3.out" });
-    const moveY = gsap.quickTo(element, "y", { duration: 0.35, ease: "power3.out" });
+    const moveX = gsap.quickTo(element, "x", { duration: 0.3, ease: "power3.out" });
+    const moveY = gsap.quickTo(element, "y", { duration: 0.3, ease: "power3.out" });
 
     element.addEventListener("pointermove", (event) => {
       const bounds = element.getBoundingClientRect();
-      moveX((event.clientX - bounds.left - bounds.width / 2) * 0.18);
-      moveY((event.clientY - bounds.top - bounds.height / 2) * 0.18);
+      moveX((event.clientX - bounds.left - bounds.width / 2) * 0.28);
+      moveY((event.clientY - bounds.top - bounds.height / 2) * 0.28);
     });
 
     element.addEventListener("pointerleave", () => {
@@ -113,37 +151,22 @@ function initMagneticLinks() {
 function initNavigation() {
   const nav = $(".primary-nav");
   const toggle = $(".menu-toggle");
-  const header = $(".site-header");
   const mq = window.matchMedia("(max-width: 960px)");
-
-  const placeNav = () => {
-    if (!nav || !header) return;
-    if (mq.matches) {
-      header.insertAdjacentElement("afterend", nav);
-    } else if (nav.previousElementSibling !== header.querySelector(".brand")) {
-      const cta = $(".header-cta", header);
-      header.insertBefore(nav, cta);
-    }
-  };
 
   const setMenuOpen = (open) => {
     if (!nav || !toggle) return;
     nav.classList.toggle("is-open", open);
     toggle.classList.toggle("is-open", open);
     toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
     document.body.classList.toggle("menu-open", open && mq.matches);
   };
 
-  placeNav();
   toggle?.addEventListener("click", () => {
     setMenuOpen(!nav.classList.contains("is-open"));
   });
 
-  mq.addEventListener("change", () => {
-    setMenuOpen(false);
-    placeNav();
-  });
+  mq.addEventListener("change", () => setMenuOpen(false));
 
   $$('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -151,14 +174,13 @@ function initNavigation() {
       if (!target) return;
       event.preventDefault();
       setMenuOpen(false);
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      scrollToTarget(target);
     });
   });
 
   $$("[data-section]").forEach((link) => {
     const section = $(`#${link.dataset.section}`);
     if (!section) return;
-
     ScrollTrigger.create({
       trigger: section,
       start: "top 45%",
@@ -166,6 +188,66 @@ function initNavigation() {
       onToggle: ({ isActive }) => link.classList.toggle("is-active", isActive),
     });
   });
+}
+
+function initWorkPreview() {
+  const rows = $$(".work-row");
+  const images = $$(".work-preview-frame img");
+  const label = $("[data-preview-label]");
+  if (!rows.length) return;
+
+  let active = 0;
+  let tween;
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const setActive = (index) => {
+    const next = Math.max(0, Math.min(index, rows.length - 1));
+    if (next === active) return;
+
+    const prevImg = images[active];
+    const nextImg = images[next];
+    rows.forEach((row, i) => row.classList.toggle("is-active", i === next));
+    if (label) label.textContent = String(next + 1).padStart(2, "0");
+
+    if (!nextImg) {
+      active = next;
+      return;
+    }
+
+    if (tween) tween.kill();
+
+    if (reduceMotion || !prevImg) {
+      images.forEach((img, i) => img.classList.toggle("is-active", i === next));
+      active = next;
+      return;
+    }
+
+    nextImg.classList.add("is-active");
+    gsap.set(nextImg, { opacity: 0, zIndex: 2 });
+    gsap.set(prevImg, { zIndex: 1 });
+
+    tween = gsap
+      .timeline({
+        onComplete: () => {
+          images.forEach((img, i) => {
+            img.classList.toggle("is-active", i === next);
+            gsap.set(img, { clearProps: "opacity,zIndex" });
+          });
+          active = next;
+          tween = null;
+        },
+      })
+      .to(nextImg, { opacity: 1, duration: 0.4, ease: "power2.out" }, 0)
+      .to(prevImg, { opacity: 0, duration: 0.4, ease: "power2.out" }, 0);
+  };
+
+  rows.forEach((row, index) => {
+    row.addEventListener("pointerenter", () => setActive(index));
+    row.addEventListener("focus", () => setActive(index));
+  });
+
+  images.forEach((img, i) => img.classList.toggle("is-active", i === 0));
+  rows[0]?.classList.add("is-active");
 }
 
 function initPhotoCarousel() {
@@ -191,10 +273,6 @@ function initPhotoCarousel() {
   const syncFocus = () => {
     if (reduceMotion) {
       gsap.set(photos, { scale: 1, opacity: 1, rotateY: 0 });
-      gsap.set(
-        photos.map((photo) => $("img", photo)).filter(Boolean),
-        { xPercent: 0, scale: 1 },
-      );
       return;
     }
 
@@ -205,19 +283,19 @@ function initPhotoCarousel() {
       const rect = photo.getBoundingClientRect();
       const photoCenter = rect.left + rect.width / 2;
       const norm = (photoCenter - center) / Math.max(rect.width, 1);
-      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.9);
+      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.85);
 
       gsap.set(photo, {
         scale: 0.92 + focus * 0.08,
-        opacity: 0.5 + focus * 0.5,
-        rotateY: gsap.utils.clamp(-7, 7, -norm * 8),
+        opacity: 0.45 + focus * 0.55,
+        rotateY: gsap.utils.clamp(-6, 6, -norm * 7),
       });
 
       const img = $("img", photo);
       if (img) {
         gsap.set(img, {
-          xPercent: gsap.utils.clamp(-10, 10, -norm * 12),
-          scale: 1.08 - focus * 0.08,
+          xPercent: gsap.utils.clamp(-8, 8, -norm * 10),
+          scale: 1.06 - focus * 0.06,
         });
       }
     });
@@ -230,24 +308,22 @@ function initPhotoCarousel() {
       indexLabel.textContent = label;
       return;
     }
-
     const direction = nextValue >= prevIndex ? 1 : -1;
     gsap.killTweensOf(indexLabel);
     indexLabel.textContent = label;
     gsap.fromTo(
       indexLabel,
-      { yPercent: direction * 110, autoAlpha: 0 },
-      { yPercent: 0, autoAlpha: 1, duration: 0.38, ease: "power3.out", overwrite: true },
+      { yPercent: direction * 120, autoAlpha: 0 },
+      { yPercent: 0, autoAlpha: 1, duration: 0.35, ease: "power3.out", overwrite: true },
     );
   };
 
   const update = (animate = true) => {
     const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
     const step = photos[0].offsetWidth + gap;
-    const clamped = Math.min(Math.max(index, 0), maxIndex());
-    index = clamped;
-
+    index = Math.min(Math.max(index, 0), maxIndex());
     const duration = reduceMotion || !animate ? 0 : 0.75;
+
     gsap.to(rail, {
       x: -index * step,
       ease: "power3.out",
@@ -275,67 +351,98 @@ function initPhotoCarousel() {
     update();
   });
 
-  window.addEventListener(
-    "keydown",
-    (event) => {
-      const section = $(".field-notes");
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const inView = rect.top < window.innerHeight * 0.75 && rect.bottom > window.innerHeight * 0.25;
-      if (!inView) return;
-      if (event.key === "ArrowLeft") {
-        index -= 1;
-        update();
-      }
-      if (event.key === "ArrowRight") {
-        index += 1;
-        update();
-      }
-    },
-  );
+  window.addEventListener("keydown", (event) => {
+    const section = $(".photos");
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+    if (!inView) return;
+    if (event.key === "ArrowLeft") {
+      index -= 1;
+      update();
+    }
+    if (event.key === "ArrowRight") {
+      index += 1;
+      update();
+    }
+  });
 
   window.addEventListener("resize", () => update(false), { passive: true });
   update(false);
+}
+
+function initLoader(onDone) {
+  const loader = $(".loader");
+  const bar = $(".loader-bar");
+  const pct = $("[data-loader-pct]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!loader || reduceMotion) {
+    loader?.remove();
+    onDone();
+    return;
+  }
+
+  document.body.classList.add("is-loading");
+  const state = { value: 0 };
+
+  gsap.to(state, {
+    value: 100,
+    duration: 0.95,
+    ease: "power2.inOut",
+    onUpdate: () => {
+      const n = Math.round(state.value);
+      if (bar) bar.style.width = `${n}%`;
+      if (pct) pct.textContent = String(n);
+    },
+    onComplete: () => {
+      gsap.to(loader, {
+        yPercent: -110,
+        duration: 0.75,
+        ease: "power4.inOut",
+        onComplete: () => {
+          loader.remove();
+          document.body.classList.remove("is-loading");
+          onDone();
+        },
+      });
+    },
+  });
 }
 
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
 
+  initWorkPreview();
+  initPhotoCarousel();
+
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
-    initPhotoCarousel();
+    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
     return;
   }
 
-  const heroCharacters = $$(".hero-title .split-char");
-  const intro = gsap.timeline({
-    defaults: { ease: "expo.out" },
-    onComplete: () => {
-      gsap.set(".site-header, .hero-meta", { clearProps: "transform" });
-    },
-  });
-
-  const isCompact = window.matchMedia("(max-width: 960px)").matches;
-
-  if (!isCompact) {
-    intro.from(".site-header", { yPercent: -100, duration: 0.8 });
-  }
+  const heroChars = $$(".hero-title .split-char");
+  const intro = gsap.timeline({ defaults: { ease: "expo.out" } });
 
   intro
-    .from(".hero-meta", { scaleX: 0, transformOrigin: "left", duration: 0.75 }, 0.12)
+    .from(".site-header", { y: -72, autoAlpha: 0, duration: 0.65 }, 0)
+    .from(".hero-rail", { y: -18, autoAlpha: 0, duration: 0.55 }, 0.08)
     .from(
-      heroCharacters,
+      heroChars,
       {
         yPercent: 120,
-        rotateX: -70,
         autoAlpha: 0,
-        duration: 1.05,
-        stagger: 0.035,
+        duration: 1,
+        stagger: 0.025,
       },
-      0.28,
+      0.12,
     )
-    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.55);
+    .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
+    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
+    .from(".hero-deco-ring", { scale: 0.7, autoAlpha: 0, duration: 0.9 }, 0.18)
+    .from(".hero-deco-block", { scale: 0.7, autoAlpha: 0, duration: 0.9 }, 0.22);
 
   gsap.to(".scroll-progress", {
     scaleX: 1,
@@ -344,371 +451,256 @@ function initMotion() {
       trigger: document.documentElement,
       start: "top top",
       end: "bottom bottom",
-      scrub: 0.15,
+      scrub: 0.2,
     },
   });
 
-  gsap.to(".ticker-track", {
+  gsap.to(".marquee-track", {
     xPercent: -50,
     duration: 24,
     repeat: -1,
     ease: "none",
   });
 
-  gsap.to(".grain", {
-    opacity: 0.09,
-    ease: "none",
-    scrollTrigger: {
-      trigger: document.documentElement,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-    },
-  });
-
-  // Hero exit scrub
+  // gentle hero exit — keep it simple so it doesn't fight Lenis
   gsap
     .timeline({
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
         end: "bottom top",
-        scrub: true,
+        scrub: 0.6,
       },
     })
-    .to(".hero-title", { yPercent: -22, scale: 0.88, transformOrigin: "50% 0%" }, 0)
-    .to(".hero-meta", { y: -40, autoAlpha: 0 }, 0)
-    .to(".hero-foot", { y: -50, autoAlpha: 0 }, 0);
+    .to(".hero-title", { yPercent: -12, opacity: 0.35 }, 0)
+    .to(".hero-rail, .hero-foot, .hero-orbit", { opacity: 0, y: -24 }, 0)
+    .to(".hero-deco-ring", { x: 60, opacity: 0.1 }, 0)
+    .to(".hero-deco-block", { x: -40, opacity: 0.05 }, 0);
 
-  // About statement word reveal + scrub
   $$("[data-reveal-lines]").forEach((element) => {
     const words = splitWords(element);
     gsap.from(words, {
-      yPercent: 110,
-      rotateX: -40,
+      yPercent: 100,
       autoAlpha: 0,
-      duration: 0.85,
-      stagger: 0.04,
+      duration: 0.75,
+      stagger: 0.05,
       ease: "power3.out",
       scrollTrigger: {
         trigger: element,
-        start: "top 82%",
+        start: "top 85%",
+        toggleActions: "play none none none",
       },
     });
   });
 
-  gsap.from(".about-bio, .about-actions, .about-kicker", {
+  gsap.from(".about-meta, .about-bio, .about-actions", {
     y: 28,
     autoAlpha: 0,
-    duration: 0.7,
+    duration: 0.65,
     stagger: 0.08,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".about-lead",
+      trigger: ".about-copy",
       start: "top 80%",
+      toggleActions: "play none none none",
     },
   });
 
   gsap.fromTo(
-    ".portrait-window",
-    { clipPath: "inset(12% 10% 12% 10%)", rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -8), autoAlpha: 0.35 },
+    ".portrait-mask",
+    { clipPath: "inset(16% 12% 16% 12%)" },
     {
       clipPath: "inset(0% 0% 0% 0%)",
-      rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -2.5),
-      autoAlpha: 1,
       ease: "none",
       scrollTrigger: {
-        trigger: ".portrait-card",
-        start: "top 90%",
+        trigger: ".about-portrait",
+        start: "top 80%",
         end: "top 45%",
-        scrub: true,
+        scrub: 0.5,
       },
     },
   );
 
-  gsap.to(".portrait-window img", {
-    yPercent: -14,
-    scale: 1.08,
+  gsap.to(".portrait-mask img", {
+    yPercent: -10,
     ease: "none",
     scrollTrigger: {
-      trigger: ".portrait-card",
+      trigger: ".about-portrait",
       start: "top bottom",
       end: "bottom top",
-      scrub: true,
+      scrub: 0.5,
     },
   });
 
-  gsap.from(".portrait-stamp", {
-    y: 20,
-    rotate: () => (window.matchMedia("(max-width: 700px)").matches ? 0 : -8),
+  gsap.from(".about-portrait figcaption", {
+    y: 16,
     autoAlpha: 0,
-    duration: 0.65,
-    ease: "back.out(1.4)",
-    scrollTrigger: {
-      trigger: ".portrait-card",
-      start: "top 70%",
-    },
-  });
-
-  gsap.from(".focus-card", {
-    y: 48,
-    autoAlpha: 0,
-    duration: 0.7,
-    stagger: 0.08,
+    duration: 0.5,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".focus-board",
-      start: "top 85%",
+      trigger: ".about-portrait",
+      start: "top 70%",
+      toggleActions: "play none none none",
     },
   });
 
-  $$(".section-title").forEach((title) => {
-    const characters = $$(".split-char", title);
-    gsap.from(characters, {
-      yPercent: 120,
-      rotateZ: 6,
+  gsap.from(".verb-strip li", {
+    y: 28,
+    autoAlpha: 0,
+    duration: 0.55,
+    stagger: 0.07,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".verb-strip",
+      start: "top 88%",
+      toggleActions: "play none none none",
+    },
+  });
+
+  $$(".section-display").forEach((title) => {
+    const chars = $$(".split-char", title);
+    if (!chars.length) return;
+    gsap.from(chars, {
+      yPercent: 110,
       autoAlpha: 0,
-      duration: 0.8,
-      stagger: 0.03,
-      ease: "expo.out",
+      duration: 0.7,
+      stagger: 0.022,
+      ease: "power3.out",
       scrollTrigger: {
         trigger: title,
-        start: "top 84%",
+        start: "top 88%",
+        toggleActions: "play none none none",
       },
     });
   });
 
-  $$(".experience-item").forEach((item) => {
+  gsap.from(".work-row", {
+    y: 28,
+    autoAlpha: 0,
+    duration: 0.55,
+    stagger: 0.07,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".work-list",
+      start: "top 85%",
+      toggleActions: "play none none none",
+    },
+  });
+
+  if (window.matchMedia("(min-width: 701px)").matches) {
+    gsap.from(".work-preview", {
+      x: 40,
+      autoAlpha: 0,
+      duration: 0.7,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: ".work-stage",
+        start: "top 80%",
+        toggleActions: "play none none none",
+      },
+    });
+  }
+
+  $$(".lead-item").forEach((item) => {
     gsap.from(item, {
       y: 36,
       autoAlpha: 0,
-      duration: 0.7,
+      duration: 0.65,
       ease: "power3.out",
       scrollTrigger: {
         trigger: item,
-        start: "top 86%",
+        start: "top 90%",
+        toggleActions: "play none none none",
       },
+    });
+
+    item.addEventListener("pointerenter", () => {
+      gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
+    });
+    item.addEventListener("pointerleave", () => {
+      gsap.to($(".lead-num", item), { scale: 1, duration: 0.35, ease: "power2.out" });
     });
   });
 
-  gsap.from(".stack-cloud span", {
-    y: 24,
-    scale: 0.85,
+  gsap.from(".stack-row span", {
+    y: 18,
     autoAlpha: 0,
-    duration: 0.45,
-    stagger: 0.035,
-    ease: "back.out(1.4)",
+    duration: 0.4,
+    stagger: 0.03,
+    ease: "power2.out",
     scrollTrigger: {
-      trigger: ".stack-cloud",
-      start: "top 88%",
+      trigger: ".stack-row",
+      start: "top 92%",
+      toggleActions: "play none none none",
     },
   });
 
-  $$(".photo").forEach((photo, index) => {
-    const image = $("img", photo);
-
-    gsap.from(photo, {
-      y: 40,
-      autoAlpha: 0,
-      duration: 0.7,
-      delay: Math.min(index, 4) * 0.04,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".field-notes",
-        start: "top 80%",
-      },
-    });
-
-    gsap.to(image, {
-      scale: 1.06,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".field-notes",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
-  });
-
-  initPhotoCarousel();
-
-  gsap.from(".contact-link .split-char", {
-    yPercent: 120,
-    rotateX: -55,
+  gsap.from(".photo", {
+    y: 36,
     autoAlpha: 0,
-    duration: 0.9,
-    stagger: 0.045,
-    ease: "expo.out",
-    scrollTrigger: {
-      trigger: ".contact-title",
-      start: "top 82%",
-    },
-  });
-
-  gsap.from(".contact-foot > *", {
-    y: 30,
-    autoAlpha: 0,
-    duration: 0.7,
-    stagger: 0.1,
+    duration: 0.6,
+    stagger: 0.04,
     ease: "power3.out",
     scrollTrigger: {
-      trigger: ".contact-foot",
-      start: "top 90%",
+      trigger: ".photos",
+      start: "top 80%",
+      toggleActions: "play none none none",
     },
   });
 
-  const responsive = gsap.matchMedia();
+  gsap.from(".contact-link .split-char", {
+    yPercent: 110,
+    autoAlpha: 0,
+    duration: 0.8,
+    stagger: 0.035,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".contact-title",
+      start: "top 85%",
+      toggleActions: "play none none none",
+    },
+  });
 
-  responsive.add("(min-width: 701px)", () => {
-    const track = $(".work-track");
-    const viewport = $(".work-viewport");
-    const cards = $$(".project-card");
-    if (!track || !viewport) return;
+  gsap.from(".contact-kicker, .contact-row > *", {
+    y: 24,
+    autoAlpha: 0,
+    duration: 0.6,
+    stagger: 0.08,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".contact",
+      start: "top 80%",
+      toggleActions: "play none none none",
+    },
+  });
 
-    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-
-    const syncProjectFocus = () => {
-      const center = window.innerWidth / 2;
-      cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        const cardCenter = rect.left + rect.width / 2;
-        const norm = (cardCenter - center) / (window.innerWidth * 0.55);
-        const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm));
-
-        gsap.set(card, {
-          scale: 0.93 + focus * 0.07,
-          rotateY: gsap.utils.clamp(-10, 10, -norm * 12),
-          z: focus * 48,
-        });
-
-        const visual = $(".project-visual", card);
-        if (visual) {
-          gsap.set(visual, { opacity: 0.5 + focus * 0.5 });
-        }
-      });
-    };
-
-    const horizontal = gsap.to(track, {
-      x: () => -distance(),
+  gsap.fromTo(
+    ".contact-slash",
+    { xPercent: -12 },
+    {
+      xPercent: 10,
       ease: "none",
       scrollTrigger: {
-        trigger: viewport,
-        start: "top top",
-        end: () => `+=${distance() + window.innerHeight * 0.85}`,
-        pin: true,
-        scrub: 0.65,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-        onUpdate: syncProjectFocus,
-        onRefresh: syncProjectFocus,
+        trigger: ".contact",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.5,
       },
-    });
+    },
+  );
 
-    syncProjectFocus();
-
-    cards.forEach((card) => {
-      const visual = $(".project-visual > img", card);
-      const copy = $(".project-copy", card);
-
-      if (visual) {
-        gsap.fromTo(
-          visual,
-          { scale: 1.14, xPercent: -4 },
-          {
-            scale: 1,
-            xPercent: 0,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              containerAnimation: horizontal,
-              start: "left 95%",
-              end: "left 35%",
-              scrub: true,
-            },
-          },
-        );
-      }
-
-      if (copy) {
-        gsap.fromTo(
-          copy,
-          { y: 22, autoAlpha: 0.35 },
-          {
-            y: 0,
-            autoAlpha: 1,
-            ease: "none",
-            scrollTrigger: {
-              trigger: card,
-              containerAnimation: horizontal,
-              start: "left 90%",
-              end: "left 48%",
-              scrub: true,
-            },
-          },
-        );
-      }
-    });
-
-    // Contact wallpaper parallax
-    gsap.fromTo(
-      ".contact-bg",
-      { yPercent: -12, scale: 1.12 },
-      {
-        yPercent: 12,
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".contact",
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
-    );
+  document.fonts.ready.then(() => {
+    ScrollTrigger.refresh();
+    lenis?.resize();
   });
-
-  responsive.add("(max-width: 700px)", () => {
-    gsap.set(".project-card", { clearProps: "transform" });
-    gsap.set(".project-visual", { clearProps: "opacity" });
-
-    $$(".project-card").forEach((card) => {
-      gsap.from(card, {
-        y: 36,
-        autoAlpha: 0,
-        duration: 0.7,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 90%",
-        },
-      });
-
-      const visual = $(".project-visual > img", card);
-      if (!visual) return;
-
-      gsap.fromTo(
-        visual,
-        { scale: 1.08 },
-        {
-          scale: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: card,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
-    });
-  });
-
-  document.fonts.ready.then(() => ScrollTrigger.refresh());
 }
 
+initSmoothScroll();
 initClock();
 initCursor();
-initMagneticLinks();
+initMagnetic();
 initNavigation();
-initMotion();
+initLoader(() => {
+  initMotion();
+  requestAnimationFrame(() => ScrollTrigger.refresh());
+});
