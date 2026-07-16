@@ -946,6 +946,13 @@ button:focus-visible {
   will-change: transform, opacity, clip-path;
 }
 
+.work-preview-frame img.work-shot-wide {
+  object-fit: contain;
+  object-position: center;
+  background: #0a0a0a;
+  transform: scale(1);
+}
+
 .work-preview-frame img.is-active {
   opacity: 1;
   transform: scale(1);
@@ -1271,6 +1278,28 @@ button:focus-visible {
   opacity: 1;
 }
 
+.contact-card-featured {
+  background: var(--ink);
+  color: var(--cream);
+  border-color: var(--ink);
+  box-shadow: 0.28rem 0.28rem 0 var(--orange);
+}
+
+.contact-card-featured .mono {
+  color: var(--orange);
+  opacity: 1;
+}
+
+.contact-card-featured:hover {
+  color: var(--ink);
+  background: var(--cream);
+  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+}
+
+.contact-card-featured:hover .mono {
+  color: var(--orange-deep);
+}
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -1498,6 +1527,12 @@ section[id] {
     object-position: top center;
     border: 2px solid color-mix(in srgb, var(--cream) 35%, transparent);
     margin: 0.35rem 0 0.15rem;
+  }
+
+  .work-row-thumb.work-shot-wide {
+    object-fit: contain;
+    object-position: center;
+    background: #0a0a0a;
   }
 
   .work-meta {
