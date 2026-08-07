@@ -698,8 +698,21 @@ function initMotion() {
     },
   });
 
-  gsap.from(".contact-top > *, .contact-pitch, .contact-card", {
+  gsap.from(".contact-top > *, .contact-pitch", {
     y: 28,
+    autoAlpha: 0,
+    duration: 0.6,
+    stagger: 0.07,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".contact-frame",
+      start: "top 82%",
+      toggleActions: "play none none none",
+    },
+  });
+
+  // cards are magnetic, so gsap owns their x/y — fade only, never tween y here
+  gsap.from(".contact-card", {
     autoAlpha: 0,
     duration: 0.6,
     stagger: 0.07,
