@@ -75,7 +75,7 @@ button:focus-visible {
 
 .mono {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.95rem;
   letter-spacing: 0.04em;
   text-transform: lowercase;
   font-weight: 500;
@@ -90,7 +90,7 @@ button:focus-visible {
   color: var(--orange);
   background: var(--cream);
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.95rem;
   transform: translateY(-200%);
 }
 
@@ -182,8 +182,8 @@ button:focus-visible {
   align-items: center;
   width: max-content;
   max-width: calc(100vw - 2rem);
-  min-height: 3.25rem;
-  padding: 0.25rem;
+  min-height: 4rem;
+  padding: 0.3rem;
   border: 2px solid var(--ink);
   background: var(--cream);
   transform: translateX(-50%);
@@ -197,9 +197,9 @@ button:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.75rem;
+  min-height: 3.4rem;
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-transform: lowercase;
 }
@@ -210,14 +210,14 @@ button:focus-visible {
 
 .brand-mark {
   display: grid;
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.6rem;
+  height: 2.6rem;
   place-items: center;
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
   font-family: var(--display);
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 800;
 }
 
@@ -227,8 +227,8 @@ button:focus-visible {
 }
 
 .primary-nav a {
-  min-width: 4.75rem;
-  padding: 0 0.85rem;
+  min-width: 6rem;
+  padding: 0 1.1rem;
   border-right: 2px solid var(--ink);
   transition: background 180ms ease, color 180ms ease;
 }
@@ -245,7 +245,7 @@ button:focus-visible {
 
 .header-cta {
   gap: 0.55rem;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
   border-left: 2px solid var(--ink);
   background: var(--orange);
   transition: background 180ms ease, color 180ms ease;
@@ -312,7 +312,7 @@ button:focus-visible {
   padding: 0.75rem 1.1rem;
   border: 2px solid var(--ink);
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-transform: lowercase;
   transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
@@ -524,6 +524,54 @@ button:focus-visible {
   opacity: 0.28;
 }
 
+.shape-ring-xs {
+  top: 80%;
+  left: auto;
+  right: 38%;
+  width: min(6vw, 2.6rem);
+  height: min(6vw, 2.6rem);
+  opacity: 0.32;
+}
+
+.shape-dot-c {
+  top: 14%;
+  left: 13%;
+  right: auto;
+  bottom: auto;
+  width: 0.6rem;
+  height: 0.6rem;
+  opacity: 0.6;
+}
+
+.shape-slash-c {
+  top: auto;
+  bottom: 13%;
+  left: auto;
+  right: 27%;
+  width: min(9vw, 4.4rem);
+  transform: rotate(42deg);
+  opacity: 0.3;
+}
+
+.shape-square-b {
+  top: 76%;
+  right: auto;
+  left: 13%;
+  width: min(5vw, 2.2rem);
+  height: min(5vw, 2.2rem);
+  opacity: 0.34;
+  transform: rotate(-16deg);
+}
+
+.shape-pill-sm {
+  top: 9%;
+  left: auto;
+  right: 31%;
+  width: min(8vw, 3.4rem);
+  height: 1.05rem;
+  opacity: 0.24;
+}
+
 .hero-rail {
   position: relative;
   z-index: 2;
@@ -619,7 +667,7 @@ button:focus-visible {
   background: var(--ink);
   color: var(--cream);
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.9rem;
   font-weight: 600;
 }
 
@@ -834,7 +882,7 @@ button:focus-visible {
 
 .work-hint {
   margin: 0 0 0.4rem;
-  opacity: 0.5;
+  opacity: 0.85;
 }
 
 /* base state is the touch state: every row is fully expanded, no interaction needed */
@@ -888,7 +936,7 @@ button:focus-visible {
   max-width: 34rem;
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
   line-height: 1.25;
-  opacity: 0.75;
+  opacity: 0.9;
 }
 
 .work-row-thumb {
@@ -904,7 +952,7 @@ button:focus-visible {
 
 .work-meta {
   grid-area: meta;
-  opacity: 0.6;
+  opacity: 0.85;
 }
 
 .work-go {
@@ -928,7 +976,27 @@ button:focus-visible {
       "idx icon thumb meta go";
     gap: 0 1.1rem;
     padding: 1.35rem var(--gutter);
-    color: color-mix(in srgb, var(--cream) 48%, transparent);
+    color: color-mix(in srgb, var(--cream) 78%, transparent);
+    cursor: pointer;
+  }
+
+  /* rest-state cue: an orange edge that fills in on hover */
+  .work-row::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0.35rem;
+    background: var(--orange);
+    opacity: 0.55;
+    transition: width 220ms ease, opacity 220ms ease;
+  }
+
+  .work-row:hover::before,
+  .work-row:focus-visible::before {
+    width: 0.75rem;
+    opacity: 1;
   }
 
   .work-row:hover,
@@ -949,11 +1017,11 @@ button:focus-visible {
 
   .work-meta {
     white-space: nowrap;
-    opacity: 0.55;
+    opacity: 0.85;
   }
 
   .work-go {
-    opacity: 0;
+    opacity: 0.5;
     transform: translateX(-0.4rem);
     transition: opacity 220ms ease, transform 220ms ease;
   }
@@ -976,9 +1044,9 @@ button:focus-visible {
 
   .work-row:hover .work-blurb,
   .work-row:focus-visible .work-blurb {
-    max-height: 9rem;
+    max-height: 12rem;
     margin-top: 0.4rem;
-    opacity: 0.75;
+    opacity: 0.9;
   }
 
   .work-row-thumb {
@@ -1293,8 +1361,9 @@ button:focus-visible {
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
-  box-shadow: 0.28rem 0.28rem 0 var(--ink);
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  /* cards rest in the raised state; magnetic js owns transform on hover */
+  box-shadow: 0.5rem 0.5rem 0 var(--ink);
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
 }
 
 .contact-card .mono {
@@ -1314,8 +1383,7 @@ button:focus-visible {
 .contact-card:hover {
   color: var(--cream);
   background: var(--ink);
-  transform: translate(-3px, -3px);
-  box-shadow: 0.4rem 0.4rem 0 var(--orange-deep);
+  box-shadow: 0.62rem 0.62rem 0 var(--orange-deep);
 }
 
 .contact-card:hover .mono {
@@ -1327,7 +1395,7 @@ button:focus-visible {
   background: var(--ink);
   color: var(--cream);
   border-color: var(--ink);
-  box-shadow: 0.28rem 0.28rem 0 var(--orange);
+  box-shadow: 0.5rem 0.5rem 0 var(--orange);
 }
 
 .contact-card-featured .mono {
@@ -1338,7 +1406,7 @@ button:focus-visible {
 .contact-card-featured:hover {
   color: var(--ink);
   background: var(--cream);
-  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+  box-shadow: 0.62rem 0.62rem 0 var(--orange);
 }
 
 .contact-card-featured:hover .mono {
@@ -1379,7 +1447,7 @@ section[id] {
 
   .primary-nav {
     position: fixed;
-    top: calc(1rem + 3.5rem);
+    top: calc(1rem + 4.3rem);
     left: 1rem;
     right: 1rem;
     display: none;
@@ -1464,7 +1532,12 @@ section[id] {
   .shape-ring-sm,
   .shape-block-sm,
   .shape-pill-tall,
-  .shape-slash-b {
+  .shape-slash-b,
+  .shape-ring-xs,
+  .shape-dot-c,
+  .shape-slash-c,
+  .shape-square-b,
+  .shape-pill-sm {
     display: none;
   }
 
