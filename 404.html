@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ff4d1a" />
+    <meta name="robots" content="noindex" />
+    <meta
+      name="description"
+      content="that page does not exist on abdullahmsultan.me. head back to the homepage."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Unbounded:wght@500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <title>404 not found | abdullah sultan</title>
+    <style>
+      :root {
+        --orange: #ff4d1a;
+        --cream: #fffaf5;
+        --ink: #120e0c;
+        --ink-soft: rgba(18, 14, 12, 0.62);
+        --line-soft: rgba(18, 14, 12, 0.2);
+        --gutter: clamp(1rem, 2.4vw, 2.5rem);
+        --display: "Unbounded", sans-serif;
+        --serif: "Newsreader", Georgia, serif;
+        --mono: "IBM Plex Mono", ui-monospace, monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: var(--orange);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 3rem;
+        padding: var(--gutter);
+        color: var(--ink);
+        background: var(--orange);
+        font-family: var(--serif);
+        text-transform: lowercase;
+        text-rendering: optimizeLegibility;
+      }
+
+      ::selection {
+        color: var(--cream);
+        background: var(--ink);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid var(--cream);
+        outline-offset: 3px;
+      }
+
+      .mono {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.04em;
+        font-weight: 500;
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .top a:hover {
+        color: var(--cream);
+      }
+
+      main {
+        display: grid;
+        gap: 1.5rem;
+        max-width: 48rem;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: var(--display);
+        font-weight: 800;
+        letter-spacing: -0.055em;
+        line-height: 0.9;
+        font-size: clamp(4rem, 22vw, 16rem);
+      }
+
+      .lede {
+        margin: 0;
+        max-width: 34rem;
+        font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+        line-height: 1.4;
+        color: var(--ink-soft);
+      }
+
+      .home {
+        justify-self: start;
+        display: inline-block;
+        padding: 0.85rem 1.4rem;
+        background: var(--ink);
+        color: var(--cream);
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .home:hover {
+        background: var(--cream);
+        color: var(--orange);
+      }
+
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line-soft);
+        color: var(--ink-soft);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <a class="mono" href="/">abdullah sultan</a>
+      <span class="mono">error 404</span>
+    </header>
+
+    <main>
+      <h1>404</h1>
+      <p class="lede">
+        this page is not here. maybe it moved, maybe the link was mistyped, maybe it never
+        existed. the work is all on the homepage either way.
+      </p>
+      <a class="home" href="/">back to the homepage</a>
+    </main>
+
+    <footer>
+      <span class="mono">riyadh, ksa</span>
+      <a class="mono" href="/resume.html">resume</a>
+    </footer>
+  </body>
+</html>
