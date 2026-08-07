@@ -6,7 +6,7 @@ Static, motion-led portfolio built with:
 - **GSAP** + ScrollTrigger
 - **Vite** for local development and production builds
 
-Live: [www.abdullahmsultan.me](https://www.abdullahmsultan.me)
+Live: [www.amsultan.site](https://www.amsultan.site)
 
 ## Develop
 
