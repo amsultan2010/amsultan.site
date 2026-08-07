@@ -1,4 +1,4 @@
-# abdullah sultan — portfolio
+# abdullah sultan portfolio
 
 Static, motion-led portfolio built with:
 
