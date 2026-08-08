@@ -48,17 +48,27 @@ function scrollToTarget(target) {
 function splitCharacters(element) {
   if (!element || element.dataset.splitReady) return $$(".split-char", element);
 
-  const label = element.textContent.trim();
+  const label = element.textContent.trim().replace(/\s+/g, " ");
   element.dataset.splitReady = "true";
   element.setAttribute("aria-label", label);
   element.textContent = "";
 
-  [...label].forEach((character) => {
-    const span = document.createElement("span");
-    span.className = "split-char";
-    span.setAttribute("aria-hidden", "true");
-    span.textContent = character === " " ? "\u00a0" : character;
-    element.append(span);
+  // chars live inside a per-word wrapper, otherwise every inline-block char is a
+  // line-break opportunity and words split mid-letter on narrow screens
+  label.split(" ").forEach((word, index, words) => {
+    const wordSpan = document.createElement("span");
+    wordSpan.className = "split-word";
+    wordSpan.setAttribute("aria-hidden", "true");
+
+    [...word].forEach((character) => {
+      const span = document.createElement("span");
+      span.className = "split-char";
+      span.textContent = character;
+      wordSpan.append(span);
+    });
+
+    element.append(wordSpan);
+    if (index < words.length - 1) element.append(" ");
   });
 
   return $$(".split-char", element);
@@ -334,7 +344,9 @@ function initMotion() {
   });
 
   intro
-    .from(".site-header", { y: -72, autoAlpha: 0, duration: 0.65 }, 0)
+    // clearProps so gsap doesn't leave the desktop translateX(-50%) inline and
+    // break the header's mobile positioning after a resize or rotate
+    .from(".site-header", { y: -72, autoAlpha: 0, duration: 0.65, clearProps: "transform" }, 0)
     .from(".hero-rail", { y: -18, autoAlpha: 0, duration: 0.55 }, 0.08)
     .from(
       heroChars,
@@ -368,6 +380,9 @@ function initMotion() {
     ease: "none",
   });
 
+  // explicit fromTo + immediateRender:false — otherwise this scrub timeline samples
+  // its start values while the intro `from` tweens still hold them at 0 and the
+  // hero bg/rail stay invisible until a reload happens to win the race
   gsap
     .timeline({
       scrollTrigger: {
@@ -377,9 +392,24 @@ function initMotion() {
         scrub: 0.6,
       },
     })
-    .to(".hero-title", { yPercent: -12, opacity: 0.35 }, 0)
-    .to(".hero-rail, .hero-foot, .hero-orbit, .hero-kicker", { opacity: 0, y: -24 }, 0)
-    .to(".hero-bg", { yPercent: 18, opacity: 0.35 }, 0);
+    .fromTo(
+      ".hero-title",
+      { yPercent: 0, opacity: 1 },
+      { yPercent: -12, opacity: 0.35, immediateRender: false },
+      0,
+    )
+    .fromTo(
+      ".hero-rail, .hero-foot, .hero-orbit, .hero-kicker",
+      { opacity: 1, y: 0 },
+      { opacity: 0, y: -24, immediateRender: false },
+      0,
+    )
+    .fromTo(
+      ".hero-bg",
+      { yPercent: 0, opacity: 1 },
+      { yPercent: 18, opacity: 0.35, immediateRender: false },
+      0,
+    );
 
   $$("[data-reveal-lines]").forEach((element) => {
     const words = splitWords(element);

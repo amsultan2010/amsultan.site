@@ -647,6 +647,11 @@ button:focus-visible {
   -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--ink);
 }
 
+.split-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .split-char {
   display: inline-block;
   will-change: transform;
@@ -1604,8 +1609,24 @@ section[id] {
     height: 2.5rem;
   }
 
+  /* narrow viewports never get the hover reveal, so undo the collapsed state
+     the (hover: hover) block sets — otherwise rows show an empty band */
+  .work-blurb {
+    max-height: none;
+    margin-top: 0.4rem;
+    opacity: 0.9;
+    overflow: visible;
+    transition: none;
+  }
+
   .work-row-thumb {
     width: 100%;
+    max-height: none;
+    margin-top: 0.6rem;
+    border-width: 2px;
+    opacity: 1;
+    overflow: visible;
+    transition: none;
   }
 
   .work-meta {
@@ -1672,13 +1693,15 @@ section[id] {
     grid-template-columns: 1fr;
   }
 
+  /* stacked, not "label go" — the long email overlapped its own label */
   .contact-card {
     min-height: 0;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-      "label go"
-      "title title";
-    gap: 0.35rem 0.75rem;
+      "label"
+      "title"
+      "go";
+    gap: 0.3rem;
     padding: 0.95rem 1rem;
   }
 
@@ -1692,8 +1715,20 @@ section[id] {
 
   .contact-card-go {
     grid-area: go;
-    justify-self: end;
+    justify-self: start;
     align-self: start;
+    margin-top: 0.15rem;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+
+  /* the back-to-top link is the only sub-44px tap target on the page */
+  .site-footer a {
+    padding: 0.5rem 0;
   }
 }
 
