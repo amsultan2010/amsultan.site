@@ -122,7 +122,7 @@ function initCursor() {
     { passive: true },
   );
 
-  $$("a, button, .work-row, .photo, .verb-strip li, .lead-item, .contact-card").forEach((target) => {
+  $$("a, button, .work-row, .verb-strip li, .lead-item, .contact-card").forEach((target) => {
     target.addEventListener("pointerenter", () => cursor.classList.add("is-hovering"));
     target.addEventListener("pointerleave", () => cursor.classList.remove("is-hovering"));
   });
@@ -188,151 +188,6 @@ function initNavigation() {
       onToggle: ({ isActive }) => link.classList.toggle("is-active", isActive),
     });
   });
-}
-
-function initPhotoCarousel() {
-  const rail = $(".photo-rail");
-  const viewport = $(".photo-viewport");
-  const photos = $$(".photo");
-  const prev = $(".photo-nav-prev");
-  const next = $(".photo-nav-next");
-  const indexLabel = $("[data-photo-index]");
-  if (!rail || !viewport || !photos.length || !prev || !next) return;
-
-  let index = 0;
-  let prevIndex = 0;
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const maxIndex = () => {
-    const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
-    const step = photos[0].offsetWidth + gap;
-    const visible = Math.max(1, Math.floor((viewport.clientWidth || window.innerWidth) / step));
-    return Math.max(0, photos.length - visible);
-  };
-
-  const syncFocus = () => {
-    if (reduceMotion) {
-      gsap.set(photos, { opacity: 1, scale: 1 });
-      photos.forEach((photo) => {
-        const img = $("img", photo);
-        if (img) gsap.set(img, { clearProps: "transform" });
-      });
-      return;
-    }
-
-    const bounds = viewport.getBoundingClientRect();
-    const center = bounds.left + bounds.width / 2;
-
-    photos.forEach((photo) => {
-      const rect = photo.getBoundingClientRect();
-      const photoCenter = rect.left + rect.width / 2;
-      const norm = (photoCenter - center) / Math.max(rect.width, 1);
-      const focus = 1 - gsap.utils.clamp(0, 1, Math.abs(norm) * 0.9);
-
-      gsap.set(photo, {
-        opacity: 0.55 + focus * 0.45,
-        scale: 1,
-        rotateY: 0,
-      });
-
-      const img = $("img", photo);
-      if (img) gsap.set(img, { clearProps: "transform" });
-    });
-  };
-
-  const animateIndexLabel = (nextValue) => {
-    if (!indexLabel) return;
-    const label = String(nextValue + 1).padStart(2, "0");
-    if (reduceMotion) {
-      indexLabel.textContent = label;
-      return;
-    }
-    const direction = nextValue >= prevIndex ? 1 : -1;
-    gsap.killTweensOf(indexLabel);
-    indexLabel.textContent = label;
-    gsap.fromTo(
-      indexLabel,
-      { yPercent: direction * 120, autoAlpha: 0 },
-      { yPercent: 0, autoAlpha: 1, duration: 0.35, ease: "power3.out", overwrite: true },
-    );
-  };
-
-  const update = (animate = true) => {
-    const gap = Number.parseFloat(getComputedStyle(rail).gap) || 16;
-    const step = photos[0].offsetWidth + gap;
-    index = Math.min(Math.max(index, 0), maxIndex());
-    const duration = reduceMotion || !animate ? 0 : 0.75;
-
-    gsap.to(rail, {
-      x: -index * step,
-      ease: "power3.out",
-      duration,
-      overwrite: true,
-      onUpdate: syncFocus,
-      onComplete: syncFocus,
-    });
-    if (duration === 0) syncFocus();
-
-    if (animate) animateIndexLabel(index);
-    else if (indexLabel) indexLabel.textContent = String(index + 1).padStart(2, "0");
-
-    prev.disabled = index <= 0;
-    next.disabled = index >= maxIndex();
-    prevIndex = index;
-  };
-
-  prev.addEventListener("click", () => {
-    index -= 1;
-    update();
-  });
-  next.addEventListener("click", () => {
-    index += 1;
-    update();
-  });
-
-  window.addEventListener("keydown", (event) => {
-    const section = $(".photos");
-    if (!section) return;
-    const rect = section.getBoundingClientRect();
-    const inView = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
-    if (!inView) return;
-    if (event.key === "ArrowLeft") {
-      index -= 1;
-      update();
-    }
-    if (event.key === "ArrowRight") {
-      index += 1;
-      update();
-    }
-  });
-
-  let dragStartX = null;
-  viewport.addEventListener(
-    "pointerdown",
-    (event) => {
-      if (event.pointerType === "mouse") return;
-      dragStartX = event.clientX;
-    },
-    { passive: true },
-  );
-  viewport.addEventListener(
-    "pointerup",
-    (event) => {
-      if (dragStartX === null) return;
-      const delta = event.clientX - dragStartX;
-      dragStartX = null;
-      if (Math.abs(delta) < 40) return;
-      index += delta < 0 ? 1 : -1;
-      update();
-    },
-    { passive: true },
-  );
-  viewport.addEventListener("pointercancel", () => {
-    dragStartX = null;
-  });
-
-  window.addEventListener("resize", () => update(false), { passive: true });
-  update(false);
 }
 
 function initLoader(onDone) {
@@ -465,8 +320,6 @@ function initHeroMotion() {
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
-
-  initPhotoCarousel();
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -672,17 +525,29 @@ function initMotion() {
     },
   });
 
-  gsap.from(".photo", {
-    y: 36,
-    autoAlpha: 0,
-    duration: 0.6,
-    stagger: 0.04,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".photos",
-      start: "top 80%",
-      toggleActions: "play none none none",
-    },
+  $$(".cut").forEach((cut) => {
+    gsap.from($(".cut-figure", cut), {
+      y: 48,
+      autoAlpha: 0,
+      duration: 0.7,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: cut,
+        start: "top 82%",
+        toggleActions: "play none none none",
+      },
+    });
+
+    gsap.to($(".cut-frame img", cut), {
+      yPercent: -8,
+      ease: "none",
+      scrollTrigger: {
+        trigger: cut,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 0.5,
+      },
+    });
   });
 
   gsap.from(".contact-link .split-char", {
