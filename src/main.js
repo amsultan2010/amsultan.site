@@ -639,6 +639,13 @@ function initMotion() {
     ScrollTrigger.refresh();
     lenis?.resize();
   });
+
+  // lazy images below the fold land long after fonts do and shift every trigger
+  // position under them, which is most of the page on a phone
+  window.addEventListener("load", () => {
+    ScrollTrigger.refresh();
+    lenis?.resize();
+  });
 }
 
 initSmoothScroll();

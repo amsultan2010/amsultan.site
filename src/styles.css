@@ -1661,8 +1661,13 @@ section[id] {
     border-right: 0;
   }
 
+  /* explicit height, not just aspect-ratio: the img inside is absolutely
+     positioned with a percentage height, and safari won't resolve that against
+     an aspect-ratio-derived box — the photo collapses to nothing.
+     125vw is the same 4/5 box the aspect-ratio describes. */
   .cut-figure {
     aspect-ratio: 4 / 5;
+    height: 125vw;
     border-left: 0;
     border-bottom: 2px solid var(--ink);
   }
