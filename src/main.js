@@ -323,7 +323,7 @@ function initMotion() {
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
-    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
+    gsap.set(".portrait-mask, .cut-figure", { clipPath: "inset(0% 0% 0% 0%)" });
     return;
   }
 
@@ -526,20 +526,36 @@ function initMotion() {
   });
 
   $$(".cut").forEach((cut) => {
-    gsap.from($(".cut-figure", cut), {
-      y: 48,
+    gsap.from($(".cut-copy", cut).children, {
+      y: 32,
       autoAlpha: 0,
-      duration: 0.7,
+      duration: 0.6,
+      stagger: 0.08,
       ease: "power3.out",
       scrollTrigger: {
         trigger: cut,
-        start: "top 82%",
+        start: "top 78%",
         toggleActions: "play none none none",
       },
     });
 
-    gsap.to($(".cut-frame img", cut), {
-      yPercent: -8,
+    gsap.fromTo(
+      $(".cut-figure", cut),
+      { clipPath: "inset(0% 0% 100% 0%)" },
+      {
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: cut,
+          start: "top 78%",
+          toggleActions: "play none none none",
+        },
+      },
+    );
+
+    gsap.to($(".cut-figure img", cut), {
+      yPercent: -6,
       ease: "none",
       scrollTrigger: {
         trigger: cut,
