@@ -789,18 +789,17 @@ button:focus-visible {
 
 .portrait-mask {
   overflow: hidden;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 861 / 1071;
   border: 2px solid var(--ink);
   background: var(--cream);
-  clip-path: inset(18% 14% 18% 14%);
   transform: rotate(-3deg);
 }
 
 .portrait-mask img {
+  display: block;
   width: 100%;
-  height: 115%;
+  height: 100%;
   object-fit: cover;
-  object-position: 50% 18%;
   filter: contrast(1.08) saturate(1.15);
 }
 
@@ -1555,16 +1554,9 @@ section[id] {
   }
 
   .portrait-mask {
-    max-height: 16rem;
-    width: min(100%, 20rem);
+    width: min(100%, 16rem);
     margin-inline: auto;
-    aspect-ratio: 5 / 4;
     transform: none;
-    clip-path: inset(0);
-  }
-
-  .portrait-mask img {
-    height: 100%;
   }
 
   .about-copy {

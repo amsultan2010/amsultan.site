@@ -455,17 +455,6 @@ function initMotion() {
     },
   );
 
-  gsap.to(".portrait-mask img", {
-    yPercent: -10,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 0.5,
-    },
-  });
-
   gsap.from(".about-portrait figcaption", {
     y: 16,
     autoAlpha: 0,
