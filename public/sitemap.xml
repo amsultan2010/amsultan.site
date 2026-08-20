@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.amsultan.site/</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.amsultan.site/images/portrait-about.jpg</image:loc>
+      <image:title>Abdullah Sultan, student founder in Riyadh</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.amsultan.site/images/projects/crosscode-thumb.png</image:loc>
+      <image:title>crosscode, an open-source CLI by Abdullah Sultan</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.amsultan.site/images/projects/fschoolai-thumb.jpg</image:loc>
+      <image:title>fschoolai course-aware AI video tutor</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.amsultan.site/resume.html</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
