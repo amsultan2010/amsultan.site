@@ -173,6 +173,30 @@ button:focus-visible {
   border: 2px solid var(--cream);
 }
 
+.cursor span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--cream);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.cursor.is-labelled {
+  width: 4.75rem;
+  height: 4.75rem;
+  background: transparent;
+  border: 2px solid var(--cream);
+}
+
+.cursor.is-labelled span {
+  opacity: 1;
+}
+
 .site-header {
   position: fixed;
   z-index: 180;
@@ -762,7 +786,7 @@ button:focus-visible {
   max-width: 32rem;
   margin: 0;
   font-size: clamp(1.1rem, 1.6vw, 1.45rem);
-  line-height: 1.28;
+  line-height: 1.35;
   color: var(--ink-soft);
 }
 
@@ -1602,7 +1626,7 @@ section[id] {
   }
 
   /* narrow viewports never get the hover reveal, so undo the collapsed state
-     the (hover: hover) block sets — otherwise rows show an empty band */
+     the (hover: hover) block sets, otherwise rows show an empty band */
   .work-blurb {
     max-height: none;
     margin-top: 0.4rem;
@@ -1655,7 +1679,7 @@ section[id] {
 
   /* explicit height, not just aspect-ratio: the img inside is absolutely
      positioned with a percentage height, and safari won't resolve that against
-     an aspect-ratio-derived box — the photo collapses to nothing.
+     an aspect-ratio-derived box, and the photo collapses to nothing.
      125vw is the same 4/5 box the aspect-ratio describes. */
   .cut-figure {
     aspect-ratio: 4 / 5;
@@ -1690,7 +1714,7 @@ section[id] {
     grid-template-columns: 1fr;
   }
 
-  /* stacked, not "label go" — the long email overlapped its own label */
+  /* stacked, not "label go": the long email overlapped its own label */
   .contact-card {
     min-height: 0;
     grid-template-columns: minmax(0, 1fr);
@@ -1745,4 +1769,18 @@ section[id] {
   .loader {
     display: none;
   }
+}
+
+/* split-line masks clip at the baseline, so give descenders somewhere to sit */
+.line-mask {
+  padding-bottom: 0.09em;
+}
+
+/* the contact cards tilt toward the pointer, which needs a shared vanishing point */
+.contact-grid {
+  perspective: 900px;
+}
+
+.contact-card {
+  transform-style: preserve-3d;
 }

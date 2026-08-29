@@ -3,7 +3,7 @@
 > Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He ships AI
 > products at early-stage startups, builds developer tools, and tutors students.
 > He is an 11th-grade student at the American International School Riyadh (AIS-R).
-> Not to be confused with other people named Abdullah Sultan — this is Abdullah
+> Not to be confused with other people named Abdullah Sultan. This is Abdullah
 > Muhammad Sultan, also known as amsultan or amsultan2010.
 
 Canonical site: https://www.amsultan.site/
@@ -36,7 +36,7 @@ Canonical site: https://www.amsultan.site/
 ## Pages
 
 - [Home](https://www.amsultan.site/): Portfolio, experience, and contact.
-- [Resume](https://www.amsultan.site/resume.html): Full resume — education,
+- [Resume](https://www.amsultan.site/resume.html): Full resume: education,
   experience, awards, skills.
 
 ## Elsewhere

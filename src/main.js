@@ -1,14 +1,28 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
+import { CustomEase } from "gsap/CustomEase";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./styles.css";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, ScrambleTextPlugin, CustomEase);
 ScrollTrigger.config({ ignoreMobileResize: true });
+
+// two signature eases for the whole site, so timing reads as one system
+CustomEase.create("out", "0.16, 1, 0.3, 1");
+CustomEase.create("inOut", "0.65, 0, 0.35, 1");
+
+const D = { fast: 0.35, base: 0.7, slow: 1.1, epic: 1.6 };
+const E = { out: "out", inOut: "inOut" };
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
 const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
+
+const finePointer = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let lenis;
 
@@ -132,9 +146,20 @@ function initCursor() {
     { passive: true },
   );
 
+  const label = $("span", cursor);
+
   $$("a, button, .work-row, .verb-strip li, .lead-item, .contact-card").forEach((target) => {
-    target.addEventListener("pointerenter", () => cursor.classList.add("is-hovering"));
-    target.addEventListener("pointerleave", () => cursor.classList.remove("is-hovering"));
+    const text = target.dataset.cursor || "";
+    target.addEventListener("pointerenter", () => {
+      cursor.classList.add("is-hovering");
+      if (!text || !label) return;
+      label.textContent = text;
+      cursor.classList.add("is-labelled");
+    });
+    target.addEventListener("pointerleave", () => {
+      cursor.classList.remove("is-hovering", "is-labelled");
+      if (label) label.textContent = "";
+    });
   });
 }
 
@@ -154,6 +179,160 @@ function initMagnetic() {
     element.addEventListener("pointerleave", () => {
       moveX(0);
       moveY(0);
+    });
+  });
+}
+
+function initWorkRowHover() {
+  if (!finePointer() || reducedMotion()) return;
+
+  $$(".work-row").forEach((row) => {
+    const index = $(".work-index", row);
+    const icon = $(".work-row-icon", row);
+    const name = $(".work-name", row);
+    const digits = index?.textContent ?? "";
+
+    // choreographed, so it cannot be a css transition: three parts on three offsets
+    const tl = gsap
+      .timeline({ paused: true, defaults: { duration: D.fast, ease: E.out } })
+      .to(index, { scale: 1.35, transformOrigin: "left center" }, 0)
+      .to(icon, { rotate: -7, scale: 1.08 }, 0.03)
+      .to(name, { x: 14 }, 0.06);
+
+    row.addEventListener("pointerenter", () => {
+      tl.play();
+      if (digits) {
+        gsap.to(index, {
+          duration: 0.5,
+          ease: "none",
+          scrambleText: { text: digits, chars: "0123456789", speed: 0.8 },
+        });
+      }
+    });
+    row.addEventListener("pointerleave", () => tl.reverse());
+  });
+}
+
+function initNavScramble() {
+  if (!finePointer() || reducedMotion()) return;
+
+  $$(".primary-nav a, .lead-item h3").forEach((element) => {
+    const original = element.textContent;
+    const host = element.closest(".lead-item") || element;
+    host.addEventListener("pointerenter", () => {
+      gsap.to(element, {
+        duration: 0.55,
+        ease: "none",
+        scrambleText: { text: original, chars: "lowerCase", speed: 0.7 },
+      });
+    });
+  });
+}
+
+function initTilt() {
+  if (!finePointer() || reducedMotion()) return;
+
+  $$(".contact-card").forEach((card) => {
+    const tiltX = gsap.quickTo(card, "rotationX", { duration: 0.5, ease: "power3" });
+    const tiltY = gsap.quickTo(card, "rotationY", { duration: 0.5, ease: "power3" });
+
+    card.addEventListener("pointermove", (event) => {
+      const bounds = card.getBoundingClientRect();
+      tiltX(((event.clientY - bounds.top) / bounds.height - 0.5) * -12);
+      tiltY(((event.clientX - bounds.left) / bounds.width - 0.5) * 14);
+    });
+    card.addEventListener("pointerleave", () => {
+      tiltX(0);
+      tiltY(0);
+    });
+  });
+}
+
+function initCounters() {
+  $$("[data-count]").forEach((element) => {
+    const end = Number(element.dataset.count);
+    if (!Number.isFinite(end)) return;
+
+    const format = (n) => n.toLocaleString("en-US");
+
+    if (reducedMotion()) {
+      element.textContent = format(end);
+      return;
+    }
+
+    // text stays at its final value until the tween starts, so SplitText measures
+    // real line widths on the paragraphs these numbers sit inside
+    const state = { value: 0 };
+    gsap.to(state, {
+      value: end,
+      onStart: () => {
+        element.textContent = "0";
+      },
+      duration: D.epic,
+      ease: E.out,
+      snap: { value: 1 },
+      onUpdate: () => {
+        element.textContent = format(Math.round(state.value));
+      },
+      scrollTrigger: { trigger: element, start: "top 92%", once: true },
+    });
+  });
+}
+
+// scroll velocity feeds two things: a slight skew on list rows, and the marquee
+// speeding up and reversing with the scroll direction
+function initScrollVelocity(marqueeTween) {
+  if (reducedMotion()) return;
+
+  const rows = $$(".work-row, .lead-item");
+  const setSkew = gsap.quickSetter(rows, "skewY", "deg");
+  const clamp = gsap.utils.clamp(-4, 4);
+  const proxy = { skew: 0 };
+
+  gsap.set(rows, { transformOrigin: "right center", force3D: true });
+
+  ScrollTrigger.create({
+    onUpdate: (self) => {
+      const velocity = self.getVelocity();
+
+      if (marqueeTween) {
+        const speed = gsap.utils.clamp(0.35, 4, Math.abs(velocity) / 900 + 0.6);
+        marqueeTween.timeScale(self.direction === -1 ? -speed : speed);
+      }
+
+      const skew = clamp(velocity / -520);
+      if (Math.abs(skew) <= Math.abs(proxy.skew)) return;
+      proxy.skew = skew;
+      setSkew(skew);
+      gsap.to(proxy, {
+        skew: 0,
+        duration: 0.8,
+        ease: "power3",
+        overwrite: true,
+        onUpdate: () => setSkew(proxy.skew),
+      });
+    },
+  });
+}
+
+// masked line reveal, the default for body copy: lines rise out of an overflow
+// clip instead of every paragraph fading up the same way
+function revealLines(selector, start = "top 85%") {
+  $$(selector).forEach((element) => {
+    SplitText.create(element, {
+      type: "lines",
+      mask: "lines",
+      autoSplit: true,
+      linesClass: "line-mask",
+      onSplit(self) {
+        return gsap.from(self.lines, {
+          yPercent: 110,
+          duration: D.slow,
+          stagger: 0.07,
+          ease: E.out,
+          scrollTrigger: { trigger: element, start, once: true },
+        });
+      },
     });
   });
 }
@@ -308,6 +487,15 @@ function initHeroMotion() {
     });
   });
 
+  gsap.to(".hero-orbit span", {
+    y: -5,
+    duration: 2.6,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
+    stagger: { each: 0.28, from: "center" },
+  });
+
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
   const hero = $(".hero");
@@ -360,7 +548,17 @@ function initMotion() {
     )
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
     .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
-    .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12);
+    .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12)
+    .from(
+      ".hero-topo path",
+      { drawSVG: "0% 0%", duration: 1.3, stagger: 0.04, ease: "power2.out" },
+      0.2,
+    )
+    .from(
+      "[data-shape]",
+      { scale: 0, autoAlpha: 0, duration: 0.7, stagger: { each: 0.035, from: "random" } },
+      0.35,
+    );
 
   gsap.to(".scroll-progress", {
     scaleX: 1,
@@ -373,43 +571,96 @@ function initMotion() {
     },
   });
 
-  gsap.to(".marquee-track", {
+  const marqueeTween = gsap.to(".marquee-track", {
     xPercent: -50,
     duration: 24,
     repeat: -1,
     ease: "none",
   });
 
-  // explicit fromTo + immediateRender:false — otherwise this scrub timeline samples
+  initScrollVelocity(marqueeTween);
+
+  // explicit fromTo + immediateRender:false, otherwise this scrub timeline samples
   // its start values while the intro `from` tweens still hold them at 0 and the
   // hero bg/rail stay invisible until a reload happens to win the race
-  gsap
-    .timeline({
-      scrollTrigger: {
-        trigger: ".hero",
-        start: "top top",
-        end: "bottom top",
-        scrub: 0.6,
-      },
-    })
-    .fromTo(
-      ".hero-title",
-      { yPercent: 0, opacity: 1 },
-      { yPercent: -12, opacity: 0.35, immediateRender: false },
-      0,
-    )
-    .fromTo(
-      ".hero-rail, .hero-foot, .hero-orbit, .hero-kicker",
-      { opacity: 1, y: 0 },
-      { opacity: 0, y: -24, immediateRender: false },
-      0,
-    )
-    .fromTo(
-      ".hero-bg",
-      { yPercent: 0, opacity: 1 },
-      { yPercent: 18, opacity: 0.35, immediateRender: false },
-      0,
-    );
+  const heroExit = gsap.matchMedia();
+
+  // desktop gets the one pinned set piece on the page: the two title lines pull
+  // apart in opposite directions while the field behind them pushes forward
+  heroExit.add("(min-width: 900px)", () => {
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "+=60%",
+          pin: true,
+          anticipatePin: 1,
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      })
+      .fromTo(
+        ".hero-line-fill",
+        { xPercent: 0, opacity: 1 },
+        { xPercent: -13, opacity: 0.12, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-line-stroke",
+        { xPercent: 0, opacity: 1 },
+        { xPercent: 15, opacity: 0.12, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-rail, .hero-foot, .hero-orbit, .hero-kicker",
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -28, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-bg",
+        { scale: 1, opacity: 1 },
+        { scale: 1.22, opacity: 0.22, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-shapes",
+        { scale: 1, opacity: 1 },
+        { scale: 1.45, opacity: 0, immediateRender: false },
+        0,
+      );
+  });
+
+  heroExit.add("(max-width: 899px)", () => {
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.6,
+        },
+      })
+      .fromTo(
+        ".hero-title",
+        { yPercent: 0, opacity: 1 },
+        { yPercent: -12, opacity: 0.35, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-rail, .hero-foot, .hero-orbit, .hero-kicker",
+        { opacity: 1, y: 0 },
+        { opacity: 0, y: -24, immediateRender: false },
+        0,
+      )
+      .fromTo(
+        ".hero-bg",
+        { yPercent: 0, opacity: 1 },
+        { yPercent: 18, opacity: 0.35, immediateRender: false },
+        0,
+      );
+  });
 
   $$("[data-reveal-lines]").forEach((element) => {
     const words = splitWords(element);
@@ -427,7 +678,7 @@ function initMotion() {
     });
   });
 
-  gsap.from(".about-meta, .about-bio, .about-actions", {
+  gsap.from(".about-meta, .about-actions", {
     y: 28,
     autoAlpha: 0,
     duration: 0.65,
@@ -511,17 +762,21 @@ function initMotion() {
   });
 
   $$(".lead-item").forEach((item) => {
-    gsap.from(item, {
-      y: 36,
-      autoAlpha: 0,
-      duration: 0.65,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: item,
-        start: "top 90%",
-        toggleActions: "play none none none",
-      },
-    });
+    const heading = $("h3", item);
+    const chars = heading ? splitCharacters(heading) : [];
+
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: {
+          trigger: item,
+          start: "top 88%",
+          once: true,
+        },
+      })
+      .from($(".lead-num", item), { yPercent: 70, autoAlpha: 0, duration: D.base }, 0)
+      .from($(".lead-body .mono", item), { y: 18, autoAlpha: 0, duration: D.fast }, 0.05)
+      .from(chars, { yPercent: 110, autoAlpha: 0, duration: D.base, stagger: 0.02 }, 0.1);
 
     item.addEventListener("pointerenter", () => {
       gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
@@ -598,7 +853,7 @@ function initMotion() {
     },
   });
 
-  gsap.from(".contact-top > *, .contact-pitch", {
+  gsap.from(".contact-top > *", {
     y: 28,
     autoAlpha: 0,
     duration: 0.6,
@@ -611,7 +866,7 @@ function initMotion() {
     },
   });
 
-  // cards are magnetic, so gsap owns their x/y — fade only, never tween y here
+  // cards are magnetic, so gsap owns their x/y: fade only, never tween y here
   gsap.from(".contact-card", {
     autoAlpha: 0,
     duration: 0.6,
@@ -622,6 +877,56 @@ function initMotion() {
       start: "top 82%",
       toggleActions: "play none none none",
     },
+  });
+
+  revealLines(".about-bio", "top 82%");
+  revealLines(".contact-pitch", "top 84%");
+  revealLines(".lead-body p.serif", "top 88%");
+  revealLines(".verb-strip em", "top 90%");
+
+  // three more parallax rates so depth reads as depth, not as one shared drift
+  gsap.set(".portrait-mask img", { scale: 1.14 });
+  gsap.to(".portrait-mask img", {
+    yPercent: -7,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".about-portrait",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 0.7,
+    },
+  });
+
+  gsap.to(".about-portrait figcaption", {
+    y: -34,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".about-portrait",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+    },
+  });
+
+  gsap.to(".stack-row span", {
+    y: (index) => -10 - (index % 3) * 9,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".stack",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 0.9,
+    },
+  });
+
+  // ambient: the status dot keeps breathing long after every entrance is done
+  gsap.to(".status-dot, .hero-rail-live i", {
+    scale: 1.5,
+    opacity: 0.45,
+    duration: 1.4,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut",
   });
 
   document.fonts.ready.then(() => {
@@ -641,7 +946,11 @@ initSmoothScroll();
 initClock();
 initCursor();
 initMagnetic();
+initTilt();
+initWorkRowHover();
+initNavScramble();
 initNavigation();
+initCounters();
 initLoader(() => {
   initMotion();
   requestAnimationFrame(() => ScrollTrigger.refresh());
