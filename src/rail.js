@@ -42,7 +42,7 @@ const OBJECTS = [
     alt: "a blue ipad air seen from the front and back at an angle" },
   { title: "where i live", src: "/images/objects/saudi.png", w: 520, h: 346,
     alt: "the flag of saudi arabia, white arabic script and a sword on green" },
-  { title: "how i relax", src: "/images/objects/steamdeck.jpg", w: 520, h: 292,
+  { title: "how i relax", src: "/images/objects/steamdeck.png", w: 520, h: 292,
     alt: "a steam deck handheld console running a game on its screen" },
   { title: "my fav f1 team", src: "/images/objects/astonmartin.png", w: 520, h: 520,
     alt: "the aston martin cognizant formula one team wordmark and winged badge" },
@@ -337,7 +337,7 @@ export function initRail() {
       position: "after",
       items: shuffle(WATCHING),
       label: "in rotation",
-      variant: "cover",
+      variant: "poster",
       duration: 90,
     }),
   );

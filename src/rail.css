@@ -134,29 +134,24 @@
   aspect-ratio: 1 / 1;
   border: 0;
   background: transparent;
-  display: grid;
-  place-items: center;
   padding: 0.5rem;
 }
 
+/* absolute inset rather than a centred grid item, so height: 100% has a real
+   box to resolve against and every object letterboxes inside the same square */
 .rail-object .rail-cover img {
+  position: absolute;
+  inset: 0.5rem;
   width: auto;
   height: auto;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: calc(100% - 1rem);
+  max-height: calc(100% - 1rem);
+  margin: auto;
   object-fit: contain;
 }
 
-/* the f1 badge is black line art baked onto opaque white. multiply drops the
-   white to the orange ground and keeps the ink, so it reads as a cutout without
-   needing the alpha it never shipped with */
-.rail-object .rail-cover img[src$="astonmartin.png"] {
-  mix-blend-mode: multiply;
-}
-
-/* the flag and the console are real photographs on their own field, so they get
-   framed as pictures rather than pretending to be cutouts */
-.rail-object .rail-cover img[src$="steamdeck.jpg"],
+/* the flag is a flat field, so a hairline keeps its edge from bleeding into the
+   orange ground. every other object is a cutout and needs no frame */
 .rail-object .rail-cover img[src$="saudi.png"] {
   border: 1px solid var(--line-soft);
 }
