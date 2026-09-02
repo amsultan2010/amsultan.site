@@ -216,6 +216,138 @@ function initWorkRowHover() {
   });
 }
 
+function initTagPreview() {
+  if (!finePointer() || reducedMotion()) return;
+
+  const chips = $$(".tag[data-tag]");
+  if (!chips.length) return;
+
+  // one card for every chip, so hovering never allocates dom mid-motion
+  const card = document.createElement("div");
+  card.className = "tag-preview";
+  card.setAttribute("aria-hidden", "true");
+  const frame = document.createElement("div");
+  frame.className = "tag-preview-frame";
+  const caption = document.createElement("p");
+  caption.className = "tag-preview-caption mono";
+  card.append(frame, caption);
+  document.body.appendChild(card);
+
+  const W = 300;
+  const H = 268;
+  const images = new Map();
+
+  const moveX = gsap.quickTo(card, "x", { duration: 0.45, ease: "power3.out" });
+  const moveY = gsap.quickTo(card, "y", { duration: 0.45, ease: "power3.out" });
+
+  const place = (event, immediate) => {
+    const x = gsap.utils.clamp(12, window.innerWidth - W - 12, event.clientX + 22);
+    const y = gsap.utils.clamp(12, window.innerHeight - H - 12, event.clientY - H - 18);
+    if (immediate) gsap.set(card, { x, y });
+    moveX(x);
+    moveY(y);
+  };
+
+  // travel lives on yPercent because quickTo already owns y
+  const reveal = gsap
+    .timeline({
+      paused: true,
+      defaults: { duration: D.fast, ease: E.out },
+      onStart: () => gsap.set(card, { visibility: "visible" }),
+      onReverseComplete: () => gsap.set(card, { visibility: "hidden" }),
+    })
+    .fromTo(
+      card,
+      { clipPath: "inset(0% 0% 100% 0%)", yPercent: 6 },
+      { clipPath: "inset(0% 0% 0% 0%)", yPercent: 0 }
+    );
+
+  chips.forEach((chip) => {
+    const name = chip.dataset.tag;
+
+    chip.addEventListener("pointerenter", (event) => {
+      let img = images.get(name);
+      if (!img) {
+        img = new Image();
+        img.src = `/images/tags/${name}.jpg`;
+        img.alt = "";
+        img.width = 640;
+        img.height = 480;
+        images.set(name, img);
+      }
+      frame.replaceChildren(img);
+      caption.textContent = name;
+      place(event, true);
+      reveal.play();
+    });
+
+    chip.addEventListener("pointermove", (event) => place(event, false));
+    chip.addEventListener("pointerleave", () => reveal.reverse());
+  });
+}
+
+function initLeadDetails() {
+  $$(".lead-toggle").forEach((toggle) => {
+    const list = document.getElementById(toggle.getAttribute("aria-controls"));
+    if (!list) return;
+
+    const items = $$("li", list);
+    let open = false;
+    let busy = false;
+
+    toggle.addEventListener("click", () => {
+      if (busy) return;
+      const next = !open;
+      open = next;
+      toggle.setAttribute("aria-expanded", String(next));
+
+      const done = () => {
+        busy = false;
+        if (!next) list.hidden = true;
+        ScrollTrigger.refresh();
+      };
+
+      if (reducedMotion()) {
+        list.hidden = !next;
+        gsap.set(list, { height: "auto", opacity: 1 });
+        gsap.set(items, { y: 0, opacity: 1 });
+        done();
+        return;
+      }
+
+      busy = true;
+
+      if (next) {
+        // unhide before measuring, since a hidden list has no height to animate to
+        list.hidden = false;
+        gsap.set(list, { height: "auto" });
+        const target = list.offsetHeight;
+        gsap
+          .timeline({ defaults: { ease: E.out }, onComplete: done })
+          .fromTo(list, { height: 0 }, { height: target, duration: D.fast })
+          .fromTo(
+            items,
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: D.fast, stagger: 0.06 },
+            0.08
+          )
+          .set(list, { height: "auto" });
+      } else {
+        gsap
+          .timeline({ defaults: { ease: E.out }, onComplete: done })
+          .to(items, { y: 8, opacity: 0, duration: D.fast, stagger: -0.04 }, 0)
+          .to(list, { height: 0, duration: D.fast }, 0.05);
+      }
+
+      gsap.to(toggle.querySelector(".lead-toggle-mark"), {
+        rotate: next ? 90 : 0,
+        duration: D.fast,
+        ease: E.out,
+      });
+    });
+  });
+}
+
 function initNavScramble() {
   if (!finePointer() || reducedMotion()) return;
 
@@ -954,6 +1086,8 @@ initCursor();
 initMagnetic();
 initTilt();
 initWorkRowHover();
+initTagPreview();
+initLeadDetails();
 initNavScramble();
 initNavigation();
 initCounters();
