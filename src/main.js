@@ -7,6 +7,9 @@ import { CustomEase } from "gsap/CustomEase";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import "./styles.css";
+import { initPalette } from "./palette.js";
+import { initRail } from "./rail.js";
+import { initVisits } from "./visits.js";
 
 gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, ScrambleTextPlugin, CustomEase);
 ScrollTrigger.config({ ignoreMobileResize: true });
@@ -944,6 +947,9 @@ function initMotion() {
 
 initSmoothScroll();
 initClock();
+initPalette();
+initRail();
+initVisits();
 initCursor();
 initMagnetic();
 initTilt();
