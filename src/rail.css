@@ -1,0 +1,125 @@
+/* in rotation rail, owned by workstream ws-3 */
+.rail {
+  padding: clamp(4rem, 8vw, 9rem) 0;
+  background: var(--orange);
+  border-bottom: 2px solid var(--ink);
+}
+
+.rail-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 var(--gutter) 1.1rem;
+}
+
+.rail-head p {
+  margin: 0;
+}
+
+.rail-hint {
+  opacity: 0.62;
+}
+
+.rail-viewport {
+  overflow: hidden;
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.rail-track {
+  display: flex;
+  align-items: flex-start;
+  width: max-content;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  will-change: transform;
+}
+
+.rail-item {
+  /* the gutter lives on the item, not as a flex gap, so two runs of twelve
+     measure exactly half the track and the wrap has no seam */
+  flex: 0 0 auto;
+  width: clamp(11rem, 15vw, 16rem);
+  margin: 0 clamp(1rem, 2vw, 2rem) 0 0;
+}
+
+.rail-cover {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+  border: 1px solid var(--line-soft);
+  border-radius: 0;
+  background: var(--ink);
+  transition: filter 320ms ease, opacity 320ms ease;
+}
+
+.rail-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.rail-track.is-dimmed .rail-item:not(.is-hot) .rail-cover {
+  opacity: 0.55;
+  filter: grayscale(1) contrast(0.92);
+}
+
+.rail-caption {
+  overflow: hidden;
+  margin-top: 0.7rem;
+}
+
+.rail-caption-inner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.rail-title {
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  line-height: 1.15;
+}
+
+.rail-kind {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  opacity: 0.62;
+}
+
+/* touch and reduced motion fall back to a native scroller, captions always on screen */
+.rail-viewport.is-scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.rail-viewport.is-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.rail-viewport.is-scroller .rail-track {
+  /* the loop is off in this mode, so a gutter here cannot break the wrap maths */
+  padding: 0 var(--gutter);
+}
+
+.rail-viewport.is-scroller .rail-item {
+  scroll-snap-align: center;
+}
+
+@media (max-width: 700px) {
+  .rail {
+    padding: 3.5rem 0;
+  }
+
+  .rail-item {
+    width: 10.5rem;
+  }
+}
