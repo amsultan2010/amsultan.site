@@ -1,0 +1,187 @@
+/* command palette. solid cream panel on a flat ink scrim, square corners,
+   hard offset shadow. same furniture as the header pill. */
+
+.palette-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 3.4rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-left: 2px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  background: var(--cream);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.palette-trigger:hover {
+  color: var(--cream);
+  background: var(--ink);
+}
+
+.palette-root {
+  position: fixed;
+  z-index: 400;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(var(--header-h) + 2.5rem) var(--gutter) var(--gutter);
+}
+
+.palette-root[hidden] {
+  display: none;
+}
+
+.palette-scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  opacity: 0.72;
+  border: 0;
+  cursor: pointer;
+}
+
+.palette-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(38rem, 100%);
+  max-height: min(30rem, calc(100vh - var(--header-h) - 5rem));
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  background: var(--cream);
+  box-shadow: 0.65rem 0.65rem 0 var(--ink);
+  overflow: hidden;
+}
+
+.palette-field {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+.palette-prompt {
+  color: var(--ink-soft);
+}
+
+.palette-input {
+  flex: 1;
+  min-width: 0;
+  padding: 1rem 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  background: transparent;
+}
+
+.palette-input:focus {
+  outline: none;
+}
+
+.palette-input::placeholder {
+  color: var(--ink-soft);
+}
+
+.palette-list {
+  flex: 1;
+  padding: 0.5rem 0;
+  overflow-y: auto;
+}
+
+.palette-group {
+  padding: 0.75rem 1rem 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+}
+
+.palette-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border-radius: 0;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.palette-row-glyph {
+  width: 1.2rem;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+}
+
+.palette-row-label {
+  flex: 1;
+  font-family: var(--serif);
+  font-size: 1.05rem;
+}
+
+.palette-row-chord {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+}
+
+.palette-row[aria-selected="true"] {
+  color: var(--cream);
+  background: var(--ink);
+}
+
+.palette-row[aria-selected="true"] .palette-row-glyph,
+.palette-row[aria-selected="true"] .palette-row-chord {
+  color: var(--cream);
+}
+
+.palette-row:focus-visible {
+  outline: 3px solid var(--cream);
+  outline-offset: -3px;
+}
+
+.palette-empty {
+  padding: 1.25rem 1rem;
+  color: var(--ink-soft);
+}
+
+.palette-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  border-top: 2px solid var(--ink);
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.palette-foot kbd {
+  padding: 0.2rem 0.5rem;
+  border: 2px solid var(--line-soft);
+  border-radius: 0;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+}
+
+@media (max-width: 960px) {
+  /* the palette stays reachable by keyboard, the button does not earn the space */
+  .palette-trigger {
+    display: none;
+  }
+}
