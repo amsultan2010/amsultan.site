@@ -631,9 +631,27 @@ function initHeroMotion() {
     stagger: { each: 0.28, from: "center" },
   });
 
+  // the hero keeps roughly twenty looping tweens alive. once it is scrolled past
+  // they are still writing transforms every frame for nothing, which is most of
+  // the jank further down the page
+  const hero = $(".hero");
+  if (hero) {
+    const ambient = [drift, topo, ...layers, ...shapes].filter(Boolean);
+    ScrollTrigger.create({
+      trigger: hero,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => {
+        gsap
+          .getTweensOf(ambient)
+          .filter((tween) => tween.repeat() === -1)
+          .forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
+      },
+    });
+  }
+
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
-  const hero = $(".hero");
   const moveX = gsap.quickTo(topo, "x", { duration: 0.9, ease: "power3.out" });
   const moveY = gsap.quickTo(topo, "y", { duration: 0.9, ease: "power3.out" });
 
@@ -712,6 +730,17 @@ function initMotion() {
     repeat: -1,
     ease: "none",
   });
+
+  // same treatment for the marquee: it only earns its frame cost while visible
+  const marqueeEl = $(".marquee");
+  if (marqueeEl && marqueeTween) {
+    ScrollTrigger.create({
+      trigger: marqueeEl,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
+    });
+  }
 
   initScrollVelocity(marqueeTween);
 

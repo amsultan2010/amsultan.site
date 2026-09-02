@@ -678,7 +678,6 @@ button:focus-visible {
 
 .split-char {
   display: inline-block;
-  will-change: transform;
 }
 
 .hero-orbit {

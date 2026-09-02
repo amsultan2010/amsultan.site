@@ -123,3 +123,56 @@
     width: 10.5rem;
   }
 }
+
+/* the object rail: cutouts sit straight on the orange ground, so no frame, no
+   fill, and a wider box than the 2:3 poster crop */
+.rail-object .rail-item {
+  width: clamp(9rem, 13vw, 14rem);
+}
+
+.rail-object .rail-cover {
+  aspect-ratio: 1 / 1;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  padding: 0.5rem;
+}
+
+.rail-object .rail-cover img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* the f1 badge is black line art baked onto opaque white. multiply drops the
+   white to the orange ground and keeps the ink, so it reads as a cutout without
+   needing the alpha it never shipped with */
+.rail-object .rail-cover img[src$="astonmartin.png"] {
+  mix-blend-mode: multiply;
+}
+
+/* the flag and the console are real photographs on their own field, so they get
+   framed as pictures rather than pretending to be cutouts */
+.rail-object .rail-cover img[src$="steamdeck.jpg"],
+.rail-object .rail-cover img[src$="saudi.png"] {
+  border: 1px solid var(--line-soft);
+}
+
+.rail-object .rail-caption {
+  text-align: center;
+}
+
+.rail-object .rail-title {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+/* the two rails sit on different sides of the page rhythm, so only the lower
+   one carries the closing rule */
+.rail-object {
+  border-bottom: 0;
+}
