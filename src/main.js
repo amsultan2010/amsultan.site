@@ -5,11 +5,14 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { CustomEase } from "gsap/CustomEase";
 import Lenis from "lenis";
+import { inject } from "@vercel/analytics";
 import "lenis/dist/lenis.css";
 import "./styles.css";
 import { initPalette } from "./palette.js";
 import { initRail } from "./rail.js";
 import { initVisits } from "./visits.js";
+
+inject({ mode: import.meta.env.DEV ? "development" : "production" });
 
 gsap.registerPlugin(ScrollTrigger, SplitText, DrawSVGPlugin, ScrambleTextPlugin, CustomEase);
 ScrollTrigger.config({ ignoreMobileResize: true });
