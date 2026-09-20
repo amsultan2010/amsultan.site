@@ -36,6 +36,10 @@ function initSmoothScroll() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion) return null;
 
+  // touch devices keep their own momentum scrolling. lenis re-implements it in
+  // javascript, which on a phone is slower than the thing it replaces
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
+
   lenis = new Lenis({
     autoRaf: false,
     duration: 1.15,
@@ -201,9 +205,9 @@ function initWorkRowHover() {
     // choreographed, so it cannot be a css transition: three parts on three offsets
     const tl = gsap
       .timeline({ paused: true, defaults: { duration: D.fast, ease: E.out } })
-      .to(index, { scale: 1.35, transformOrigin: "left center" }, 0)
+      .to(index, { scale: 1.3, transformOrigin: "left center" }, 0)
       .to(icon, { rotate: -7, scale: 1.08 }, 0.03)
-      .to(name, { x: 14 }, 0.06);
+      .to(name, { x: 8 }, 0.06);
 
     row.addEventListener("pointerenter", () => {
       tl.play();
@@ -289,68 +293,6 @@ function initTagPreview() {
   });
 }
 
-function initLeadDetails() {
-  $$(".lead-toggle").forEach((toggle) => {
-    const list = document.getElementById(toggle.getAttribute("aria-controls"));
-    if (!list) return;
-
-    const items = $$("li", list);
-    let open = false;
-    let busy = false;
-
-    toggle.addEventListener("click", () => {
-      if (busy) return;
-      const next = !open;
-      open = next;
-      toggle.setAttribute("aria-expanded", String(next));
-
-      const done = () => {
-        busy = false;
-        if (!next) list.hidden = true;
-        ScrollTrigger.refresh();
-      };
-
-      if (reducedMotion()) {
-        list.hidden = !next;
-        gsap.set(list, { height: "auto", opacity: 1 });
-        gsap.set(items, { y: 0, opacity: 1 });
-        done();
-        return;
-      }
-
-      busy = true;
-
-      if (next) {
-        // unhide before measuring, since a hidden list has no height to animate to
-        list.hidden = false;
-        gsap.set(list, { height: "auto" });
-        const target = list.offsetHeight;
-        gsap
-          .timeline({ defaults: { ease: E.out }, onComplete: done })
-          .fromTo(list, { height: 0 }, { height: target, duration: D.fast })
-          .fromTo(
-            items,
-            { y: 12, opacity: 0 },
-            { y: 0, opacity: 1, duration: D.fast, stagger: 0.06 },
-            0.08
-          )
-          .set(list, { height: "auto" });
-      } else {
-        gsap
-          .timeline({ defaults: { ease: E.out }, onComplete: done })
-          .to(items, { y: 8, opacity: 0, duration: D.fast, stagger: -0.04 }, 0)
-          .to(list, { height: 0, duration: D.fast }, 0.05);
-      }
-
-      gsap.to(toggle.querySelector(".lead-toggle-mark"), {
-        rotate: next ? 90 : 0,
-        duration: D.fast,
-        ease: E.out,
-      });
-    });
-  });
-}
-
 function initNavScramble() {
   if (!finePointer() || reducedMotion()) return;
 
@@ -417,38 +359,15 @@ function initCounters() {
   });
 }
 
-// scroll velocity feeds two things: a slight skew on list rows, and the marquee
-// speeding up and reversing with the scroll direction
+// the marquee speeds up and reverses with the scroll direction. the rows used
+// to skew with it too, which read as the whole page wobbling, so they don't
 function initScrollVelocity(marqueeTween) {
-  if (reducedMotion()) return;
-
-  const rows = $$(".work-row, .lead-item");
-  const setSkew = gsap.quickSetter(rows, "skewY", "deg");
-  const clamp = gsap.utils.clamp(-4, 4);
-  const proxy = { skew: 0 };
-
-  gsap.set(rows, { transformOrigin: "right center", force3D: true });
+  if (reducedMotion() || !marqueeTween) return;
 
   ScrollTrigger.create({
     onUpdate: (self) => {
-      const velocity = self.getVelocity();
-
-      if (marqueeTween) {
-        const speed = gsap.utils.clamp(0.35, 4, Math.abs(velocity) / 900 + 0.6);
-        marqueeTween.timeScale(self.direction === -1 ? -speed : speed);
-      }
-
-      const skew = clamp(velocity / -520);
-      if (Math.abs(skew) <= Math.abs(proxy.skew)) return;
-      proxy.skew = skew;
-      setSkew(skew);
-      gsap.to(proxy, {
-        skew: 0,
-        duration: 0.8,
-        ease: "power3",
-        overwrite: true,
-        onUpdate: () => setSkew(proxy.skew),
-      });
+      const speed = gsap.utils.clamp(0.35, 4, Math.abs(self.getVelocity()) / 900 + 0.6);
+      marqueeTween.timeScale(self.direction === -1 ? -speed : speed);
     },
   });
 }
@@ -489,11 +408,22 @@ function initNavigation() {
     document.body.classList.toggle("menu-open", open && mq.matches);
   };
 
-  toggle?.addEventListener("click", () => {
+  toggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
     setMenuOpen(!nav.classList.contains("is-open"));
   });
 
   mq.addEventListener("change", () => setMenuOpen(false));
+
+  document.addEventListener("click", (event) => {
+    if (!nav?.classList.contains("is-open")) return;
+    if (nav.contains(event.target) || toggle?.contains(event.target)) return;
+    setMenuOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenuOpen(false);
+  });
 
   $$('a[href^="#"]').forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -943,7 +873,14 @@ function initMotion() {
       })
       .from($(".lead-num", item), { yPercent: 70, autoAlpha: 0, duration: D.base }, 0)
       .from($(".lead-body .mono", item), { y: 18, autoAlpha: 0, duration: D.fast }, 0.05)
-      .from(chars, { yPercent: 110, autoAlpha: 0, duration: D.base, stagger: 0.02 }, 0.1);
+      .from(chars, { yPercent: 110, autoAlpha: 0, duration: D.base, stagger: 0.02 }, 0.1)
+      .from($(".zc-mark", item) ?? [], { scale: 0.7, rotate: -12, autoAlpha: 0, duration: D.base }, 0.08)
+      .from($$(".lead-points li, .zc-cta", item), {
+        y: 16,
+        autoAlpha: 0,
+        duration: D.fast,
+        stagger: 0.06,
+      }, 0.25);
 
     item.addEventListener("pointerenter", () => {
       gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
@@ -1048,7 +985,7 @@ function initMotion() {
 
   revealLines(".about-bio", "top 82%");
   revealLines(".contact-pitch", "top 84%");
-  revealLines(".lead-body p.serif", "top 88%");
+  revealLines(".lead-lede", "top 88%");
   revealLines(".verb-strip em", "top 90%");
 
   // three more parallax rates so depth reads as depth, not as one shared drift
@@ -1119,7 +1056,6 @@ initMagnetic();
 initTilt();
 initWorkRowHover();
 initTagPreview();
-initLeadDetails();
 initNavScramble();
 initNavigation();
 initCounters();

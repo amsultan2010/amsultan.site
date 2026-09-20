@@ -4,6 +4,16 @@
   "buildCommand": "npm run build",
   "redirects": [
     {
+      "source": "/resume.html",
+      "destination": "https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true",
+      "permanent": true
+    },
+    {
+      "source": "/resume",
+      "destination": "https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true",
+      "permanent": true
+    },
+    {
       "source": "/desktop",
       "destination": "/",
       "permanent": true
@@ -37,7 +47,12 @@
   "headers": [
     {
       "source": "/(.*)",
-      "has": [{ "type": "host", "value": ".*\\.vercel\\.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": ".*\\.vercel\\.app"
+        }
+      ],
       "headers": [
         {
           "key": "X-Robots-Tag",

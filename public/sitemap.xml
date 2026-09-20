@@ -4,7 +4,7 @@
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.amsultan.site/</loc>
-    <lastmod>2026-08-20</lastmod>
+    <lastmod>2026-09-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -19,11 +19,5 @@
       <image:loc>https://www.amsultan.site/images/projects/fschoolai-thumb.jpg</image:loc>
       <image:title>fschoolai course-aware AI video tutor</image:title>
     </image:image>
-  </url>
-  <url>
-    <loc>https://www.amsultan.site/resume.html</loc>
-    <lastmod>2026-08-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>

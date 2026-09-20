@@ -17,7 +17,9 @@
   font-weight: 600;
 }
 
-@media (max-width: 900px) {
+/* the header pill gained a fourth nav item; the counter is the first thing to
+   give up its space */
+@media (max-width: 1200px) {
   .visit-counter {
     display: none;
   }

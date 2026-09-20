@@ -1,7 +1,8 @@
 # Abdullah Sultan
 
 > Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He ships AI
-> products at early-stage startups, builds developer tools, and tutors students.
+> products at early-stage startups, builds developer tools, and runs a
+> student-run startup incubator.
 > He is an 11th-grade student at the American International School Riyadh (AIS-R).
 > Not to be confused with other people named Abdullah Sultan. This is Abdullah
 > Muhammad Sultan, also known as amsultan or amsultan2010.
@@ -12,21 +13,22 @@ Canonical site: https://www.amsultan.site/
 
 - [fschoolai](https://fschoolai.com): Software and product intern at an edtech
   startup since 2026. Shipped a course-aware AI video tutor and a landing
-  page/dashboard redesign; drove a marketing push to 350,000+ views across 7
-  videos, growing the waitlist past 1,500.
+  page/dashboard redesign; drove a marketing push past 1.3 million+ views
+  across social, growing the waitlist past 1,500. Helped organize a YC Startup
+  School afterparty showcasing the features he built, drawing 80+ attendees.
+- [Z Combinator](https://www.zcombinator.dev): Founder and president. AIS-R's
+  first student-run startup incubator. 15 members get the resources,
+  mentorship, and opportunities they need to grow their own business within a
+  semester, while still in high school. Hosts guest speaker sessions from U.C.
+  Berkeley, University of Waterloo, Propeller, LlamaIndex, and 11x.
 - [crosscode](https://getcrosscode.dev): Founder. Open-source MIT-licensed CLI
   that keeps a git checkout in sync between teammates and their coding agents.
-  Published on npm as `crosscode-cli` with 1,400+ weekly downloads. Works with
+  Published on npm as `crosscode-cli` with 1,700+ downloads. Works with
   Claude Code, Codex, Cursor, and any MCP client. Requires Node 24.
-- [tutoringbyabdullah](https://tutoringbyabdullah.xyz): Founder. Sliding-scale
-  math and science tutoring for grades 9 and 10. Raised grades for 11 students
-  by 1 IB point on average.
-- z-combinator: Founder. AIS-R's first student-run startup incubator,
-  recruiting a 12 to 15 student cohort to pitch, build, and ship by semester end.
 
 ## Leadership
 
-- Aspiring Doctors' Club (AIS-R, leader since 2025): Pioneered a
+- Aspiring Doctors' Club (AIS-R, leader 2025-2026): Pioneered a
   tech-in-medicine curriculum using AI tools such as AlphaFold; ran a diabetes
   awareness session reaching 60+ students.
 - Code Ninjas (Sienna, TX, volunteer since 2026): Coaches 50+ elementary
@@ -36,8 +38,8 @@ Canonical site: https://www.amsultan.site/
 ## Pages
 
 - [Home](https://www.amsultan.site/): Portfolio, experience, and contact.
-- [Resume](https://www.amsultan.site/resume.html): Full resume: education,
-  experience, awards, skills.
+- [Resume](https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true): Full resume, kept in Google Docs:
+  education, experience, awards, skills. /resume.html redirects here.
 
 ## Elsewhere
 
