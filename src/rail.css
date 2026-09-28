@@ -92,7 +92,7 @@
   opacity: 0.62;
 }
 
-/* touch and reduced motion fall back to a native scroller, captions always on screen */
+/* reduced motion falls back to a native scroller, captions always on screen */
 .rail-viewport.is-scroller {
   overflow-x: auto;
   overflow-y: hidden;

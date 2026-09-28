@@ -29,10 +29,8 @@ const WATCHING = [
     alt: "moon knight poster: a masked figure in a white suit and wrapped hood" },
   { title: "invincible", kind: "show", src: "/images/watchlist/shows/invincible.jpg", w: 352, h: 440,
     alt: "invincible poster: an illustrated hero in a blue and yellow suit mid flight" },
-  { title: "fresh prince", kind: "show", src: "/images/watchlist/shows/fresh-prince.jpg", w: 293, h: 440,
-    alt: "the fresh prince of bel air poster: the lead posed in bright nineties colour" },
-  { title: "suits", kind: "show", src: "/images/watchlist/shows/suits.jpg", w: 299, h: 440,
-    alt: "suits poster: the cast in tailored suits against a glass office tower" },
+  { title: "jojo's bizarre adventure", kind: "show", src: "/images/watchlist/shows/jojo.jpg", w: 311, h: 440,
+    alt: "jojo's bizarre adventure steel ball run poster: riders racing horses down a desert canyon under a blue sky" },
 ];
 
 const OBJECTS = [
@@ -169,7 +167,8 @@ function initDrag(track, auto) {
   return Draggable.create(track, {
     type: "x",
     inertia: true,
-    allowNativeTouchScrolling: false,
+    // a vertical swipe still scrolls the page, a horizontal one drags the rail
+    allowNativeTouchScrolling: true,
     cursor: "grab",
     activeCursor: "grabbing",
     onPressInit() {
@@ -235,24 +234,27 @@ function mountRail({ anchor, position, items, label, variant, duration }) {
 
   const mm = gsap.matchMedia();
 
+  // matchMedia only runs this when at least one condition matches, so the
+  // motion pair guarantees it runs on touch devices too
   mm.add(
     {
       fine: "(hover: hover) and (pointer: fine)",
+      motion: "(prefers-reduced-motion: no-preference)",
       reduce: "(prefers-reduced-motion: reduce)",
     },
     (context) => {
       const { fine, reduce } = context.conditions;
-      const playful = fine && !reduce;
 
-      viewport.classList.toggle("is-scroller", !playful);
+      // touch gets the same loop and drag as desktop, only the hover reveal is
+      // pointer only. reduced motion is the one case that falls back to a scroller
+      viewport.classList.toggle("is-scroller", reduce);
 
-      if (!playful) {
+      if (reduce) {
         gsap.set(track, { x: 0, xPercent: 0 });
         gsap.set(track.querySelectorAll(".rail-caption-inner"), {
           yPercent: 0,
           autoAlpha: 1,
         });
-        if (!reduce) initEntrance(section, track, 24);
         return;
       }
 
@@ -265,8 +267,13 @@ function mountRail({ anchor, position, items, label, variant, duration }) {
       });
 
       const drag = initDrag(track, auto);
-      initHover(track);
-      initEntrance(section, track, 40);
+      if (fine) {
+        initHover(track);
+      } else {
+        // no hover on touch, so the captions just stay on screen
+        gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
+      }
+      initEntrance(section, track, fine ? 40 : 24);
 
       // an off screen rail still costs a transform write every frame, so park it
       // until it is actually in view
