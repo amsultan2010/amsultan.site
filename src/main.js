@@ -890,17 +890,54 @@ function initMotion() {
     });
   });
 
+  gsap.from(".stack-label", {
+    x: -24,
+    autoAlpha: 0,
+    duration: 0.5,
+    stagger: 0.08,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".stack",
+      start: "top 92%",
+      toggleActions: "play none none none",
+    },
+  });
+
+  // clearProps hands transform back to css, which owns the hover lift
   gsap.from(".stack-row span", {
     y: 18,
     autoAlpha: 0,
     duration: 0.4,
     stagger: 0.03,
     ease: "power2.out",
+    clearProps: "transform",
     scrollTrigger: {
-      trigger: ".stack-row",
+      trigger: ".stack",
       start: "top 92%",
       toggleActions: "play none none none",
     },
+  });
+
+  $$(".record-cells").forEach((cells) => {
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: {
+          trigger: cells,
+          start: "top 88%",
+          once: true,
+        },
+      })
+      .from($$(".record-cell > *", cells), { y: 18, autoAlpha: 0, duration: D.fast, stagger: 0.04 }, 0)
+      // clearProps hands transform back to css, which owns the hover lift
+      .from($$(".record-mark", cells), {
+        scale: 0.6,
+        rotate: -10,
+        duration: D.base,
+        stagger: 0.05,
+        ease: "back.out(1.7)",
+        clearProps: "transform",
+      }, 0.05);
   });
 
   $$(".cut").forEach((cut) => {
@@ -988,7 +1025,7 @@ function initMotion() {
   revealLines(".lead-lede", "top 88%");
   revealLines(".verb-strip em", "top 90%");
 
-  // three more parallax rates so depth reads as depth, not as one shared drift
+  // two more parallax rates so depth reads as depth, not as one shared drift
   gsap.set(".portrait-mask img", { scale: 1.14 });
   gsap.to(".portrait-mask img", {
     yPercent: -7,
@@ -1009,17 +1046,6 @@ function initMotion() {
       start: "top bottom",
       end: "bottom top",
       scrub: 1,
-    },
-  });
-
-  gsap.to(".stack-row span", {
-    y: (index) => -10 - (index % 3) * 9,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".stack",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 0.9,
     },
   });
 

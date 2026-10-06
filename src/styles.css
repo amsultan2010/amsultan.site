@@ -797,18 +797,28 @@ button:focus-visible {
   border-right: 2px solid var(--ink);
 }
 
-.about-meta {
-  margin: 0;
-  color: var(--ink-soft);
+.about-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1.75rem, 4vw, 3rem) var(--gutter) 1rem;
+  border-bottom: 2px solid var(--ink);
 }
 
+.about-meta {
+  margin: 0 0 0.4rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* sized off the column so the longest word always fits on one line, and capped
+   so the last three words stay together */
 .about-statement {
-  max-width: 11ch;
+  max-width: 12em;
   margin: 0;
-  font-size: clamp(2.8rem, 6.5vw, 6.2rem);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  font-weight: 400;
+  font-size: clamp(1.6rem, 4.5vw, 4.2rem);
+  line-height: 0.98;
 }
 
 .about-bio {
@@ -816,7 +826,6 @@ button:focus-visible {
   margin: 0;
   font-size: clamp(1.1rem, 1.6vw, 1.45rem);
   line-height: 1.35;
-  color: var(--ink-soft);
 }
 
 .about-actions {
@@ -966,12 +975,12 @@ button:focus-visible {
 .work-row {
   position: relative;
   display: grid;
-  grid-template-columns: 2.25rem 2.5rem minmax(0, 1fr);
+  grid-template-columns: 2.25rem 2.5rem minmax(0, 1fr) auto;
   grid-template-areas:
-    "idx icon name"
-    "blurb blurb blurb"
-    "thumb thumb thumb"
-    "meta meta go";
+    "idx icon name name"
+    "blurb blurb blurb blurb"
+    "thumb thumb thumb thumb"
+    "meta meta meta go";
   gap: 0.5rem 0.85rem;
   align-items: center;
   padding: 1.25rem var(--gutter) 1.5rem;
@@ -1318,32 +1327,293 @@ button:focus-visible {
   transform: translate(0.15rem, -0.15rem);
 }
 
+/* a two-line key: value list under the rows: what is solid, and what is still
+   going in */
 .stack {
-  padding: 1.25rem var(--gutter) 1.75rem;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin: 0;
 }
 
 .stack-label {
-  margin: 0 0 0.85rem;
+  display: flex;
+  align-items: center;
+  padding: 1.4rem clamp(1.25rem, 3vw, 2.75rem) 1.4rem var(--gutter);
+  font-size: clamp(1.9rem, 3.6vw, 3.1rem);
+  line-height: 1;
+}
+
+/* outlined for what is not finished yet: the same split the hero name makes */
+.stack-label-open {
+  color: transparent;
+  -webkit-text-stroke: clamp(1.25px, 0.15vw, 2.25px) var(--ink);
 }
 
 .stack-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.55rem;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 1.4rem var(--gutter) 1.4rem 0;
+}
+
+.stack-row ~ .stack-label,
+.stack-row ~ .stack-row {
+  border-top: 2px solid var(--ink);
 }
 
 .stack-row span {
-  padding: 0.55rem 0.9rem;
+  padding: 0.55rem 0.95rem;
   border: 2px solid var(--ink);
-  background: transparent;
-  font-family: var(--serif);
-  font-size: 1.05rem;
-  transition: background 180ms ease, color 180ms ease;
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease,
+    color 180ms ease;
+}
+
+.stack-fluent span {
+  color: var(--cream);
+  background: var(--ink);
+  box-shadow: 0.25rem 0.25rem 0 var(--orange-deep);
 }
 
 .stack-row span:hover {
   color: var(--orange);
   background: var(--cream);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stack-row span:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 0.4rem 0.4rem 0 var(--ink);
+  }
+}
+
+
+/* record */
+.record {
+  background: var(--cream);
+}
+
+.record .section-display {
+  padding: clamp(1.75rem, 4vw, 3rem) var(--gutter) 1.25rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+/* the label takes the slot a lead row gives its number */
+.record-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.85rem var(--gutter);
+  color: var(--cream);
+  background: var(--ink);
+}
+
+.record-label .display {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1;
+}
+
+.record-label .mono {
+  color: var(--orange);
+}
+
+.record-cells {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.record-cell {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.1rem;
+  align-items: center;
+  padding: 1.25rem var(--gutter);
+  border-top: 2px solid var(--ink);
+  transition: background 220ms ease, color 220ms ease;
+}
+
+.record-cell:first-child {
+  border-top: 0;
+}
+
+.record-awards .record-cell {
+  background: var(--orange);
+}
+
+.record-stat {
+  font-size: clamp(2.6rem, 6vw, 4.75rem);
+  line-height: 0.9;
+  letter-spacing: -0.07em;
+}
+
+/* a square mark leads every other entry: the real logo where there is one */
+.record-mark {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  background: #fff;
+  box-shadow: 0.28rem 0.28rem 0 var(--ink);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.record-mark svg {
+  width: 62%;
+  height: 62%;
+}
+
+.record-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.record-mark-pad img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.record-mark-anthropic {
+  background: #d4a27f;
+}
+
+.record-mark-text {
+  background: var(--orange);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.record-text {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.record-text strong {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.1;
+}
+
+.record-awards .record-text strong {
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  line-height: 1.02;
+}
+
+.record-text > .mono {
+  font-size: 0.82rem;
+  opacity: 0.75;
+}
+
+.record-text > .record-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  opacity: 1;
+}
+
+.record-chips span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding-left: 0.45rem;
+  border: 2px solid var(--ink);
+}
+
+.record-chips b {
+  padding: 0.15rem 0.4rem;
+  color: var(--cream);
+  background: var(--ink);
+  font-weight: 500;
+}
+
+@media (min-width: 620px) and (max-width: 899px) {
+  .record-certs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-certs .record-cell:nth-child(2) {
+    border-top: 0;
+  }
+
+  .record-certs .record-cell:nth-child(even) {
+    border-left: 2px solid var(--ink);
+  }
+}
+
+@media (min-width: 900px) {
+  .record-cells {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .record-awards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-cell {
+    padding-block: 1.6rem;
+    border-top: 0;
+  }
+
+  .record-cell + .record-cell {
+    border-left: 2px solid var(--ink);
+  }
+
+  /* the certifications wrap onto a second row of three */
+  .record-certs .record-cell:nth-child(n + 4) {
+    border-top: 2px solid var(--ink);
+  }
+
+  .record-certs .record-cell:nth-child(4) {
+    border-left: 0;
+  }
+}
+
+/* wide enough for the labels to stand beside their rows: one grid for all
+   three, so the label column is as wide as its longest word */
+@media (min-width: 1100px) {
+  .record-body {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
+  .record-label {
+    flex-direction: column;
+    padding: 1.35rem var(--gutter) 1.25rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
+  }
+
+  .record-cells {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  /* the contact section below already draws the closing rule */
+  .record-label:nth-last-child(2),
+  .record-cells:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .record-awards .record-cell:hover {
+    color: var(--orange);
+    background: var(--cream);
+  }
+
+  .record-cell:hover .record-mark {
+    transform: translate(-2px, -2px);
+    box-shadow: 0.42rem 0.42rem 0 var(--orange-deep);
+  }
 }
 
 
@@ -1354,10 +1624,6 @@ button:focus-visible {
   align-items: stretch;
   min-height: min(80svh, 46rem);
   border-bottom: 2px solid var(--ink);
-}
-
-.cut-light {
-  background: var(--cream);
 }
 
 .cut-dark {
@@ -1658,6 +1924,10 @@ section[id],
     grid-template-columns: 1fr 1fr;
   }
 
+  .about-statement {
+    font-size: 3.9vw;
+  }
+
   .verb-strip li {
     grid-template-columns: 4.5rem 1fr;
   }
@@ -1682,6 +1952,10 @@ section[id],
   .about-copy {
     border-right: 0;
     border-bottom: 2px solid var(--ink);
+  }
+
+  .about-statement {
+    font-size: clamp(1.35rem, 8vw, 3.8rem);
   }
 
   .portrait-mask {
@@ -1766,6 +2040,22 @@ section[id],
     padding: 0.75rem 0;
   }
 
+  .stack {
+    grid-template-columns: 1fr;
+  }
+
+  .stack-label {
+    padding-bottom: 0;
+  }
+
+  .stack-row {
+    padding: 0.85rem var(--gutter) 1.4rem;
+  }
+
+  .stack-row ~ .stack-row {
+    border-top: 0;
+  }
+
   .stack-row span {
     padding: 0.7rem 0.95rem;
   }
@@ -1834,17 +2124,17 @@ section[id],
     width: 100%;
   }
 
-  /* the longest word has to fit inside a 320px viewport */
-  .about-statement {
-    font-size: clamp(2rem, 9vw, 3.6rem);
-  }
-
   .verb-strip li {
     grid-template-columns: 1fr;
     gap: 0.3rem;
   }
 
-  .work-head {
+  .verb-strip em {
+    grid-column: 1;
+  }
+
+  .work-head,
+  .about-head {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.35rem;
@@ -1962,10 +2252,6 @@ section[id],
   .hero-orbit span,
   .hero-kicker {
     font-size: 0.8rem;
-  }
-
-  .about-statement {
-    font-size: clamp(1.9rem, 8.5vw, 3rem);
   }
 
   .contact-title {
