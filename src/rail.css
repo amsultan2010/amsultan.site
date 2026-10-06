@@ -54,6 +54,7 @@
   border-radius: 0;
   background: var(--ink);
   transition: filter 320ms ease, opacity 320ms ease;
+  box-shadow: 0.4rem 0.4rem 0 var(--ink);
 }
 
 .rail-cover img {
@@ -135,6 +136,7 @@
   border: 0;
   background: transparent;
   padding: 0.5rem;
+  box-shadow: none;
 }
 
 /* absolute inset rather than a centred grid item, so height: 100% has a real
@@ -148,12 +150,20 @@
   max-height: calc(100% - 1rem);
   margin: auto;
   object-fit: contain;
+  filter: drop-shadow(0.3rem 0.3rem 0 var(--ink));
 }
 
 /* the flag is a flat field, so a hairline keeps its edge from bleeding into the
    orange ground. every other object is a cutout and needs no frame */
 .rail-object .rail-cover img[src$="saudi.png"] {
   border: 1px solid var(--line-soft);
+}
+
+/* a hard shadow thickens thin dark lettering into a smear, so the two wordmark
+   logos go without one */
+.rail-object .rail-cover img[src$="claude.png"],
+.rail-object .rail-cover img[src$="astonmartin.png"] {
+  filter: none;
 }
 
 .rail-object .rail-caption {

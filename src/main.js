@@ -775,7 +775,20 @@ function initMotion() {
     });
   });
 
-  gsap.from(".about-meta, .about-actions", {
+  gsap.from(".about-line", {
+    yPercent: 40,
+    autoAlpha: 0,
+    duration: 0.7,
+    stagger: 0.12,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".about-statement",
+      start: "top 85%",
+      toggleActions: "play none none none",
+    },
+  });
+
+  gsap.from(".about-facts div, .about-actions", {
     y: 28,
     autoAlpha: 0,
     duration: 0.65,

@@ -347,8 +347,7 @@ button:focus-visible {
   transform: rotate(-45deg);
 }
 
-.pill,
-.ghost {
+.pill {
   display: inline-flex;
   min-height: 3.1rem;
   align-items: center;
@@ -362,9 +361,6 @@ button:focus-visible {
   font-weight: 600;
   text-transform: lowercase;
   transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
-}
-
-.pill {
   color: var(--ink);
   background: var(--cream);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);
@@ -377,23 +373,16 @@ button:focus-visible {
   box-shadow: 0.4rem 0.4rem 0 var(--orange-deep);
 }
 
-.ghost {
-  background: transparent;
-}
-
-.ghost:hover {
-  color: var(--cream);
-  background: var(--ink);
+.pill-hot {
+  background: var(--orange);
 }
 
 .pill span,
-.ghost span,
 .header-cta span {
   transition: transform 180ms ease;
 }
 
 .pill:hover span,
-.ghost:hover span,
 .header-cta:hover span {
   transform: translate(0.15rem, -0.15rem);
 }
@@ -629,6 +618,7 @@ button:focus-visible {
   padding: 0.85rem 1rem;
   border: 2px solid var(--ink);
   background: color-mix(in srgb, var(--cream) 18%, transparent);
+  box-shadow: 0.3rem 0.3rem 0 var(--ink);
 }
 
 .hero-rail-live {
@@ -669,6 +659,7 @@ button:focus-visible {
   padding: 0.4rem 0.7rem;
   border: 2px solid var(--ink);
   background: var(--cream);
+  box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
 
 .hero-title {
@@ -719,6 +710,7 @@ button:focus-visible {
   font-family: var(--mono);
   font-size: 0.9rem;
   font-weight: 600;
+  box-shadow: 0.22rem 0.22rem 0 var(--cream);
 }
 
 .hero-foot {
@@ -789,49 +781,85 @@ button:focus-visible {
   min-height: min(88svh, 52rem);
 }
 
-.about-copy {
-  display: grid;
-  align-content: center;
-  gap: 1.35rem;
-  padding: clamp(2rem, 5vw, 4.5rem) var(--gutter);
-  border-right: 2px solid var(--ink);
-}
-
-.about-head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: clamp(1.75rem, 4vw, 3rem) var(--gutter) 1rem;
+.about .section-display {
+  padding: clamp(1.75rem, 4vw, 3rem) var(--gutter) 1.25rem;
   border-bottom: 2px solid var(--ink);
 }
 
-.about-meta {
-  margin: 0 0 0.4rem;
-  color: var(--ink-soft);
-  white-space: nowrap;
+/* the copy is a stack of ruled cells, like the rows further down the page,
+   rather than one padded block */
+.about-copy {
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid var(--ink);
 }
 
-/* sized off the column so the longest word always fits on one line, and capped
-   so the last three words stay together */
+.about-copy > * {
+  padding-inline: var(--gutter);
+}
+
+/* sized off the column so the longest word always fits on one line */
 .about-statement {
-  max-width: 12em;
   margin: 0;
+  padding-block: clamp(1.75rem, 3.6vw, 3.25rem);
+  color: var(--cream);
+  background: var(--ink);
   font-size: clamp(1.6rem, 4.5vw, 4.2rem);
   line-height: 0.98;
 }
 
+.about-line {
+  display: block;
+}
+
+.about-line-accent {
+  color: var(--orange);
+}
+
+/* takes the spare height, so the cells always fill the portrait's column */
 .about-bio {
-  max-width: 32rem;
+  flex: 1;
+  align-content: center;
   margin: 0;
-  font-size: clamp(1.1rem, 1.6vw, 1.45rem);
+  padding-block: 1.6rem;
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
   line-height: 1.35;
+}
+
+.about-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 2px solid var(--ink);
+}
+
+.about-facts div {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem var(--gutter) 1.15rem;
+}
+
+.about-facts div + div {
+  border-left: 2px solid var(--ink);
+}
+
+.about-facts dt {
+  color: var(--ink-soft);
+}
+
+.about-facts dd {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+  line-height: 1;
 }
 
 .about-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.9rem;
+  padding-block: 1.25rem 1.5rem;
+  border-top: 2px solid var(--ink);
 }
 
 .about-portrait {
@@ -849,12 +877,28 @@ button:focus-visible {
     var(--orange);
 }
 
-.portrait-mask {
-  overflow: hidden;
+/* the frame carries the tilt and the size, so the hard shadow can sit behind
+   the mask: the mask's own clip-path would cut a shadow off */
+.portrait-frame {
+  position: relative;
   aspect-ratio: 861 / 1071;
+  transform: rotate(-3deg);
+}
+
+.portrait-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: translate(0.55rem, 0.55rem);
+}
+
+.portrait-mask {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
   border: 2px solid var(--ink);
   background: var(--cream);
-  transform: rotate(-3deg);
 }
 
 .portrait-mask img {
@@ -873,6 +917,7 @@ button:focus-visible {
   border: 2px solid var(--ink);
   background: var(--cream);
   transform: rotate(3deg);
+  box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
 
 .verb-strip {
@@ -1005,6 +1050,7 @@ button:focus-visible {
   object-fit: contain;
   border: 2px solid color-mix(in srgb, var(--cream) 30%, transparent);
   background: #0a0a0a;
+  box-shadow: 0.25rem 0.25rem 0 var(--orange);
 }
 
 .work-row-main {
@@ -1028,6 +1074,9 @@ button:focus-visible {
   object-position: top center;
   border: 2px solid color-mix(in srgb, var(--cream) 30%, transparent);
   background: #0a0a0a;
+  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+  /* room for the shadow before the date line under it */
+  margin-bottom: 0.4rem;
 }
 
 .work-meta {
@@ -1096,6 +1145,7 @@ button:focus-visible {
   .work-row-thumb {
     align-self: start;
     margin-top: 0.15rem;
+    margin-bottom: 0;
   }
 }
 
@@ -1125,7 +1175,7 @@ button:focus-visible {
     border-color: var(--orange);
     filter: brightness(1.06);
     transform: translate(-2px, -2px);
-    box-shadow: 0.35rem 0.35rem 0 var(--orange-deep);
+    box-shadow: 0.55rem 0.55rem 0 var(--orange-deep);
   }
 }
 
@@ -1273,6 +1323,7 @@ button:focus-visible {
   width: clamp(2.1rem, 3.4vw, 2.9rem);
   height: clamp(2.1rem, 3.4vw, 2.9rem);
   border: 2px solid var(--cream);
+  box-shadow: 0.22rem 0.22rem 0 var(--ink);
 }
 
 .lead-zc h3 {
@@ -1312,6 +1363,7 @@ button:focus-visible {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   transition: background 180ms ease, color 180ms ease;
+  box-shadow: 0.28rem 0.28rem 0 var(--ink);
 }
 
 .zc-cta:hover {
@@ -1371,12 +1423,13 @@ button:focus-visible {
   font-weight: 600;
   transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease,
     color 180ms ease;
+  box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
 
 .stack-fluent span {
   color: var(--cream);
   background: var(--ink);
-  box-shadow: 0.25rem 0.25rem 0 var(--orange-deep);
+  box-shadow: 0.25rem 0.25rem 0 var(--cream);
 }
 
 .stack-row span:hover {
@@ -1692,6 +1745,7 @@ button:focus-visible {
   border: 2px solid var(--ink);
   background: var(--cream);
   color: var(--ink);
+  box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
 
 .cut-dark .cut-figure figcaption {
@@ -1958,7 +2012,7 @@ section[id],
     font-size: clamp(1.35rem, 8vw, 3.8rem);
   }
 
-  .portrait-mask {
+  .portrait-frame {
     width: min(100%, 20rem);
     margin-inline: auto;
   }
@@ -2110,7 +2164,7 @@ section[id],
     width: 100%;
   }
 
-  .portrait-mask {
+  .portrait-frame {
     width: min(100%, 16rem);
     transform: none;
   }
@@ -2119,8 +2173,7 @@ section[id],
     display: grid;
   }
 
-  .about-actions .pill,
-  .about-actions .ghost {
+  .about-actions .pill {
     width: 100%;
   }
 
@@ -2133,8 +2186,7 @@ section[id],
     grid-column: 1;
   }
 
-  .work-head,
-  .about-head {
+  .work-head {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.35rem;
