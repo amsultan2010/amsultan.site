@@ -38,7 +38,7 @@ function readLinks() {
 
 function buildCommands() {
   const commands = [
-    { group: "sections", label: "go to work", keywords: "experience jobs", chord: "g w", glyph: "↓", run: () => scrollToHash("#work") },
+    { group: "sections", label: "go to built", keywords: "work experience projects", chord: "g w", glyph: "↓", run: () => scrollToHash("#work") },
     { group: "sections", label: "go to about", keywords: "bio story", chord: "g a", glyph: "↓", run: () => scrollToHash("#about") },
     { group: "sections", label: "go to contact", keywords: "email reach hire", chord: "g c", glyph: "↓", run: () => scrollToHash("#contact") },
     { group: "sections", label: "back to top", keywords: "hero start home", glyph: "↑", run: () => scrollToHash("#top") },
