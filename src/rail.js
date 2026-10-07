@@ -34,18 +34,26 @@ const WATCHING = [
 ];
 
 const OBJECTS = [
-  { title: "my fav shoes", src: "/images/objects/shoes.png", w: 520, h: 346,
+  { title: "the kicks", src: "/images/objects/shoes.png", w: 520, h: 346,
     alt: "a pair of red and white nike air jordan 1 high top sneakers" },
+  { title: "where i learn", src: "/images/objects/aisr.png", w: 314, h: 313,
+    alt: "the american international school riyadh seal, an open book inside a blue and gold ring" },
   { title: "what i code on", src: "/images/objects/macbook.png", w: 520, h: 520,
     alt: "a midnight blue macbook air open, showing a blue wallpaper" },
+  { title: "pokemon of choice", src: "/images/objects/garchomp.png", w: 496, h: 520,
+    alt: "garchomp, a navy and red land shark dragon pokemon, mid roar" },
   { title: "what i write on", src: "/images/objects/ipad.png", w: 311, h: 520,
     alt: "a blue ipad air seen from the front and back at an angle" },
-  { title: "where i live", src: "/images/objects/saudi.png", w: 520, h: 346,
+  { title: "home", src: "/images/objects/saudi.png", w: 520, h: 346,
     alt: "the flag of saudi arabia, white arabic script and a sword on green" },
+  { title: "my sport", src: "/images/objects/tennis.webp", w: 520, h: 520,
+    alt: "a bright green felt tennis ball with a white seam" },
   { title: "how i relax", src: "/images/objects/steamdeck.png", w: 520, h: 292,
     alt: "a steam deck handheld console running a game on its screen" },
-  { title: "my fav f1 team", src: "/images/objects/astonmartin.png", w: 520, h: 520,
+  { title: "who i support", src: "/images/objects/astonmartin.png", w: 520, h: 520,
     alt: "the aston martin cognizant formula one team wordmark and winged badge" },
+  { title: "smash main", src: "/images/objects/incineroar.png", w: 247, h: 241,
+    alt: "incineroar, a red and black wrestler cat pokemon, in a fighting stance" },
   { title: "my second brain", src: "/images/objects/claude.png", w: 520, h: 112,
     alt: "the claude wordmark beside its orange asterisk mark" },
 ];
@@ -111,9 +119,15 @@ function buildSection({ items, label, variant }) {
   const head = document.createElement("div");
   head.className = "rail-head";
 
+  // the last word carries the accent, the same split the about statement uses
+  const cut = label.lastIndexOf(" ") + 1;
+  const accent = document.createElement("span");
+  accent.className = "rail-label-accent";
+  accent.textContent = label.slice(cut);
+
   const heading = document.createElement("p");
-  heading.className = "mono rail-label";
-  heading.textContent = label;
+  heading.className = "display rail-label";
+  heading.append(label.slice(0, cut), accent);
 
   const hint = document.createElement("p");
   hint.className = "mono rail-hint";
@@ -334,9 +348,11 @@ export function initRail() {
       anchor: document.querySelector(".about"),
       position: "after",
       items: shuffle(OBJECTS),
-      label: "things i keep around",
+      label: "my personal stack",
       variant: "object",
-      duration: 64,
+      // one run of the track per duration, so a longer run needs more seconds
+      // just to hold its pace
+      duration: 48,
     }),
   );
 
@@ -345,9 +361,9 @@ export function initRail() {
       anchor: document.querySelector(".lead"),
       position: "after",
       items: shuffle(WATCHING),
-      label: "in rotation",
+      label: "current watchlist",
       variant: "poster",
-      duration: 90,
+      duration: 43,
     }),
   );
 
