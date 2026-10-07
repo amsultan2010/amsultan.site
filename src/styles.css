@@ -816,14 +816,65 @@ button:focus-visible {
   color: var(--orange);
 }
 
-/* takes the spare height, so the cells always fill the portrait's column */
-.about-bio {
+/* takes the spare height, so the cells always fill the portrait's column.
+   every row is its own ruled cell and stretches evenly into that height */
+.about-points {
   flex: 1;
-  align-content: center;
+  display: grid;
+  grid-auto-rows: 1fr;
   margin: 0;
-  padding-block: 1.6rem;
-  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
-  line-height: 1.35;
+  padding: 0;
+  list-style: none;
+  counter-reset: point;
+  font-size: clamp(1.02rem, 1.35vw, 1.22rem);
+  line-height: 1.3;
+}
+
+.about-points li {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: center;
+  padding: 0.9rem var(--gutter);
+  border-top: 2px solid var(--ink);
+  text-wrap: pretty;
+  counter-increment: point;
+}
+
+.about-points li:first-child {
+  border-top: 0;
+}
+
+/* the number is a display cut at a size orange still reads at on cream */
+.about-points li::before {
+  content: counter(point, decimal-leading-zero);
+  color: var(--orange);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.2rem;
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.about-points strong {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--orange);
+  text-decoration-thickness: 0.16em;
+  text-underline-offset: 0.18em;
+}
+
+/* the last line is the punchline, so it drops the number and takes the fill */
+.about-points .about-point-closer {
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--orange);
+  font-size: clamp(1.02rem, 1.7vw, 1.5rem);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.about-points .about-point-closer::before {
+  content: none;
 }
 
 .about-facts {
@@ -881,7 +932,7 @@ button:focus-visible {
    the mask: the mask's own clip-path would cut a shadow off */
 .portrait-frame {
   position: relative;
-  aspect-ratio: 861 / 1071;
+  aspect-ratio: 982 / 1400;
   transform: rotate(-3deg);
 }
 
@@ -1670,89 +1721,6 @@ button:focus-visible {
 }
 
 
-/* portrait cuts */
-.cut {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: stretch;
-  min-height: min(80svh, 46rem);
-  border-bottom: 2px solid var(--ink);
-}
-
-.cut-dark {
-  color: var(--cream);
-  background: var(--ink);
-}
-
-.cut-copy {
-  display: grid;
-  align-content: center;
-  gap: 1rem;
-  padding: clamp(2rem, 5vw, 4.5rem) var(--gutter);
-}
-
-.cut-label {
-  margin: 0;
-  font-size: clamp(2.4rem, 5.5vw, 5rem);
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-}
-
-.cut-note {
-  margin: 0;
-  max-width: 26ch;
-  font-size: clamp(0.85rem, 1.2vw, 1rem);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--orange);
-}
-
-.cut-figure {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  border-left: 2px solid var(--ink);
-  background: var(--orange);
-}
-
-.cut-dark .cut-figure {
-  grid-column: 1;
-  grid-row: 1;
-  border-left: 0;
-  border-right: 2px solid var(--cream);
-}
-
-.cut-figure img {
-  position: absolute;
-  inset: -6% 0;
-  width: 100%;
-  height: 112%;
-  object-fit: cover;
-  object-position: 50% 8%;
-  filter: contrast(1.06) saturate(1.1);
-}
-
-.cut-dark .cut-figure img {
-  object-position: 62% 20%;
-}
-
-.cut-figure figcaption {
-  position: absolute;
-  right: 1.25rem;
-  bottom: 1.25rem;
-  z-index: 1;
-  padding: 0.4rem 0.7rem;
-  border: 2px solid var(--ink);
-  background: var(--cream);
-  color: var(--ink);
-  box-shadow: 0.25rem 0.25rem 0 var(--ink);
-}
-
-.cut-dark .cut-figure figcaption {
-  right: auto;
-  left: 1.25rem;
-}
-
 /* contact */
 .contact {
   position: relative;
@@ -2199,36 +2167,6 @@ section[id],
   .lead-num {
     font-size: 1.25rem;
     padding: 1.1rem 0.4rem;
-  }
-
-  .cut {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-
-  .cut-dark .cut-figure {
-    grid-column: 1;
-    grid-row: auto;
-    border-right: 0;
-  }
-
-  /* explicit height, not just aspect-ratio: the img inside is absolutely
-     positioned with a percentage height, and safari won't resolve that against
-     an aspect-ratio-derived box, and the photo collapses to nothing.
-     125vw is the same 4/5 box the aspect-ratio describes. */
-  .cut-figure {
-    aspect-ratio: 4 / 5;
-    height: 125vw;
-    border-left: 0;
-    border-bottom: 2px solid var(--ink);
-  }
-
-  .cut-dark .cut-figure {
-    border-bottom-color: var(--cream);
-  }
-
-  .cut-copy {
-    padding: 1.75rem var(--gutter) 2.25rem;
   }
 
   .contact {

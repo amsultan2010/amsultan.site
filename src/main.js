@@ -607,7 +607,7 @@ function initMotion() {
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
-    gsap.set(".portrait-mask, .cut-figure", { clipPath: "inset(0% 0% 0% 0%)" });
+    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
     return;
   }
 
@@ -788,7 +788,7 @@ function initMotion() {
     },
   });
 
-  gsap.from(".about-facts div, .about-actions", {
+  gsap.from(".about-points li, .about-facts div, .about-actions", {
     y: 28,
     autoAlpha: 0,
     duration: 0.65,
@@ -953,47 +953,6 @@ function initMotion() {
       }, 0.05);
   });
 
-  $$(".cut").forEach((cut) => {
-    gsap.from($(".cut-copy", cut).children, {
-      y: 32,
-      autoAlpha: 0,
-      duration: 0.6,
-      stagger: 0.08,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: cut,
-        start: "top 78%",
-        toggleActions: "play none none none",
-      },
-    });
-
-    gsap.fromTo(
-      $(".cut-figure", cut),
-      { clipPath: "inset(0% 0% 100% 0%)" },
-      {
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 0.9,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: cut,
-          start: "top 78%",
-          toggleActions: "play none none none",
-        },
-      },
-    );
-
-    gsap.to($(".cut-figure img", cut), {
-      yPercent: -6,
-      ease: "none",
-      scrollTrigger: {
-        trigger: cut,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 0.5,
-      },
-    });
-  });
-
   gsap.from(".contact-link .split-char", {
     yPercent: 110,
     autoAlpha: 0,
@@ -1033,7 +992,6 @@ function initMotion() {
     },
   });
 
-  revealLines(".about-bio", "top 82%");
   revealLines(".contact-pitch", "top 84%");
   revealLines(".lead-lede", "top 88%");
   revealLines(".verb-strip em", "top 90%");
