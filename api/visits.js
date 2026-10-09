@@ -1,4 +1,4 @@
-// lifetime visit counter api - owned by workstream ws-2
+// lifetime visit counter api, owned by workstream ws-2
 // storage is vercel kv / upstash redis. without those env vars the endpoint
 // reports itself unconfigured rather than serving an invented number.
 const KEY = "portfolio:visits";

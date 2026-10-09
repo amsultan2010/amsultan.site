@@ -293,6 +293,54 @@ function initTagPreview() {
   });
 }
 
+// the closing cells and the right-now rows share one move: the arrow leaves
+// through one side of its window and comes back in through the other. that is
+// two tweens with a jump between them, which a css transition cannot express
+function initArrowSwap() {
+  if (!finePointer() || reducedMotion()) return;
+
+  const travel = { down: [0, 1], out: [1, -1] };
+
+  $$(".arrow-swap").forEach((frame) => {
+    const host = frame.closest("a");
+    const glyph = $("span", frame);
+    if (!host || !glyph) return;
+
+    const [dx, dy] = travel[frame.dataset.dir] ?? travel.out;
+    const tl = gsap
+      .timeline({ paused: true })
+      .to(glyph, { xPercent: dx * 110, yPercent: dy * 110, duration: 0.2, ease: "power2.in" })
+      .set(glyph, { xPercent: dx * -110, yPercent: dy * -110 })
+      .to(glyph, { xPercent: 0, yPercent: 0, duration: D.fast, ease: E.out });
+
+    host.addEventListener("pointerenter", () => tl.restart());
+  });
+}
+
+function initActionFill() {
+  if (!finePointer() || reducedMotion()) return;
+
+  $$(".action-cell").forEach((cell) => {
+    const fill = $(".action-fill", cell);
+    if (!fill) return;
+
+    // from here the script owns the layer, so the css fallback stands down
+    cell.classList.add("is-wired");
+    gsap.set(fill, { y: 0, yPercent: 101 });
+
+    const tl = gsap
+      .timeline({ paused: true })
+      .to(fill, { yPercent: 0, duration: 0.45, ease: E.inOut });
+
+    cell.addEventListener("pointerenter", () => tl.play());
+    cell.addEventListener("pointerleave", () => tl.reverse());
+    // the text colour flips on focus in css, so the layer has to follow it or a
+    // keyboard user gets ink on ink
+    cell.addEventListener("focus", () => tl.play());
+    cell.addEventListener("blur", () => tl.reverse());
+  });
+}
+
 function initNavScramble() {
   if (!finePointer() || reducedMotion()) return;
 
@@ -333,7 +381,8 @@ function initCounters() {
     const end = Number(element.dataset.count);
     if (!Number.isFinite(end)) return;
 
-    const format = (n) => n.toLocaleString("en-US");
+    const pad = Number(element.dataset.pad) || 0;
+    const format = (n) => n.toLocaleString("en-US").padStart(pad, "0");
 
     if (reducedMotion()) {
       element.textContent = format(end);
@@ -453,7 +502,17 @@ function initLoader(onDone) {
   const pct = $("[data-loader-pct]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (!loader || reduceMotion) {
+  // the loader is an opening, not a toll: once per session, never on the way
+  // back from a link. storage can throw in a private window, so it is guarded
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem("loader-seen") === "1";
+    sessionStorage.setItem("loader-seen", "1");
+  } catch {
+    seen = false;
+  }
+
+  if (!loader || reduceMotion || seen) {
     loader?.remove();
     onDone();
     return;
@@ -464,7 +523,7 @@ function initLoader(onDone) {
 
   gsap.to(state, {
     value: 100,
-    duration: 0.95,
+    duration: 0.8,
     ease: "power2.inOut",
     onUpdate: () => {
       const n = Math.round(state.value);
@@ -474,7 +533,7 @@ function initLoader(onDone) {
     onComplete: () => {
       gsap.to(loader, {
         yPercent: -110,
-        duration: 0.75,
+        duration: 0.65,
         ease: "power4.inOut",
         onComplete: () => {
           loader.remove();
@@ -555,13 +614,14 @@ function initHeroMotion() {
     });
   });
 
-  gsap.to(".hero-orbit span", {
-    y: -5,
+  // the strip is one joined bar, so it breathes as one piece. yPercent, because
+  // the hero exit scrub already owns y on this element
+  gsap.to(".hero-orbit", {
+    yPercent: -12,
     duration: 2.6,
     repeat: -1,
     yoyo: true,
     ease: "sine.inOut",
-    stagger: { each: 0.28, from: "center" },
   });
 
   // the hero keeps roughly twenty looping tweens alive. once it is scrolled past
@@ -775,31 +835,167 @@ function initMotion() {
     });
   });
 
-  gsap.from(".about-line", {
-    yPercent: 40,
-    autoAlpha: 0,
-    duration: 0.7,
-    stagger: 0.12,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".about-statement",
-      start: "top 85%",
-      toggleActions: "play none none none",
-    },
+  // scrubbed drifts differ by width, and the wide ones do not exist on a phone
+  const drift = gsap.matchMedia();
+
+  // about: the statement is display type, so it gets the display verb. letters
+  // rise out of a mask one line after the next, then each tag stamps on
+  const statementLines = $$(".about-line");
+  if (statementLines.length) {
+    const statement = gsap.timeline({
+      defaults: { ease: E.out },
+      scrollTrigger: { trigger: ".about-statement", start: "top 82%", once: true },
+    });
+
+    statementLines.forEach((line, index) => {
+      const at = index * 0.16;
+      statement
+        .from($$(".split-char", line), { yPercent: 118, duration: D.slow, stagger: 0.016 }, at)
+        .from(
+          $(".about-line-tag", line),
+          { scale: 0, rotate: -16, duration: D.base, ease: "back.out(1.7)" },
+          at + 0.5,
+        );
+    });
+
+    // and they keep moving after they land: each line slides at its own rate
+    // while the band crosses the viewport, pulling the staircase toward the
+    // middle. the outer two only ever move inward, so nothing leaves the gutter
+    drift.add("(min-width: 821px)", () => {
+      [
+        [0, 9],
+        [4, -4],
+        [0, -9],
+      ].forEach(([from, to], index) => {
+        if (!statementLines[index]) return;
+        gsap.fromTo(
+          statementLines[index],
+          { xPercent: from },
+          {
+            xPercent: to,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".about-statement",
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.8,
+            },
+          },
+        );
+      });
+    });
+  }
+
+  // the four claims are ruled cells, so they arrive as cells: each one wipes in
+  // from its leading edge and brings its rule with it. batched, so a phone that
+  // only has two of them on screen only plays two
+  gsap.set(".about-points li", { clipPath: "inset(0% 100% 0% 0%)" });
+  ScrollTrigger.batch(".about-points li", {
+    start: "top 86%",
+    once: true,
+    onEnter: (cells) =>
+      gsap.to(cells, {
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: D.slow,
+        stagger: 0.12,
+        ease: E.inOut,
+        clearProps: "clipPath",
+      }),
   });
 
-  gsap.from(".about-points li, .about-facts div, .about-actions", {
-    y: 28,
-    autoAlpha: 0,
-    duration: 0.65,
-    stagger: 0.08,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".about-copy",
-      start: "top 80%",
-      toggleActions: "play none none none",
-    },
+  // the punchline is laid down like a strip of tape, then the one reversed
+  // phrase is stamped onto it from above
+  const closer = $(".about-closer");
+  if (closer) {
+    const mark = $(".about-closer-mark", closer);
+
+    gsap
+      .timeline({ scrollTrigger: { trigger: closer, start: "top 84%", once: true } })
+      .fromTo(
+        ".about-closer-text",
+        { clipPath: "inset(-15% 100% -15% -3%)" },
+        {
+          clipPath: "inset(-15% -3% -15% -3%)",
+          duration: D.epic,
+          ease: E.inOut,
+          clearProps: "clipPath",
+        },
+        0,
+      )
+      .from(".about-closer em", { scale: 1.6, autoAlpha: 0, duration: D.fast, ease: "power4.in" }, 0.8)
+      .from(mark, { scale: 0, duration: D.slow, ease: E.out }, 0.3);
+
+    // the mark turns with the scroll, and its arms keep turning on their own
+    // for as long as the band is on screen
+    gsap.to(mark, {
+      rotate: 200,
+      ease: "none",
+      scrollTrigger: { trigger: closer, start: "top bottom", end: "bottom top", scrub: 1 },
+    });
+
+    const spin = gsap.to($("g", mark), {
+      rotate: 360,
+      svgOrigin: "50 50",
+      duration: 26,
+      repeat: -1,
+      ease: "none",
+    });
+    const spinView = ScrollTrigger.create({
+      trigger: closer,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => (self.isActive ? spin.play() : spin.pause()),
+    });
+    if (!spinView.isActive) spin.pause();
+  }
+
+  // the spec sheet: both labels rise out of their own bar, the rows unroll
+  // downward, and each fact decodes into place as its row opens
+  gsap.from(".sheet-label > *", {
+    yPercent: 140,
+    duration: D.base,
+    stagger: 0.06,
+    ease: E.out,
+    scrollTrigger: { trigger: ".about-sheet", start: "top 88%", once: true },
   });
+
+  gsap.set(".about-facts div, .verb-strip li", { clipPath: "inset(0% 0% 100% 0%)" });
+  ScrollTrigger.batch(".about-facts div, .verb-strip li", {
+    start: "top 92%",
+    once: true,
+    onEnter: (rows) =>
+      gsap.to(rows, {
+        clipPath: "inset(0% 0% 0% 0%)",
+        duration: D.base,
+        stagger: 0.07,
+        ease: E.out,
+        clearProps: "clipPath",
+      }),
+  });
+
+  $$(".about-facts dd").forEach((fact, index) => {
+    gsap.to(fact, {
+      duration: D.slow,
+      delay: 0.15 + index * 0.12,
+      ease: "none",
+      scrambleText: { text: fact.textContent, chars: "lowerCase", speed: 0.5 },
+      scrollTrigger: { trigger: fact, start: "top 92%", once: true },
+    });
+  });
+
+  // the two closing cells come up from the floor of the section
+  gsap.fromTo(
+    ".action-cell",
+    { clipPath: "inset(100% 0% 0% 0%)" },
+    {
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: D.slow,
+      stagger: 0.1,
+      ease: E.out,
+      clearProps: "clipPath",
+      scrollTrigger: { trigger: ".about-actions", start: "top 94%", once: true },
+    },
+  );
 
   gsap.fromTo(
     ".portrait-mask",
@@ -828,54 +1024,94 @@ function initMotion() {
     },
   });
 
-  gsap.from(".verb-strip li", {
-    y: 28,
-    autoAlpha: 0,
-    duration: 0.55,
-    stagger: 0.07,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".verb-strip",
-      start: "top 88%",
-      toggleActions: "play none none none",
-    },
+  // section heads: the word rises out of its own bar, its echoes slide in from
+  // the edge they run off, and the count cell opens from that same edge
+  $$(".section-head").forEach((head) => {
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: { trigger: head, start: "top 88%", once: true },
+      })
+      .from($$(".section-display .split-char", head), { yPercent: 125, duration: D.slow, stagger: 0.03 }, 0)
+      .from($$(".section-echo i", head), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12)
+      .fromTo(
+        $(".section-meta", head),
+        { clipPath: "inset(0% 0% 0% 100%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: E.inOut, clearProps: "clipPath" },
+        0.2,
+      );
   });
 
-  $$(".section-display").forEach((title) => {
-    const chars = $$(".split-char", title);
-    if (!chars.length) return;
-    gsap.from(chars, {
-      yPercent: 110,
-      autoAlpha: 0,
-      duration: 0.7,
-      stagger: 0.022,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: title,
-        start: "top 88%",
-        toggleActions: "play none none none",
-      },
+  // the echo is hidden on a phone, so its scrub only exists where it shows. each
+  // head slides at a different rate, which is what makes it read as depth. the
+  // run moves away from the word, so a gap opens rather than a letter being cut
+  drift.add("(min-width: 701px)", () => {
+    $$(".section-echo-run").forEach((run, index) => {
+      gsap.fromTo(
+        run,
+        { xPercent: 0 },
+        {
+          xPercent: [9, 15, 6][index % 3],
+          ease: "none",
+          scrollTrigger: {
+            trigger: run,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.5 + (index % 3) * 0.25,
+          },
+        },
+      );
     });
   });
 
-  gsap.from(".work-row", {
-    y: 28,
-    autoAlpha: 0,
-    duration: 0.55,
-    stagger: 0.07,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".work-list",
-      start: "top 85%",
-      toggleActions: "play none none none",
-    },
+  // each built row is staged on its own trigger. hover owns the index scale,
+  // the mark's rotation and the name's x, so the entrance stays off all three:
+  // a hover that lands mid-entrance would otherwise record the wrong rest state
+  $$(".work-row").forEach((row) => {
+    const shot = $(".work-row-shot", row);
+
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: { trigger: row, start: "top 84%", once: true },
+      })
+      .from($(".work-index", row), { yPercent: 120, autoAlpha: 0, duration: D.base }, 0)
+      .from($(".work-row-icon", row), { y: 22, autoAlpha: 0, duration: D.base }, 0.05)
+      .fromTo(
+        $(".work-name", row),
+        { clipPath: "inset(0% 100% 0% 0%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: D.slow, ease: E.inOut, clearProps: "clipPath" },
+        0.08,
+      )
+      .from($$(".work-points li", row), { x: -22, autoAlpha: 0, duration: D.base, stagger: 0.07 }, 0.2)
+      .from($$(".work-meta, .work-go", row), { y: 12, autoAlpha: 0, duration: D.fast, stagger: 0.06 }, 0.4);
+
+    // the shot has its own trigger because on a phone it sits a screen below
+    // the top of its row. the frame unmasks from its top edge while the image
+    // inside settles back from overscale. the end inset is negative so the hard
+    // shadow is already showing when the clip is dropped
+    if (shot) {
+      gsap
+        .timeline({
+          defaults: { duration: D.epic, ease: E.out },
+          scrollTrigger: { trigger: shot, start: "top 88%", once: true },
+        })
+        .fromTo(
+          shot,
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          { clipPath: "inset(-8% -8% -10% -8%)", clearProps: "clipPath" },
+          0,
+        )
+        .from($("img", shot), { scale: 1.3, clearProps: "transform" }, 0);
+    }
   });
 
   $$(".lead-item").forEach((item) => {
     const heading = $("h3", item);
     const chars = heading ? splitCharacters(heading) : [];
 
-    gsap
+    const mark = $(".zc-mark", item);
+    const reveal = gsap
       .timeline({
         defaults: { ease: E.out },
         scrollTrigger: {
@@ -887,13 +1123,17 @@ function initMotion() {
       .from($(".lead-num", item), { yPercent: 70, autoAlpha: 0, duration: D.base }, 0)
       .from($(".lead-body .mono", item), { y: 18, autoAlpha: 0, duration: D.fast }, 0.05)
       .from(chars, { yPercent: 110, autoAlpha: 0, duration: D.base, stagger: 0.02 }, 0.1)
-      .from($(".zc-mark", item) ?? [], { scale: 0.7, rotate: -12, autoAlpha: 0, duration: D.base }, 0.08)
       .from($$(".lead-points li, .zc-cta", item), {
         y: 16,
         autoAlpha: 0,
         duration: D.fast,
         stagger: 0.06,
       }, 0.25);
+
+    // only one row carries a mark, and an empty target makes gsap warn
+    if (mark) {
+      reveal.from(mark, { scale: 0.7, rotate: -12, autoAlpha: 0, duration: D.base }, 0.08);
+    }
 
     item.addEventListener("pointerenter", () => {
       gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
@@ -903,36 +1143,21 @@ function initMotion() {
     });
   });
 
-  gsap.from(".stack-label", {
-    x: -24,
-    autoAlpha: 0,
-    duration: 0.5,
-    stagger: 0.08,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".stack",
-      start: "top 92%",
-      toggleActions: "play none none none",
-    },
-  });
-
-  // clearProps hands transform back to css, which owns the hover lift
-  gsap.from(".stack-row span", {
-    y: 18,
-    autoAlpha: 0,
-    duration: 0.4,
-    stagger: 0.03,
-    ease: "power2.out",
-    clearProps: "transform",
-    scrollTrigger: {
-      trigger: ".stack",
-      start: "top 92%",
-      toggleActions: "play none none none",
-    },
+  // fluent and learning: the label rises in its bar, then every word rises out
+  // of its own mask, the second panel a beat behind the first
+  $$(".stack-panel").forEach((panel, index) => {
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: { trigger: panel, start: "top 90%", once: true },
+      })
+      .from($$(".stack-label > *", panel), { yPercent: 140, duration: D.base, stagger: 0.06 }, index * 0.1)
+      .from($$(".stack-list li > *", panel), { yPercent: 125, duration: D.slow, stagger: 0.05 }, index * 0.1 + 0.12);
   });
 
   $$(".record-cells").forEach((cells) => {
-    gsap
+    const marks = $$(".record-mark", cells);
+    const reveal = gsap
       .timeline({
         defaults: { ease: E.out },
         scrollTrigger: {
@@ -941,16 +1166,24 @@ function initMotion() {
           once: true,
         },
       })
-      .from($$(".record-cell > *", cells), { y: 18, autoAlpha: 0, duration: D.fast, stagger: 0.04 }, 0)
-      // clearProps hands transform back to css, which owns the hover lift
-      .from($$(".record-mark", cells), {
-        scale: 0.6,
-        rotate: -10,
-        duration: D.base,
-        stagger: 0.05,
-        ease: "back.out(1.7)",
-        clearProps: "transform",
-      }, 0.05);
+      .from($$(".record-cell > *", cells), { y: 18, autoAlpha: 0, duration: D.fast, stagger: 0.04 }, 0);
+
+    // the awards row leads with a number, not a mark. clearProps hands transform
+    // back to css, which owns the hover lift
+    if (marks.length) {
+      reveal.from(
+        marks,
+        {
+          scale: 0.6,
+          rotate: -10,
+          duration: D.base,
+          stagger: 0.05,
+          ease: "back.out(1.7)",
+          clearProps: "transform",
+        },
+        0.05,
+      );
+    }
   });
 
   gsap.from(".contact-link .split-char", {
@@ -1021,7 +1254,7 @@ function initMotion() {
   });
 
   // ambient: the status dot keeps breathing long after every entrance is done
-  gsap.to(".status-dot, .hero-rail-live i", {
+  gsap.to(".status-dot, .hero-rail-live i, .stack-pulse", {
     scale: 1.5,
     opacity: 0.45,
     duration: 1.4,
@@ -1053,6 +1286,8 @@ initMagnetic();
 initTilt();
 initWorkRowHover();
 initTagPreview();
+initArrowSwap();
+initActionFill();
 initNavScramble();
 initNavigation();
 initCounters();

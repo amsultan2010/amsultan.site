@@ -11,7 +11,7 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# ai answer engines - allowed, this site is a personal profile
+# ai answer engines are allowed, this site is a personal profile
 User-agent: GPTBot
 Allow: /
 

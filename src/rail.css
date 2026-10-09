@@ -1,22 +1,56 @@
 /* the two rails, owned by workstream ws-3 */
 .rail {
-  padding: 0 0 clamp(4rem, 8vw, 9rem);
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
 
+/* the head is a row of ruled cells that fills the bar edge to edge: label,
+   ruler, count, drag hint. the block padding is the same above and below and
+   every cell centres its own content, which is what stops the label hanging low */
 .rail-head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: clamp(1.75rem, 4vw, 3rem) var(--gutter) 1.25rem;
   background: var(--orange);
   border-bottom: 2px solid var(--ink);
 }
 
 .rail-head p {
   margin: 0;
+}
+
+.rail-cell {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: clamp(0.85rem, 1.5vw, 1.35rem) clamp(1rem, 1.8vw, 1.75rem);
+}
+
+.rail-cell + .rail-cell {
+  border-left: 2px solid var(--ink);
+}
+
+.rail-cell-label {
+  padding-left: var(--gutter);
+}
+
+.rail-cell-ruler {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.rail-cell-hint {
+  gap: 0.65rem;
+  padding-right: var(--gutter);
+}
+
+/* the entrance lifts each line out of its own mask. the block padding is room
+   for ascenders and descenders, a mask cut to the line box would shave them */
+.rail-mask {
+  overflow: hidden;
+  padding: 0.18em 0.08em 0.18em 0;
+}
+
+.rail-rise {
+  display: block;
 }
 
 .rail-label {
@@ -28,14 +62,58 @@
   color: var(--cream);
 }
 
-.rail-hint {
+/* the ruler: short ticks on every step and a tall one on every fifth. these two
+   gradients are drawn marks, the only ones in the rails */
+.rail-ruler {
+  position: relative;
+  flex: 1 1 auto;
+  height: 1.5rem;
+  /* the carriage travels a full strip width, so it is clipped here */
+  overflow: hidden;
+}
+
+.rail-ticks {
+  --tick: 0.75rem;
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px calc(var(--tick) * 5)) left bottom / 100% 75% no-repeat,
+    repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px var(--tick)) left bottom / 100% 40% no-repeat;
+  transform-origin: 0 50%;
+}
+
+/* as wide as the strip less one playhead, so 100% of its own width is the far
+   end of the ruler and the script never has to measure anything */
+.rail-carriage {
+  position: absolute;
+  inset: 0 0.5rem 0 0;
+  will-change: transform;
+}
+
+.rail-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.5rem;
+  background: var(--ink);
+  transform-origin: 50% 100%;
+}
+
+.rail-arrow {
   flex: 0 0 auto;
+  width: 1.625rem;
+  height: 0.625rem;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  transform-origin: 0 50%;
 }
 
 .rail-viewport {
   overflow: hidden;
   padding: 1.75rem 0;
-  border-bottom: 1px solid var(--line-soft);
 }
 
 .rail-track {
@@ -125,42 +203,95 @@
   scroll-snap-align: center;
 }
 
-@media (max-width: 700px) {
-  .rail {
-    padding-bottom: 3.5rem;
+/* nothing drives the playhead once the loop is off, so the ruler stays behind
+   as a plain scale */
+@media (prefers-reduced-motion: reduce) {
+  .rail-carriage {
+    display: none;
   }
+}
 
+@media (max-width: 700px) {
   .rail-item {
     width: 10.5rem;
   }
+
+  /* no spare width for a ruler on a phone, so the label takes the slack and
+     the bar stays one compact row */
+  .rail-cell-ruler {
+    display: none;
+  }
+
+  .rail-cell-label {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 }
 
-/* the object rail: cutouts sit straight on the cream ground, so no frame, no
-   fill, and a wider box than the 2:3 poster crop */
+/* under this the label, the count and the hint no longer fit on one line. the
+   count is the one that can go, and the label gives up a couple of pixels on
+   the narrowest phones so the bar stays a single row */
+@media (max-width: 560px) {
+  .rail-cell-count {
+    display: none;
+  }
+
+  .rail-cell-label {
+    padding-right: 0.75rem;
+  }
+
+  .rail-cell-hint {
+    padding-left: 0.75rem;
+  }
+
+  .rail-label {
+    font-size: clamp(1.2rem, 5.6vw, 1.45rem);
+  }
+}
+
+/* the object rail: cutouts sit straight on the cream ground, so no frame and no
+   fill. --rail-u is the side of the square every cutout is given in area, each
+   item then reshapes that square to its own aspect ratio through --span, so a
+   wide object gets a wide cell and nothing is letterboxed down to a sliver */
+.rail-object {
+  --rail-u: clamp(7.25rem, 10.75vw, 11.75rem);
+  --rail-pad: 0.5rem;
+  /* only the lower rail carries the closing rule. this one runs straight into
+     the dark section below */
+  border-bottom: 0;
+}
+
 .rail-object .rail-item {
-  width: clamp(9rem, 13vw, 14rem);
+  width: calc(var(--rail-u) * var(--span) + var(--rail-pad) * 2);
+  /* the narrow cutouts still need a cell their caption fits on one line in */
+  min-width: 9.5rem;
 }
 
+/* every cover is one shared row height, so the captions sit on one line. the
+   overflow is open because the file is larger than the cell, see below, and a
+   soft shadow baked into a png must not be cut off at the cell edge */
 .rail-object .rail-cover {
-  aspect-ratio: 1 / 1;
+  overflow: visible;
+  aspect-ratio: auto;
+  height: calc(var(--rail-u) * var(--rise) + var(--rail-pad) * 2);
   border: 0;
   background: transparent;
-  padding: 0.5rem;
   box-shadow: none;
 }
 
-/* absolute inset rather than a centred grid item, so height: 100% has a real
-   box to resolve against and every object letterboxes inside the same square */
+/* --span sizes the trimmed box, --bleed scales the file up by its transparent
+   padding, and the shift slides the trimmed box onto the centre of the cell.
+   the pointer ignores the image so that padding cannot stretch the hover area */
 .rail-object .rail-cover img {
   position: absolute;
-  inset: 0.5rem;
-  width: auto;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--rail-u) * var(--span) * var(--bleed));
+  max-width: none;
   height: auto;
-  max-width: calc(100% - 1rem);
-  max-height: calc(100% - 1rem);
-  margin: auto;
-  object-fit: contain;
+  transform: translate(var(--shift-x), var(--shift-y));
   filter: drop-shadow(0.3rem 0.3rem 0 var(--ink));
+  pointer-events: none;
 }
 
 /* the flag is a flat field, so a hairline keeps its edge from bleeding into the
@@ -180,20 +311,14 @@
   text-align: center;
 }
 
+/* the poster caption spreads a title and a kind apart. an object has the title
+   alone, which that spread would leave on the left edge of a wide cell */
+.rail-object .rail-caption-inner {
+  justify-content: center;
+}
+
 .rail-object .rail-title {
   font-family: var(--mono);
   font-size: 0.85rem;
   letter-spacing: 0.04em;
-}
-
-/* the two rails sit on different sides of the page rhythm, so only the lower
-   one carries the closing rule and the air under it. the upper one runs
-   straight into the dark section below */
-.rail-object {
-  padding-bottom: 0;
-  border-bottom: 0;
-}
-
-.rail-object .rail-viewport {
-  border-bottom: 0;
 }

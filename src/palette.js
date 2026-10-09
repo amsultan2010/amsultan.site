@@ -1,4 +1,4 @@
-// command palette - owned by workstream ws-2
+// command palette, owned by workstream ws-2
 import gsap from "gsap";
 import "./palette.css";
 
@@ -88,7 +88,7 @@ export function initPalette() {
   trigger.type = "button";
   trigger.className = "palette-trigger mono";
   trigger.setAttribute("aria-label", "open command palette");
-  trigger.innerHTML = `<span aria-hidden="true">${isMac() ? "⌘" : "ctrl"}k</span>`;
+  trigger.innerHTML = `<span aria-hidden="true">${isMac() ? "⌘" : "ctrl "}k</span>`;
   header.appendChild(trigger);
 
   const root = document.createElement("div");

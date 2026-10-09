@@ -33,28 +33,42 @@ const WATCHING = [
     alt: "jojo's bizarre adventure steel ball run poster: riders racing horses down a desert canyon under a blue sky" },
 ];
 
+// trim is the solid part of each cutout inside its own file, as [x, y, w, h] in
+// file pixels. measured once from the alpha channel at alpha above 96, so a soft
+// cast shadow does not count. the rail sizes that box, never the canvas
 const OBJECTS = [
   { title: "the kicks", src: "/images/objects/shoes.png", w: 520, h: 346,
+    trim: [29, 62, 460, 245],
     alt: "a pair of red and white nike air jordan 1 high top sneakers" },
   { title: "where i learn", src: "/images/objects/aisr.png", w: 314, h: 313,
+    trim: [0, 0, 314, 313],
     alt: "the american international school riyadh seal, an open book inside a blue and gold ring" },
   { title: "what i code on", src: "/images/objects/macbook.png", w: 520, h: 520,
+    trim: [61, 139, 398, 242],
     alt: "a midnight blue macbook air open, showing a blue wallpaper" },
   { title: "pokemon of choice", src: "/images/objects/garchomp.png", w: 496, h: 520,
+    trim: [0, 0, 496, 520],
     alt: "garchomp, a navy and red land shark dragon pokemon, mid roar" },
   { title: "what i write on", src: "/images/objects/ipad.png", w: 311, h: 520,
+    trim: [7, 3, 297, 371],
     alt: "a blue ipad air seen from the front and back at an angle" },
   { title: "home", src: "/images/objects/saudi.png", w: 520, h: 346,
+    trim: [0, 0, 520, 346],
     alt: "the flag of saudi arabia, white arabic script and a sword on green" },
   { title: "my sport", src: "/images/objects/tennis.webp", w: 520, h: 520,
+    trim: [40, 36, 437, 431],
     alt: "a bright green felt tennis ball with a white seam" },
   { title: "how i relax", src: "/images/objects/steamdeck.png", w: 520, h: 292,
+    trim: [74, 71, 372, 172],
     alt: "a steam deck handheld console running a game on its screen" },
   { title: "who i support", src: "/images/objects/astonmartin.png", w: 520, h: 520,
+    trim: [30, 102, 462, 316],
     alt: "the aston martin cognizant formula one team wordmark and winged badge" },
   { title: "smash main", src: "/images/objects/incineroar.png", w: 247, h: 241,
+    trim: [22, 2, 213, 233],
     alt: "incineroar, a red and black wrestler cat pokemon, in a fighting stance" },
   { title: "my second brain", src: "/images/objects/claude.png", w: 520, h: 112,
+    trim: [0, 0, 520, 112],
     alt: "the claude wordmark beside its orange asterisk mark" },
 ];
 
@@ -69,10 +83,31 @@ function shuffle(list) {
   return out;
 }
 
+// the widest cutout is held to this many base widths, or the claude wordmark at
+// 4.6 to 1 would take a third of the screen on its own
+const MAX_SPAN = 1.9;
+
+// equal visible area: every cutout covers a square of one base unit, reshaped to
+// its own aspect ratio, so a wide object gets a wide cell instead of a letterbox.
+// its width in base units is then the root of that ratio
+const aspectOf = ({ trim }) => trim[2] / trim[3];
+const spanOf = (item) => Math.min(Math.sqrt(aspectOf(item)), MAX_SPAN);
+
+// the file is drawn larger than its cell by whatever transparent padding it
+// carries, then slid so the middle of the trimmed box lands on the cell centre
+function fitObject(figure, item) {
+  const [x, y, w, h] = item.trim;
+  figure.style.setProperty("--span", spanOf(item).toFixed(3));
+  figure.style.setProperty("--bleed", (item.w / w).toFixed(3));
+  figure.style.setProperty("--shift-x", `${((x + w / 2) / item.w * -100).toFixed(2)}%`);
+  figure.style.setProperty("--shift-y", `${((y + h / 2) / item.h * -100).toFixed(2)}%`);
+}
+
 function buildItem(item, variant, isClone) {
   const figure = document.createElement("figure");
   figure.className = `rail-item rail-item-${variant}`;
   if (isClone) figure.setAttribute("aria-hidden", "true");
+  if (item.trim) fitObject(figure, item);
 
   const cover = document.createElement("div");
   cover.className = "rail-cover";
@@ -111,35 +146,82 @@ function buildItem(item, variant, isClone) {
   return figure;
 }
 
-function buildSection({ items, label, variant }) {
+function el(tag, className, ...children) {
+  const node = document.createElement(tag);
+  node.className = className;
+  node.append(...children);
+  return node;
+}
+
+// a line and the mask it rises out of. the entrance moves the inner span and the
+// outer one clips it, so nothing in the head is faded in on opacity alone
+const masked = (className, ...children) =>
+  el("p", `${className} rail-mask`, el("span", "rail-rise", ...children));
+
+// drawn rather than typed: a text arrow falls back to whatever face has the
+// glyph, and on some phones that face is the emoji one
+function buildArrow() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "rail-arrow");
+  svg.setAttribute("viewBox", "0 0 26 10");
+  svg.setAttribute("aria-hidden", "true");
+
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M1 5h24M5 1 1 5l4 4M21 1l4 4-4 4");
+  svg.append(path);
+
+  return svg;
+}
+
+// four ruled cells that fill the bar: the label, a ruler whose playhead tracks
+// the loop, a count, and the drag hint
+function buildHead(label, count) {
+  // the last word carries the accent, the same split the about statement uses
+  const cut = label.lastIndexOf(" ") + 1;
+  const accent = el("span", "rail-label-accent", label.slice(cut));
+
+  const ruler = el(
+    "div",
+    "rail-cell rail-cell-ruler",
+    el(
+      "span",
+      "rail-ruler",
+      el("span", "rail-ticks"),
+      el("span", "rail-carriage", el("span", "rail-playhead")),
+    ),
+  );
+  // the ruler only repeats what the track is already doing
+  ruler.setAttribute("aria-hidden", "true");
+
+  return el(
+    "div",
+    "rail-head",
+    el("div", "rail-cell rail-cell-label", masked("display rail-label", label.slice(0, cut), accent)),
+    ruler,
+    el("div", "rail-cell rail-cell-count", masked("mono rail-count", count)),
+    el("div", "rail-cell rail-cell-hint", masked("mono rail-hint", "drag"), buildArrow()),
+  );
+}
+
+function buildSection({ items, label, variant, noun }) {
   const section = document.createElement("section");
   section.className = `rail rail-${variant}`;
   section.setAttribute("aria-label", label);
 
-  const head = document.createElement("div");
-  head.className = "rail-head";
-
-  // the last word carries the accent, the same split the about statement uses
-  const cut = label.lastIndexOf(" ") + 1;
-  const accent = document.createElement("span");
-  accent.className = "rail-label-accent";
-  accent.textContent = label.slice(cut);
-
-  const heading = document.createElement("p");
-  heading.className = "display rail-label";
-  heading.append(label.slice(0, cut), accent);
-
-  const hint = document.createElement("p");
-  hint.className = "mono rail-hint";
-  hint.textContent = "drag";
-
-  head.append(heading, hint);
+  const head = buildHead(label, `${items.length} ${noun}`);
 
   const viewport = document.createElement("div");
   viewport.className = "rail-viewport";
 
   const track = document.createElement("div");
   track.className = "rail-track";
+
+  // one row height for the whole object rail, so the captions share a line: the
+  // tallest cutout sets it and the rest centre inside
+  if (variant === "object") {
+    const rise = Math.max(...items.map((item) => spanOf(item) / aspectOf(item)));
+    track.style.setProperty("--rise", rise.toFixed(3));
+  }
 
   // two identical runs, so an xPercent wrap of -50 lands on a matching frame
   items.forEach((item) => track.append(buildItem(item, variant, false)));
@@ -148,13 +230,13 @@ function buildSection({ items, label, variant }) {
   viewport.append(track);
   section.append(head, viewport);
 
-  return { section, viewport, track };
+  return { section, head, viewport, track };
 }
 
 // the auto scroll owns xPercent, the drag owns x. handing the offset between the
 // two on press and release keeps a single wrapped value instead of two that can
 // drift past each other
-function initDrag(track, auto) {
+function initDrag(track, auto, setHead) {
   const runWidth = () => track.offsetWidth / 2;
   let handedOver = false;
 
@@ -175,7 +257,11 @@ function initDrag(track, auto) {
   };
 
   const wrapDrag = function wrapDrag() {
-    gsap.set(track, { x: gsap.utils.wrap(-runWidth(), 0)(this.x) });
+    const run = runWidth();
+    const px = gsap.utils.wrap(-run, 0)(this.x);
+    gsap.set(track, { x: px });
+    // the auto tween is paused under a drag, so the playhead is fed from here
+    setHead(-px / run);
   };
 
   return Draggable.create(track, {
@@ -240,10 +326,28 @@ function initEntrance(section, track, travel) {
   });
 }
 
-function mountRail({ anchor, position, items, label, variant, duration }) {
+// one shot, as the bar itself comes into view: the label rises out of its mask,
+// the ticks run out from the left, then the two mono cells follow
+function initHeadEntrance(head) {
+  const [label, count, hint] = head.querySelectorAll(".rail-rise");
+
+  return gsap
+    .timeline({
+      defaults: { ease: "out" },
+      scrollTrigger: { trigger: head, start: "top 88%", once: true },
+    })
+    .from(label, { yPercent: 125, duration: D.slow }, 0)
+    .from(head.querySelector(".rail-ticks"), { scaleX: 0, duration: D.slow }, 0.1)
+    .from([count, hint], { yPercent: 125, duration: D.base, stagger: 0.08 }, 0.3)
+    .from(head.querySelector(".rail-playhead"), { scaleY: 0, duration: D.fast }, 0.5)
+    .from(head.querySelector(".rail-arrow"), { scaleX: 0, duration: D.base }, 0.5);
+}
+
+function mountRail({ anchor, position, items, label, noun, variant, duration }) {
   if (!anchor) return;
 
-  const { section, viewport, track } = buildSection({ items, label, variant });
+  const { section, head, viewport, track } = buildSection({ items, label, variant, noun });
+  const carriage = head.querySelector(".rail-carriage");
   anchor[position](section);
 
   const mm = gsap.matchMedia();
@@ -272,22 +376,39 @@ function mountRail({ anchor, position, items, label, variant, duration }) {
         return;
       }
 
+      // loop progress, 0 to 1, as a place along the ruler. the carriage is as
+      // wide as the strip, so a percentage of itself needs no measuring
+      const setX = gsap.quickSetter(carriage, "xPercent");
+      const setHead = (progress) => setX(progress * 100);
+
       const auto = gsap.to(track, {
         xPercent: -50,
         duration,
         ease: "none",
         repeat: -1,
         modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
+        onUpdate() {
+          setHead(this.progress());
+        },
       });
 
-      const drag = initDrag(track, auto);
+      const drag = initDrag(track, auto, setHead);
       if (fine) {
         initHover(track);
       } else {
         // no hover on touch, so the captions just stay on screen
         gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
       }
+      initHeadEntrance(head);
       initEntrance(section, track, fine ? 40 : 24);
+
+      // the drag hint leans a few pixels either way, slowly, so the bar is never
+      // completely still while the rail is on screen
+      const sway = gsap.fromTo(
+        head.querySelector(".rail-arrow"),
+        { x: -3 },
+        { x: 3, duration: 1.6, ease: "inOut", repeat: -1, yoyo: true },
+      );
 
       // an off screen rail still costs a transform write every frame, so park it
       // until it is actually in view
@@ -296,12 +417,17 @@ function mountRail({ anchor, position, items, label, variant, duration }) {
         start: "top bottom",
         end: "bottom top",
         onToggle: (self) => {
+          // the hint is no part of the drag handover, so it parks either way
+          sway.paused(!self.isActive);
           if (drag.isPressed || drag.isThrowing) return;
           if (self.isActive) auto.play();
           else auto.pause();
         },
       });
-      if (!inView.isActive) auto.pause();
+      if (!inView.isActive) {
+        auto.pause();
+        sway.pause();
+      }
 
       // a subtle speed bias: fast scrolling pushes the rail along, then it eases
       // back to its own pace rather than staying stuck at the boosted speed
@@ -329,8 +455,10 @@ function mountRail({ anchor, position, items, label, variant, duration }) {
         nudge.kill();
         inView.kill();
         drag.kill();
+        sway.kill();
         auto.kill();
         gsap.set(track, { x: 0, xPercent: 0, clearProps: "cursor" });
+        gsap.set(carriage, { clearProps: "transform" });
       };
     },
   );
@@ -349,10 +477,11 @@ export function initRail() {
       position: "after",
       items: shuffle(OBJECTS),
       label: "my personal stack",
+      noun: "objects",
       variant: "object",
       // one run of the track per duration, so a longer run needs more seconds
       // just to hold its pace
-      duration: 48,
+      duration: 52,
     }),
   );
 
@@ -362,6 +491,7 @@ export function initRail() {
       position: "after",
       items: shuffle(WATCHING),
       label: "current watchlist",
+      noun: "titles",
       variant: "poster",
       duration: 43,
     }),
