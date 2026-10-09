@@ -577,7 +577,7 @@ function initHeroMotion() {
   // the jank further down the page
   const hero = $(".hero");
   if (hero) {
-    const ambient = [drift, topo, ...layers, ...shapes].filter(Boolean);
+    const ambient = [drift, topo, $(".hero-orbit"), ...layers, ...shapes].filter(Boolean);
     ScrollTrigger.create({
       trigger: hero,
       start: "top bottom",
