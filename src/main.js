@@ -1185,16 +1185,6 @@ function initMotion() {
     },
   });
 
-  // ambient: the status dot keeps breathing long after every entrance is done
-  gsap.to(".status-dot, .hero-rail-live i, .stack-pulse", {
-    scale: 1.5,
-    opacity: 0.45,
-    duration: 1.4,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut",
-  });
-
   document.fonts.ready.then(() => {
     ScrollTrigger.refresh();
     lenis?.resize();
