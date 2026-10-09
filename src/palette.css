@@ -26,6 +26,17 @@
   background: var(--ink);
 }
 
+/* the header pill is cream, so the site's cream ring would vanish on it */
+.palette-trigger:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: -3px;
+}
+
+.palette-trigger:active {
+  color: var(--ink);
+  background: var(--orange);
+}
+
 .palette-root {
   position: fixed;
   z-index: 400;
@@ -92,8 +103,16 @@
   outline: none;
 }
 
+/* the ring the input gave up is drawn on the whole field instead, inset
+   because the panel clips its overflow */
+.palette-field:focus-within {
+  outline: 3px solid var(--orange);
+  outline-offset: -3px;
+}
+
 .palette-input::placeholder {
   color: var(--ink-soft);
+  text-transform: lowercase;
 }
 
 .palette-list {
@@ -149,8 +168,20 @@
   color: var(--cream);
 }
 
+/* sits after the selected state so a press shows on the row under the pointer */
+.palette-row:active {
+  color: var(--ink);
+  background: var(--orange);
+}
+
+.palette-row:active .palette-row-glyph,
+.palette-row:active .palette-row-chord {
+  color: var(--ink);
+}
+
+/* orange reads on both the cream rows and the selected ink one */
 .palette-row:focus-visible {
-  outline: 3px solid var(--cream);
+  outline: 3px solid var(--orange);
   outline-offset: -3px;
 }
 
@@ -177,6 +208,7 @@
   color: var(--ink);
   font-family: var(--mono);
   font-size: 0.72rem;
+  text-transform: lowercase;
 }
 
 @media (max-width: 960px) {

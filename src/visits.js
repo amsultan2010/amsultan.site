@@ -1,4 +1,4 @@
-// lifetime visit counter - owned by workstream ws-2
+// lifetime visit counter, owned by workstream ws-2
 import gsap from "gsap";
 import "./visits.css";
 
@@ -27,15 +27,16 @@ export function initVisits() {
   element.setAttribute("aria-live", "polite");
   element.innerHTML = '<span>lifetime visits:</span> <span class="visit-counter-value"></span>';
   const value = element.querySelector(".visit-counter-value");
-  header.insertBefore(element, header.querySelector(".header-cta"));
 
   const format = (n) => n.toLocaleString("en-US");
 
   fetch(`/api/visits${shouldBump() ? "?bump=1" : ""}`, { headers: { accept: "application/json" } })
     .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
     .then((data) => {
-      // a made up number is worse than no number, so an unconfigured store removes the label
+      // a made up number is worse than no number, and a label that mounts then
+      // vanishes is worse than none, so it only joins the header once a real count lands
       if (data.unconfigured || !Number.isFinite(data.count)) throw new Error("no count");
+      header.insertBefore(element, header.querySelector(".header-cta"));
 
       if (reducedMotion()) {
         value.textContent = format(data.count);
