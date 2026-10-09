@@ -67,27 +67,6 @@ function splitCharacters(element) {
   return $$(".split-char", element);
 }
 
-function splitWords(element) {
-  if (!element || element.dataset.wordsReady) return $$(".reveal-word", element);
-
-  const label = element.textContent.trim().replace(/\s+/g, " ");
-  element.dataset.wordsReady = "true";
-  element.setAttribute("aria-label", label);
-  element.textContent = "";
-
-  label.split(" ").forEach((word, index, words) => {
-    const span = document.createElement("span");
-    span.className = "reveal-word";
-    span.setAttribute("aria-hidden", "true");
-    span.style.display = "inline-block";
-    span.textContent = word;
-    element.append(span);
-    if (index < words.length - 1) element.append(" ");
-  });
-
-  return $$(".reveal-word", element);
-}
-
 function initClock() {
   const clock = $("[data-clock]");
   if (!clock) return;
@@ -786,22 +765,6 @@ function initMotion() {
         { yPercent: 18, opacity: 0.35, immediateRender: false },
         0,
       );
-  });
-
-  $$("[data-reveal-lines]").forEach((element) => {
-    const words = splitWords(element);
-    gsap.from(words, {
-      yPercent: 100,
-      autoAlpha: 0,
-      duration: 0.75,
-      stagger: 0.05,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: element,
-        start: "top 85%",
-        toggleActions: "play none none none",
-      },
-    });
   });
 
   // scrubbed drifts differ by width, and the wide ones do not exist on a phone
