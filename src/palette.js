@@ -1,5 +1,6 @@
 // command palette, owned by workstream ws-2
 import gsap from "gsap";
+import { lockScroll } from "./scroll.js";
 import "./palette.css";
 
 const D = { fast: 0.35, base: 0.7, slow: 1.1, epic: 1.6 };
@@ -111,7 +112,7 @@ export function initPalette() {
           spellcheck="false"
         />
       </div>
-      <div class="palette-list" id="palette-list" role="listbox" aria-label="commands"></div>
+      <div class="palette-list" id="palette-list" role="listbox" aria-label="commands" data-lenis-prevent></div>
       <div class="palette-foot mono">
         <span>use ↑ ↓ to navigate, enter to run</span>
         <kbd>esc</kbd>
@@ -189,15 +190,6 @@ export function initPalette() {
     command.run();
   }
 
-  function lockScroll(locked) {
-    if (window.__lenis?.stop) {
-      if (locked) window.__lenis.stop();
-      else window.__lenis.start?.();
-      return;
-    }
-    document.body.style.overflow = locked ? "hidden" : "";
-  }
-
   function show() {
     if (open) return;
     open = true;
@@ -205,7 +197,7 @@ export function initPalette() {
     document.body.appendChild(root);
     input.value = "";
     render();
-    lockScroll(true);
+    lockScroll("palette", true);
     trigger.setAttribute("aria-expanded", "true");
     input.focus();
 
@@ -235,7 +227,7 @@ export function initPalette() {
   function close() {
     if (!open) return;
     open = false;
-    lockScroll(false);
+    lockScroll("palette", false);
     trigger.setAttribute("aria-expanded", "false");
     if (restoreFocus?.focus) restoreFocus.focus();
     restoreFocus = null;

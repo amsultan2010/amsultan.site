@@ -53,11 +53,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-body.is-loading,
-body.menu-open {
-  overflow: hidden;
-}
-
 ::selection {
   color: var(--cream);
   background: var(--ink);
@@ -1897,6 +1892,7 @@ button:focus-visible {
   width: 0.55rem;
   height: 0.55rem;
   background: var(--orange);
+  animation: live-pulse 1.4s ease-in-out infinite;
 }
 
 .stack-list {

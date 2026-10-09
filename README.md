@@ -11,7 +11,7 @@ Live: [www.amsultan.site](https://www.amsultan.site)
 ## Layout
 
 - `index.html`, `404.html`: the two pages Vite builds
-- `src/`: styles and scripts (`main.js` for page motion, `palette` for the command palette, `rail` for the draggable rails, `visits` for the visit counter)
+- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `palette` for the command palette, `rail` for the draggable rails, `visits` for the visit counter)
 - `api/visits.js`: the Vercel function behind the visit counter
 - `public/`: images, icons, the resume, and crawler files, served as they are
 

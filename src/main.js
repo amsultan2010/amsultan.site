@@ -4,9 +4,8 @@ import { SplitText } from "gsap/SplitText";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { CustomEase } from "gsap/CustomEase";
-import Lenis from "lenis";
 import { inject } from "@vercel/analytics";
-import "lenis/dist/lenis.css";
+import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
 import { initPalette } from "./palette.js";
 import { initRail } from "./rail.js";
@@ -29,36 +28,6 @@ const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
 
 const finePointer = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-let lenis;
-
-function initSmoothScroll() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion) return null;
-
-  // touch devices keep their own momentum scrolling. lenis re-implements it in
-  // javascript, which on a phone is slower than the thing it replaces
-  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return null;
-
-  lenis = new Lenis({
-    autoRaf: false,
-    duration: 1.15,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-    touchMultiplier: 1.2,
-  });
-
-  lenis.on("scroll", ScrollTrigger.update);
-
-  const tick = (time) => {
-    lenis.raf(time * 1000);
-  };
-
-  gsap.ticker.add(tick);
-  gsap.ticker.lagSmoothing(0);
-
-  return lenis;
-}
 
 function scrollToTarget(target) {
   if (!target) return;
@@ -96,27 +65,6 @@ function splitCharacters(element) {
   });
 
   return $$(".split-char", element);
-}
-
-function splitWords(element) {
-  if (!element || element.dataset.wordsReady) return $$(".reveal-word", element);
-
-  const label = element.textContent.trim().replace(/\s+/g, " ");
-  element.dataset.wordsReady = "true";
-  element.setAttribute("aria-label", label);
-  element.textContent = "";
-
-  label.split(" ").forEach((word, index, words) => {
-    const span = document.createElement("span");
-    span.className = "reveal-word";
-    span.setAttribute("aria-hidden", "true");
-    span.style.display = "inline-block";
-    span.textContent = word;
-    element.append(span);
-    if (index < words.length - 1) element.append(" ");
-  });
-
-  return $$(".reveal-word", element);
 }
 
 function initClock() {
@@ -454,7 +402,7 @@ function initNavigation() {
     toggle.classList.toggle("is-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
-    document.body.classList.toggle("menu-open", open && mq.matches);
+    lockScroll("menu", open && mq.matches);
   };
 
   toggle?.addEventListener("click", (event) => {
@@ -518,7 +466,7 @@ function initLoader(onDone) {
     return;
   }
 
-  document.body.classList.add("is-loading");
+  lockScroll("loader", true);
   const state = { value: 0 };
 
   gsap.to(state, {
@@ -537,7 +485,7 @@ function initLoader(onDone) {
         ease: "power4.inOut",
         onComplete: () => {
           loader.remove();
-          document.body.classList.remove("is-loading");
+          lockScroll("loader", false);
           onDone();
         },
       });
@@ -629,7 +577,7 @@ function initHeroMotion() {
   // the jank further down the page
   const hero = $(".hero");
   if (hero) {
-    const ambient = [drift, topo, ...layers, ...shapes].filter(Boolean);
+    const ambient = [drift, topo, $(".hero-orbit"), ...layers, ...shapes].filter(Boolean);
     ScrollTrigger.create({
       trigger: hero,
       start: "top bottom",
@@ -817,22 +765,6 @@ function initMotion() {
         { yPercent: 18, opacity: 0.35, immediateRender: false },
         0,
       );
-  });
-
-  $$("[data-reveal-lines]").forEach((element) => {
-    const words = splitWords(element);
-    gsap.from(words, {
-      yPercent: 100,
-      autoAlpha: 0,
-      duration: 0.75,
-      stagger: 0.05,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: element,
-        start: "top 85%",
-        toggleActions: "play none none none",
-      },
-    });
   });
 
   // scrubbed drifts differ by width, and the wide ones do not exist on a phone
@@ -1251,16 +1183,6 @@ function initMotion() {
       end: "bottom top",
       scrub: 1,
     },
-  });
-
-  // ambient: the status dot keeps breathing long after every entrance is done
-  gsap.to(".status-dot, .hero-rail-live i, .stack-pulse", {
-    scale: 1.5,
-    opacity: 0.45,
-    duration: 1.4,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut",
   });
 
   document.fonts.ready.then(() => {
