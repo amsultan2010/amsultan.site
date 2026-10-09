@@ -5,7 +5,7 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import { ScrambleTextPlugin } from "gsap/ScrambleTextPlugin";
 import { CustomEase } from "gsap/CustomEase";
 import { inject } from "@vercel/analytics";
-import { initSmoothScroll, lenis } from "./scroll.js";
+import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
 import { initPalette } from "./palette.js";
 import { initRail } from "./rail.js";
@@ -423,7 +423,7 @@ function initNavigation() {
     toggle.classList.toggle("is-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
-    document.body.classList.toggle("menu-open", open && mq.matches);
+    lockScroll("menu", open && mq.matches);
   };
 
   toggle?.addEventListener("click", (event) => {
@@ -487,7 +487,7 @@ function initLoader(onDone) {
     return;
   }
 
-  document.body.classList.add("is-loading");
+  lockScroll("loader", true);
   const state = { value: 0 };
 
   gsap.to(state, {
@@ -506,7 +506,7 @@ function initLoader(onDone) {
         ease: "power4.inOut",
         onComplete: () => {
           loader.remove();
-          document.body.classList.remove("is-loading");
+          lockScroll("loader", false);
           onDone();
         },
       });

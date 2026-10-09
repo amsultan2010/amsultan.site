@@ -34,14 +34,21 @@ export function initSmoothScroll() {
   return lenis;
 }
 
+const locks = new Set();
+
 // lenis scrolls from script, which a hidden overflow on body does nothing to
 // stop, so with lenis running the only way to hold the page is to stop it.
-// without it the overflow is enough
-export function lockScroll(locked) {
+// without it the overflow is enough. the palette, the loader and the menu each
+// hold under their own name, so one closing cannot let go for another
+export function lockScroll(owner, locked) {
+  if (locked) locks.add(owner);
+  else locks.delete(owner);
+
+  const held = locks.size > 0;
   if (lenis) {
-    if (locked) lenis.stop();
+    if (held) lenis.stop();
     else lenis.start();
     return;
   }
-  document.body.style.overflow = locked ? "hidden" : "";
+  document.body.style.overflow = held ? "hidden" : "";
 }

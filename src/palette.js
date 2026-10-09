@@ -197,7 +197,7 @@ export function initPalette() {
     document.body.appendChild(root);
     input.value = "";
     render();
-    lockScroll(true);
+    lockScroll("palette", true);
     trigger.setAttribute("aria-expanded", "true");
     input.focus();
 
@@ -227,7 +227,7 @@ export function initPalette() {
   function close() {
     if (!open) return;
     open = false;
-    lockScroll(false);
+    lockScroll("palette", false);
     trigger.setAttribute("aria-expanded", "false");
     if (restoreFocus?.focus) restoreFocus.focus();
     restoreFocus = null;
