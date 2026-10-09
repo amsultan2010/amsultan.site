@@ -1,5 +1,6 @@
 // command palette, owned by workstream ws-2
 import gsap from "gsap";
+import { lockScroll } from "./scroll.js";
 import "./palette.css";
 
 const D = { fast: 0.35, base: 0.7, slow: 1.1, epic: 1.6 };
@@ -187,15 +188,6 @@ export function initPalette() {
   function run(command) {
     close();
     command.run();
-  }
-
-  function lockScroll(locked) {
-    if (window.__lenis?.stop) {
-      if (locked) window.__lenis.stop();
-      else window.__lenis.start?.();
-      return;
-    }
-    document.body.style.overflow = locked ? "hidden" : "";
   }
 
   function show() {
