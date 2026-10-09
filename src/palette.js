@@ -112,7 +112,7 @@ export function initPalette() {
           spellcheck="false"
         />
       </div>
-      <div class="palette-list" id="palette-list" role="listbox" aria-label="commands"></div>
+      <div class="palette-list" id="palette-list" role="listbox" aria-label="commands" data-lenis-prevent></div>
       <div class="palette-foot mono">
         <span>use ↑ ↓ to navigate, enter to run</span>
         <kbd>esc</kbd>
