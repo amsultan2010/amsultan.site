@@ -83,47 +83,62 @@ export function createNetwork(canvas, { ground, ahead }) {
     draw();
   }
 
-  function fire(node, relay = true) {
+  // `reach` is how many more layers the signal may cross from here
+  function fire(node, reach = Infinity) {
     node.a = 1;
     const next = LAYERS[node.layer + 1];
-    if (!next || !relay) return;
+    if (!next || reach < 1) return;
     for (let i = 0; i < FAN[node.layer]; i++) {
       // the last hidden layer leans on one output, so a pass ends in an answer
       const lean = node.layer === LAYERS.length - 2 && Math.random() < 0.6;
       const to = lean ? winner : gsap.utils.random(0, next - 1, 1);
-      pulses.push({ edge: edges[node.out + to], t: 0, speed: 1 / gsap.utils.random(0.3, 0.5) });
+      pulses.push({
+        edge: edges[node.out + to],
+        t: 0,
+        speed: 1 / gsap.utils.random(0.3, 0.5),
+        reach: reach - 1,
+      });
     }
   }
 
   function step(dt) {
     // the front fires each neuron as it passes over it. in the loader those
-    // signals run on ahead of the bar. with nothing drawn ahead of the front
-    // they would only land as a tangle, so there the neuron just flashes
+    // signals run one layer ahead of the bar, which fires that layer itself
+    // when it gets there. with nothing drawn ahead of the front they would
+    // only land as a tangle, so there the neuron just flashes
     const front = net.front * width;
     if (front > lastFront) {
       nodes.forEach((node) => {
-        if (node.cross > lastFront && node.cross <= front) fire(node, Boolean(ahead));
+        if (node.cross > lastFront && node.cross <= front) fire(node, ahead ? 1 : 0);
       });
     }
     lastFront = front;
 
     nextPass -= dt;
     if (nextPass <= 0) {
-      nextPass = gsap.utils.random(0.7, 1.3);
+      // about as long as a pass takes to cross, so each one reads left to right
+      nextPass = gsap.utils.random(1.1, 1.7);
       winner = gsap.utils.random(0, LAYERS[LAYERS.length - 1] - 1, 1);
-      gsap.utils.shuffle(nodes.slice(0, LAYERS[0])).slice(0, 3).forEach(fire);
+      gsap.utils
+        .shuffle(nodes.slice(0, LAYERS[0]))
+        .slice(0, 3)
+        .forEach((node) => fire(node));
     }
 
     nodes.forEach((node) => (node.a = Math.max(0, node.a - dt * 1.7)));
     edges.forEach((edge) => (edge.heat = Math.max(0, edge.heat - dt * 2.4)));
 
+    // a signal that lands fires the neuron it reached, which sends its own.
+    // those are added after the filter, or they would be lost with the old list
+    const landed = [];
     pulses = pulses.filter((pulse) => {
       pulse.t += dt * pulse.speed;
       pulse.edge.heat = 1;
       if (pulse.t < 1) return true;
-      fire(nodes[pulse.edge.to]);
+      landed.push(pulse);
       return false;
     });
+    landed.forEach((pulse) => fire(nodes[pulse.edge.to], pulse.reach));
   }
 
   function paint(p, from, to) {
