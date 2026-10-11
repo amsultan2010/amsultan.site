@@ -905,6 +905,13 @@ button:focus-visible {
   color: var(--orange);
 }
 
+/* the same cream outline the middle line wears, so the orange holds its edge
+   against the network behind it */
+.about-line-accent .about-line-text {
+  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--cream);
+  paint-order: stroke fill;
+}
+
 .about-line-tag {
   margin-top: 0.42em;
   padding: 0.4em 0.6em;
