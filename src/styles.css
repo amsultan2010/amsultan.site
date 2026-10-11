@@ -848,6 +848,9 @@ button:focus-visible {
 /* the statement is the section's heading: three lines stepping across the band
    from one gutter to the other, sized off the viewport so the longest fits */
 .about-statement {
+  /* its own stacking context, so the network can sit between the ink and the type */
+  position: relative;
+  isolation: isolate;
   display: grid;
   gap: 0.1em;
   margin: 0;
@@ -900,6 +903,13 @@ button:focus-visible {
 
 .about-line-accent {
   color: var(--orange);
+}
+
+/* the same cream outline the middle line wears, so the orange holds its edge
+   against the network behind it */
+.about-line-accent .about-line-text {
+  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--cream);
+  paint-order: stroke fill;
 }
 
 .about-line-tag {

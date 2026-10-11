@@ -22,6 +22,8 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 - `src/palette.js` (cmd/ctrl+k palette) and `src/visits.js` (visit counter) inject themselves into
   `.site-header`. The palette reads its links off `.contact-card` and `.about-actions a`.
 - `src/styles.css` tokens in `:root`, then one block per section. Each module imports its own css.
+- `src/network.js` `createNetwork(canvas, { ground, ahead })`, the 8-12-12-8 neural network drawn
+  on a canvas in `.loader` and behind `.about-statement`. `network.css` places each canvas.
 - `api/visits.js` the Vercel function behind the counter, stored in Vercel KV.
 - `public/` served as is. `robots.txt`, `sitemap.xml` and `llms.txt` are maintained by hand.
 
