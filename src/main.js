@@ -10,6 +10,7 @@ import "./styles.css";
 import { initPalette } from "./palette.js";
 import { initRail } from "./rail.js";
 import { initVisits } from "./visits.js";
+import { createNetwork } from "./network.js";
 
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
 
@@ -468,15 +469,19 @@ function initLoader(onDone) {
 
   lockScroll("loader", true);
   const state = { value: 0 };
+  // the edge of the bar is the network's forward pass: it fires each layer as
+  // it crosses, and what it has passed turns from the ink palette to the orange
+  const net = createNetwork($(".loader-net"), { split: true });
 
   gsap.to(state, {
     value: 100,
-    duration: 0.8,
+    duration: 1.2,
     ease: "power2.inOut",
     onUpdate: () => {
       const n = Math.round(state.value);
       if (bar) bar.style.width = `${n}%`;
       if (pct) pct.textContent = String(n);
+      net.front = n / 100;
     },
     onComplete: () => {
       gsap.to(loader, {
@@ -484,6 +489,7 @@ function initLoader(onDone) {
         duration: 0.65,
         ease: "power4.inOut",
         onComplete: () => {
+          net.kill();
           loader.remove();
           lockScroll("loader", false);
           onDone();
