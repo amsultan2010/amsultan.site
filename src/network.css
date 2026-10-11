@@ -1,0 +1,9 @@
+/* each canvas fills its parent: the loader, and the hero's background. the
+   script sizes the bitmap and places the network inside it */
+.loader-net,
+.hero-net {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
