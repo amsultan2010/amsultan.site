@@ -848,6 +848,9 @@ button:focus-visible {
 /* the statement is the section's heading: three lines stepping across the band
    from one gutter to the other, sized off the viewport so the longest fits */
 .about-statement {
+  /* its own stacking context, so the network can sit between the ink and the type */
+  position: relative;
+  isolation: isolate;
   display: grid;
   gap: 0.1em;
   margin: 0;

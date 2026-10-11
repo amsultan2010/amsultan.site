@@ -618,6 +618,7 @@ function initHeroMotion() {
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
+  const aboutNet = createNetwork($(".about-net"), { ground: "ink" });
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -784,6 +785,10 @@ function initMotion() {
       defaults: { ease: E.out },
       scrollTrigger: { trigger: ".about-statement", start: "top 82%", once: true },
     });
+
+    // behind them the network wires itself up input to output, the pass the
+    // loader ran, and then keeps thinking
+    statement.to(aboutNet, { front: 1, duration: D.epic, ease: E.inOut }, 0);
 
     statementLines.forEach((line, index) => {
       const at = index * 0.16;
