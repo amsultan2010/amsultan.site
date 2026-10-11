@@ -1,5 +1,6 @@
-// the network behind the loader and the hero: four layers of neurons on a
-// canvas, signals running input to output. one canvas each, same drawing
+// the network in the loader and behind the about statement: four layers of
+// neurons on a canvas, signals running input to output. one canvas each, same
+// drawing. the css gives each canvas its place, the network fills it
 import gsap from "gsap";
 import "./network.css";
 
@@ -17,16 +18,17 @@ function palettes() {
   );
   return {
     // on the orange ground: ink wiring, a neuron flashes cream and then ink
-    lit: { ground: orange, line: ink, hot: ink, head: cream, flash: cream, after: ink, ring: 0.8 },
-    // on the ink the loader bar has not reached: cream wiring, orange, then cream
-    dark: { ground: ink, line: cream, hot: orange, head: cream, flash: orange, after: cream, ring: 0.5 },
+    orange: { ground: orange, line: ink, hot: ink, heat: 0.6, head: cream, flash: cream, after: ink, ring: 0.8 },
+    // on the ink ground: cream wiring, a neuron flashes orange and then cream
+    ink: { ground: ink, line: cream, hot: orange, heat: 0.9, head: cream, flash: orange, after: cream, ring: 0.5 },
   };
 }
 
-// `split` paints the part right of the front in the dark palette, for the
-// loader, where the front is the edge of the bar. without it that part is
-// simply not drawn yet. tween `front` from 0 to 1 to wire the network up
-export function createNetwork(canvas, { split = false } = {}) {
+// `ground` is the colour it is drawn on. tween `front` from 0 to 1 to wire it
+// up left to right. `ahead` is the ground the front has not reached yet, for
+// the loader, where the front is the edge of the bar and both sides are drawn.
+// without it the part ahead of the front is simply not there yet
+export function createNetwork(canvas, { ground, ahead }) {
   const ctx = canvas.getContext("2d");
   const still = reducedMotion();
   const pal = palettes();
@@ -48,6 +50,7 @@ export function createNetwork(canvas, { split = false } = {}) {
   let width = 0;
   let height = 0;
   let radius = 0;
+  let wiring = 0;
   let lastFront = 0;
   let nextPass = 0;
   let winner = 0;
@@ -60,10 +63,13 @@ export function createNetwork(canvas, { split = false } = {}) {
     canvas.height = height * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+    // the full height of the canvas, less the room a lifted neuron needs
     const boxW = Math.min(width * 0.84, 1180);
-    const boxH = Math.min(height * 0.52, 560);
+    const boxH = Math.min(height - 28, 560);
     const gap = boxH / (Math.max(...LAYERS) - 1);
-    radius = gsap.utils.clamp(3, 7, gap * 0.17);
+    radius = gsap.utils.clamp(2.5, 7, gap * 0.19);
+    // packed into a short band the same wiring reads as a grey slab, so it dims
+    wiring = 0.16 * gsap.utils.clamp(0.5, 1, gap / 24);
 
     nodes.forEach((node) => {
       node.x = (width - boxW) / 2 + (boxW * node.layer) / (LAYERS.length - 1);
@@ -77,10 +83,10 @@ export function createNetwork(canvas, { split = false } = {}) {
     draw();
   }
 
-  function fire(node) {
+  function fire(node, relay = true) {
     node.a = 1;
     const next = LAYERS[node.layer + 1];
-    if (!next) return;
+    if (!next || !relay) return;
     for (let i = 0; i < FAN[node.layer]; i++) {
       // the last hidden layer leans on one output, so a pass ends in an answer
       const lean = node.layer === LAYERS.length - 2 && Math.random() < 0.6;
@@ -90,11 +96,13 @@ export function createNetwork(canvas, { split = false } = {}) {
   }
 
   function step(dt) {
-    // the front fires each neuron as it passes over it
+    // the front fires each neuron as it passes over it. in the loader those
+    // signals run on ahead of the bar. with nothing drawn ahead of the front
+    // they would only land as a tangle, so there the neuron just flashes
     const front = net.front * width;
     if (front > lastFront) {
       nodes.forEach((node) => {
-        if (node.cross > lastFront && node.cross <= front) fire(node);
+        if (node.cross > lastFront && node.cross <= front) fire(node, Boolean(ahead));
       });
     }
     lastFront = front;
@@ -120,6 +128,8 @@ export function createNetwork(canvas, { split = false } = {}) {
 
   function paint(p, from, to) {
     if (to <= from) return;
+    // a phone draws the same network a third of the size, so its strokes thin
+    const thin = radius < 5;
     ctx.save();
     ctx.beginPath();
     ctx.rect(from, 0, to - from, height);
@@ -128,7 +138,7 @@ export function createNetwork(canvas, { split = false } = {}) {
     // every connection, faint
     ctx.strokeStyle = p.line;
     ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.16;
+    ctx.globalAlpha = wiring;
     ctx.beginPath();
     edges.forEach(({ from: a, to: b }) => {
       ctx.moveTo(nodes[a].x, nodes[a].y);
@@ -138,10 +148,10 @@ export function createNetwork(canvas, { split = false } = {}) {
 
     // the ones a signal is on, or has just left
     ctx.strokeStyle = p.hot;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = thin ? 1 : 1.5;
     edges.forEach(({ from: a, to: b, heat }) => {
       if (heat < 0.02) return;
-      ctx.globalAlpha = heat * 0.9;
+      ctx.globalAlpha = heat * p.heat;
       ctx.beginPath();
       ctx.moveTo(nodes[a].x, nodes[a].y);
       ctx.lineTo(nodes[b].x, nodes[b].y);
@@ -151,7 +161,7 @@ export function createNetwork(canvas, { split = false } = {}) {
     // the signal itself: a short hard dash, no glow
     ctx.globalAlpha = 1;
     ctx.strokeStyle = p.head;
-    ctx.lineWidth = 3;
+    ctx.lineWidth = thin ? 2 : 3;
     ctx.beginPath();
     pulses.forEach(({ edge, t }) => {
       const a = nodes[edge.from];
@@ -164,7 +174,7 @@ export function createNetwork(canvas, { split = false } = {}) {
 
     // a firing neuron lifts off a hard shadow, the way everything on the page
     // does on hover, then sinks back onto it
-    const ringWidth = radius > 5 ? 2 : 1.5;
+    const ringWidth = thin ? 1.5 : 2;
     nodes.forEach(({ x, y, a }) => {
       const lift = a * radius * 0.7;
       if (a > 0) {
@@ -191,8 +201,8 @@ export function createNetwork(canvas, { split = false } = {}) {
   function draw() {
     const front = net.front * width;
     ctx.clearRect(0, 0, width, height);
-    if (split) paint(pal.dark, front, width);
-    paint(pal.lit, 0, front);
+    if (ahead) paint(pal[ahead], front, width);
+    paint(pal[ground], 0, front);
   }
 
   const tick = (time, delta) => {

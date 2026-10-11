@@ -471,7 +471,7 @@ function initLoader(onDone) {
   const state = { value: 0 };
   // the edge of the bar is the network's forward pass: it fires each layer as
   // it crosses, and what it has passed turns from the ink palette to the orange
-  const net = createNetwork($(".loader-net"), { split: true });
+  const net = createNetwork($(".loader-net"), { ground: "orange", ahead: "ink" });
 
   gsap.to(state, {
     value: 100,
