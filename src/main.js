@@ -445,6 +445,14 @@ function initNavigation() {
   });
 }
 
+// the network behind the about statement. made on its own, ahead of the loader,
+// so reduced motion still gets it, drawn at rest. initMotion wires it up
+let aboutNet;
+
+function initAboutNetwork() {
+  aboutNet = createNetwork($(".about-net"), { ground: "ink" });
+}
+
 function initLoader(onDone) {
   const loader = $(".loader");
   const bar = $(".loader-bar");
@@ -618,7 +626,6 @@ function initHeroMotion() {
 function initMotion() {
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
-  const aboutNet = createNetwork($(".about-net"), { ground: "ink" });
 
   if (reduceMotion) {
     gsap.set(".scroll-progress", { scaleX: 1 });
@@ -1224,6 +1231,7 @@ initActionFill();
 initNavScramble();
 initNavigation();
 initCounters();
+initAboutNetwork();
 initLoader(() => {
   initMotion();
   requestAnimationFrame(() => ScrollTrigger.refresh());
