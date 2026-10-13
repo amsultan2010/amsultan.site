@@ -22,8 +22,7 @@ Canonical site: https://www.amsultan.site/
   Claude Code, Codex, Cursor, and any MCP client. Requires Node 24.
 - [the downforce blog](https://www.downforceblog.com): Writer, since 2025.
   Formula 1 race reports and opinion pieces written from Riyadh. 28 posts
-  across race reports, editorials, and guides; 400+ impressions within the
-  first month.
+  across race reports, editorials, and guides; 42,000+ views.
 
 ## Lead
 
