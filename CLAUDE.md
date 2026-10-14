@@ -64,8 +64,10 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. Env
 - JS breakpoints mirror CSS ones: 900px hero pin, 960px menu, 820px and 700px scroll drifts.
 - Facts are repeated by hand. A changed number means the body copy, its `data-count`, the meta and
   social descriptions, the JSON-LD, `public/llms.txt` and `lastmod` in `public/sitemap.xml`.
-- Colour values are copied into `404.html`, `public/resume.html` and `theme-color`. The resume is a
-  Google Doc whose URL is hard-coded in those two files, `index.html`, `vercel.json` and `llms.txt`.
+- Colour values are copied into `404.html` and `theme-color`.
+- The resume is `public/resume.pdf`, served only at `/resume` by a rewrite in `vercel.json`, which
+  also redirects `/resume.pdf` and `/resume.html` there. Vite skips `vercel.json`, so locally
+  `/resume` is not the PDF. To update it, replace the file.
 - Images are absolute `/images/...` strings, so Vite never checks them. A `data-tag="x"` chip needs
   `public/images/tags/x.jpg`, and a new rail object needs a measured `trim` box.
 - Stale, safe to ignore: `.vscode/`, `.env.example`, the root `images/` folder, `dev/` (not in the
