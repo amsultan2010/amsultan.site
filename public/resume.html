@@ -4,11 +4,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, follow" />
-    <!-- the resume lives in google docs so it is maintained in one place.
-         vercel.json sends a 308 for this path in production; the refresh below
-         is the fallback for a local preview or a direct file open. -->
-    <meta http-equiv="refresh" content="0; url=https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true" />
-    <link rel="canonical" href="https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true" />
+    <!-- vercel.json sends a 308 to /resume for this path in production, which
+         serves resume.pdf; the refresh below is the fallback for a local
+         preview or a direct file open. -->
+    <meta http-equiv="refresh" content="0; url=/resume.pdf" />
+    <link rel="canonical" href="https://www.amsultan.site/resume" />
     <title>resume | Abdullah Sultan</title>
     <!-- this page is on screen for a moment at most, so it borrows the site's
          colours without fetching its webfonts -->
@@ -42,7 +42,7 @@
     </style>
   </head>
   <body>
-    <p>redirecting to <a href="https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true">abdullah sultan's resume</a>.</p>
+    <p>redirecting to <a href="/resume.pdf">abdullah sultan's resume</a>.</p>
     <p><a href="/">back to amsultan.site</a></p>
   </body>
 </html>
