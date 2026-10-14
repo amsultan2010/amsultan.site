@@ -9,6 +9,11 @@
       "permanent": true
     },
     {
+      "source": "/resume.pdf",
+      "destination": "/resume",
+      "permanent": true
+    },
+    {
       "source": "/desktop",
       "destination": "/",
       "permanent": true
