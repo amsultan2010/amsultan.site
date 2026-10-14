@@ -5,12 +5,7 @@
   "redirects": [
     {
       "source": "/resume.html",
-      "destination": "https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true",
-      "permanent": true
-    },
-    {
-      "source": "/resume",
-      "destination": "https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true",
+      "destination": "/resume",
       "permanent": true
     },
     {
@@ -44,7 +39,26 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/resume",
+      "destination": "/resume.pdf"
+    }
+  ],
   "headers": [
+    {
+      "source": "/resume(.pdf)?",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/pdf"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"Abdullah_Sultan_Resume.pdf\""
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "has": [
