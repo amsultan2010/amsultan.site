@@ -55,8 +55,8 @@ Canonical site: https://www.amsultan.site/
 ## Pages
 
 - [Home](https://www.amsultan.site/): Portfolio, experience, and contact.
-- [Resume](https://docs.google.com/document/d/1FQRDRkgqLeDj8VNmkRN9D9CTKxkBH-HE/edit?rtpof=true): Full resume, kept in Google Docs:
-  education, experience, awards, skills. /resume.html redirects here.
+- [Resume](https://www.amsultan.site/resume): Full resume as a PDF: education,
+  experience, awards, skills.
 
 ## Elsewhere
 
