@@ -845,7 +845,7 @@ button:focus-visible {
   outline-offset: -5px;
 }
 
-/* the statement is the section's heading: three lines stepping across the band
+/* the statement is the section's heading: two lines stepping across the band
    from one gutter to the other, sized off the viewport so the longest fits */
 .about-statement {
   /* its own stacking context, so the network can sit between the ink and the type */
@@ -871,10 +871,6 @@ button:focus-visible {
 }
 
 .about-line:nth-child(2) {
-  justify-self: center;
-}
-
-.about-line:nth-child(3) {
   justify-self: end;
 }
 

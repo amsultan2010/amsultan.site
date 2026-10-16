@@ -810,12 +810,11 @@ function initMotion() {
 
     // and they keep moving after they land: each line slides at its own rate
     // while the band crosses the viewport, pulling the staircase toward the
-    // middle. the outer two only ever move inward, so nothing leaves the gutter
+    // middle. both only ever move inward, so nothing leaves the gutter
     drift.add("(min-width: 821px)", () => {
       [
-        [0, 9],
-        [4, -4],
-        [0, -9],
+        [0, 6],
+        [0, -6],
       ].forEach(([from, to], index) => {
         if (!statementLines[index]) return;
         gsap.fromTo(
