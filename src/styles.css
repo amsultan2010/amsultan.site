@@ -858,7 +858,7 @@ button:focus-visible {
   overflow: hidden;
   color: var(--cream);
   background: var(--ink);
-  font-size: clamp(1.4rem, 6.2vw, 6.75rem);
+  font-size: clamp(1.4rem, 7.6vw, 8.25rem);
   line-height: 1;
 }
 
@@ -2440,7 +2440,7 @@ section[id],
 
   /* no room to step the lines across, so they stack flush and run larger */
   .about-statement {
-    font-size: clamp(1.3rem, 8.4vw, 4rem);
+    font-size: clamp(1.3rem, 8.6vw, 4.5rem);
   }
 
   .about-line:nth-child(n) {
