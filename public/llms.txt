@@ -49,10 +49,10 @@ Canonical site: https://www.amsultan.site/
   ahead, in the highest course on offer. Four self-studied AP exams:
   Precalculus 5, Computer Science Principles 5, Computer Science A 4,
   Psychology 4.
-- Certifications (2026): Claude Code in Action and AI Fluency: Framework and
-  Foundations (Anthropic), Applied AI Workflow Foundations (OpenAI), Intro to
-  Generative AI (AWS), Intro to Programming (Kaggle), Introduction to AI
-  (Google).
+- Certifications (2026): Associate AI Engineer for Data Scientists career
+  track (DataCamp, in progress), AI Fluency: Framework and Foundations
+  (Anthropic), Applied AI Workflow Foundations (OpenAI), Intro to Generative AI
+  (AWS), Intro to Programming (Kaggle), Introduction to AI (Google).
 
 ## Pages
 

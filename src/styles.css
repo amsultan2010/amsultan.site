@@ -15,8 +15,8 @@
   --zc: #5a0fe8;
   --zc-deep: #4409c0;
   --archivo: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  /* the built rows, the marquee and the right-now list wear the palette of the
-     thing they point at. every value is read from that site's shipped css */
+  /* the built rows and the marquee wear the palette of the thing they point
+     at. every value is read from that site's shipped css */
   --fs-bg: #ffffff;
   --fs-fg: #1d1d1f;
   --fs-accent: #0071e3;
@@ -25,6 +25,10 @@
   --df-bg: #0a3940;
   --df-fg: #f2ecdf;
   --df-accent: #c6e33a;
+  /* datacamp's green and navy, read off its own logo, for the one
+     certification still in progress */
+  --dc: #03ef62;
+  --dc-ink: #05192d;
   /* notched phones: the page paints edge to edge, these push content back in */
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -2065,17 +2069,75 @@ button:focus-visible {
   font-weight: 500;
 }
 
+/* the certifications draw their rules with the gap, so the one in progress can
+   take a bigger block and the rest fill in around it */
+.record-certs {
+  gap: 2px;
+  background: var(--ink);
+}
+
+.record-certs .record-cell {
+  border-top: 0;
+  background: var(--cream);
+}
+
+/* the track still in progress wears datacamp's own green, a size up */
+.record-certs .record-cell-dc {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: space-between;
+  gap: 1.75rem;
+  padding-block: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--dc-ink);
+  background: var(--dc);
+}
+
+.record-cell-dc .record-mark {
+  width: clamp(4.25rem, 6vw, 5.5rem);
+  border-color: var(--dc-ink);
+  box-shadow: 0.35rem 0.35rem 0 var(--dc-ink);
+}
+
+.record-cell-dc .record-text {
+  gap: 0.7rem;
+}
+
+.record-cell-dc .record-text strong {
+  font-size: clamp(1.5rem, 3vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.record-cell-dc .record-text > .mono {
+  opacity: 1;
+}
+
+.record-text > .record-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  padding: 0.3rem 0.6rem;
+  color: var(--dc);
+  background: var(--dc-ink);
+  font-size: 0.78rem;
+}
+
+.record-status i {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--dc);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
 @media (min-width: 620px) and (max-width: 899px) {
   .record-certs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .record-certs .record-cell:nth-child(2) {
-    border-top: 0;
-  }
-
-  .record-certs .record-cell:nth-child(even) {
-    border-left: 2px solid var(--ink);
+  .record-certs .record-cell-dc,
+  .record-certs .record-cell:last-child {
+    grid-column: span 2;
   }
 }
 
@@ -2097,13 +2159,14 @@ button:focus-visible {
     border-left: 2px solid var(--ink);
   }
 
-  /* the certifications wrap onto a second row of three */
-  .record-certs .record-cell:nth-child(n + 4) {
-    border-top: 2px solid var(--ink);
+  /* a two by two block for the track in progress, the other five around it */
+  .record-certs .record-cell + .record-cell {
+    border-left: 0;
   }
 
-  .record-certs .record-cell:nth-child(4) {
-    border-left: 0;
+  .record-certs .record-cell-dc {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 }
 
@@ -2141,6 +2204,10 @@ button:focus-visible {
   .record-cell:hover .record-mark {
     transform: translate(-2px, -2px);
     box-shadow: 0.42rem 0.42rem 0 var(--orange-deep);
+  }
+
+  .record-cell-dc:hover .record-mark {
+    box-shadow: 0.5rem 0.5rem 0 var(--dc-ink);
   }
 }
 
