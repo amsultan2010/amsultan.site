@@ -18,7 +18,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
   `initMotion` (the intro and every scroll reveal) only runs once the loader is done.
 - `src/scroll.js` Lenis setup and `lockScroll(owner, locked)`.
 - `src/rail.js` the two draggable rails, built from the `OBJECTS` and `WATCHING` arrays and
-  inserted after `.about` and `.lead`. Their markup is not in `index.html`.
+  inserted after `.work` and `.lead`. Their markup is not in `index.html`.
 - `src/palette.js` (cmd/ctrl+k palette) and `src/visits.js` (visit counter) inject themselves into
   `.site-header`. The palette reads its links off `.contact-card` and `.about-actions a`.
 - `src/styles.css` tokens in `:root`, then one block per section. Each module imports its own css.
