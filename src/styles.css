@@ -975,6 +975,17 @@ button:focus-visible {
   text-underline-offset: 0.18em;
 }
 
+/* the one claim still in progress is set a size up on the dark ground */
+.about-points .about-point-now {
+  color: var(--cream);
+  background: var(--ink);
+  font-size: 1.14em;
+}
+
+.about-point-now strong {
+  color: var(--orange);
+}
+
 .about-portrait {
   position: relative;
   margin: 0;
