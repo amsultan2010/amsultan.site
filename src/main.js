@@ -107,7 +107,7 @@ function initCursor() {
 
   const label = $("span", cursor);
 
-  $$("a, button, .work-row, .verb-strip li, .lead-item, .contact-card").forEach((target) => {
+  $$("a, button, .work-row, .lead-item, .contact-card").forEach((target) => {
     const text = target.dataset.cursor || "";
     target.addEventListener("pointerenter", () => {
       cursor.classList.add("is-hovering");
@@ -898,8 +898,8 @@ function initMotion() {
     if (!spinView.isActive) spin.pause();
   }
 
-  // the spec sheet: both labels rise out of their own bar, the rows unroll
-  // downward, and each fact decodes into place as its row opens
+  // the spec sheet: the label rises out of its bar, the cells unroll
+  // downward, and each fact decodes into place as its cell opens
   gsap.from(".sheet-label > *", {
     yPercent: 140,
     duration: D.base,
@@ -908,8 +908,8 @@ function initMotion() {
     scrollTrigger: { trigger: ".about-sheet", start: "top 88%", once: true },
   });
 
-  gsap.set(".about-facts div, .verb-strip li", { clipPath: "inset(0% 0% 100% 0%)" });
-  ScrollTrigger.batch(".about-facts div, .verb-strip li", {
+  gsap.set(".about-facts div", { clipPath: "inset(0% 0% 100% 0%)" });
+  ScrollTrigger.batch(".about-facts div", {
     start: "top 92%",
     once: true,
     onEnter: (rows) =>
@@ -922,7 +922,7 @@ function initMotion() {
       }),
   });
 
-  $$(".about-facts dd").forEach((fact, index) => {
+  $$(".about-facts dd.display").forEach((fact, index) => {
     gsap.to(fact, {
       duration: D.slow,
       delay: 0.15 + index * 0.12,
@@ -1176,7 +1176,6 @@ function initMotion() {
 
   revealLines(".contact-pitch", "top 84%");
   revealLines(".lead-lede", "top 88%");
-  revealLines(".verb-strip em", "top 90%");
 
   // two more parallax rates so depth reads as depth, not as one shared drift
   gsap.set(".portrait-mask img", { scale: 1.14 });

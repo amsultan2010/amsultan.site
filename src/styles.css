@@ -15,8 +15,8 @@
   --zc: #5a0fe8;
   --zc-deep: #4409c0;
   --archivo: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  /* the built rows, the marquee and the right-now list wear the palette of the
-     thing they point at. every value is read from that site's shipped css */
+  /* the built rows and the marquee wear the palette of the thing they point
+     at. every value is read from that site's shipped css */
   --fs-bg: #ffffff;
   --fs-fg: #1d1d1f;
   --fs-accent: #0071e3;
@@ -25,6 +25,10 @@
   --df-bg: #0a3940;
   --df-fg: #f2ecdf;
   --df-accent: #c6e33a;
+  /* datacamp's green and navy, read off its own logo, for the one
+     certification still in progress */
+  --dc: #03ef62;
+  --dc-ink: #05192d;
   /* notched phones: the page paints edge to edge, these push content back in */
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -975,6 +979,17 @@ button:focus-visible {
   text-underline-offset: 0.18em;
 }
 
+/* the one claim still in progress is set a size up on the dark ground */
+.about-points .about-point-now {
+  color: var(--cream);
+  background: var(--ink);
+  font-size: 1.14em;
+}
+
+.about-point-now strong {
+  color: var(--orange);
+}
+
 .about-portrait {
   position: relative;
   margin: 0;
@@ -1069,22 +1084,10 @@ button:focus-visible {
   color: var(--ink);
 }
 
-/* under the punchline, a spec sheet: what never changes on the left, what is
-   in motion on the right, on rows that share their rules */
+/* under the punchline, a spec sheet the full width of the page: three facts
+   in ruled cells, each set as large as the cell will hold */
 .about-sheet {
-  display: grid;
-  grid-template-columns: minmax(15rem, 0.42fr) minmax(0, 1fr);
   border-top: 2px solid var(--ink);
-}
-
-.sheet-col {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.sheet-col + .sheet-col {
-  border-left: 2px solid var(--ink);
 }
 
 .sheet-label {
@@ -1108,28 +1111,23 @@ button:focus-visible {
   color: var(--orange);
 }
 
-.about-facts,
-.verb-strip {
-  flex: 1;
+.about-facts {
   display: grid;
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
   padding: 0;
-  list-style: none;
 }
 
 .about-facts div {
   display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr);
-  gap: 1rem;
-  align-items: baseline;
-  align-content: center;
-  padding: 1.15rem var(--gutter);
+  grid-template-rows: auto 1fr auto;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--gutter);
 }
 
-.about-facts div + div,
-.verb-strip li + li {
-  border-top: 2px solid var(--ink);
+.about-facts div + div {
+  border-left: 2px solid var(--ink);
 }
 
 .about-facts dt {
@@ -1138,77 +1136,29 @@ button:focus-visible {
 
 .about-facts dd {
   margin: 0;
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-  line-height: 1.05;
 }
 
-/* each row jumps to the place further down the page where the thing lives, and
-   takes that thing's colours while the pointer is on it */
-.verb-strip a {
-  --verb-bg: var(--orange);
-  --verb-fg: var(--cream);
-  display: grid;
-  grid-template-columns: 5rem minmax(8rem, 0.75fr) minmax(0, 1.25fr) auto;
-  gap: 1rem;
-  align-items: baseline;
-  align-content: center;
-  height: 100%;
-  padding: 1.15rem var(--gutter);
-  transition: background 200ms ease, color 200ms ease;
+/* the same three treatments the statement above runs: fill, outline, orange */
+.about-facts dd.display {
+  align-self: end;
+  font-size: clamp(2.4rem, 7.2vw, 7.25rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
 }
 
-.verb-fs a {
-  --verb-bg: var(--fs-accent);
-  --verb-fg: var(--fs-bg);
+.about-facts div:nth-child(2) dd.display {
+  color: var(--cream);
+  -webkit-text-stroke: clamp(3px, 0.4vw, 6px) var(--ink);
+  paint-order: stroke fill;
 }
 
-.verb-cc a {
-  --verb-bg: var(--cc-bg);
-  --verb-fg: var(--cc-fg);
-}
-
-.verb-zc a {
-  --verb-bg: var(--zc);
-}
-
-.verb-strip a:hover,
-.verb-strip a:focus-visible,
-.verb-strip a:active {
-  color: var(--verb-fg);
-  background: var(--verb-bg);
-}
-
-.verb-strip .mono {
+.about-facts div:nth-child(3) dd.display {
   color: var(--orange);
-  transition: color 200ms ease;
 }
 
-.verb-strip strong {
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-  line-height: 1.05;
-  transition: color 200ms ease;
-}
-
-.verb-zc strong {
-  color: var(--zc);
-  font-family: var(--archivo);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.verb-strip a:hover .mono,
-.verb-strip a:focus-visible .mono,
-.verb-strip a:active .mono,
-.verb-strip a:hover strong,
-.verb-strip a:focus-visible strong,
-.verb-strip a:active strong {
-  color: inherit;
-}
-
-.verb-strip em {
-  font-style: italic;
-  font-size: 1.05rem;
-  opacity: 0.85;
+.fact-note {
+  font-size: 0.82rem;
+  opacity: 0.75;
 }
 
 /* a one-glyph window: the arrow leaves through one side and comes back in
@@ -1227,7 +1177,7 @@ button:focus-visible {
    than two small buttons in a wide empty row */
 .about-actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   border-top: 2px solid var(--ink);
 }
 
@@ -1303,6 +1253,29 @@ button:focus-visible {
   font-family: var(--mono);
   font-weight: 600;
   letter-spacing: 0;
+}
+
+/* the resume is the main way out: the wider cell, the larger type, and orange
+   on the dark ground until the orange fill comes up behind it */
+.action-cell-main strong,
+.action-cell-main .arrow-swap {
+  font-size: clamp(2rem, 5.6vw, 5.25rem);
+}
+
+.action-cell-main .action-text .mono,
+.action-cell-main .arrow-swap {
+  color: var(--orange);
+  opacity: 1;
+  transition: color 200ms ease;
+}
+
+.action-cell-main:hover .action-text .mono,
+.action-cell-main:hover .arrow-swap,
+.action-cell-main:focus-visible .action-text .mono,
+.action-cell-main:focus-visible .arrow-swap,
+.action-cell-main:active .action-text .mono,
+.action-cell-main:active .arrow-swap {
+  color: inherit;
 }
 
 /* section heads: the word, then its own outline echoing off toward the edge,
@@ -2096,17 +2069,75 @@ button:focus-visible {
   font-weight: 500;
 }
 
+/* the certifications draw their rules with the gap, so the one in progress can
+   take a bigger block and the rest fill in around it */
+.record-certs {
+  gap: 2px;
+  background: var(--ink);
+}
+
+.record-certs .record-cell {
+  border-top: 0;
+  background: var(--cream);
+}
+
+/* the track still in progress wears datacamp's own green, a size up */
+.record-certs .record-cell-dc {
+  grid-template-columns: minmax(0, 1fr);
+  align-content: space-between;
+  gap: 1.75rem;
+  padding-block: clamp(1.5rem, 3vw, 2.5rem);
+  color: var(--dc-ink);
+  background: var(--dc);
+}
+
+.record-cell-dc .record-mark {
+  width: clamp(4.25rem, 6vw, 5.5rem);
+  border-color: var(--dc-ink);
+  box-shadow: 0.35rem 0.35rem 0 var(--dc-ink);
+}
+
+.record-cell-dc .record-text {
+  gap: 0.7rem;
+}
+
+.record-cell-dc .record-text strong {
+  font-size: clamp(1.5rem, 3vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.record-cell-dc .record-text > .mono {
+  opacity: 1;
+}
+
+.record-text > .record-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-self: start;
+  padding: 0.3rem 0.6rem;
+  color: var(--dc);
+  background: var(--dc-ink);
+  font-size: 0.78rem;
+}
+
+.record-status i {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--dc);
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
 @media (min-width: 620px) and (max-width: 899px) {
   .record-certs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .record-certs .record-cell:nth-child(2) {
-    border-top: 0;
-  }
-
-  .record-certs .record-cell:nth-child(even) {
-    border-left: 2px solid var(--ink);
+  .record-certs .record-cell-dc,
+  .record-certs .record-cell:last-child {
+    grid-column: span 2;
   }
 }
 
@@ -2128,13 +2159,14 @@ button:focus-visible {
     border-left: 2px solid var(--ink);
   }
 
-  /* the certifications wrap onto a second row of three */
-  .record-certs .record-cell:nth-child(n + 4) {
-    border-top: 2px solid var(--ink);
+  /* a two by two block for the track in progress, the other five around it */
+  .record-certs .record-cell + .record-cell {
+    border-left: 0;
   }
 
-  .record-certs .record-cell:nth-child(4) {
-    border-left: 0;
+  .record-certs .record-cell-dc {
+    grid-column: span 2;
+    grid-row: span 2;
   }
 }
 
@@ -2172,6 +2204,10 @@ button:focus-visible {
   .record-cell:hover .record-mark {
     transform: translate(-2px, -2px);
     box-shadow: 0.42rem 0.42rem 0 var(--orange-deep);
+  }
+
+  .record-cell-dc:hover .record-mark {
+    box-shadow: 0.5rem 0.5rem 0 var(--dc-ink);
   }
 }
 
@@ -2251,10 +2287,10 @@ button:focus-visible {
 }
 
 .contact-pitch {
-  max-width: 28rem;
   margin: 0;
   font-size: clamp(1.2rem, 2vw, 1.65rem);
   line-height: 1.2;
+  text-wrap: balance;
   font-style: italic;
   color: var(--ink-soft);
 }
@@ -2406,19 +2442,6 @@ section[id],
   .about-grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   }
-
-  .about-sheet {
-    grid-template-columns: minmax(12rem, 0.5fr) minmax(0, 1fr);
-  }
-
-  .verb-strip a {
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
-  }
-
-  .verb-strip em {
-    grid-column: 2;
-    grid-row: 2;
-  }
 }
 
 /* the portrait column gets too narrow to read as a portrait below this */
@@ -2449,15 +2472,6 @@ section[id],
 
   .about-line-tag {
     display: none;
-  }
-
-  .about-sheet {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .sheet-col + .sheet-col {
-    border-left: 0;
-    border-top: 2px solid var(--ink);
   }
 
   .portrait-frame {
@@ -2629,22 +2643,17 @@ section[id],
     align-self: start;
   }
 
-  .verb-strip a {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.3rem 1rem;
+  .about-facts {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .verb-strip a > .mono:first-child,
-  .verb-strip strong,
-  .verb-strip em {
-    grid-column: 1;
-    grid-row: auto;
+  .about-facts div + div {
+    border-left: 0;
+    border-top: 2px solid var(--ink);
   }
 
-  .verb-strip .arrow-swap {
-    grid-column: 2;
-    grid-row: 1 / span 3;
-    align-self: center;
+  .about-facts dd.display {
+    font-size: clamp(2.8rem, 15vw, 4.5rem);
   }
 
   .lead-item {

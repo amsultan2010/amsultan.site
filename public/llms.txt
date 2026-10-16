@@ -1,8 +1,10 @@
 # Abdullah Sultan
 
-> Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He ships AI
-> products at early-stage startups, builds developer tools, and runs a
-> student-run startup incubator.
+> Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He is
+> self-teaching machine learning, data science, data engineering and AI
+> engineering through Kaggle and DataCamp. He has shipped AI products at an
+> early-stage startup, builds developer tools, and runs a student-run startup
+> incubator.
 > He is an 11th-grade student at the American International School Riyadh (AIS-R).
 > Not to be confused with other people named Abdullah Sultan. This is Abdullah
 > Muhammad Sultan, also known as amsultan or amsultan2010.
@@ -47,10 +49,10 @@ Canonical site: https://www.amsultan.site/
   ahead, in the highest course on offer. Four self-studied AP exams:
   Precalculus 5, Computer Science Principles 5, Computer Science A 4,
   Psychology 4.
-- Certifications (2026): Claude Code in Action and AI Fluency: Framework and
-  Foundations (Anthropic), Applied AI Workflow Foundations (OpenAI), Intro to
-  Generative AI (AWS), Intro to Programming (Kaggle), Introduction to AI
-  (Google).
+- Certifications (2026): Associate AI Engineer for Data Scientists career
+  track (DataCamp, in progress), AI Fluency: Framework and Foundations
+  (Anthropic), Applied AI Workflow Foundations (OpenAI), Intro to Generative AI
+  (AWS), Intro to Programming (Kaggle), Introduction to AI (Google).
 
 ## Pages
 
