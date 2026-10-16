@@ -1173,7 +1173,7 @@ button:focus-visible {
    than two small buttons in a wide empty row */
 .about-actions {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   border-top: 2px solid var(--ink);
 }
 
@@ -1249,6 +1249,29 @@ button:focus-visible {
   font-family: var(--mono);
   font-weight: 600;
   letter-spacing: 0;
+}
+
+/* the resume is the main way out: the wider cell, the larger type, and orange
+   on the dark ground until the orange fill comes up behind it */
+.action-cell-main strong,
+.action-cell-main .arrow-swap {
+  font-size: clamp(2rem, 5.6vw, 5.25rem);
+}
+
+.action-cell-main .action-text .mono,
+.action-cell-main .arrow-swap {
+  color: var(--orange);
+  opacity: 1;
+  transition: color 200ms ease;
+}
+
+.action-cell-main:hover .action-text .mono,
+.action-cell-main:hover .arrow-swap,
+.action-cell-main:focus-visible .action-text .mono,
+.action-cell-main:focus-visible .arrow-swap,
+.action-cell-main:active .action-text .mono,
+.action-cell-main:active .arrow-swap {
+  color: inherit;
 }
 
 /* section heads: the word, then its own outline echoing off toward the edge,
