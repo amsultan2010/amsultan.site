@@ -1,5 +1,5 @@
-// two draggable rails: film and show covers after the lead section, and the
-// objects i actually keep around further up the page
+// two draggable rails: the objects i actually keep around after the built
+// section, and film and show covers after the lead section
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
@@ -469,11 +469,11 @@ function mountRail({ anchor, position, items, label, noun, variant, duration }) 
 export function initRail() {
   const sections = [];
 
-  // the objects sit up with the about copy, the covers sit after the lead list,
-  // so the two rails punctuate the page instead of stacking
+  // the objects sit between the built and lead sections, the covers sit after
+  // the lead list, so the two rails punctuate the page instead of stacking
   sections.push(
     mountRail({
-      anchor: document.querySelector(".about"),
+      anchor: document.querySelector(".work"),
       position: "after",
       items: shuffle(OBJECTS),
       label: "my personal stack",
