@@ -2287,10 +2287,10 @@ button:focus-visible {
 }
 
 .contact-pitch {
-  max-width: 28rem;
   margin: 0;
   font-size: clamp(1.2rem, 2vw, 1.65rem);
   line-height: 1.2;
+  text-wrap: balance;
   font-style: italic;
   color: var(--ink-soft);
 }
