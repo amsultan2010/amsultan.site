@@ -2069,8 +2069,8 @@ button:focus-visible {
   font-weight: 500;
 }
 
-/* the certifications draw their rules with the gap, so the one in progress can
-   take a bigger block and the rest fill in around it */
+/* the certifications draw their rules with the gap, so the green cell in
+   progress keeps them without a border of its own */
 .record-certs {
   gap: 2px;
   background: var(--ink);
@@ -2081,31 +2081,15 @@ button:focus-visible {
   background: var(--cream);
 }
 
-/* the track still in progress wears datacamp's own green, a size up */
+/* the track still in progress wears datacamp's own green */
 .record-certs .record-cell-dc {
-  grid-template-columns: minmax(0, 1fr);
-  align-content: space-between;
-  gap: 1.75rem;
-  padding-block: clamp(1.5rem, 3vw, 2.5rem);
   color: var(--dc-ink);
   background: var(--dc);
 }
 
 .record-cell-dc .record-mark {
-  width: clamp(4.25rem, 6vw, 5.5rem);
   border-color: var(--dc-ink);
-  box-shadow: 0.35rem 0.35rem 0 var(--dc-ink);
-}
-
-.record-cell-dc .record-text {
-  gap: 0.7rem;
-}
-
-.record-cell-dc .record-text strong {
-  font-size: clamp(1.5rem, 3vw, 2.75rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
-  text-wrap: balance;
+  box-shadow: 0.28rem 0.28rem 0 var(--dc-ink);
 }
 
 .record-cell-dc .record-text > .mono {
@@ -2117,10 +2101,10 @@ button:focus-visible {
   align-items: center;
   gap: 0.5rem;
   justify-self: start;
-  padding: 0.3rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   color: var(--dc);
   background: var(--dc-ink);
-  font-size: 0.78rem;
+  font-size: 0.72rem;
 }
 
 .record-status i {
@@ -2133,11 +2117,6 @@ button:focus-visible {
 @media (min-width: 620px) and (max-width: 899px) {
   .record-certs {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .record-certs .record-cell-dc,
-  .record-certs .record-cell:last-child {
-    grid-column: span 2;
   }
 }
 
@@ -2159,14 +2138,9 @@ button:focus-visible {
     border-left: 2px solid var(--ink);
   }
 
-  /* a two by two block for the track in progress, the other five around it */
+  /* the gap draws the certifications' rules */
   .record-certs .record-cell + .record-cell {
     border-left: 0;
-  }
-
-  .record-certs .record-cell-dc {
-    grid-column: span 2;
-    grid-row: span 2;
   }
 }
 
@@ -2207,7 +2181,7 @@ button:focus-visible {
   }
 
   .record-cell-dc:hover .record-mark {
-    box-shadow: 0.5rem 0.5rem 0 var(--dc-ink);
+    box-shadow: 0.42rem 0.42rem 0 var(--dc-ink);
   }
 }
 
