@@ -1080,22 +1080,10 @@ button:focus-visible {
   color: var(--ink);
 }
 
-/* under the punchline, a spec sheet: what never changes on the left, what is
-   in motion on the right, on rows that share their rules */
+/* under the punchline, a spec sheet the full width of the page: three facts
+   in ruled cells, each set as large as the cell will hold */
 .about-sheet {
-  display: grid;
-  grid-template-columns: minmax(15rem, 0.42fr) minmax(0, 1fr);
   border-top: 2px solid var(--ink);
-}
-
-.sheet-col {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.sheet-col + .sheet-col {
-  border-left: 2px solid var(--ink);
 }
 
 .sheet-label {
@@ -1119,28 +1107,23 @@ button:focus-visible {
   color: var(--orange);
 }
 
-.about-facts,
-.verb-strip {
-  flex: 1;
+.about-facts {
   display: grid;
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
   padding: 0;
-  list-style: none;
 }
 
 .about-facts div {
   display: grid;
-  grid-template-columns: 5rem minmax(0, 1fr);
-  gap: 1rem;
-  align-items: baseline;
-  align-content: center;
-  padding: 1.15rem var(--gutter);
+  grid-template-rows: auto 1fr auto;
+  gap: 0.9rem;
+  min-width: 0;
+  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--gutter);
 }
 
-.about-facts div + div,
-.verb-strip li + li {
-  border-top: 2px solid var(--ink);
+.about-facts div + div {
+  border-left: 2px solid var(--ink);
 }
 
 .about-facts dt {
@@ -1149,77 +1132,29 @@ button:focus-visible {
 
 .about-facts dd {
   margin: 0;
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-  line-height: 1.05;
 }
 
-/* each row jumps to the place further down the page where the thing lives, and
-   takes that thing's colours while the pointer is on it */
-.verb-strip a {
-  --verb-bg: var(--orange);
-  --verb-fg: var(--cream);
-  display: grid;
-  grid-template-columns: 5rem minmax(8rem, 0.75fr) minmax(0, 1.25fr) auto;
-  gap: 1rem;
-  align-items: baseline;
-  align-content: center;
-  height: 100%;
-  padding: 1.15rem var(--gutter);
-  transition: background 200ms ease, color 200ms ease;
+/* the same three treatments the statement above runs: fill, outline, orange */
+.about-facts dd.display {
+  align-self: end;
+  font-size: clamp(2.4rem, 7.2vw, 7.25rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
 }
 
-.verb-fs a {
-  --verb-bg: var(--fs-accent);
-  --verb-fg: var(--fs-bg);
+.about-facts div:nth-child(2) dd.display {
+  color: var(--cream);
+  -webkit-text-stroke: clamp(3px, 0.4vw, 6px) var(--ink);
+  paint-order: stroke fill;
 }
 
-.verb-cc a {
-  --verb-bg: var(--cc-bg);
-  --verb-fg: var(--cc-fg);
-}
-
-.verb-zc a {
-  --verb-bg: var(--zc);
-}
-
-.verb-strip a:hover,
-.verb-strip a:focus-visible,
-.verb-strip a:active {
-  color: var(--verb-fg);
-  background: var(--verb-bg);
-}
-
-.verb-strip .mono {
+.about-facts div:nth-child(3) dd.display {
   color: var(--orange);
-  transition: color 200ms ease;
 }
 
-.verb-strip strong {
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
-  line-height: 1.05;
-  transition: color 200ms ease;
-}
-
-.verb-zc strong {
-  color: var(--zc);
-  font-family: var(--archivo);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.verb-strip a:hover .mono,
-.verb-strip a:focus-visible .mono,
-.verb-strip a:active .mono,
-.verb-strip a:hover strong,
-.verb-strip a:focus-visible strong,
-.verb-strip a:active strong {
-  color: inherit;
-}
-
-.verb-strip em {
-  font-style: italic;
-  font-size: 1.05rem;
-  opacity: 0.85;
+.fact-note {
+  font-size: 0.82rem;
+  opacity: 0.75;
 }
 
 /* a one-glyph window: the arrow leaves through one side and comes back in
@@ -2417,19 +2352,6 @@ section[id],
   .about-grid {
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   }
-
-  .about-sheet {
-    grid-template-columns: minmax(12rem, 0.5fr) minmax(0, 1fr);
-  }
-
-  .verb-strip a {
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
-  }
-
-  .verb-strip em {
-    grid-column: 2;
-    grid-row: 2;
-  }
 }
 
 /* the portrait column gets too narrow to read as a portrait below this */
@@ -2460,15 +2382,6 @@ section[id],
 
   .about-line-tag {
     display: none;
-  }
-
-  .about-sheet {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .sheet-col + .sheet-col {
-    border-left: 0;
-    border-top: 2px solid var(--ink);
   }
 
   .portrait-frame {
@@ -2640,22 +2553,17 @@ section[id],
     align-self: start;
   }
 
-  .verb-strip a {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.3rem 1rem;
+  .about-facts {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .verb-strip a > .mono:first-child,
-  .verb-strip strong,
-  .verb-strip em {
-    grid-column: 1;
-    grid-row: auto;
+  .about-facts div + div {
+    border-left: 0;
+    border-top: 2px solid var(--ink);
   }
 
-  .verb-strip .arrow-swap {
-    grid-column: 2;
-    grid-row: 1 / span 3;
-    align-self: center;
+  .about-facts dd.display {
+    font-size: clamp(2.8rem, 15vw, 4.5rem);
   }
 
   .lead-item {
