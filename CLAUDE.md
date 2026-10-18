@@ -72,3 +72,19 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. Env
   `public/images/tags/x.jpg`, and a new rail object needs a measured `trim` box.
 - Stale, safe to ignore: `.vscode/`, `.env.example`, the root `images/` folder, `dev/` (not in the
   build), and the Vercel dashboard's Astro preset (`vercel.json` overrides it).
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `amsultan2010/amsultan.site`, through the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five defaults, each label named after its role: `needs-triage`, `needs-info`, `ready-for-agent`,
+`ready-for-human`, `wontfix`. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root, neither written yet. See
+`docs/agents/domain.md`.
