@@ -128,9 +128,10 @@ html[data-view] .view-life {
   padding-top: calc(var(--header-h) + 1.25rem + var(--safe-t));
 }
 
-/* life ends on a rail's own rule, so contact gets a strip of ground before its own */
-html[data-view] .view-life {
-  padding-bottom: clamp(2rem, 5vw, 3.5rem);
+/* life butts straight onto contact, so the last rail hands its bottom rule to
+   contact's top one instead of stacking a second line under it */
+html[data-view] .view-life .rail:last-child {
+  border-bottom: 0;
 }
 
 /* loader */
