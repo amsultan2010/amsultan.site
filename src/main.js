@@ -275,12 +275,18 @@ function initActionFill() {
       .timeline({ paused: true })
       .to(fill, { yPercent: 0, duration: 0.45, ease: E.inOut });
 
+    // the text colour flips on :hover and :focus-visible in css, so the layer
+    // stays up while either holds, or the text lands on its own colour
     cell.addEventListener("pointerenter", () => tl.play());
-    cell.addEventListener("pointerleave", () => tl.reverse());
-    // the text colour flips on focus in css, so the layer has to follow it or a
-    // keyboard user gets ink on ink
-    cell.addEventListener("focus", () => tl.play());
-    cell.addEventListener("blur", () => tl.reverse());
+    cell.addEventListener("pointerleave", () => {
+      if (!cell.matches(":focus-visible")) tl.reverse();
+    });
+    cell.addEventListener("focus", () => {
+      if (cell.matches(":focus-visible")) tl.play();
+    });
+    cell.addEventListener("blur", () => {
+      if (!cell.matches(":hover")) tl.reverse();
+    });
   });
 }
 
