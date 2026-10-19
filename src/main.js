@@ -509,10 +509,11 @@ function showView(name) {
 }
 
 // main dips out and comes back, and the new view's own entrances do the
-// arriving. clearProps hands opacity back once it is up again
-function swapView(name) {
+// arriving. clearProps hands opacity back once it is up again. the view is read
+// once main is out, so a change of mind during the dip is the one shown
+function swapView() {
   if (!motionOn) {
-    showView(name);
+    showView(wanted);
     return Promise.resolve();
   }
 
@@ -523,7 +524,7 @@ function swapView(name) {
       duration: D.fast,
       ease: E.inOut,
       onComplete: () => {
-        showView(name);
+        if (wanted !== view) showView(wanted);
         gsap.to(main, {
           opacity: 1,
           duration: D.fast,
@@ -540,7 +541,7 @@ function swapView(name) {
 // clicks or back presses ends on the last one instead of queueing every swap
 async function runSwitches() {
   switching = true;
-  while (view !== wanted) await swapView(wanted);
+  while (view !== wanted) await swapView();
   switching = false;
 }
 
