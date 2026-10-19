@@ -530,23 +530,7 @@ export function initRail() {
   });
 
   // the sections land after first paint, so when life is the first view every
-  // trigger below them is stale. the covers carry an aspect-ratio, so height is
-  // known before the bytes are, and the second refresh only catches anything
-  // that settles late. lazy images in a hidden view wait until it is shown
+  // trigger below them is stale. the covers carry their size, so height is
+  // known before the bytes are and no image load needs another refresh
   requestAnimationFrame(() => ScrollTrigger.refresh());
-
-  const images = rails.flatMap(({ section }) => [...section.querySelectorAll("img")]);
-  let pending = images.filter((img) => !img.complete).length;
-  if (!pending) return;
-
-  const settle = () => {
-    pending -= 1;
-    if (pending === 0) ScrollTrigger.refresh();
-  };
-
-  images.forEach((img) => {
-    if (img.complete) return;
-    img.addEventListener("load", settle, { once: true });
-    img.addEventListener("error", settle, { once: true });
-  });
 }
