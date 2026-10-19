@@ -109,21 +109,28 @@ button:focus-visible {
   font-weight: 500;
 }
 
-.skip-link {
-  position: fixed;
-  z-index: 300;
-  top: 0.75rem;
-  left: 0.75rem;
-  padding: 0.75rem 1rem;
-  color: var(--orange);
-  background: var(--cream);
-  font-family: var(--mono);
-  font-size: 0.95rem;
-  transform: translateY(-200%);
+/* views: the inline script in the head names one before first paint and only
+   that one shows. with no script there is no attribute, so all three stack */
+html[data-view] .view {
+  display: none;
 }
 
-.skip-link:focus {
-  transform: translateY(0);
+html[data-view="me"] .view[data-view-name="me"],
+html[data-view="work"] .view[data-view-name="work"],
+html[data-view="life"] .view[data-view-name="life"] {
+  display: block;
+}
+
+/* the hero clears the fixed header with its own padding. work and life open on
+   a head instead, so the view leaves the same room on the orange ground above it */
+html[data-view] .view[data-view-name="work"],
+html[data-view] .view-life {
+  padding-top: calc(var(--header-h) + 1.25rem + var(--safe-t));
+}
+
+/* life ends on a rail's own rule, so contact gets a strip of ground before its own */
+html[data-view] .view-life {
+  padding-bottom: clamp(2rem, 5vw, 3.5rem);
 }
 
 /* loader */
@@ -298,7 +305,8 @@ button:focus-visible {
 }
 
 .primary-nav a:hover,
-.primary-nav a.is-active {
+.primary-nav a.is-active,
+.primary-nav a[aria-current="page"] {
   color: var(--cream);
   background: var(--ink);
 }
@@ -842,6 +850,12 @@ button:focus-visible {
 .about {
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
+}
+
+/* in a view, about is the last thing before contact, whose top rule already
+   draws the line. two would stack into one thick one */
+html[data-view] .about {
+  border-bottom: 0;
 }
 
 .about a:focus-visible {
@@ -2360,8 +2374,21 @@ button:focus-visible {
   border-top: 2px solid var(--ink);
 }
 
-.site-footer a:hover,
-.site-footer a:active {
+/* a button now there is no #top to link to. it drops every button default so
+   it still reads as the plain line of footer text the link was */
+.back-to-top {
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
+.back-to-top:hover,
+.back-to-top:active {
   color: var(--orange);
 }
 
@@ -2570,6 +2597,11 @@ section[id],
     min-height: auto;
   }
 
+  html[data-view] .view[data-view-name="work"],
+  html[data-view] .view-life {
+    padding-top: 5rem;
+  }
+
   .hero-title {
     font-size: clamp(2.8rem, 15vw, 4.2rem);
   }
@@ -2697,8 +2729,8 @@ section[id],
     gap: 0.35rem;
   }
 
-  /* the back-to-top link is the only sub-44px tap target on the page */
-  .site-footer a {
+  /* the back-to-top button is the only sub-44px tap target on the page */
+  .back-to-top {
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
