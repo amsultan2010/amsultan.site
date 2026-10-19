@@ -11,8 +11,7 @@ Live: [www.amsultan.site](https://www.amsultan.site)
 ## Layout
 
 - `index.html`, `404.html`: the two pages Vite builds
-- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `palette` for the command palette, `rail` for the draggable rails, `visits` for the visit counter, `network` for the neural network in the loader and behind the about statement)
-- `api/visits.js`: the Vercel function behind the visit counter
+- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `palette` for the command palette, `rail` for the draggable rails, `network` for the neural network in the loader and behind the about statement)
 - `public/`: images, icons, the resume, and crawler files, served as they are
 
 ## Develop
@@ -33,7 +32,7 @@ npm run preview
 
 ## Environment
 
-No keys are needed to run the site. The visit counter reads `KV_REST_API_URL` and `KV_REST_API_TOKEN` (Vercel KV / Upstash Redis) when deployed on Vercel; without them it reports itself unconfigured and everything else works.
+No keys are needed to run the site.
 
 ## Contributing
 

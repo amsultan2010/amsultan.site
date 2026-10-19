@@ -8,7 +8,6 @@ import { inject } from "@vercel/analytics";
 import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
 import { buildRails, initRail } from "./rail.js";
-import { initVisits } from "./visits.js";
 import { createNetwork } from "./network.js";
 
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
@@ -275,12 +274,18 @@ function initActionFill() {
       .timeline({ paused: true })
       .to(fill, { yPercent: 0, duration: 0.45, ease: E.inOut });
 
+    // the text colour flips on :hover and :focus-visible in css, so the layer
+    // stays up while either holds, or the text lands on its own colour
     cell.addEventListener("pointerenter", () => tl.play());
-    cell.addEventListener("pointerleave", () => tl.reverse());
-    // the text colour flips on focus in css, so the layer has to follow it or a
-    // keyboard user gets ink on ink
-    cell.addEventListener("focus", () => tl.play());
-    cell.addEventListener("blur", () => tl.reverse());
+    cell.addEventListener("pointerleave", () => {
+      if (!cell.matches(":focus-visible")) tl.reverse();
+    });
+    cell.addEventListener("focus", () => {
+      if (cell.matches(":focus-visible")) tl.play();
+    });
+    cell.addEventListener("blur", () => {
+      if (!cell.matches(":hover")) tl.reverse();
+    });
   });
 }
 
@@ -503,10 +508,11 @@ function showView(name) {
 }
 
 // main dips out and comes back, and the new view's own entrances do the
-// arriving. clearProps hands opacity back once it is up again
-function swapView(name) {
+// arriving. clearProps hands opacity back once it is up again. the view is read
+// once main is out, so a change of mind during the dip is the one shown
+function swapView() {
   if (!motionOn) {
-    showView(name);
+    showView(wanted);
     return Promise.resolve();
   }
 
@@ -517,7 +523,7 @@ function swapView(name) {
       duration: D.fast,
       ease: E.inOut,
       onComplete: () => {
-        showView(name);
+        if (wanted !== view) showView(wanted);
         gsap.to(main, {
           opacity: 1,
           duration: D.fast,
@@ -534,7 +540,7 @@ function swapView(name) {
 // clicks or back presses ends on the last one instead of queueing every swap
 async function runSwitches() {
   switching = true;
-  while (view !== wanted) await swapView(wanted);
+  while (view !== wanted) await swapView();
   switching = false;
 }
 
@@ -829,12 +835,16 @@ function buildMe(ctx) {
       0.35,
     );
 
-  const marqueeTween = gsap.to(".marquee-track", {
-    xPercent: -50,
-    duration: 24,
-    repeat: -1,
-    ease: "none",
-  });
+  // a scroll up plays the loop backwards, and a loop played backwards stops dead
+  // at its start, so the playhead begins a long way in
+  const marqueeTween = gsap
+    .to(".marquee-track", {
+      xPercent: -50,
+      duration: 24,
+      repeat: -1,
+      ease: "none",
+    })
+    .totalTime(24 * 500);
 
   // same treatment for the marquee: it only earns its frame cost while visible
   const marqueeEl = $(".marquee");
@@ -1434,7 +1444,6 @@ function initMotion() {
 initSmoothScroll();
 initClock();
 initRail();
-initVisits();
 initCursor();
 initMagnetic();
 initTilt();

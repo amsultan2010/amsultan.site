@@ -243,7 +243,10 @@ function initDrag(track, auto, setHead) {
 
   const takeOver = () => {
     auto.pause();
-    const px = (gsap.getProperty(track, "xPercent") / 100) * track.offsetWidth;
+    // mid throw the offset is already in x, so both are summed
+    const px =
+      gsap.getProperty(track, "x") +
+      (gsap.getProperty(track, "xPercent") / 100) * track.offsetWidth;
     gsap.set(track, { xPercent: 0, x: px });
     handedOver = false;
   };
