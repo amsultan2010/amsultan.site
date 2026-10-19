@@ -7,7 +7,6 @@ import { CustomEase } from "gsap/CustomEase";
 import { inject } from "@vercel/analytics";
 import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
-import { initPalette } from "./palette.js";
 import { initRail } from "./rail.js";
 import { initVisits } from "./visits.js";
 import { createNetwork } from "./network.js";
@@ -1216,7 +1215,6 @@ function initMotion() {
 
 initSmoothScroll();
 initClock();
-initPalette();
 initRail();
 initVisits();
 initCursor();

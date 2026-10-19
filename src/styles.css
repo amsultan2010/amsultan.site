@@ -2482,8 +2482,7 @@ section[id],
   .brand,
   .primary-nav a,
   .header-cta,
-  .menu-toggle,
-  .palette-trigger {
+  .menu-toggle {
     min-height: 3rem;
   }
 
