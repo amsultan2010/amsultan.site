@@ -11,7 +11,7 @@ Live: [www.amsultan.site](https://www.amsultan.site)
 ## Layout
 
 - `index.html`, `404.html`: the two pages Vite builds
-- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `palette` for the command palette, `rail` for the draggable rails, `network` for the neural network in the loader and behind the about statement)
+- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `rail` for the draggable rails, `network` for the neural network in the loader and behind the about statement)
 - `public/`: images, icons, the resume, and crawler files, served as they are
 
 ## Develop
@@ -46,5 +46,4 @@ The license does not cover:
 
 - My own content: the writing, my name and likeness, photos, the resume, and project images under `public/`. Swap these out if you reuse the site.
 - Third-party images and logos under `public/images/` (film and show covers, game characters, brand marks), which belong to their owners.
-- `dev/transition-demo.html`, which is adapted from [ronnielgandhe/rg-portfolio](https://github.com/ronnielgandhe/rg-portfolio) and is not mine to license.
 - Dependencies, which keep their own licenses. GSAP in particular ships under the [GSAP standard license](https://gsap.com/community/standard-license/), not MIT.

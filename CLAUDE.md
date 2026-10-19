@@ -81,8 +81,8 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. The
   `/resume` is not the PDF. To update it, replace the file.
 - Images are absolute `/images/...` strings, so Vite never checks them. A `data-tag="x"` chip needs
   `public/images/tags/x.jpg`, and a new rail object needs a measured `trim` box.
-- Stale, safe to ignore: `.vscode/`, `.env.example`, the root `images/` folder, `dev/` (not in the
-  build), and the Vercel dashboard's Astro preset (`vercel.json` overrides it).
+- Stale, safe to ignore: `.env.example` and the Vercel dashboard's Astro preset (`vercel.json`
+  overrides it).
 
 ## Agent skills
 
