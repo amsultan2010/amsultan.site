@@ -826,7 +826,8 @@ function buildMe(ctx) {
       0.12,
     )
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
-    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
+    // yPercent, because the see work pill is magnetic and quickTo owns its y
+    .from(".hero-foot > *", { yPercent: 40, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
     .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12)
     .from(
       ".hero-topo path",

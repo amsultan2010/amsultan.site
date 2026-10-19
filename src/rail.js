@@ -332,12 +332,13 @@ function initHover(track) {
   };
 }
 
+// the hover owns each cover's y, so the entrance travels on yPercent
 function initEntrance(section, track, travel) {
   const covers = [...track.querySelectorAll(".rail-cover")];
 
   return gsap.from(covers, {
     clipPath: "inset(0% 0% 100% 0%)",
-    y: travel,
+    yPercent: travel,
     duration: D.slow,
     stagger: 0.045,
     ease: "out",
@@ -428,7 +429,7 @@ function animateRail({ section, head, viewport, track, duration }) {
         gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
       }
       initHeadEntrance(head);
-      initEntrance(section, track, fine ? 40 : 24);
+      initEntrance(section, track, fine ? 12 : 10);
 
       // the drag hint leans a few pixels either way, slowly, so the bar is never
       // completely still while the rail is on screen
