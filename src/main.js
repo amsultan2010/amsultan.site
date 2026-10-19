@@ -108,8 +108,10 @@ function initCursor() {
       label.textContent = text;
       cursor.classList.add("is-labelled");
     });
-    target.addEventListener("pointerleave", () => {
-      cursor.classList.remove("is-hovering", "is-labelled");
+    target.addEventListener("pointerleave", (event) => {
+      // back onto the lead row the link sits in, which is still hovered
+      if (!event.relatedTarget?.closest(".lead-item")) cursor.classList.remove("is-hovering");
+      cursor.classList.remove("is-labelled");
       if (label) label.textContent = "";
     });
   });
