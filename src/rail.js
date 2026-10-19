@@ -342,9 +342,6 @@ function initEntrance(section, track, travel) {
     duration: D.slow,
     stagger: 0.045,
     ease: "out",
-    // will-change is dropped once the entrance is done, so these covers do not
-    // hold a compositor layer each for the rest of the session
-    onComplete: () => gsap.set(covers, { clearProps: "willChange" }),
     scrollTrigger: { trigger: section, start: "top 85%", once: true },
   });
 }

@@ -241,18 +241,16 @@ function initTagPreview() {
 function initArrowSwap() {
   if (!finePointer() || reducedMotion()) return;
 
-  const travel = { down: [0, 1], out: [1, -1] };
-
+  // out the top right, back in from the bottom left
   $$(".arrow-swap").forEach((frame) => {
     const host = frame.closest("a");
     const glyph = $("span", frame);
     if (!host || !glyph) return;
 
-    const [dx, dy] = travel[frame.dataset.dir] ?? travel.out;
     const tl = gsap
       .timeline({ paused: true })
-      .to(glyph, { xPercent: dx * 110, yPercent: dy * 110, duration: 0.2, ease: "power2.in" })
-      .set(glyph, { xPercent: dx * -110, yPercent: dy * -110 })
+      .to(glyph, { xPercent: 110, yPercent: -110, duration: 0.2, ease: "power2.in" })
+      .set(glyph, { xPercent: -110, yPercent: 110 })
       .to(glyph, { xPercent: 0, yPercent: 0, duration: D.fast, ease: E.out });
 
     host.addEventListener("pointerenter", () => tl.restart());
@@ -605,7 +603,6 @@ function initLoader(onDone) {
   const loader = $(".loader");
   const bar = $(".loader-bar");
   const pct = $("[data-loader-pct]");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // the loader is an opening, not a toll: once per session, never on the way
   // back from a link. storage can throw in a private window, so it is guarded
@@ -617,7 +614,7 @@ function initLoader(onDone) {
     seen = false;
   }
 
-  if (!loader || reduceMotion || seen) {
+  if (!loader || reducedMotion() || seen) {
     loader?.remove();
     onDone();
     return;
@@ -656,12 +653,11 @@ function initLoader(onDone) {
 }
 
 function initHeroMotion() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const topo = $(".hero-topo");
   const drift = $(".topo-drift");
   const layers = $$(".topo-layer");
   const shapes = $$("[data-shape]");
-  if (!topo || reduceMotion) return;
+  if (!topo || reducedMotion()) return;
 
   // solid contour drift, no dashoffset (that was chopping the lines)
   if (drift) {
@@ -1332,12 +1328,6 @@ function buildWork() {
   revealLines(".lead-lede", "top 88%");
 }
 
-// life: the two rails. rail.js owns their motion and hands back its cleanup,
-// which the context runs when life is left
-function buildLife() {
-  return buildRails();
-}
-
 // contact ends every view, so its entrances replay with each one
 function buildContact() {
   gsap.from(".contact-link .split-char", {
@@ -1382,12 +1372,14 @@ function buildContact() {
   revealLines(".contact-pitch", "top 84%");
 }
 
-const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildLife };
+// life is the two rails. rail.js owns their motion and hands back its cleanup,
+// which the context runs when life is left
+const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildRails };
 
 // one context per visit. contact and the counters end every view, so they are
 // built into it too. each builder's returned cleanup runs when it is reverted
 function buildView(name) {
-  const counted = $$(`.view[data-view-name="${name}"] [data-count], .contact [data-count]`);
+  const counted = $$(`.view[data-view-name="${name}"] [data-count]`);
 
   return gsap.context((ctx) => {
     ctx.add(VIEW_MOTION[name]);
@@ -1397,12 +1389,11 @@ function buildView(name) {
 }
 
 function initMotion() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
 
   // no contexts under reduced motion: everything is set to its final state
   // once, for all three views, and a switch is an instant swap
-  if (reduceMotion) {
+  if (reducedMotion()) {
     gsap.set(".scroll-progress", { scaleX: 1 });
     gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
     buildCounters($$("[data-count]"));

@@ -19,7 +19,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 - `404.html` the second Vite entry. Its styles are inline; it does not load `src/styles.css`.
 - `src/main.js` all page motion, as `init*` functions called in order at the bottom of the file.
   `initRouter` swaps views in place (`requestView`, `swapView`, `showView`). `buildView` puts one
-  view's motion (`buildMe`, `buildWork` or `buildLife`, plus `buildContact` and `buildCounters`)
+  view's motion (`buildMe`, `buildWork` or `buildRails`, plus `buildContact` and `buildCounters`)
   in a `gsap.context` that is reverted when the view is left. `initMotion` runs the header intro
   and the first view's motion once the loader is done.
 - `src/scroll.js` Lenis setup and `lockScroll(owner, locked)`.
@@ -41,7 +41,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
   `--ink`. Hover lifts an element off its shadow and `:active` sinks it back.
 - Rows about another product wear that product's own colours: `--fs-*`, `--cc-*`, `--df-*`, `--zc`.
 - Motion is bound in `main.js` by class selector. Markup hooks: `data-split`, `data-count` with
-  `data-pad`, `data-cursor`, `data-tag`, `data-dir`, `data-shape`, `data-view-link`,
+  `data-pad`, `data-cursor`, `data-tag`, `data-shape`, `data-view-link`,
   `data-back-to-top`, `.magnetic`.
 - There are no `#` links. A link to a view is a real `<a href>` to `/`, `/work` or `/life` with
   `data-view-link`, so it works without JS and in a new tab.
