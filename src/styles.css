@@ -1629,10 +1629,12 @@ html[data-view] .about {
 
 
 /* lead */
+/* lead now sits straight under the last built row, which is near ink, so its
+   head takes the cream ground the rail between them used to supply */
 .lead {
-  --head-bg: var(--ink);
-  --head-ink: var(--cream);
-  --head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
+  --head-bg: var(--cream);
+  --head-ink: var(--ink);
+  --head-rule: var(--ink);
   background: var(--orange);
   border-bottom: 2px solid var(--ink);
 }
