@@ -505,6 +505,8 @@ function showView(name) {
   if (motionOn) viewMotion = buildView(name);
   ScrollTrigger.refresh();
   lenis?.resize();
+  // the focused link may have just been hidden, so focus starts again at main
+  $("main").focus({ preventScroll: true });
 }
 
 // main dips out and comes back, and the new view's own entrances do the
