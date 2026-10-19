@@ -8,7 +8,6 @@ import { inject } from "@vercel/analytics";
 import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
 import { buildRails, initRail } from "./rail.js";
-import { initVisits } from "./visits.js";
 import { createNetwork } from "./network.js";
 
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
@@ -1445,7 +1444,6 @@ function initMotion() {
 initSmoothScroll();
 initClock();
 initRail();
-initVisits();
 initCursor();
 initMagnetic();
 initTilt();
