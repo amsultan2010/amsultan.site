@@ -829,12 +829,16 @@ function buildMe(ctx) {
       0.35,
     );
 
-  const marqueeTween = gsap.to(".marquee-track", {
-    xPercent: -50,
-    duration: 24,
-    repeat: -1,
-    ease: "none",
-  });
+  // a scroll up plays the loop backwards, and a loop played backwards stops dead
+  // at its start, so the playhead begins a long way in
+  const marqueeTween = gsap
+    .to(".marquee-track", {
+      xPercent: -50,
+      duration: 24,
+      repeat: -1,
+      ease: "none",
+    })
+    .totalTime(24 * 500);
 
   // same treatment for the marquee: it only earns its frame cost while visible
   const marqueeEl = $(".marquee");
