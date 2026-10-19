@@ -26,11 +26,9 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 - `src/rail.js` the two draggable rails, built from the `OBJECTS` and `WATCHING` arrays and
   mounted into the life view. Their markup is not in `index.html`. `buildRails()` builds their
   motion and returns its cleanup.
-- `src/visits.js` the visit counter, which injects itself into `.site-header`.
 - `src/styles.css` tokens in `:root`, then one block per section. Each module imports its own css.
 - `src/network.js` `createNetwork(canvas, { ground, ahead })`, the 8-12-12-8 neural network drawn
   on a canvas in `.loader` and behind `.about-statement`. `network.css` places each canvas.
-- `api/visits.js` the Vercel function behind the counter, stored in Vercel KV.
 - `public/` served as is. `robots.txt`, `sitemap.xml` and `llms.txt` are maintained by hand.
 
 ## Conventions
@@ -59,17 +57,15 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 Vercel project `abdullahsultan`, connected to GitHub `amsultan2010/amsultan.site`. A push to `main`
 deploys production. Any other pushed branch gets a preview, which is `noindex` and behind Vercel
-login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. Env vars, read only by
-`api/visits.js`: `KV_REST_API_URL`, `KV_REST_API_TOKEN`.
+login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. There are no env vars.
 
 ## Gotchas
 
-- `D` and `E` are redeclared in `main.js`, `rail.js` and `visits.js`. The eases are
+- `D` and `E` are redeclared in `main.js` and `rail.js`. The eases are
   CustomEases created in the body of `main.js`, so other modules use them only inside `init*`.
 - With Lenis running, `overflow: hidden` on `body` holds nothing. Use `lockScroll`, and put
   `data-lenis-prevent` on anything that scrolls inside an overlay. `lenis` is undefined on touch.
-- Vite does not serve `/api/visits`, so the counter never mounts locally. The loader shows once per
-  tab (`sessionStorage` key `loader-seen`).
+- The loader shows once per tab (`sessionStorage` key `loader-seen`).
 - JS breakpoints mirror CSS ones: 900px hero pin, 960px menu, 820px and 700px scroll drifts.
 - A view's path lives in three places: the head script in `index.html`, `PATHS` in `main.js` and
   the rewrites in `vercel.json`. Vite serves `index.html` at any path locally, but Vercel
