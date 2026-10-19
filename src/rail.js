@@ -1,5 +1,6 @@
-// two draggable rails: the objects i actually keep around after the built
-// section, and film and show covers after the lead section
+// two draggable rails, the objects i actually keep around and then film and
+// show covers. together they are the whole life view, so both mount into it.
+// the markup is built once, the motion each time life is shown
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Draggable } from "gsap/Draggable";
@@ -284,8 +285,10 @@ function initDrag(track, auto, setHead) {
   })[0];
 }
 
+// the hover is rebuilt on every visit to life, so it hands back a cleanup that
+// takes its listeners off again. otherwise each visit would add another set
 function initHover(track) {
-  [...track.children].forEach((item) => {
+  const unbind = [...track.children].map((item) => {
     const cover = item.querySelector(".rail-cover");
     const caption = item.querySelector(".rail-caption-inner");
 
@@ -296,18 +299,32 @@ function initHover(track) {
       .to(cover, { y: -14, scale: 1.04, duration: D.fast }, 0)
       .to(caption, { yPercent: 0, autoAlpha: 1, duration: D.base }, 0.05);
 
-    item.addEventListener("pointerenter", () => {
+    const enter = () => {
       item.classList.add("is-hot");
       track.classList.add("is-dimmed");
       tl.play();
-    });
+    };
 
-    item.addEventListener("pointerleave", () => {
+    const leave = () => {
       item.classList.remove("is-hot");
       track.classList.remove("is-dimmed");
       tl.reverse();
-    });
+    };
+
+    item.addEventListener("pointerenter", enter);
+    item.addEventListener("pointerleave", leave);
+
+    return () => {
+      item.removeEventListener("pointerenter", enter);
+      item.removeEventListener("pointerleave", leave);
+      item.classList.remove("is-hot");
+    };
   });
+
+  return () => {
+    unbind.forEach((off) => off());
+    track.classList.remove("is-dimmed");
+  };
 }
 
 function initEntrance(section, track, travel) {
@@ -343,13 +360,18 @@ function initHeadEntrance(head) {
     .from(head.querySelector(".rail-arrow"), { scaleX: 0, duration: D.base }, 0.5);
 }
 
-function mountRail({ anchor, position, items, label, noun, variant, duration }) {
-  if (!anchor) return;
+// the rails mounted into life, in page order, for buildRails to animate
+const rails = [];
 
+function mountRail({ view, items, label, noun, variant, duration }) {
   const { section, head, viewport, track } = buildSection({ items, label, variant, noun });
-  const carriage = head.querySelector(".rail-carriage");
-  anchor[position](section);
+  view.append(section);
+  rails.push({ section, head, viewport, track, duration });
+}
 
+// one rail's motion, reverted with the matchMedia this returns
+function animateRail({ section, head, viewport, track, duration }) {
+  const carriage = head.querySelector(".rail-carriage");
   const mm = gsap.matchMedia();
 
   // matchMedia only runs this when at least one condition matches, so the
@@ -393,8 +415,9 @@ function mountRail({ anchor, position, items, label, noun, variant, duration }) 
       });
 
       const drag = initDrag(track, auto, setHead);
+      let unhover = null;
       if (fine) {
-        initHover(track);
+        unhover = initHover(track);
       } else {
         // no hover on touch, so the captions just stay on screen
         gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
@@ -451,6 +474,7 @@ function mountRail({ anchor, position, items, label, noun, variant, duration }) 
       });
 
       return () => {
+        unhover?.();
         gsap.killTweensOf(speed);
         nudge.kill();
         inView.kill();
@@ -463,49 +487,49 @@ function mountRail({ anchor, position, items, label, noun, variant, duration }) 
     },
   );
 
-  return section;
+  return mm;
+}
+
+// called by main.js each time life is shown. the cleanup it returns reverts
+// every rail's matchMedia, which runs the cleanup above: loop, drag, hover,
+// sway, parking and nudge all stop, and the entrances are ready to replay
+export function buildRails() {
+  const motion = rails.map(animateRail);
+  return () => motion.forEach((mm) => mm.revert());
 }
 
 export function initRail() {
-  const sections = [];
+  const view = document.querySelector('.view[data-view-name="life"]');
+  if (!view) return;
 
-  // the objects sit between the built and lead sections, the covers sit after
-  // the lead list, so the two rails punctuate the page instead of stacking
-  sections.push(
-    mountRail({
-      anchor: document.querySelector(".work"),
-      position: "after",
-      items: shuffle(OBJECTS),
-      label: "my personal stack",
-      noun: "objects",
-      variant: "object",
-      // one run of the track per duration, so a longer run needs more seconds
-      // just to hold its pace
-      duration: 52,
-    }),
-  );
+  // the stack first, then the watchlist
+  mountRail({
+    view,
+    items: shuffle(OBJECTS),
+    label: "my personal stack",
+    noun: "objects",
+    variant: "object",
+    // one run of the track per duration, so a longer run needs more seconds
+    // just to hold its pace
+    duration: 52,
+  });
 
-  sections.push(
-    mountRail({
-      anchor: document.querySelector(".lead"),
-      position: "after",
-      items: shuffle(WATCHING),
-      label: "current watchlist",
-      noun: "titles",
-      variant: "poster",
-      duration: 43,
-    }),
-  );
+  mountRail({
+    view,
+    items: shuffle(WATCHING),
+    label: "current watchlist",
+    noun: "titles",
+    variant: "poster",
+    duration: 43,
+  });
 
-  const mounted = sections.filter(Boolean);
-  if (!mounted.length) return;
-
-  // the sections land after first paint, so every trigger below them is stale.
-  // the covers carry an aspect-ratio, so height is known before the bytes are,
-  // and the second refresh only catches anything that settles late
+  // the sections land after first paint, so when life is the first view every
+  // trigger below them is stale. the covers carry an aspect-ratio, so height is
+  // known before the bytes are, and the second refresh only catches anything
+  // that settles late. lazy images in a hidden view wait until it is shown
   requestAnimationFrame(() => ScrollTrigger.refresh());
 
-  const images = mounted.flatMap((section) => [...section.querySelectorAll("img")]);
+  const images = rails.flatMap(({ section }) => [...section.querySelectorAll("img")]);
   let pending = images.filter((img) => !img.complete).length;
   if (!pending) return;
 

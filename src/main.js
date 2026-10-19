@@ -7,8 +7,7 @@ import { CustomEase } from "gsap/CustomEase";
 import { inject } from "@vercel/analytics";
 import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
-import { initPalette } from "./palette.js";
-import { initRail } from "./rail.js";
+import { buildRails, initRail } from "./rail.js";
 import { initVisits } from "./visits.js";
 import { createNetwork } from "./network.js";
 
@@ -30,20 +29,15 @@ const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)]
 const finePointer = () => window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function scrollToTarget(target) {
-  if (!target) return;
-  if (lenis) {
-    lenis.scrollTo(target, { offset: -24, duration: 1.2 });
-  } else {
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-}
-
 function splitCharacters(element) {
-  if (!element || element.dataset.splitReady) return $$(".split-char", element);
+  if (!element) return [];
+
+  // a hover scramble rewrites a heading's text and takes its chars with it, so
+  // one split before is split again when its view comes back
+  const existing = $$(".split-char", element);
+  if (existing.length) return existing;
 
   const label = element.textContent.trim().replace(/\s+/g, " ");
-  element.dataset.splitReady = "true";
   element.setAttribute("aria-label", label);
   element.textContent = "";
 
@@ -325,8 +319,13 @@ function initTilt() {
   });
 }
 
-function initCounters() {
-  $$("[data-count]").forEach((element) => {
+// built with each view, so the numbers count up again on every visit. the
+// cleanup prints the real values back, or a count cut off by leaving would
+// show its halfway number until the next one starts
+function buildCounters(elements) {
+  const settle = [];
+
+  elements.forEach((element) => {
     const end = Number(element.dataset.count);
     if (!Number.isFinite(end)) return;
 
@@ -337,6 +336,10 @@ function initCounters() {
       element.textContent = format(end);
       return;
     }
+
+    settle.push(() => {
+      element.textContent = format(end);
+    });
 
     // text stays at its final value until the tween starts, so SplitText measures
     // real line widths on the paragraphs these numbers sit inside
@@ -355,6 +358,8 @@ function initCounters() {
       scrollTrigger: { trigger: element, start: "top 92%", once: true },
     });
   });
+
+  return () => settle.forEach((print) => print());
 }
 
 // the marquee speeds up and reverses with the scroll direction. the rows used
@@ -392,26 +397,31 @@ function revealLines(selector, start = "top 85%") {
   });
 }
 
+const menuQuery = window.matchMedia("(max-width: 960px)");
+
+// out here rather than inside initNavigation, because a view switch closes the
+// phone menu too
+function setMenuOpen(open) {
+  const nav = $(".primary-nav");
+  const toggle = $(".menu-toggle");
+  if (!nav || !toggle) return;
+  nav.classList.toggle("is-open", open);
+  toggle.classList.toggle("is-open", open);
+  toggle.setAttribute("aria-expanded", String(open));
+  toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
+  lockScroll("menu", open && menuQuery.matches);
+}
+
 function initNavigation() {
   const nav = $(".primary-nav");
   const toggle = $(".menu-toggle");
-  const mq = window.matchMedia("(max-width: 960px)");
-
-  const setMenuOpen = (open) => {
-    if (!nav || !toggle) return;
-    nav.classList.toggle("is-open", open);
-    toggle.classList.toggle("is-open", open);
-    toggle.setAttribute("aria-expanded", String(open));
-    toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
-    lockScroll("menu", open && mq.matches);
-  };
 
   toggle?.addEventListener("click", (event) => {
     event.stopPropagation();
     setMenuOpen(!nav.classList.contains("is-open"));
   });
 
-  mq.addEventListener("change", () => setMenuOpen(false));
+  menuQuery.addEventListener("change", () => setMenuOpen(false));
 
   document.addEventListener("click", (event) => {
     if (!nav?.classList.contains("is-open")) return;
@@ -422,27 +432,157 @@ function initNavigation() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") setMenuOpen(false);
   });
+}
 
-  $$('a[href^="#"]').forEach((link) => {
+// the three views share one html page and swap in place. the address is the
+// source of truth: a link pushes it, the back button pops it, and the view on
+// screen catches up with it one switch at a time
+const PATHS = { me: "/", work: "/work", life: "/life" };
+// me keeps the title written in the html, read once in initRouter
+const TITLES = { work: "Work | Abdullah Sultan", life: "Life | Abdullah Sultan" };
+
+let view = "me"; // the view on screen
+let wanted = "me"; // the view the address asks for
+let switching = false;
+// off under reduced motion, and until the loader is done and initMotion runs
+let motionOn = false;
+// the gsap.context holding the motion of the view on screen
+let viewMotion = null;
+
+// the same mapping as the inline script in the head, which picks the first view
+function viewFromPath() {
+  const path = location.pathname.replace(/\/$/, "");
+  return Object.keys(PATHS).find((name) => PATHS[name] === path) || "me";
+}
+
+function markView(name) {
+  // the brand also links to me, but it is a way home, not a place, so it is
+  // never marked
+  $$(".primary-nav a[data-view-link]").forEach((link) => {
+    const current = link.dataset.viewLink === name;
+    link.classList.toggle("is-active", current);
+    if (current) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+  document.title = TITLES[name];
+}
+
+function scrollToTop() {
+  if (lenis) lenis.scrollTo(0);
+  else window.scrollTo({ top: 0, behavior: reducedMotion() ? "instant" : "smooth" });
+}
+
+function jumpToTop() {
+  if (lenis) lenis.scrollTo(0, { immediate: true });
+  else window.scrollTo(0, 0);
+}
+
+// a link that disappears under the pointer never gets its pointerleave, so the
+// cursor, a magnet or a hover timeline would stay stuck in its hover state.
+// everything hovered in the view being left is told it was left
+function releaseHover(scope) {
+  scope?.querySelectorAll(":hover").forEach((element) => {
+    element.dispatchEvent(new PointerEvent("pointerleave"));
+  });
+}
+
+// the swap itself, made while main is faded out: the old view's motion is
+// reverted, the new view is shown from its top, and its motion is built fresh
+function showView(name) {
+  releaseHover($(`.view[data-view-name="${view}"]`));
+  viewMotion?.revert();
+  viewMotion = null;
+
+  view = name;
+  document.documentElement.dataset.view = name;
+  jumpToTop();
+
+  if (motionOn) viewMotion = buildView(name);
+  ScrollTrigger.refresh();
+  lenis?.resize();
+}
+
+// main dips out and comes back, and the new view's own entrances do the
+// arriving. clearProps hands opacity back once it is up again
+function swapView(name) {
+  if (!motionOn) {
+    showView(name);
+    return Promise.resolve();
+  }
+
+  const main = $("main");
+  return new Promise((resolve) => {
+    gsap.to(main, {
+      opacity: 0,
+      duration: D.fast,
+      ease: E.inOut,
+      onComplete: () => {
+        showView(name);
+        gsap.to(main, {
+          opacity: 1,
+          duration: D.fast,
+          ease: E.inOut,
+          clearProps: "opacity",
+          onComplete: resolve,
+        });
+      },
+    });
+  });
+}
+
+// a request that lands mid switch only changes the wanted view, so a run of
+// clicks or back presses ends on the last one instead of queueing every swap
+async function runSwitches() {
+  switching = true;
+  while (view !== wanted) await swapView(wanted);
+  switching = false;
+}
+
+function requestView(name, push) {
+  setMenuOpen(false);
+
+  if (name === wanted) {
+    // the link to the view already on screen goes back to its top
+    if (push && !switching) scrollToTop();
+    return;
+  }
+
+  if (push) history.pushState(null, "", PATHS[name]);
+  wanted = name;
+  markView(name);
+  if (!switching) runSwitches();
+}
+
+function initRouter() {
+  const root = document.documentElement;
+
+  // every view opens at its top, so the browser must not put back the scroll
+  // of whatever view it last saw at this address
+  history.scrollRestoration = "manual";
+  TITLES.me = document.title;
+
+  view = wanted = root.dataset.view in PATHS ? root.dataset.view : "me";
+  root.dataset.view = view;
+  markView(view);
+
+  $$("a[data-view-link]").forEach((link) => {
     link.addEventListener("click", (event) => {
-      const target = $(link.getAttribute("href"));
-      if (!target) return;
+      // a modified or middle click keeps its native meaning: that address in a
+      // new tab or window
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
-      setMenuOpen(false);
-      scrollToTarget(target);
+      requestView(link.dataset.viewLink, true);
     });
   });
 
-  $$("[data-section]").forEach((link) => {
-    const section = $(`#${link.dataset.section}`);
-    if (!section) return;
-    ScrollTrigger.create({
-      trigger: section,
-      start: "top 45%",
-      end: "bottom 45%",
-      onToggle: ({ isActive }) => link.classList.toggle("is-active", isActive),
-    });
+  window.addEventListener("popstate", () => requestView(viewFromPath(), false));
+
+  // the owner asked for this emoji. it lives in the tab title only, never on the page
+  document.addEventListener("visibilitychange", () => {
+    document.title = document.hidden ? "please come back 😭" : TITLES[wanted];
   });
+
+  $$("[data-back-to-top]").forEach((button) => button.addEventListener("click", scrollToTop));
 }
 
 // the network behind the about statement. made on its own, ahead of the loader,
@@ -604,13 +744,22 @@ function initHeroMotion() {
       },
     });
   }
+}
 
-  if (!window.matchMedia("(pointer: fine)").matches) return;
+// the contour field leans away from the pointer. bound once, apart from the me
+// view's motion, so coming back to me never stacks a second listener. quickTo
+// owns the field's x and y, and the view's own loops only touch its opacity
+function initHeroParallax() {
+  if (!finePointer() || reducedMotion()) return;
+
+  const hero = $(".hero");
+  const topo = $(".hero-topo");
+  if (!hero || !topo) return;
 
   const moveX = gsap.quickTo(topo, "x", { duration: 0.9, ease: "power3.out" });
   const moveY = gsap.quickTo(topo, "y", { duration: 0.9, ease: "power3.out" });
 
-  hero?.addEventListener(
+  hero.addEventListener(
     "pointermove",
     (event) => {
       const rect = hero.getBoundingClientRect();
@@ -623,26 +772,38 @@ function initHeroMotion() {
   );
 }
 
-function initMotion() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  $$("[data-split]").forEach(splitCharacters);
+// the number swells while its row is hovered. bound once for the same reason
+// as the parallax. hover owns the scale, so the entrance stays on yPercent
+function initLeadHover() {
+  if (!finePointer() || reducedMotion()) return;
 
-  if (reduceMotion) {
-    gsap.set(".scroll-progress", { scaleX: 1 });
-    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
-    return;
-  }
-
-  const heroChars = $$(".hero-title .split-char");
-  const intro = gsap.timeline({
-    defaults: { ease: "expo.out" },
-    onComplete: () => initHeroMotion(),
+  $$(".lead-item").forEach((item) => {
+    item.addEventListener("pointerenter", () => {
+      gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
+    });
+    item.addEventListener("pointerleave", () => {
+      gsap.to($(".lead-num", item), { scale: 1, duration: 0.35, ease: "power2.out" });
+    });
   });
+}
 
-  intro
-    // clearProps so gsap doesn't leave the desktop translateX(-50%) inline and
-    // break the header's mobile positioning after a resize or rotate
-    .from(".site-header", { y: -72, autoAlpha: 0, duration: 0.65, clearProps: "transform" }, 0)
+// each view's motion lives in its own gsap.context, built when the view is
+// shown and reverted when it is left, so every entrance replays on a visit and
+// every loop dies with its view. a builder is handed that context for whatever
+// it starts later, from a callback, so that is reverted with the rest
+
+// me: the hero, the marquee and about
+function buildMe(ctx) {
+  const heroChars = $$(".hero-title .split-char");
+
+  // the hero's part of the intro. the header's part plays once, in initMotion,
+  // and starts on the same frame as this on a first visit to me. the loops only
+  // start once this has landed, and join the context so they die with the view
+  gsap
+    .timeline({
+      defaults: { ease: "expo.out" },
+      onComplete: () => ctx.add(initHeroMotion),
+    })
     .from(".hero-rail", { y: -18, autoAlpha: 0, duration: 0.55 }, 0.08)
     .from(
       heroChars,
@@ -668,17 +829,6 @@ function initMotion() {
       0.35,
     );
 
-  gsap.to(".scroll-progress", {
-    scaleX: 1,
-    ease: "none",
-    scrollTrigger: {
-      trigger: document.documentElement,
-      start: "top top",
-      end: "bottom bottom",
-      scrub: 0.2,
-    },
-  });
-
   const marqueeTween = gsap.to(".marquee-track", {
     xPercent: -50,
     duration: 24,
@@ -701,7 +851,8 @@ function initMotion() {
 
   // explicit fromTo + immediateRender:false, otherwise this scrub timeline samples
   // its start values while the intro `from` tweens still hold them at 0 and the
-  // hero bg/rail stay invisible until a reload happens to win the race
+  // hero bg/rail stay invisible until a reload happens to win the race. the two
+  // are built in the same context on every visit, so the race comes back each time
   const heroExit = gsap.matchMedia();
 
   // desktop gets the one pinned set piece on the page: the two title lines pull
@@ -794,7 +945,7 @@ function initMotion() {
     });
 
     // behind them the network wires itself up input to output, the pass the
-    // loader ran, and then keeps thinking
+    // loader ran, and then keeps thinking. leaving me reverts it to unwired
     statement.to(aboutNet, { front: 1, duration: D.epic, ease: E.inOut }, 0);
 
     statementLines.forEach((line, index) => {
@@ -837,19 +988,22 @@ function initMotion() {
 
   // the four claims are ruled cells, so they arrive as cells: each one wipes in
   // from its leading edge and brings its rule with it. batched, so a phone that
-  // only has two of them on screen only plays two
+  // only has two of them on screen only plays two. the wipe starts after the
+  // context was built, so it is added to it by hand
   gsap.set(".about-points li", { clipPath: "inset(0% 100% 0% 0%)" });
   ScrollTrigger.batch(".about-points li", {
     start: "top 86%",
     once: true,
     onEnter: (cells) =>
-      gsap.to(cells, {
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: D.slow,
-        stagger: 0.12,
-        ease: E.inOut,
-        clearProps: "clipPath",
-      }),
+      ctx.add(() =>
+        gsap.to(cells, {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: D.slow,
+          stagger: 0.12,
+          ease: E.inOut,
+          clearProps: "clipPath",
+        }),
+      ),
   });
 
   // the punchline is laid down like a strip of tape, then the one reversed
@@ -913,13 +1067,15 @@ function initMotion() {
     start: "top 92%",
     once: true,
     onEnter: (rows) =>
-      gsap.to(rows, {
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: D.base,
-        stagger: 0.07,
-        ease: E.out,
-        clearProps: "clipPath",
-      }),
+      ctx.add(() =>
+        gsap.to(rows, {
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: D.base,
+          stagger: 0.07,
+          ease: E.out,
+          clearProps: "clipPath",
+        }),
+      ),
   });
 
   $$(".about-facts dd.display").forEach((fact, index) => {
@@ -969,10 +1125,37 @@ function initMotion() {
     scrollTrigger: {
       trigger: ".about-portrait",
       start: "top 70%",
-      toggleActions: "play none none none",
+      once: true,
     },
   });
 
+  // two more parallax rates so depth reads as depth, not as one shared drift
+  gsap.set(".portrait-mask img", { scale: 1.14 });
+  gsap.to(".portrait-mask img", {
+    yPercent: -7,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".about-portrait",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 0.7,
+    },
+  });
+
+  gsap.to(".about-portrait figcaption", {
+    y: -34,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".about-portrait",
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+    },
+  });
+}
+
+// work: built, lead and record
+function buildWork() {
   // section heads: the word rises out of its own bar, its echoes slide in from
   // the edge they run off, and the count cell opens from that same edge
   $$(".section-head").forEach((head) => {
@@ -994,6 +1177,7 @@ function initMotion() {
   // the echo is hidden on a phone, so its scrub only exists where it shows. each
   // head slides at a different rate, which is what makes it read as depth. the
   // run moves away from the word, so a gap opens rather than a letter being cut
+  const drift = gsap.matchMedia();
   drift.add("(min-width: 701px)", () => {
     $$(".section-echo-run").forEach((run, index) => {
       gsap.fromTo(
@@ -1083,13 +1267,6 @@ function initMotion() {
     if (mark) {
       reveal.from(mark, { scale: 0.7, rotate: -12, autoAlpha: 0, duration: D.base }, 0.08);
     }
-
-    item.addEventListener("pointerenter", () => {
-      gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
-    });
-    item.addEventListener("pointerleave", () => {
-      gsap.to($(".lead-num", item), { scale: 1, duration: 0.35, ease: "power2.out" });
-    });
   });
 
   // fluent and learning: the label rises in its bar, then every word rises out
@@ -1135,6 +1312,17 @@ function initMotion() {
     }
   });
 
+  revealLines(".lead-lede", "top 88%");
+}
+
+// life: the two rails. rail.js owns their motion and hands back its cleanup,
+// which the context runs when life is left
+function buildLife() {
+  return buildRails();
+}
+
+// contact ends every view, so its entrances replay with each one
+function buildContact() {
   gsap.from(".contact-link .split-char", {
     yPercent: 110,
     autoAlpha: 0,
@@ -1144,7 +1332,7 @@ function initMotion() {
     scrollTrigger: {
       trigger: ".contact-title",
       start: "top 85%",
-      toggleActions: "play none none none",
+      once: true,
     },
   });
 
@@ -1157,7 +1345,7 @@ function initMotion() {
     scrollTrigger: {
       trigger: ".contact-frame",
       start: "top 82%",
-      toggleActions: "play none none none",
+      once: true,
     },
   });
 
@@ -1170,36 +1358,65 @@ function initMotion() {
     scrollTrigger: {
       trigger: ".contact-frame",
       start: "top 82%",
-      toggleActions: "play none none none",
+      once: true,
     },
   });
 
   revealLines(".contact-pitch", "top 84%");
-  revealLines(".lead-lede", "top 88%");
+}
 
-  // two more parallax rates so depth reads as depth, not as one shared drift
-  gsap.set(".portrait-mask img", { scale: 1.14 });
-  gsap.to(".portrait-mask img", {
-    yPercent: -7,
+const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildLife };
+
+// one context per visit. contact and the counters end every view, so they are
+// built into it too. each builder's returned cleanup runs when it is reverted
+function buildView(name) {
+  const counted = $$(`.view[data-view-name="${name}"] [data-count], .contact [data-count]`);
+
+  return gsap.context((ctx) => {
+    ctx.add(VIEW_MOTION[name]);
+    ctx.add(buildContact);
+    ctx.add(() => buildCounters(counted));
+  });
+}
+
+function initMotion() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  $$("[data-split]").forEach(splitCharacters);
+
+  // no contexts under reduced motion: everything is set to its final state
+  // once, for all three views, and a switch is an instant swap
+  if (reduceMotion) {
+    gsap.set(".scroll-progress", { scaleX: 1 });
+    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
+    buildCounters($$("[data-count]"));
+    buildRails();
+    return;
+  }
+
+  // the header's part of the intro. the header is in no view, so it plays once.
+  // clearProps so gsap doesn't leave the desktop translateX(-50%) inline and
+  // break the header's mobile positioning after a resize or rotate
+  gsap.from(".site-header", {
+    y: -72,
+    autoAlpha: 0,
+    duration: 0.65,
+    ease: "expo.out",
+    clearProps: "transform",
+  });
+
+  gsap.to(".scroll-progress", {
+    scaleX: 1,
     ease: "none",
     scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 0.7,
+      trigger: document.documentElement,
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.2,
     },
   });
 
-  gsap.to(".about-portrait figcaption", {
-    y: -34,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1,
-    },
-  });
+  motionOn = true;
+  viewMotion = buildView(view);
 
   document.fonts.ready.then(() => {
     ScrollTrigger.refresh();
@@ -1216,7 +1433,6 @@ function initMotion() {
 
 initSmoothScroll();
 initClock();
-initPalette();
 initRail();
 initVisits();
 initCursor();
@@ -1227,8 +1443,10 @@ initTagPreview();
 initArrowSwap();
 initActionFill();
 initNavScramble();
+initHeroParallax();
+initLeadHover();
 initNavigation();
-initCounters();
+initRouter();
 initAboutNetwork();
 initLoader(() => {
   initMotion();

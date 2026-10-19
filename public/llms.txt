@@ -57,6 +57,8 @@ Canonical site: https://www.amsultan.site/
 ## Pages
 
 - [Home](https://www.amsultan.site/): Portfolio, experience, and contact.
+- [Work](https://www.amsultan.site/work): Built, lead, and record.
+- [Life](https://www.amsultan.site/life): The personal stack and the watchlist.
 - [Resume](https://www.amsultan.site/resume): Full resume as a PDF: education,
   experience, awards, skills.
 

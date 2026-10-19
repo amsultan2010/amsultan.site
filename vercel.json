@@ -40,7 +40,17 @@
     },
     {
       "source": "/pictures",
-      "destination": "/#margin",
+      "destination": "/life",
+      "permanent": true
+    },
+    {
+      "source": "/work/",
+      "destination": "/work",
+      "permanent": true
+    },
+    {
+      "source": "/life/",
+      "destination": "/life",
       "permanent": true
     }
   ],
@@ -48,6 +58,14 @@
     {
       "source": "/resume",
       "destination": "/resume.pdf"
+    },
+    {
+      "source": "/work",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/life",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -90,6 +108,24 @@
     },
     {
       "source": "/index.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/work",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/life",
       "headers": [
         {
           "key": "Cache-Control",
