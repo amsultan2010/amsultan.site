@@ -738,17 +738,19 @@ function initHeroMotion() {
   const hero = $(".hero");
   if (hero) {
     const ambient = [drift, topo, $(".hero-orbit"), ...layers, ...shapes].filter(Boolean);
-    ScrollTrigger.create({
+    const park = (active) =>
+      gsap
+        .getTweensOf(ambient)
+        .filter((tween) => tween.repeat() === -1)
+        .forEach((tween) => (active ? tween.play() : tween.pause()));
+    const heroView = ScrollTrigger.create({
       trigger: hero,
       start: "top bottom",
       end: "bottom top",
-      onToggle: (self) => {
-        gsap
-          .getTweensOf(ambient)
-          .filter((tween) => tween.repeat() === -1)
-          .forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
-      },
+      onToggle: (self) => park(self.isActive),
     });
+    // scrolled past before the intro landed, so no toggle comes to park them
+    if (!heroView.isActive) park(false);
   }
 }
 
@@ -849,12 +851,14 @@ function buildMe(ctx) {
   // same treatment for the marquee: it only earns its frame cost while visible
   const marqueeEl = $(".marquee");
   if (marqueeEl && marqueeTween) {
-    ScrollTrigger.create({
+    const marqueeView = ScrollTrigger.create({
       trigger: marqueeEl,
       start: "top bottom",
       end: "bottom top",
       onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
     });
+    // it starts below the fold, where no toggle fires until it is reached
+    if (!marqueeView.isActive) marqueeTween.pause();
   }
 
   initScrollVelocity(marqueeTween);

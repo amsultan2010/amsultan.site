@@ -237,7 +237,7 @@ function buildSection({ items, label, variant, noun }) {
 // the auto scroll owns xPercent, the drag owns x. handing the offset between the
 // two on press and release keeps a single wrapped value instead of two that can
 // drift past each other
-function initDrag(track, auto, setHead) {
+function initDrag(track, auto, setHead, onScreen) {
   const runWidth = () => track.offsetWidth / 2;
   let handedOver = false;
 
@@ -257,7 +257,9 @@ function initDrag(track, auto, setHead) {
     const px = gsap.utils.wrap(-runWidth(), 0)(gsap.getProperty(track, "x"));
     const xPercent = (px / track.offsetWidth) * 100;
     gsap.set(track, { x: 0, xPercent });
-    auto.progress(-xPercent / 50).play();
+    auto.progress(-xPercent / 50);
+    // a throw can end off screen, where the inView trigger has parked the loop
+    if (onScreen()) auto.play();
   };
 
   const wrapDrag = function wrapDrag() {
@@ -417,7 +419,7 @@ function animateRail({ section, head, viewport, track, duration }) {
         },
       });
 
-      const drag = initDrag(track, auto, setHead);
+      const drag = initDrag(track, auto, setHead, () => inView.isActive);
       let unhover = null;
       if (fine) {
         unhover = initHover(track);
