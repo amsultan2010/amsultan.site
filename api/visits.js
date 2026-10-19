@@ -20,7 +20,8 @@ export default async function handler(request, response) {
     const bump = new URL(request.url, "http://localhost").searchParams.get("bump") === "1";
     const count = bump ? await kv.incr(KEY) : Number(await kv.get(KEY)) || 0;
     return response.status(200).json({ count });
-  } catch {
+  } catch (error) {
+    console.error("visits: kv request failed", error);
     return response.status(200).json({ count: null, unconfigured: true });
   }
 }
