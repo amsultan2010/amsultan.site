@@ -203,6 +203,11 @@
   scroll-snap-align: center;
 }
 
+/* the second run only exists for the loop's wrap */
+.rail-viewport.is-scroller .rail-item[aria-hidden] {
+  display: none;
+}
+
 /* nothing drives the playhead once the loop is off, so the ruler stays behind
    as a plain scale */
 @media (prefers-reduced-motion: reduce) {
