@@ -856,6 +856,8 @@ function buildMe(ctx) {
       trigger: marqueeEl,
       start: "top bottom",
       end: "bottom top",
+      // built before the hero pin above it, so it must be measured after the pin
+      refreshPriority: -1,
       onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
     });
     // it starts below the fold, where no toggle fires until it is reached
