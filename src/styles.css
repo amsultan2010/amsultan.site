@@ -1637,6 +1637,7 @@ html[data-view] .about {
   --head-ink: var(--ink);
   --head-rule: var(--ink);
   background: var(--orange);
+  border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
 }
 
