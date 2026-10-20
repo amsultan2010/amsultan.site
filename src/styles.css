@@ -325,6 +325,38 @@ html[data-view] .view-life .rail:last-child {
   background: var(--orange-deep);
 }
 
+/* at the bottom of a view the next stop in the nav hops and turns orange, so
+   there is somewhere to go. initNextNudge sets the class */
+.primary-nav a.is-next,
+.menu-toggle.is-next {
+  color: var(--ink);
+  background: var(--orange);
+  animation: next-hop 1.1s ease-in-out infinite;
+}
+
+@keyframes next-hop {
+  0%,
+  45%,
+  100% {
+    transform: translateY(0);
+  }
+
+  15% {
+    transform: translateY(-0.5rem);
+  }
+
+  30% {
+    transform: translateY(0.12rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-nav a.is-next,
+  .menu-toggle.is-next {
+    animation: none;
+  }
+}
+
 .brand-mark {
   transition: background 180ms ease, color 180ms ease;
 }

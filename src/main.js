@@ -439,6 +439,22 @@ function initNavigation() {
   });
 }
 
+// at the bottom of a view, the next stop in the nav hops to say there is more.
+// on a phone the links sit in the closed menu, so the menu button hops instead
+const NEXT = { me: "/work", work: "/life", life: "/resume" };
+function initNextNudge() {
+  const root = document.documentElement;
+  const update = () => {
+    const atEnd = window.innerHeight + window.scrollY >= root.scrollHeight - 8;
+    const next = atEnd ? NEXT[root.dataset.view] : null;
+    $$(".primary-nav a").forEach((link) =>
+      link.classList.toggle("is-next", link.getAttribute("href") === next),
+    );
+    $(".menu-toggle")?.classList.toggle("is-next", Boolean(next));
+  };
+  window.addEventListener("scroll", update, { passive: true });
+}
+
 // the three views share one html page and swap in place. the address is the
 // source of truth: a link pushes it, the back button pops it, and the view on
 // screen catches up with it one switch at a time
@@ -1450,6 +1466,7 @@ initNavScramble();
 initHeroParallax();
 initLeadHover();
 initNavigation();
+initNextNudge();
 initRouter();
 initAboutNetwork();
 initLoader(() => {
