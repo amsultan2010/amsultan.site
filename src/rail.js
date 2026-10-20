@@ -237,7 +237,7 @@ function buildSection({ items, label, variant, noun }) {
 // the auto scroll owns xPercent, the drag owns x. handing the offset between the
 // two on press and release keeps a single wrapped value instead of two that can
 // drift past each other
-function initDrag(track, auto, setHead, onScreen) {
+function initDrag(track, auto, setHead, onScreen, toProgress) {
   const runWidth = () => track.offsetWidth / 2;
   let handedOver = false;
 
@@ -257,7 +257,7 @@ function initDrag(track, auto, setHead, onScreen) {
     const px = gsap.utils.wrap(-runWidth(), 0)(gsap.getProperty(track, "x"));
     const xPercent = (px / track.offsetWidth) * 100;
     gsap.set(track, { x: 0, xPercent });
-    auto.progress(-xPercent / 50);
+    auto.progress(toProgress(-xPercent / 50));
     // a throw can end off screen, where the inView trigger has parked the loop
     if (onScreen()) auto.play();
   };
@@ -366,14 +366,14 @@ function initHeadEntrance(head) {
 // the rails mounted into life, in page order, for buildRails to animate
 const rails = [];
 
-function mountRail({ view, items, label, noun, variant, duration }) {
+function mountRail({ view, items, label, noun, variant, duration, reverse = false }) {
   const { section, head, viewport, track } = buildSection({ items, label, variant, noun });
   view.append(section);
-  rails.push({ section, head, viewport, track, duration });
+  rails.push({ section, head, viewport, track, duration, reverse });
 }
 
 // one rail's motion, reverted with the matchMedia this returns
-function animateRail({ section, head, viewport, track, duration }) {
+function animateRail({ section, head, viewport, track, duration, reverse }) {
   const carriage = head.querySelector(".rail-carriage");
   const mm = gsap.matchMedia();
 
@@ -406,18 +406,21 @@ function animateRail({ section, head, viewport, track, duration }) {
       const setX = gsap.quickSetter(carriage, "xPercent");
       const setHead = (progress) => setX(progress * 100);
 
-      const auto = gsap.to(track, {
-        xPercent: -50,
+      // a reversed rail runs the same loop from the other end. its place along
+      // the track, read as 0 to 1 from the left, is then the tween's progress flipped
+      const toProgress = (place) => (reverse ? 1 - place : place);
+      const auto = gsap.fromTo(track, { xPercent: reverse ? -50 : 0 }, {
+        xPercent: reverse ? 0 : -50,
         duration,
         ease: "none",
         repeat: -1,
         modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
         onUpdate() {
-          setHead(this.progress());
+          setHead(toProgress(this.progress()));
         },
       });
 
-      const drag = initDrag(track, auto, setHead, () => inView.isActive);
+      const drag = initDrag(track, auto, setHead, () => inView.isActive, toProgress);
       let unhover = null;
       if (fine) {
         unhover = initHover(track);
@@ -523,7 +526,9 @@ export function initRail() {
     label: "current watchlist",
     noun: "titles",
     variant: "poster",
-    duration: 43,
+    // the other way from the stack, and quicker
+    duration: 30,
+    reverse: true,
   });
 
   // the sections land after first paint, so when life is the first view every
