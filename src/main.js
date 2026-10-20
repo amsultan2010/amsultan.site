@@ -439,17 +439,21 @@ function initNavigation() {
   });
 }
 
-// the clips load and play only while on screen. a hidden view's clips are never
-// on screen, so they wait until it is shown. under reduced motion the posters stay
+// the clips of the view on screen play the whole time it is shown, reduced
+// motion included, and the clips of the other views pause
+function playClips() {
+  $$("video[data-clip]").forEach((clip) => {
+    if (clip.closest(".view").dataset.viewName === document.documentElement.dataset.view) {
+      clip.play().catch(() => {});
+    } else clip.pause();
+  });
+}
+
+// low power mode on an iphone refuses autoplay, even muted, until the visitor
+// touches the page, so every tap tries again
 function initClips() {
-  if (reducedMotion()) return;
-  const io = new IntersectionObserver((entries) =>
-    entries.forEach(({ target, isIntersecting }) => {
-      if (isIntersecting) target.play().catch(() => {});
-      else target.pause();
-    }),
-  );
-  $$("video[data-clip]").forEach((clip) => io.observe(clip));
+  playClips();
+  ["touchend", "click"].forEach((type) => document.addEventListener(type, playClips, { passive: true }));
 }
 
 // at the bottom of a view, the next stop in the nav hops to say there is more.
@@ -529,6 +533,7 @@ function showView(name) {
 
   view = name;
   document.documentElement.dataset.view = name;
+  playClips();
   jumpToTop();
 
   if (motionOn) viewMotion = buildView(name);
