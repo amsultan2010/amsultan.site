@@ -127,10 +127,11 @@ html[data-view="life"] .view[data-view-name="life"] {
 }
 
 /* the hero clears the fixed header with its own padding. work and life open on
-   a head instead, so the view leaves the same room on the orange ground above it */
+   a head instead, which rides up under the header so the header's lower part
+   sits over its top edge. phones keep a clear gap, set further down */
 html[data-view] .view[data-view-name="work"],
 html[data-view] .view-life {
-  padding-top: calc(var(--header-h) + 1.25rem + var(--safe-t));
+  padding-top: calc(1rem + var(--header-h) * 0.6 + var(--safe-t));
 }
 
 /* life butts straight onto contact, so the last rail hands its bottom rule to
