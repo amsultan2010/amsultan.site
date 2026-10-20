@@ -66,7 +66,7 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. The
 - With Lenis running, `overflow: hidden` on `body` holds nothing. Use `lockScroll`, and put
   `data-lenis-prevent` on anything that scrolls inside an overlay. `lenis` is undefined on touch.
 - The loader shows once per tab (`sessionStorage` key `loader-seen`).
-- JS breakpoints mirror CSS ones: 900px hero pin, 960px menu, 820px and 700px scroll drifts.
+- JS breakpoints mirror CSS ones: 900px hero pin, 820px and 700px scroll drifts.
 - A view's path lives in three places: the head script in `index.html`, `PATHS` in `main.js` and
   the rewrites in `vercel.json`. Vite serves `index.html` at any path locally, but Vercel
   rewrites only `/work` and `/life`, so a new view needs all three or it 404s in production.
