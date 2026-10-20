@@ -83,6 +83,11 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+/* main takes focus after a view switch only to hold the tab order, so no ring */
+main:focus {
+  outline: none;
+}
+
 /* a cream ring on a cream ground is no ring at all */
 .site-header a:focus-visible,
 .site-header button:focus-visible,
@@ -409,7 +414,9 @@ html[data-view] .view-life .rail:last-child {
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: lowercase;
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  /* no transform here: the pill is magnetic, and gsap reading a transform mid
+     transition keeps the stale value, which left it resting low after its entrance */
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
   color: var(--ink);
   background: var(--cream);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);

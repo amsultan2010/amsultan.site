@@ -108,8 +108,10 @@ function initCursor() {
       label.textContent = text;
       cursor.classList.add("is-labelled");
     });
-    target.addEventListener("pointerleave", () => {
-      cursor.classList.remove("is-hovering", "is-labelled");
+    target.addEventListener("pointerleave", (event) => {
+      // back onto the lead row the link sits in, which is still hovered
+      if (!event.relatedTarget?.closest(".lead-item")) cursor.classList.remove("is-hovering");
+      cursor.classList.remove("is-labelled");
       if (label) label.textContent = "";
     });
   });
@@ -241,18 +243,16 @@ function initTagPreview() {
 function initArrowSwap() {
   if (!finePointer() || reducedMotion()) return;
 
-  const travel = { down: [0, 1], out: [1, -1] };
-
+  // out the top right, back in from the bottom left
   $$(".arrow-swap").forEach((frame) => {
     const host = frame.closest("a");
     const glyph = $("span", frame);
     if (!host || !glyph) return;
 
-    const [dx, dy] = travel[frame.dataset.dir] ?? travel.out;
     const tl = gsap
       .timeline({ paused: true })
-      .to(glyph, { xPercent: dx * 110, yPercent: dy * 110, duration: 0.2, ease: "power2.in" })
-      .set(glyph, { xPercent: dx * -110, yPercent: dy * -110 })
+      .to(glyph, { xPercent: 110, yPercent: -110, duration: 0.2, ease: "power2.in" })
+      .set(glyph, { xPercent: -110, yPercent: 110 })
       .to(glyph, { xPercent: 0, yPercent: 0, duration: D.fast, ease: E.out });
 
     host.addEventListener("pointerenter", () => tl.restart());
@@ -505,6 +505,8 @@ function showView(name) {
   if (motionOn) viewMotion = buildView(name);
   ScrollTrigger.refresh();
   lenis?.resize();
+  // the focused link may have just been hidden, so focus starts again at main
+  $("main").focus({ preventScroll: true });
 }
 
 // main dips out and comes back, and the new view's own entrances do the
@@ -603,7 +605,6 @@ function initLoader(onDone) {
   const loader = $(".loader");
   const bar = $(".loader-bar");
   const pct = $("[data-loader-pct]");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   // the loader is an opening, not a toll: once per session, never on the way
   // back from a link. storage can throw in a private window, so it is guarded
@@ -615,7 +616,7 @@ function initLoader(onDone) {
     seen = false;
   }
 
-  if (!loader || reduceMotion || seen) {
+  if (!loader || reducedMotion() || seen) {
     loader?.remove();
     onDone();
     return;
@@ -654,12 +655,11 @@ function initLoader(onDone) {
 }
 
 function initHeroMotion() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const topo = $(".hero-topo");
   const drift = $(".topo-drift");
   const layers = $$(".topo-layer");
   const shapes = $$("[data-shape]");
-  if (!topo || reduceMotion) return;
+  if (!topo || reducedMotion()) return;
 
   // solid contour drift, no dashoffset (that was chopping the lines)
   if (drift) {
@@ -738,17 +738,19 @@ function initHeroMotion() {
   const hero = $(".hero");
   if (hero) {
     const ambient = [drift, topo, $(".hero-orbit"), ...layers, ...shapes].filter(Boolean);
-    ScrollTrigger.create({
+    const park = (active) =>
+      gsap
+        .getTweensOf(ambient)
+        .filter((tween) => tween.repeat() === -1)
+        .forEach((tween) => (active ? tween.play() : tween.pause()));
+    const heroView = ScrollTrigger.create({
       trigger: hero,
       start: "top bottom",
       end: "bottom top",
-      onToggle: (self) => {
-        gsap
-          .getTweensOf(ambient)
-          .filter((tween) => tween.repeat() === -1)
-          .forEach((tween) => (self.isActive ? tween.play() : tween.pause()));
-      },
+      onToggle: (self) => park(self.isActive),
     });
+    // scrolled past before the intro landed, so no toggle comes to park them
+    if (!heroView.isActive) park(false);
   }
 }
 
@@ -822,7 +824,8 @@ function buildMe(ctx) {
       0.12,
     )
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
-    .from(".hero-foot > *", { y: 24, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
+    // yPercent, because the see work pill is magnetic and quickTo owns its y
+    .from(".hero-foot > *", { yPercent: 40, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
     .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12)
     .from(
       ".hero-topo path",
@@ -849,12 +852,16 @@ function buildMe(ctx) {
   // same treatment for the marquee: it only earns its frame cost while visible
   const marqueeEl = $(".marquee");
   if (marqueeEl && marqueeTween) {
-    ScrollTrigger.create({
+    const marqueeView = ScrollTrigger.create({
       trigger: marqueeEl,
       start: "top bottom",
       end: "bottom top",
+      // built before the hero pin above it, so it must be measured after the pin
+      refreshPriority: -1,
       onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
     });
+    // it starts below the fold, where no toggle fires until it is reached
+    if (!marqueeView.isActive) marqueeTween.pause();
   }
 
   initScrollVelocity(marqueeTween);
@@ -1325,12 +1332,6 @@ function buildWork() {
   revealLines(".lead-lede", "top 88%");
 }
 
-// life: the two rails. rail.js owns their motion and hands back its cleanup,
-// which the context runs when life is left
-function buildLife() {
-  return buildRails();
-}
-
 // contact ends every view, so its entrances replay with each one
 function buildContact() {
   gsap.from(".contact-link .split-char", {
@@ -1375,12 +1376,14 @@ function buildContact() {
   revealLines(".contact-pitch", "top 84%");
 }
 
-const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildLife };
+// life is the two rails. rail.js owns their motion and hands back its cleanup,
+// which the context runs when life is left
+const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildRails };
 
 // one context per visit. contact and the counters end every view, so they are
 // built into it too. each builder's returned cleanup runs when it is reverted
 function buildView(name) {
-  const counted = $$(`.view[data-view-name="${name}"] [data-count], .contact [data-count]`);
+  const counted = $$(`.view[data-view-name="${name}"] [data-count]`);
 
   return gsap.context((ctx) => {
     ctx.add(VIEW_MOTION[name]);
@@ -1390,12 +1393,11 @@ function buildView(name) {
 }
 
 function initMotion() {
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   $$("[data-split]").forEach(splitCharacters);
 
   // no contexts under reduced motion: everything is set to its final state
   // once, for all three views, and a switch is an instant swap
-  if (reduceMotion) {
+  if (reducedMotion()) {
     gsap.set(".scroll-progress", { scaleX: 1 });
     gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
     buildCounters($$("[data-count]"));
@@ -1429,13 +1431,6 @@ function initMotion() {
   viewMotion = buildView(view);
 
   document.fonts.ready.then(() => {
-    ScrollTrigger.refresh();
-    lenis?.resize();
-  });
-
-  // lazy images below the fold land long after fonts do and shift every trigger
-  // position under them, which is most of the page on a phone
-  window.addEventListener("load", () => {
     ScrollTrigger.refresh();
     lenis?.resize();
   });

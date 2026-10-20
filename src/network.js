@@ -228,6 +228,19 @@ export function createNetwork(canvas, { ground, ahead }) {
   const resize = new ResizeObserver(layout);
   resize.observe(canvas);
 
+  // a move to a screen with another pixel ratio resizes nothing, so the observer
+  // never hears of it. a query matches one ratio, so it is remade after each change
+  let ratio;
+  function watchRatio() {
+    ratio = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+    ratio.addEventListener("change", onRatio, { once: true });
+  }
+  function onRatio() {
+    layout();
+    watchRatio();
+  }
+  watchRatio();
+
   // it draws on the ticker rather than in a tween, so an observer parks it
   // when the canvas is off screen. reduced motion gets the wiring, at rest
   const park = new IntersectionObserver(([entry]) => {
@@ -238,6 +251,7 @@ export function createNetwork(canvas, { ground, ahead }) {
 
   function kill() {
     resize.disconnect();
+    ratio.removeEventListener("change", onRatio);
     park.disconnect();
     gsap.ticker.remove(tick);
   }
