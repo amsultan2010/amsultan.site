@@ -2707,6 +2707,22 @@ section[id],
     max-width: 10.5rem;
   }
 
+  /* the long stupid stuff title needs the whole bar, so its count drops under it */
+  .stuff .section-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stuff .section-meta {
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: none;
+    padding-left: var(--gutter);
+    border-left: 0;
+    border-top: 2px solid var(--head-rule, var(--ink));
+  }
+
   .zc-cta {
     width: 100%;
     justify-content: space-between;
