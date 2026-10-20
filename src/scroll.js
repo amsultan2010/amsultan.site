@@ -38,8 +38,8 @@ const locks = new Set();
 
 // lenis scrolls from script, which a hidden overflow on body does nothing to
 // stop, so with lenis running the only way to hold the page is to stop it.
-// without it the overflow is enough. the loader and the menu each hold under
-// their own name, so one closing cannot let go for another
+// without it the overflow is enough. each owner holds under its own
+// name, so one closing cannot let go for another
 export function lockScroll(owner, locked) {
   if (locked) locks.add(owner);
   else locks.delete(owner);

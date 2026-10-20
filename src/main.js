@@ -402,58 +402,24 @@ function revealLines(selector, start = "top 85%") {
   });
 }
 
-const menuQuery = window.matchMedia("(max-width: 960px)");
-
-// out here rather than inside initNavigation, because a view switch closes the
-// phone menu too
-function setMenuOpen(open) {
-  const nav = $(".primary-nav");
-  const toggle = $(".menu-toggle");
-  if (!nav || !toggle) return;
-  nav.classList.toggle("is-open", open);
-  toggle.classList.toggle("is-open", open);
-  toggle.setAttribute("aria-expanded", String(open));
-  toggle.setAttribute("aria-label", open ? "close menu" : "open menu");
-  lockScroll("menu", open && menuQuery.matches);
-}
-
-function initNavigation() {
-  const nav = $(".primary-nav");
-  const toggle = $(".menu-toggle");
-
-  toggle?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    setMenuOpen(!nav.classList.contains("is-open"));
-  });
-
-  menuQuery.addEventListener("change", () => setMenuOpen(false));
-
-  document.addEventListener("click", (event) => {
-    if (!nav?.classList.contains("is-open")) return;
-    if (nav.contains(event.target) || toggle?.contains(event.target)) return;
-    setMenuOpen(false);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") setMenuOpen(false);
+// the clips of the view on screen play the whole time it is shown, reduced
+// motion included, and the clips of the other views pause
+function playClips() {
+  $$("video[data-clip]").forEach((clip) => {
+    if (clip.closest(".view").dataset.viewName === document.documentElement.dataset.view) {
+      clip.play().catch(() => {});
+    } else clip.pause();
   });
 }
 
-// the clips load and play only while on screen. a hidden view's clips are never
-// on screen, so they wait until it is shown. under reduced motion the posters stay
+// low power mode on an iphone refuses autoplay, even muted, until the visitor
+// touches the page, so every tap tries again
 function initClips() {
-  if (reducedMotion()) return;
-  const io = new IntersectionObserver((entries) =>
-    entries.forEach(({ target, isIntersecting }) => {
-      if (isIntersecting) target.play().catch(() => {});
-      else target.pause();
-    }),
-  );
-  $$("video[data-clip]").forEach((clip) => io.observe(clip));
+  playClips();
+  ["touchend", "click"].forEach((type) => document.addEventListener(type, playClips, { passive: true }));
 }
 
-// at the bottom of a view, the next stop in the nav hops to say there is more.
-// on a phone the links sit in the closed menu, so the menu button hops instead
+// at the bottom of a view, the next stop in the nav hops to say there is more
 const NEXT = { me: "/work", work: "/life", life: "/resume" };
 function initNextNudge() {
   const root = document.documentElement;
@@ -463,7 +429,6 @@ function initNextNudge() {
     $$(".primary-nav a").forEach((link) =>
       link.classList.toggle("is-next", link.getAttribute("href") === next),
     );
-    $(".menu-toggle")?.classList.toggle("is-next", Boolean(next));
   };
   window.addEventListener("scroll", update, { passive: true });
 }
@@ -529,6 +494,7 @@ function showView(name) {
 
   view = name;
   document.documentElement.dataset.view = name;
+  playClips();
   jumpToTop();
 
   if (motionOn) viewMotion = buildView(name);
@@ -576,8 +542,6 @@ async function runSwitches() {
 }
 
 function requestView(name, push) {
-  setMenuOpen(false);
-
   if (name === wanted) {
     // the link to the view already on screen goes back to its top
     if (push && !switching) scrollToTop();
@@ -1478,7 +1442,6 @@ initActionFill();
 initNavScramble();
 initHeroParallax();
 initLeadHover();
-initNavigation();
 initNextNudge();
 initClips();
 initRouter();
