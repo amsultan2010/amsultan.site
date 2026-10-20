@@ -399,12 +399,6 @@ html[data-view] .view-life .rail:last-child {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .primary-nav a.is-next {
-    animation: none;
-  }
-}
-
 .brand-mark {
   transition: background 180ms ease, color 180ms ease;
 }
