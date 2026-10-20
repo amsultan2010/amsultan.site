@@ -1672,6 +1672,7 @@ html[data-view] .about {
 /* stupid stuff: three claude artifacts, each a looping clip that opens it */
 .stuff {
   --head-bg: var(--orange);
+  --head-accent: var(--cream);
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
