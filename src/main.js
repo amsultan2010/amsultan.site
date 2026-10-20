@@ -439,6 +439,19 @@ function initNavigation() {
   });
 }
 
+// the clips load and play only while on screen. a hidden view's clips are never
+// on screen, so they wait until it is shown. under reduced motion the posters stay
+function initClips() {
+  if (reducedMotion()) return;
+  const io = new IntersectionObserver((entries) =>
+    entries.forEach(({ target, isIntersecting }) => {
+      if (isIntersecting) target.play().catch(() => {});
+      else target.pause();
+    }),
+  );
+  $$("video[data-clip]").forEach((clip) => io.observe(clip));
+}
+
 // at the bottom of a view, the next stop in the nav hops to say there is more.
 // on a phone the links sit in the closed menu, so the menu button hops instead
 const NEXT = { me: "/work", work: "/life", life: "/resume" };
@@ -1467,6 +1480,7 @@ initHeroParallax();
 initLeadHover();
 initNavigation();
 initNextNudge();
+initClips();
 initRouter();
 initAboutNetwork();
 initLoader(() => {
