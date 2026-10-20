@@ -361,16 +361,16 @@ html[data-view] .view-life .rail:last-child {
 
 .primary-nav a.is-next::after {
   position: absolute;
-  top: calc(100% + 0.9rem);
+  top: calc(100% + 0.6rem);
   left: 50%;
   margin-left: -0.5em;
   width: 1em;
-  font-size: 1.6rem;
+  font-size: 4.2rem;
   font-weight: 700;
   line-height: 1;
   text-align: center;
-  /* the hard shadow keeps the cream flash readable on a cream ground */
-  text-shadow: 0.12rem 0.12rem 0 var(--ink);
+  /* the hard shadow keeps the orange flash readable on the orange ground */
+  text-shadow: 0.18rem 0.18rem 0 var(--ink);
   content: "↑" / "";
   pointer-events: none;
   animation:
@@ -379,19 +379,20 @@ html[data-view] .view-life .rail:last-child {
 }
 
 @keyframes next-arrow-bounce {
+  /* the glyph is narrow, so it is stretched sideways to read from across the page */
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateY(0) scaleX(1.9);
   }
 
   50% {
-    transform: translateY(0.45rem);
+    transform: translateY(0.9rem) scaleX(1.9);
   }
 }
 
 @keyframes next-arrow-flash {
   0% {
-    color: var(--ink);
+    color: var(--orange);
   }
 
   50% {
