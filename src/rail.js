@@ -30,7 +30,7 @@ const WATCHING = [
     alt: "moon knight poster: a masked figure in a white suit and wrapped hood" },
   { title: "invincible", kind: "show", src: "/images/watchlist/shows/invincible.jpg", w: 352, h: 440,
     alt: "invincible poster: an illustrated hero in a blue and yellow suit mid flight" },
-  { title: "jojo's bizarre adventure", kind: "show", src: "/images/watchlist/shows/jojo.jpg", w: 311, h: 440,
+  { title: "jojo's bizarre\u00a0adventure", kind: "show", src: "/images/watchlist/shows/jojo.jpg", w: 311, h: 440,
     alt: "jojo's bizarre adventure steel ball run poster: riders racing horses down a desert canyon under a blue sky" },
 ];
 
