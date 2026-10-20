@@ -55,6 +55,12 @@ body {
   font-family: var(--serif);
   text-transform: lowercase;
   text-rendering: optimizeLegibility;
+  /* no line ends on one lonely word: text avoids it, short display lines split evenly */
+  text-wrap: pretty;
+}
+
+:where(h1, h2, h3, strong, .display) {
+  text-wrap: balance;
 }
 
 ::selection {
