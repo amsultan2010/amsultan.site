@@ -13,7 +13,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 - `index.html` the whole site: every word, the meta tags and the JSON-LD. It holds three views,
   one shown at a time (ADR 0001): me at `/` (`#top`, the marquee, `#about`), work at `/work`
-  (`#work` headed "built", `#proof` headed "lead", `#record`) and life at `/life` (the rails).
+  (`#work` headed "built", `#proof` headed "lead", `#record`) and life at `/life` (the stack rail, `#stuff`, the watchlist rail).
   `#contact` and the footer end every view. An inline head script sets `html[data-view]` from the
   path before first paint, and css shows only that `.view[data-view-name]`.
 - `404.html` the second Vite entry. Its styles are inline; it does not load `src/styles.css`.
@@ -70,6 +70,7 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. The
 - A view's path lives in three places: the head script in `index.html`, `PATHS` in `main.js` and
   the rewrites in `vercel.json`. Vite serves `index.html` at any path locally, but Vercel
   rewrites only `/work` and `/life`, so a new view needs all three or it 404s in production.
+  `NEXT` in `main.js` also lists the views in order, for the nav link that bounces at the bottom.
 - Motion for anything inside a view is created in that view's `build*` function, or through
   `ctx.add` when it starts later, so the context's revert kills it. Built anywhere else, it keeps
   running in a hidden view. Pointer behaviours are bound once in `init*` and must not be rebuilt.
