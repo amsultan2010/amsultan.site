@@ -2540,6 +2540,12 @@ section[id],
     display: flex;
   }
 
+  /* the header spans the width here, so it would cover the heading itself */
+  html[data-view] .view[data-view-name="work"],
+  html[data-view] .view-life {
+    padding-top: calc(var(--header-h) + 1.25rem + var(--safe-t));
+  }
+
   .primary-nav a {
     min-height: 3.25rem;
     justify-content: flex-start;
