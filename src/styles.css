@@ -353,6 +353,52 @@ html[data-view] .view-life .rail:last-child {
   }
 }
 
+/* an arrow under it bounces and flashes, pointing up at it. it only points,
+   so taps go through it */
+.primary-nav a.is-next {
+  position: relative;
+}
+
+.primary-nav a.is-next::after {
+  position: absolute;
+  top: calc(100% + 0.9rem);
+  left: 50%;
+  margin-left: -0.5em;
+  width: 1em;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  /* the hard shadow keeps the cream flash readable on a cream ground */
+  text-shadow: 0.12rem 0.12rem 0 var(--ink);
+  content: "↑" / "";
+  pointer-events: none;
+  animation:
+    next-arrow-bounce 0.7s ease-in-out infinite,
+    next-arrow-flash 0.7s steps(1) infinite;
+}
+
+@keyframes next-arrow-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(0.45rem);
+  }
+}
+
+@keyframes next-arrow-flash {
+  0% {
+    color: var(--ink);
+  }
+
+  50% {
+    color: var(--cream);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .primary-nav a.is-next {
     animation: none;
