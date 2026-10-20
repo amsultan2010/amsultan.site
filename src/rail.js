@@ -520,6 +520,9 @@ export function initRail() {
     duration: 52,
   });
 
+  // stupid stuff sits in index.html; moving it here puts it between the two
+  view.append(view.querySelector(".stuff"));
+
   mountRail({
     view,
     items: shuffle(WATCHING),
