@@ -17,7 +17,7 @@ The view holding built, lead and record, in that order.
 _Avoid_: projects, experience, proof
 
 **Life**:
-The view holding the personal stack and the watchlist.
+The view holding the personal stack, stupid stuff and the watchlist, in that order.
 _Avoid_: personal, hobbies, flicks
 
 ## Inside a view
@@ -41,6 +41,10 @@ _Avoid_: achievements
 **Rail**:
 A draggable row of pictures. The personal stack and the watchlist are the two rails.
 _Avoid_: carousel, slider
+
+**Stupid stuff**:
+The section in life of small things Abdullah made as claude artifacts, each a looping clip that opens it.
+_Avoid_: artifacts, experiments, side projects
 
 **Contact**:
 The block that ends every view, with the ways to reach Abdullah.

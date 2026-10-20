@@ -58,7 +58,7 @@ Canonical site: https://www.amsultan.site/
 
 - [Home](https://www.amsultan.site/): About and contact.
 - [Work](https://www.amsultan.site/work): Built, lead, and record.
-- [Life](https://www.amsultan.site/life): The personal stack and the watchlist.
+- [Life](https://www.amsultan.site/life): The personal stack, small games made as Claude artifacts, and the watchlist.
 - [Resume](https://www.amsultan.site/resume): Full resume as a PDF: education,
   experience, awards, skills.
 
