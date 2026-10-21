@@ -1,0 +1,89 @@
+/* the resume page: the site header on top, the hero's field pinned behind,
+   the google doc in front */
+.resume-page .hero-bg {
+  position: fixed;
+}
+
+.resume {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: calc(var(--header-h) + 2.25rem + var(--safe-t)) calc(var(--gutter) + var(--safe-r))
+    calc(var(--gutter) + var(--safe-b)) calc(var(--gutter) + var(--safe-l));
+}
+
+.resume-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.resume-title {
+  margin: 0;
+  font-size: clamp(2.8rem, 9vw, 6.5rem);
+  line-height: 0.9;
+}
+
+/* the one action on the page, so it is the pill turned up: bigger, and ink */
+.resume-download {
+  min-height: 4.2rem;
+  padding: 1rem 1.6rem;
+  font-size: 1.15rem;
+  color: var(--cream);
+  background: var(--ink);
+  box-shadow: 0.42rem 0.42rem 0 var(--cream);
+}
+
+.resume-download:hover {
+  color: var(--ink);
+  background: var(--cream);
+  box-shadow: 0.55rem 0.55rem 0 var(--ink);
+}
+
+.resume-download:active {
+  box-shadow: 0.08rem 0.08rem 0 var(--ink);
+}
+
+.resume-download span {
+  font-size: 1.4rem;
+}
+
+.resume-download:hover span {
+  transform: translateY(0.15rem);
+}
+
+.resume-doc {
+  position: relative;
+  display: grid;
+  flex: 1;
+  min-height: 28rem;
+  place-items: center;
+  border: 2px solid var(--ink);
+  background: var(--cream);
+  box-shadow: 0.42rem 0.42rem 0 var(--ink);
+}
+
+/* google's editor takes a few seconds; the frame is transparent until it paints */
+.resume-doc iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 700px) {
+  .resume {
+    padding-top: calc(5.5rem + var(--safe-t));
+  }
+
+  .resume-download {
+    width: 100%;
+  }
+}

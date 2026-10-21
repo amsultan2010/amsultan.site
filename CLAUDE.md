@@ -16,7 +16,9 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
   (`#work` headed "built", `#proof` headed "lead", `#record`) and life at `/life` (the stack rail, `#stuff`, the watchlist rail).
   `#contact` and the footer end every view. An inline head script sets `html[data-view]` from the
   path before first paint, and css shows only that `.view[data-view-name]`.
-- `404.html` the second Vite entry, `resume.html` the third. Its styles are inline; it does not load `src/styles.css`.
+- `404.html` the second Vite entry. Its styles are inline; it does not load `src/styles.css`.
+- `resume.html` the third Vite entry. `src/resume.js` loads `styles.css` and `resume.css` and
+  drifts the hero's shapes behind the doc. Its header and shapes are copied from `index.html`.
 - `src/main.js` all page motion, as `init*` functions called in order at the bottom of the file.
   `initRouter` swaps views in place (`requestView`, `swapView`, `showView`). `buildView` puts one
   view's motion (`buildMe`, `buildWork` or `buildRails`, plus `buildContact` and `buildCounters`)
@@ -77,10 +79,10 @@ login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. The
 - Facts are repeated by hand. A changed number means the body copy, its `data-count`, the meta and
   social descriptions, the JSON-LD, `public/llms.txt` and `lastmod` in `public/sitemap.xml`.
 - Colour values are copied into `404.html` and `theme-color`.
-- The resume is a Google Doc, embedded by `resume.html` (the third Vite entry, inline styles like
-  `404.html`) and linked there as a PDF export. Edit the doc, not the repo. `/resume` is a rewrite
-  in `vercel.json`, which also redirects `/resume.pdf` and `/resume.html` there. Vite skips
-  `vercel.json`, so locally the page is at `/resume.html`. The doc must stay viewable by anyone
+- The resume is a Google Doc, embedded by `resume.html` and linked there as a PDF export. Edit
+  the doc, not the repo. `/resume` is a rewrite in `vercel.json`, which also redirects
+  `/resume.pdf` and `/resume.html` there. Vite skips `vercel.json`, so locally the page is at
+  `/resume.html`. The doc must stay viewable by anyone
   with the link.
 - Images are absolute `/images/...` strings, so Vite never checks them. A `data-tag="x"` chip needs
   `public/images/tags/x.jpg`, and a new rail object needs a measured `trim` box.
