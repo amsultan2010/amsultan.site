@@ -57,7 +57,7 @@
   "rewrites": [
     {
       "source": "/resume",
-      "destination": "/resume.pdf"
+      "destination": "/resume.html"
     },
     {
       "source": "/work",
@@ -69,19 +69,6 @@
     }
   ],
   "headers": [
-    {
-      "source": "/resume(.pdf)?",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/pdf"
-        },
-        {
-          "key": "Content-Disposition",
-          "value": "inline; filename=\"Abdullah_Sultan_Resume.pdf\""
-        }
-      ]
-    },
     {
       "source": "/(.*)",
       "has": [
