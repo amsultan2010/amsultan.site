@@ -1486,7 +1486,8 @@ html[data-view] .about {
     "idx icon name name"
     "blurb blurb blurb blurb"
     "thumb thumb thumb thumb"
-    "meta meta meta go";
+    "meta meta meta meta"
+    "go   go   go   go";
   gap: 0.5rem 0.85rem;
   align-items: center;
   padding: 1.25rem var(--gutter) 1.5rem;
@@ -1595,7 +1596,7 @@ html[data-view] .about {
 
 .work-go {
   grid-area: go;
-  justify-self: end;
+  justify-self: start;
   white-space: nowrap;
   color: var(--row-accent);
 }
@@ -1617,7 +1618,8 @@ html[data-view] .about {
    one glance rather than a scroll */
 @media (min-width: 900px) {
   .work-row {
-    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, 22rem);
+    /* the shot gives way below 1350px so the date line keeps its one line */
+    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 26vw));
     grid-template-areas:
       "idx icon name  thumb"
       "idx icon blurb thumb"
@@ -1696,11 +1698,21 @@ html[data-view] .about {
 }
 
 
-/* the date and role lines in built and lead, and built's link label */
+/* the date and role lines in built and lead, and built's link label. each
+   stays on one line, so on a phone the size follows the screen width */
 .work-row .work-meta,
 .work-row .work-go,
 .lead-item .lead-body .mono {
-  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  font-size: clamp(0.7rem, 3.2vw, 1.15rem);
+  white-space: nowrap;
+}
+
+@media (min-width: 900px) {
+  .work-row .work-meta,
+  .work-row .work-go,
+  .lead-item .lead-body .mono {
+    font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+  }
 }
 
 /* stupid stuff: three claude artifacts, each a looping clip that opens it */
