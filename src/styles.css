@@ -1696,6 +1696,13 @@ html[data-view] .about {
 }
 
 
+/* the date and role lines in built and lead, and built's link label */
+.work-row .work-meta,
+.work-row .work-go,
+.lead-item .lead-body .mono {
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+}
+
 /* stupid stuff: three claude artifacts, each a looping clip that opens it */
 .stuff {
   --head-bg: var(--orange);
@@ -1801,7 +1808,7 @@ html[data-view] .about {
 
 .lead-body .mono {
   margin: 0 0 0.35rem;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .lead-body h3 {
@@ -1811,9 +1818,9 @@ html[data-view] .about {
 }
 
 .lead-body .serif {
-  max-width: 40rem;
+  max-width: 48rem;
   margin: 0.65rem 0 0;
-  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  font-size: clamp(1.2rem, 1.75vw, 1.55rem);
   line-height: 1.25;
 }
 
@@ -1848,9 +1855,9 @@ html[data-view] .about {
   grid-area: blurb;
   display: grid;
   gap: 0.3rem;
-  max-width: 40rem;
+  max-width: 48rem;
   /* matches the lead bullets below it */
-  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  font-size: clamp(1.2rem, 1.75vw, 1.55rem);
   opacity: 0.9;
 }
 
