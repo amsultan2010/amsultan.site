@@ -9,7 +9,8 @@
    every cell centres its own content, which is what stops the label hanging low */
 .rail-head {
   display: flex;
-  background: var(--orange);
+  color: var(--rail-head-ink, var(--ink));
+  background: var(--rail-head-bg, var(--orange));
   border-bottom: 2px solid var(--ink);
 }
 
@@ -25,7 +26,7 @@
 }
 
 .rail-cell + .rail-cell {
-  border-left: 2px solid var(--ink);
+  border-left: 2px solid var(--rail-head-rule, var(--ink));
 }
 
 .rail-cell-label {
@@ -56,10 +57,11 @@
 .rail-label {
   font-size: clamp(1.45rem, 3.4vw, 2.75rem);
   line-height: 0.95;
+  white-space: nowrap;
 }
 
 .rail-label-accent {
-  color: var(--cream);
+  color: var(--rail-head-accent, var(--cream));
 }
 
 /* the ruler: short ticks on every step and a tall one on every fifth. these two
@@ -77,8 +79,8 @@
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px calc(var(--tick) * 5)) left bottom / 100% 75% no-repeat,
-    repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px var(--tick)) left bottom / 100% 40% no-repeat;
+    repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px calc(var(--tick) * 5)) left bottom / 100% 75% no-repeat,
+    repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px var(--tick)) left bottom / 100% 40% no-repeat;
   transform-origin: 0 50%;
 }
 
@@ -96,7 +98,7 @@
   bottom: 0;
   left: 0;
   width: 0.5rem;
-  background: var(--ink);
+  background: currentColor;
   transform-origin: 50% 100%;
 }
 
@@ -111,9 +113,10 @@
   transform-origin: 0 50%;
 }
 
+/* the top only needs room for a hovered cover to lift into */
 .rail-viewport {
   overflow: hidden;
-  padding: 1.75rem 0;
+  padding: 1.25rem 0 1.75rem;
 }
 
 .rail-track {
@@ -243,9 +246,28 @@
     padding-left: 0.75rem;
   }
 
+  /* a label is about 11.4 of its own em wide, and the hint cell and gutters
+     take 9rem, so this is the largest size that keeps it on one line */
   .rail-label {
-    font-size: clamp(1.2rem, 5.6vw, 1.45rem);
+    font-size: min(1.45rem, calc((100vw - 9rem) / 11.4));
   }
+}
+
+/* each rail takes its own ground and head colours, so the three read as three
+   sections and not one bar printed three times: the stack is cream on ink,
+   stupid stuff keeps its old section head over an ink ground, and the watchlist
+   is a cream head over an orange ground */
+.rail-object {
+  --rail-head-bg: var(--ink);
+  --rail-head-ink: var(--cream);
+  --rail-head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
+  --rail-head-accent: var(--orange);
+}
+
+.rail-poster {
+  --rail-head-bg: var(--cream);
+  --rail-head-accent: var(--orange);
+  background: var(--orange);
 }
 
 /* the object rail: cutouts sit straight on the cream ground, so no frame and no
@@ -322,6 +344,29 @@
   letter-spacing: 0.04em;
 }
 
+.rail-stuff {
+  --head-bg: var(--orange);
+  --head-accent: var(--cream);
+  color: var(--cream);
+  background: var(--ink);
+}
+
+/* the title is about 11.6 of its own em wide. at this size it sits on one line
+   beside the count with room left for the echo, down to the 900px layout below */
+.rail-stuff .section-display,
+.rail-stuff .section-echo {
+  font-size: min(5.4vw, 5.5rem);
+}
+
+.rail-stuff .section-display {
+  white-space: nowrap;
+}
+
+/* an ink shadow would vanish into the ink ground */
+.rail-stuff .rail-cover {
+  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+}
+
 /* the stuff rail: each cover is a 16:9 clip that links to its game. there are
    only five, so the width follows the viewport: five of them always run past the
    screen edge and the wrap never shows a gap */
@@ -345,5 +390,43 @@
 .rail-stuff .rail-caption-inner {
   flex-direction: column;
   align-items: start;
-  gap: 0.2rem;
+  gap: 0.35rem;
+}
+
+/* the name is always on screen, so it carries the weight of a heading */
+.rail-stuff .rail-title {
+  font-family: var(--display);
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  font-weight: 800;
+}
+
+.rail-stuff .rail-kind {
+  font-size: 0.85rem;
+}
+
+/* under 900px the long title needs the whole bar to stay on one line, so the
+   echo goes, the count drops under it, and the title grows into the width */
+@media (max-width: 900px) {
+  .rail-stuff .section-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .rail-stuff .section-echo {
+    display: none;
+  }
+
+  .rail-stuff .section-display {
+    font-size: min(calc((100vw - 3rem) / 11.6), 5.5rem);
+  }
+
+  .rail-stuff .section-meta {
+    grid-auto-flow: column;
+    justify-content: start;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: none;
+    padding-left: var(--gutter);
+    border-left: 0;
+    border-top: 2px solid var(--head-rule, var(--ink));
+  }
 }

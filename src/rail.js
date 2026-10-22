@@ -251,12 +251,32 @@ function buildHead(label, count) {
   );
 }
 
-function buildSection({ items, label, variant, noun }) {
+// stupid stuff keeps the head it had as its own section: the word, its outline
+// echoing off to the edge, then a count. main.js splits the word into chars and
+// counts the number up, the same as every other section head
+function buildSectionHead(label, echo, count, note) {
+  const title = el("h2", "section-display", label);
+  title.dataset.split = "";
+
+  const run = el("span", "section-echo-run", ...Array.from({ length: 6 }, () => el("i", "", echo)));
+  const echoes = el("span", "section-echo", run);
+  echoes.setAttribute("aria-hidden", "true");
+
+  const number = el("b", "display", String(count).padStart(2, "0"));
+  number.dataset.count = count;
+  number.dataset.pad = "2";
+
+  return el("header", "section-head", title, echoes, el("p", "section-meta", number, el("span", "mono", note)));
+}
+
+function buildSection({ items, label, variant, noun, echo, note }) {
   const section = document.createElement("section");
   section.className = `rail rail-${variant}`;
   section.setAttribute("aria-label", label);
 
-  const head = buildHead(label, `${items.length} ${noun}`);
+  const head = echo
+    ? buildSectionHead(label, echo, items.length, note)
+    : buildHead(label, `${items.length} ${noun}`);
 
   const viewport = document.createElement("div");
   viewport.className = "rail-viewport";
@@ -342,7 +362,10 @@ function initDrag(track, auto, setHead, onScreen, toProgress) {
 function initHover(track) {
   const unbind = [...track.children].map((item) => {
     const cover = item.querySelector(".rail-cover");
-    const caption = item.querySelector(".rail-caption-inner");
+    // a stuff title stays on screen, so only the line under it is revealed
+    const caption = item.querySelector(
+      item.matches(".rail-item-stuff") ? ".rail-kind" : ".rail-caption-inner",
+    );
 
     gsap.set(caption, { yPercent: 105, autoAlpha: 0 });
 
@@ -410,18 +433,38 @@ function initHeadEntrance(head) {
     .from(head.querySelector(".rail-arrow"), { scaleX: 0, duration: D.base }, 0.5);
 }
 
+// the section heads in work enter the same way: the chars rise out of the
+// word's padding, the echoes slide in, and the count opens from its edge
+function initSectionHeadEntrance(head) {
+  return gsap
+    .timeline({
+      defaults: { ease: "out" },
+      scrollTrigger: { trigger: head, start: "top 88%", once: true },
+    })
+    .from(head.querySelectorAll(".split-char"), { yPercent: 125, duration: D.slow, stagger: 0.03 }, 0)
+    .from(head.querySelectorAll(".section-echo i"), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12)
+    .fromTo(
+      head.querySelector(".section-meta"),
+      { clipPath: "inset(0% 0% 0% 100%)" },
+      { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: "inOut", clearProps: "clipPath" },
+      0.2,
+    );
+}
+
 // the rails mounted into life, in page order, for buildRails to animate
 const rails = [];
 
-function mountRail({ view, items, label, noun, variant, duration, reverse = false }) {
-  const { section, head, viewport, track } = buildSection({ items, label, variant, noun });
+function mountRail({ view, items, label, noun, echo, note, variant, duration, reverse = false }) {
+  const { section, head, viewport, track } = buildSection({ items, label, variant, noun, echo, note });
   view.append(section);
   rails.push({ section, head, viewport, track, duration, reverse });
 }
 
 // one rail's motion, reverted with the matchMedia this returns
 function animateRail({ section, head, viewport, track, duration, reverse }) {
+  // a section head has no ruler and no drag hint, so both can be missing
   const carriage = head.querySelector(".rail-carriage");
+  const arrow = head.querySelector(".rail-arrow");
   const mm = gsap.matchMedia();
 
   // matchMedia only runs this when at least one condition matches, so the
@@ -450,7 +493,7 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
 
       // loop progress, 0 to 1, as a place along the ruler. the carriage is as
       // wide as the strip, so a percentage of itself needs no measuring
-      const setX = gsap.quickSetter(carriage, "xPercent");
+      const setX = carriage ? gsap.quickSetter(carriage, "xPercent") : () => {};
       const setHead = (progress) => setX(progress * 100);
 
       // a reversed rail runs the same loop from the other end. its place along
@@ -475,13 +518,14 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
         // no hover on touch, so the captions just stay on screen
         gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
       }
-      initHeadEntrance(head);
+      if (carriage) initHeadEntrance(head);
+      else initSectionHeadEntrance(head);
       initEntrance(section, track, fine ? 12 : 10);
 
       // the drag hint leans a few pixels either way, slowly, so the bar is never
       // completely still while the rail is on screen
-      const sway = gsap.fromTo(
-        head.querySelector(".rail-arrow"),
+      const sway = arrow && gsap.fromTo(
+        arrow,
         { x: -3 },
         { x: 3, duration: 1.6, ease: "inOut", repeat: -1, yoyo: true },
       );
@@ -494,7 +538,7 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
         end: "bottom top",
         onToggle: (self) => {
           // the hint is no part of the drag handover, so it parks either way
-          sway.paused(!self.isActive);
+          sway?.paused(!self.isActive);
           if (drag.isPressed || drag.isThrowing) return;
           if (self.isActive) auto.play();
           else auto.pause();
@@ -502,7 +546,7 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
       });
       if (!inView.isActive) {
         auto.pause();
-        sway.pause();
+        sway?.pause();
       }
 
       // a subtle speed bias: fast scrolling pushes the rail along, then it eases
@@ -532,10 +576,10 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
         nudge.kill();
         inView.kill();
         drag.kill();
-        sway.kill();
+        sway?.kill();
         auto.kill();
         gsap.set(track, { x: 0, xPercent: 0, clearProps: "cursor" });
-        gsap.set(carriage, { clearProps: "transform" });
+        if (carriage) gsap.set(carriage, { clearProps: "transform" });
       };
     },
   );
@@ -572,7 +616,8 @@ export function initRail() {
     view,
     items: shuffle(STUFF),
     label: "stupid stuff i made",
-    noun: "games",
+    echo: "stuff",
+    note: "claude artifacts, every clip opens one",
     variant: "stuff",
     duration: 64,
     reverse: true,
