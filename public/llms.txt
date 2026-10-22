@@ -11,20 +11,17 @@
 
 Canonical site: https://www.amsultan.site/
 
-## Built
+## Worked
 
+- [Cycls](https://cycls.com): AI engineering intern, fall/winter 2026. The
+  youngest ever intern at the Riyadh-based tech startup, a business suite of
+  AI agents. Helping build and deploy specialized agents to over 7,000
+  customers.
 - [fschoolai](https://fschoolai.com): Software and product intern at an edtech
   startup, summer 2026. Shipped a course-aware AI video tutor and a landing
   page/dashboard redesign; drove a marketing push past 1.3 million+ views
   across social, growing the waitlist past 1,500. Helped organize a YC Startup
   School afterparty showcasing the features he built, drawing 80+ attendees.
-- [crosscode](https://getcrosscode.dev): Creator. Open-source MIT-licensed CLI
-  that keeps a git checkout in sync between teammates and their coding agents.
-  Published on npm as `crosscode-cli` with 1,700+ downloads. Works with
-  Claude Code, Codex, Cursor, and any MCP client. Requires Node 24.
-- [the downforce blog](https://www.downforceblog.com): Writer, since 2025.
-  Formula 1 race reports and opinion pieces written from Riyadh. 28 posts
-  across race reports, editorials, and guides; 42,000+ views.
 
 ## Lead
 
@@ -39,6 +36,16 @@ Canonical site: https://www.amsultan.site/
 - Code Ninjas (Sienna, TX, volunteer, summer 2026): Coached 50+ elementary
   schoolers in robotics, game design, 3D modeling, and Python/Java. 100+
   volunteer hours.
+
+## Built
+
+- [crosscode](https://getcrosscode.dev): Creator. Open-source MIT-licensed CLI
+  that keeps a git checkout in sync between teammates and their coding agents.
+  Published on npm as `crosscode-cli` with 1,700+ downloads. Works with
+  Claude Code, Codex, Cursor, and any MCP client. Requires Node 24.
+- [the downforce blog](https://www.downforceblog.com): Writer, since 2025.
+  Formula 1 race reports and opinion pieces written from Riyadh. 28 posts
+  across race reports, editorials, and guides; 42,000+ views.
 
 ## Record
 
@@ -57,7 +64,7 @@ Canonical site: https://www.amsultan.site/
 ## Pages
 
 - [Home](https://www.amsultan.site/): About and contact.
-- [Work](https://www.amsultan.site/work): Built, lead, and record.
+- [Work](https://www.amsultan.site/work): Worked, lead, built, and record.
 - [Life](https://www.amsultan.site/life): The personal stack, small games made as Claude artifacts, and the watchlist.
 - [Resume](https://www.amsultan.site/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
