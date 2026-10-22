@@ -1459,7 +1459,7 @@ html[data-view] .about {
 }
 
 .work-group .display {
-  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  font-size: clamp(1.3rem, 2.4vw, 2.1rem);
   line-height: 1;
 }
 
@@ -1558,7 +1558,7 @@ html[data-view] .about {
   grid-area: name;
   /* it is a .tag, so the underline should hug the word, not the grid column */
   justify-self: start;
-  font-size: clamp(1.15rem, 2.2vw, 1.85rem);
+  font-size: clamp(1.45rem, 3.2vw, 2.75rem);
   line-height: 1.05;
 }
 
@@ -1617,7 +1617,7 @@ html[data-view] .about {
    one glance rather than a scroll */
 @media (min-width: 900px) {
   .work-row {
-    grid-template-columns: 3.25rem 3rem minmax(0, 1fr) minmax(13rem, 20rem);
+    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, 22rem);
     grid-template-areas:
       "idx icon name  thumb"
       "idx icon blurb thumb"
@@ -1629,8 +1629,8 @@ html[data-view] .about {
   }
 
   .work-row-icon {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   .work-name {
@@ -1848,8 +1848,9 @@ html[data-view] .about {
   grid-area: blurb;
   display: grid;
   gap: 0.3rem;
-  max-width: 34rem;
-  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  max-width: 40rem;
+  /* matches the lead bullets below it */
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
   opacity: 0.9;
 }
 
