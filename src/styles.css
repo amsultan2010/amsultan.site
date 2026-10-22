@@ -834,7 +834,7 @@ html[data-view] .view-life .rail:last-child {
   display: flex;
   width: max-content;
   align-items: center;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   font-family: var(--display);
   font-size: clamp(1.1rem, 2.2vw, 2rem);
   font-weight: 800;
@@ -907,7 +907,7 @@ html[data-view] .about {
   display: grid;
   gap: 0.1em;
   margin: 0;
-  padding: clamp(2rem, 5vw, 4.5rem) var(--gutter) clamp(2.1rem, 5.2vw, 4.75rem);
+  padding: clamp(1.4rem, 3.4vw, 3rem) var(--gutter) clamp(1.5rem, 3.6vw, 3.2rem);
   overflow: hidden;
   color: var(--cream);
   background: var(--ink);
@@ -999,7 +999,7 @@ html[data-view] .about {
   grid-template-columns: clamp(2.3rem, 4.2vw, 4rem) minmax(0, 1fr);
   gap: clamp(0.85rem, 1.6vw, 1.5rem);
   align-items: center;
-  padding: clamp(1rem, 1.9vw, 1.75rem) var(--gutter);
+  padding: clamp(0.7rem, 1.3vw, 1.2rem) var(--gutter);
   border-top: 2px solid var(--ink);
   text-wrap: pretty;
   counter-increment: point;
@@ -1105,7 +1105,7 @@ html[data-view] .about {
   align-items: center;
   gap: clamp(1rem, 3vw, 3rem);
   margin: 0;
-  padding: clamp(1.75rem, 4.2vw, 3.75rem) var(--gutter) clamp(2rem, 4.6vw, 4rem);
+  padding: clamp(1.2rem, 2.8vw, 2.5rem) var(--gutter) clamp(1.4rem, 3vw, 2.75rem);
   border-top: 2px solid var(--ink);
   background: var(--orange);
 }
@@ -1172,7 +1172,7 @@ html[data-view] .about {
   grid-template-rows: auto 1fr auto;
   gap: 0.9rem;
   min-width: 0;
-  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--gutter);
+  padding: clamp(0.9rem, 1.8vw, 1.5rem) var(--gutter);
 }
 
 .about-facts div + div {
@@ -1239,7 +1239,7 @@ html[data-view] .about {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: clamp(1.2rem, 2.5vw, 2.1rem) var(--gutter);
+  padding: clamp(0.85rem, 1.7vw, 1.4rem) var(--gutter);
   overflow: hidden;
   color: var(--cream);
   background: var(--ink);
@@ -1353,8 +1353,8 @@ html[data-view] .about {
 /* the padding doubles as the mask the letters rise out of */
 .section-head .section-display {
   align-self: center;
-  padding: clamp(1.1rem, 2.6vw, 2.1rem) clamp(0.9rem, 1.8vw, 1.6rem)
-    clamp(1.1rem, 2.6vw, 2.1rem) var(--gutter);
+  padding: clamp(0.75rem, 1.7vw, 1.4rem) clamp(0.9rem, 1.8vw, 1.6rem)
+    clamp(0.75rem, 1.7vw, 1.4rem) var(--gutter);
   overflow: hidden;
 }
 
@@ -1415,7 +1415,7 @@ html[data-view] .about {
   gap: 0.4rem;
   max-width: 15rem;
   margin: 0;
-  padding: 0.8rem var(--gutter) 0.8rem clamp(1rem, 2vw, 1.75rem);
+  padding: 0.6rem var(--gutter) 0.6rem clamp(1rem, 2vw, 1.75rem);
   border-left: 2px solid var(--head-rule, var(--ink));
 }
 
@@ -1450,7 +1450,7 @@ html[data-view] .about {
   justify-content: space-between;
   gap: 1rem;
   margin: 0;
-  padding: 1rem var(--gutter) 0.85rem;
+  padding: 0.7rem var(--gutter) 0.6rem;
   border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
   color: var(--cream);
   font-weight: inherit;
@@ -1489,7 +1489,7 @@ html[data-view] .about {
     "foot foot foot foot";
   gap: 0.5rem 0.85rem;
   align-items: center;
-  padding: 1.25rem var(--gutter) 1.5rem;
+  padding: 0.9rem var(--gutter) 1.05rem;
   border-bottom: 2px solid var(--ink);
   color: var(--row-fg);
   background: var(--row-bg);
@@ -1631,7 +1631,7 @@ html[data-view] .about {
       "idx icon foot  thumb";
     gap: 0.4rem 1.35rem;
     align-items: start;
-    padding: 1.75rem var(--gutter);
+    padding: 1.25rem var(--gutter);
   }
 
   .work-row-icon {
@@ -1754,14 +1754,14 @@ html[data-view] .about {
 .lead-num {
   display: grid;
   place-items: center;
-  padding: 1.5rem clamp(0.6rem, 1.4vw, 1.25rem);
+  padding: 1.05rem clamp(0.6rem, 1.4vw, 1.25rem);
   border-right: 2px solid var(--ink);
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1;
 }
 
 .lead-body {
-  padding: 1.35rem var(--gutter);
+  padding: 0.95rem var(--gutter);
 }
 
 .lead-body .mono {
@@ -1997,7 +1997,7 @@ html[data-view] .about {
   align-content: center;
   gap: 0.18em 0;
   margin: 0;
-  padding: clamp(1.25rem, 2.6vw, 2.25rem) var(--gutter) clamp(1.4rem, 2.8vw, 2.4rem);
+  padding: clamp(0.9rem, 1.8vw, 1.5rem) var(--gutter) clamp(1rem, 1.9vw, 1.6rem);
   list-style: none;
   font-family: var(--display);
   font-weight: 800;
@@ -2060,7 +2060,7 @@ html[data-view] .about {
   justify-content: space-between;
   gap: 1rem;
   margin: 0;
-  padding: 0.85rem var(--gutter);
+  padding: 0.6rem var(--gutter);
   color: var(--cream);
   background: var(--ink);
 }
@@ -2086,7 +2086,7 @@ html[data-view] .about {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 1.1rem;
   align-items: center;
-  padding: 1.25rem var(--gutter);
+  padding: 0.9rem var(--gutter);
   border-top: 2px solid var(--ink);
   transition: background 220ms ease, color 220ms ease;
 }
@@ -2249,7 +2249,7 @@ html[data-view] .about {
   }
 
   .record-cell {
-    padding-block: 1.6rem;
+    padding-block: 1.1rem;
     border-top: 0;
   }
 
@@ -2273,7 +2273,7 @@ html[data-view] .about {
 
   .record-label {
     flex-direction: column;
-    padding: 1.35rem var(--gutter) 1.25rem;
+    padding: 0.95rem var(--gutter) 0.9rem;
     border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
   }
 
@@ -2308,7 +2308,7 @@ html[data-view] .about {
 /* contact */
 .contact {
   position: relative;
-  padding: clamp(2rem, 5vw, 3.5rem) var(--gutter) clamp(2.5rem, 5vw, 3.75rem);
+  padding: clamp(1.4rem, 3.4vw, 2.4rem) var(--gutter) clamp(1.75rem, 3.4vw, 2.6rem);
   overflow: hidden;
   background: var(--orange);
   border-top: 2px solid var(--ink);
@@ -2319,7 +2319,7 @@ html[data-view] .about {
   z-index: 1;
   display: grid;
   gap: 1.35rem;
-  padding: clamp(1.5rem, 3vw, 2.25rem);
+  padding: clamp(1.1rem, 2.1vw, 1.6rem);
   border: 2px solid var(--ink);
   background: var(--cream);
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
@@ -2399,8 +2399,8 @@ html[data-view] .about {
   display: grid;
   gap: 0.65rem;
   align-content: space-between;
-  min-height: 9.5rem;
-  padding: 1rem;
+  min-height: 7.5rem;
+  padding: 0.85rem;
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
@@ -2739,16 +2739,16 @@ section[id],
 
   .lead-num {
     font-size: 1.25rem;
-    padding: 1.1rem 0.4rem;
+    padding: 0.8rem 0.4rem;
   }
 
   .contact {
-    padding: 1.5rem var(--gutter) 2rem;
+    padding: 1.1rem var(--gutter) 1.4rem;
   }
 
   .contact-frame {
     gap: 1.1rem;
-    padding: 1.15rem;
+    padding: 0.9rem;
     box-shadow: 0.35rem 0.35rem 0 var(--ink);
   }
 
