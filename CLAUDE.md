@@ -13,8 +13,8 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 - `index.html` the whole site: every word, the meta tags and the JSON-LD. It holds three views,
   one shown at a time (ADR 0001): me at `/` (`#top`, the marquee, `#about`), work at `/work`
-  (`.work-split` holding `#worked` and `#proof` headed "lead" side by side from 1100px, then
-  `#work` headed "built", then `#record`) and life at `/life` (the stack rail, `#stuff`, the watchlist rail).
+  (`#work` headed "built", in two `.work-group`s: internships then projects; `#proof` headed
+  "lead", `#record`) and life at `/life` (the stack rail, `#stuff`, the watchlist rail).
   `#contact` and the footer end every view. An inline head script sets `html[data-view]` from the
   path before first paint, and css shows only that `.view[data-view-name]`.
 - `404.html` the second Vite entry. Its styles are inline; it does not load `src/styles.css`.
