@@ -1,4 +1,4 @@
-/* the two rails, owned by workstream ws-3 */
+/* the three rails, owned by workstream ws-3 */
 .rail {
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
@@ -320,4 +320,30 @@
   font-family: var(--mono);
   font-size: 0.85rem;
   letter-spacing: 0.04em;
+}
+
+/* the stuff rail: each cover is a 16:9 clip that links to its game. there are
+   only five, so the width follows the viewport: five of them always run past the
+   screen edge and the wrap never shows a gap */
+.rail-stuff .rail-item {
+  width: max(15rem, 24vw);
+}
+
+.rail-stuff .rail-cover {
+  display: block;
+  aspect-ratio: 16 / 9;
+}
+
+.rail-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the line under each name is a sentence, too long to sit beside it */
+.rail-stuff .rail-caption-inner {
+  flex-direction: column;
+  align-items: start;
+  gap: 0.2rem;
 }

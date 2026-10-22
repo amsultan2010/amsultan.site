@@ -1386,7 +1386,7 @@ function buildContact() {
   revealLines(".contact-pitch", "top 84%");
 }
 
-// life is the two rails. rail.js owns their motion and hands back its cleanup,
+// life is the three rails. rail.js owns their motion and hands back its cleanup,
 // which the context runs when life is left
 const VIEW_MOTION = { me: buildMe, work: buildWork, life: buildRails };
 

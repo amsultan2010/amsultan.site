@@ -1,5 +1,6 @@
-// two draggable rails, the objects i actually keep around and then film and
-// show covers. together they are the whole life view, so both mount into it.
+// three draggable rails: the objects i actually keep around, the stupid stuff i
+// made, then film and show covers. together they are the whole life view, so
+// all three mount into it.
 // the markup is built once, the motion each time life is shown
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -32,6 +33,20 @@ const WATCHING = [
     alt: "invincible poster: an illustrated hero in a blue and yellow suit mid flight" },
   { title: "jojo's bizarre\u00a0adventure", kind: "show", src: "/images/watchlist/shows/jojo.jpg", w: 311, h: 440,
     alt: "jojo's bizarre adventure steel ball run poster: riders racing horses down a desert canyon under a blue sky" },
+];
+
+// each one a claude artifact. its clip and poster are /videos/<clip>.mp4 and .jpg
+const STUFF = [
+  { title: "flipside", kind: "a puzzle on a mobius strip", clip: "flipside",
+    href: "https://claude.ai/artifact/RxX379rCanHjP7ZEtjbnrW" },
+  { title: "five nights at altman's", kind: "five nights at freddy's, with tech execs", clip: "fnaa",
+    href: "https://claude.ai/artifact/EVSx5Z8PuxaGoCpwMMyDF9" },
+  { title: "parselands", kind: "an endless runner where a llama parses pdfs", clip: "parselands",
+    href: "https://claude.ai/artifact/Dma4tHZzpwyzdJxiuFALj9" },
+  { title: "saudi surfers", kind: "subway surfers, but in riyadh, past its famous landmarks", clip: "saudisurfers",
+    href: "https://claude.ai/artifact/3JZp6mZvVnEmYVxnnX7zig" },
+  { title: "tesla tricks", kind: "a game built around the tesla roadster", clip: "tesla",
+    href: "https://claude.ai/artifact/4eraPAM9XVeLjrtHuSkobX" },
 ];
 
 // trim is the solid part of each cutout inside its own file, as [x, y, w, h] in
@@ -104,15 +119,7 @@ function fitObject(figure, item) {
   figure.style.setProperty("--shift-y", `${((y + h / 2) / item.h * -100).toFixed(2)}%`);
 }
 
-function buildItem(item, variant, isClone) {
-  const figure = document.createElement("figure");
-  figure.className = `rail-item rail-item-${variant}`;
-  if (isClone) figure.setAttribute("aria-hidden", "true");
-  if (item.trim) fitObject(figure, item);
-
-  const cover = document.createElement("div");
-  cover.className = "rail-cover";
-
+function buildImage(item, isClone) {
   const img = document.createElement("img");
   img.src = item.src;
   img.alt = isClone ? "" : item.alt;
@@ -121,7 +128,47 @@ function buildItem(item, variant, isClone) {
   img.loading = "lazy";
   img.decoding = "async";
   img.draggable = false;
-  cover.append(img);
+  return img;
+}
+
+// playClips in main.js plays and pauses every data-clip video with its view
+function buildClip(name) {
+  const video = document.createElement("video");
+  video.className = "rail-video";
+  video.dataset.clip = "";
+  video.src = `/videos/${name}.mp4`;
+  video.poster = `/videos/${name}.jpg`;
+  video.width = 960;
+  video.height = 540;
+  // the property is what autoplay checks, the attribute is what ios reads
+  video.muted = true;
+  video.setAttribute("muted", "");
+  video.loop = true;
+  video.playsInline = true;
+  video.preload = "none";
+  video.setAttribute("aria-hidden", "true");
+  return video;
+}
+
+function buildItem(item, variant, isClone) {
+  const figure = document.createElement("figure");
+  figure.className = `rail-item rail-item-${variant}`;
+  if (isClone) figure.setAttribute("aria-hidden", "true");
+  if (item.trim) fitObject(figure, item);
+
+  // a stuff cover is the link to its artifact. the caption only shows on hover,
+  // so the link carries its own name
+  const cover = document.createElement(item.href ? "a" : "div");
+  cover.className = "rail-cover";
+  if (item.href) {
+    cover.href = item.href;
+    cover.target = "_blank";
+    cover.rel = "noreferrer";
+    cover.dataset.cursor = "open";
+    cover.setAttribute("aria-label", `${item.title}, ${item.kind}`);
+    if (isClone) cover.tabIndex = -1;
+  }
+  cover.append(item.clip ? buildClip(item.clip) : buildImage(item, isClone));
 
   const caption = document.createElement("figcaption");
   caption.className = "rail-caption";
@@ -508,7 +555,7 @@ export function initRail() {
   const view = document.querySelector('.view[data-view-name="life"]');
   if (!view) return;
 
-  // the stack first, then the watchlist
+  // the stack first, then stupid stuff, then the watchlist
   mountRail({
     view,
     items: shuffle(OBJECTS),
@@ -520,8 +567,16 @@ export function initRail() {
     duration: 52,
   });
 
-  // stupid stuff sits in index.html; moving it here puts it between the two
-  view.append(view.querySelector(".stuff"));
+  // each rail runs the other way from the one above it, at its own pace
+  mountRail({
+    view,
+    items: shuffle(STUFF),
+    label: "stupid stuff i made",
+    noun: "games",
+    variant: "stuff",
+    duration: 64,
+    reverse: true,
+  });
 
   mountRail({
     view,
@@ -529,9 +584,7 @@ export function initRail() {
     label: "current watchlist",
     noun: "titles",
     variant: "poster",
-    // the other way from the stack, and quicker
     duration: 30,
-    reverse: true,
   });
 
   // the sections land after first paint, so when life is the first view every
