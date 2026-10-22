@@ -1,8 +1,8 @@
 # Abdullah Sultan
 
 > Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He is
-> self-teaching machine learning, data science, data engineering and AI
-> engineering through Kaggle and DataCamp. He has shipped AI products at an
+> self-learning machine learning, AI engineering and data science through
+> Kaggle, DataCamp, 3Blue1Brown and StatQuest. He has shipped AI products at an
 > early-stage startup, builds developer tools, and runs a student-run startup
 > incubator.
 > He is an 11th-grade student at the American International School Riyadh (AIS-R).
