@@ -25,6 +25,8 @@
   --df-bg: #0a3940;
   --df-fg: #f2ecdf;
   --df-accent: #c6e33a;
+  --cy-bg: #000000;
+  --cy-fg: #ffffff;
   /* datacamp's green and navy, read off its own logo, for the one
      certification still in progress */
   --dc: #03ef62;
@@ -1498,6 +1500,13 @@ html[data-view] .about {
   --row-bg: var(--df-bg);
   --row-fg: var(--df-fg);
   --row-accent: var(--df-accent);
+}
+
+/* cycls is black and white too, like crosscode */
+.work-cy {
+  --row-bg: var(--cy-bg);
+  --row-fg: var(--cy-fg);
+  --row-accent: var(--cy-fg);
 }
 
 .work-index {
