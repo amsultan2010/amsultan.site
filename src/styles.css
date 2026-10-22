@@ -1486,8 +1486,7 @@ html[data-view] .about {
     "idx icon name name"
     "blurb blurb blurb blurb"
     "thumb thumb thumb thumb"
-    "meta meta meta meta"
-    "go   go   go   go";
+    "foot foot foot foot";
   gap: 0.5rem 0.85rem;
   align-items: center;
   padding: 1.25rem var(--gutter) 1.5rem;
@@ -1589,14 +1588,20 @@ html[data-view] .about {
   object-position: top center;
 }
 
+/* the date line and the link label share one line at every width */
+.work-foot {
+  grid-area: foot;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8em;
+}
+
 .work-meta {
-  grid-area: meta;
   opacity: 0.85;
 }
 
 .work-go {
-  grid-area: go;
-  justify-self: start;
   white-space: nowrap;
   color: var(--row-accent);
 }
@@ -1619,12 +1624,11 @@ html[data-view] .about {
 @media (min-width: 900px) {
   .work-row {
     /* the shot gives way below 1350px so the date line keeps its one line */
-    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 26vw));
+    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 24vw));
     grid-template-areas:
       "idx icon name  thumb"
       "idx icon blurb thumb"
-      "idx icon meta  thumb"
-      "idx icon go    thumb";
+      "idx icon foot  thumb";
     gap: 0.4rem 1.35rem;
     align-items: start;
     padding: 1.75rem var(--gutter);
@@ -1643,14 +1647,10 @@ html[data-view] .about {
     margin-top: 0.15rem;
   }
 
-  .work-meta {
+  .work-foot {
+    justify-content: start;
+    gap: 1.25em;
     margin-top: 0.5rem;
-    white-space: nowrap;
-  }
-
-  .work-go {
-    justify-self: start;
-    margin-top: 0.2rem;
   }
 
   .work-row-shot {
@@ -1699,19 +1699,25 @@ html[data-view] .about {
 
 
 /* the date and role lines in built and lead, and built's link label. each
-   stays on one line, so on a phone the size follows the screen width */
+   stays on one line, so on a phone the size follows the screen width. built's
+   line also carries "visit", so it runs a step smaller there */
 .work-row .work-meta,
 .work-row .work-go,
 .lead-item .lead-body .mono {
-  font-size: clamp(0.7rem, 3.2vw, 1.15rem);
+  font-size: clamp(0.6rem, 3.1vw, 1.15rem);
   white-space: nowrap;
+}
+
+.work-row .work-meta,
+.work-row .work-go {
+  font-size: clamp(0.55rem, 2.75vw, 1.15rem);
 }
 
 @media (min-width: 900px) {
   .work-row .work-meta,
   .work-row .work-go,
   .lead-item .lead-body .mono {
-    font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+    font-size: clamp(0.9rem, 1.25vw, 1.15rem);
   }
 }
 
