@@ -1441,6 +1441,32 @@ html[data-view] .about {
   overflow: clip;
 }
 
+/* built holds two groups, internships then projects. each opens on a slim
+   band in the section's own ink, so the rows read as one list in two parts
+   rather than two sections */
+.work-group {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem var(--gutter) 0.85rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
+  color: var(--cream);
+  font-weight: inherit;
+  /* the mask the label rises out of */
+  overflow: clip;
+}
+
+.work-group .display {
+  font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+  line-height: 1;
+}
+
+.work-group-count {
+  color: var(--orange);
+}
+
 /* every row is open at every width. the blurb and the shot are the content,
    not a hover reward, so nothing is hidden behind a pointer the reader may
    not have.
@@ -1669,74 +1695,6 @@ html[data-view] .about {
   }
 }
 
-
-/* worked and lead sit side by side once each half is wide enough to hold a
-   row. a half is too narrow for the shot to sit beside the copy, so the rows
-   in it keep the stacked layout every row has below 900px */
-.work-split {
-  display: grid;
-}
-
-@media (min-width: 1100px) {
-  .work-split {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* the stack stretches so the lead half ends level with the worked half */
-  .work-split > .lead {
-    display: flex;
-    flex-direction: column;
-    border-top: 0;
-    border-left: 2px solid var(--ink);
-  }
-
-  .work-split .stack {
-    flex: 1;
-  }
-
-  .work-split .work-row {
-    grid-template-columns: 3.25rem 3rem minmax(0, 1fr) auto;
-    grid-template-areas:
-      "idx icon name  name"
-      ".   .    blurb blurb"
-      ".   .    thumb thumb"
-      ".   .    meta  go";
-    align-items: start;
-  }
-
-  .work-split .work-name {
-    align-self: center;
-  }
-
-  .work-split .work-row-shot {
-    margin: 0.6rem 0 0.5rem;
-  }
-
-  .work-split .work-meta {
-    white-space: normal;
-  }
-
-  .work-split .work-go {
-    justify-self: end;
-  }
-
-  .work-split .section-display {
-    font-size: clamp(2.2rem, 4.6vw, 5.5rem);
-  }
-
-  .work-split .lead-num {
-    font-size: clamp(1.8rem, 3vw, 3.5rem);
-  }
-
-  /* a half panel cannot hold "data engineering" at the full-width size */
-  .work-split .stack-list {
-    font-size: clamp(1.1rem, 1.55vw, 2rem);
-  }
-
-  .work-split .lead-item {
-    grid-template-columns: clamp(4.5rem, 7vw, 7rem) minmax(0, 1fr);
-  }
-}
 
 /* stupid stuff: three claude artifacts, each a looping clip that opens it */
 .stuff {

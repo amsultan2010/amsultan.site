@@ -1207,6 +1207,23 @@ function buildWork() {
     });
   });
 
+  // the two group bands in built: the label rises out of its band and the
+  // count opens from the edge it sits on, like a small section head
+  $$(".work-group").forEach((group) => {
+    gsap
+      .timeline({
+        defaults: { ease: E.out },
+        scrollTrigger: { trigger: group, start: "top 88%", once: true },
+      })
+      .from($(".display", group), { yPercent: 110, duration: D.base }, 0)
+      .fromTo(
+        $(".work-group-count", group),
+        { clipPath: "inset(0% 0% 0% 100%)" },
+        { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: E.inOut, clearProps: "clipPath" },
+        0.1,
+      );
+  });
+
   // each built row is staged on its own trigger. hover owns the index scale,
   // the mark's rotation and the name's x, so the entrance stays off all three:
   // a hover that lands mid-entrance would otherwise record the wrong rest state
