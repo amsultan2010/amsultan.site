@@ -394,19 +394,21 @@
       </div>
 
       <div class="view" data-view-name="work">
-        <!-- worked and lead share a row on wide screens, each half its own section -->
-        <div class="work-split">
-        <section class="work work-jobs" id="worked" aria-labelledby="worked-title">
+        <section class="work" id="work" aria-labelledby="work-title">
           <header class="section-head">
-            <h2 id="worked-title" class="section-display" data-split>worked</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>worked</i><i>worked</i><i>worked</i><i>worked</i><i>worked</i><i>worked</i></span></span>
+            <h2 id="work-title" class="section-display" data-split>built</h2>
+            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i></span></span>
             <p class="section-meta">
-              <b class="display" data-count="2" data-pad="2">02</b>
-              <span class="mono">internships, every row links out</span>
+              <b class="display" data-count="4" data-pad="2">04</b>
+              <span class="mono">internships and projects, every row links out</span>
             </p>
           </header>
 
           <div class="work-stage">
+            <h3 class="work-group" id="internships">
+              <span class="display">internships</span>
+              <span class="mono work-group-count">02</span>
+            </h3>
             <div class="work-list">
               <a
                 class="work-row work-cy"
@@ -435,9 +437,7 @@
                 <span class="mono work-meta">fall/winter 2026 · ai engineering intern</span>
                 <span class="mono work-go">visit <span aria-hidden="true">↗</span></span>
                 <span class="work-row-shot">
-                  <!-- placeholder until the clip exists: swap for
-                       <video class="work-row-thumb" data-clip src="/videos/cycls.mp4" poster="/videos/cycls.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="..."></video> -->
-                  <img class="work-row-thumb" src="/images/projects/cycls-thumb.jpg" alt="the cycls share card: cycls, a business suite of ai agents" width="960" height="600" loading="lazy" />
+                  <video class="work-row-thumb" data-clip src="/videos/cycls.mp4" poster="/videos/cycls.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the cycls site, a grid of its ai agents: super, haseef, khitabik, imagine, injaz and tasibot"></video>
                 </span>
               </a>
 
@@ -471,6 +471,76 @@
                 <span class="mono work-go">visit <span aria-hidden="true">↗</span></span>
                 <span class="work-row-shot">
                   <video class="work-row-thumb" data-clip src="/videos/fschoolai.mp4" poster="/videos/fschoolai.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of an fschoolai ai tutor session, with a lesson video beside a chat panel"></video>
+                </span>
+              </a>
+            </div>
+
+            <h3 class="work-group" id="projects">
+              <span class="display">projects</span>
+              <span class="mono work-group-count">02</span>
+            </h3>
+            <div class="work-list">
+              <a
+                class="work-row work-cc"
+                id="crosscode"
+                data-cursor="visit"
+                href="https://getcrosscode.dev"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="mono work-index">01</span>
+                <img
+                  class="work-row-icon"
+                  src="/images/projects/crosscode-icon.png"
+                  alt="crosscode logo, a white x mark on black"
+                  width="512"
+                  height="512"
+                  loading="lazy"
+                />
+                <span class="work-row-main">
+                  <span class="display work-name tag" data-tag="crosscode">crosscode</span>
+                  <ul class="serif work-points">
+                    <li>open-source and mit-licensed agentic multiplayer coding</li>
+                    <li>1,700+ downloads on npm as crosscode-cli</li>
+                    <li>works with claude code, codex, cursor, and any mcp client</li>
+                  </ul>
+                </span>
+                <span class="mono work-meta">since 2026 · creator · mit licensed</span>
+                <span class="mono work-go">visit <span aria-hidden="true">↗</span></span>
+                <span class="work-row-shot">
+                  <video class="work-row-thumb" data-clip src="/videos/crosscode.mp4" poster="/videos/crosscode.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the crosscode landing page on a black background"></video>
+                </span>
+              </a>
+
+              <a
+                class="work-row work-df"
+                id="downforce"
+                data-cursor="visit"
+                href="https://www.downforceblog.com"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="mono work-index">02</span>
+                <img
+                  class="work-row-icon"
+                  src="/images/projects/downforce-icon.png"
+                  alt="the downforce blog logo, a dark chevron mark on lime green"
+                  width="512"
+                  height="512"
+                  loading="lazy"
+                />
+                <span class="work-row-main">
+                  <span class="display work-name tag" data-tag="downforce">the downforce blog</span>
+                  <ul class="serif work-points">
+                    <li>formula 1 race reports and opinion pieces, written from riyadh</li>
+                    <li>28 posts across race reports, editorials, and guides</li>
+                    <li>42,000+ views</li>
+                  </ul>
+                </span>
+                <span class="mono work-meta">since 2025 · writer</span>
+                <span class="mono work-go">read <span aria-hidden="true">↗</span></span>
+                <span class="work-row-shot">
+                  <video class="work-row-thumb" data-clip src="/videos/downforce.mp4" poster="/videos/downforce.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the downforce blog homepage, a large wordmark above a photo of formula 1 cars"></video>
                 </span>
               </a>
             </div>
@@ -554,86 +624,6 @@
                 <li><span class="stack-word">data engineering</span><i aria-hidden="true">/</i></li>
                 <li><span class="stack-word">machine learning</span></li>
               </ul>
-            </div>
-          </div>
-        </section>
-        </div>
-
-        <section class="work" id="work" aria-labelledby="work-title">
-          <header class="section-head">
-            <h2 id="work-title" class="section-display" data-split>built</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i></span></span>
-            <p class="section-meta">
-              <b class="display" data-count="2" data-pad="2">02</b>
-              <span class="mono">projects, every row links out</span>
-            </p>
-          </header>
-
-          <div class="work-stage">
-            <div class="work-list">
-              <a
-                class="work-row work-cc"
-                id="crosscode"
-                data-cursor="visit"
-                href="https://getcrosscode.dev"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span class="mono work-index">01</span>
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/crosscode-icon.png"
-                  alt="crosscode logo, a white x mark on black"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="crosscode">crosscode</span>
-                  <ul class="serif work-points">
-                    <li>open-source and mit-licensed agentic multiplayer coding</li>
-                    <li>1,700+ downloads on npm as crosscode-cli</li>
-                    <li>works with claude code, codex, cursor, and any mcp client</li>
-                  </ul>
-                </span>
-                <span class="mono work-meta">since 2026 · creator · mit licensed</span>
-                <span class="mono work-go">visit <span aria-hidden="true">↗</span></span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/crosscode.mp4" poster="/videos/crosscode.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the crosscode landing page on a black background"></video>
-                </span>
-              </a>
-
-              <a
-                class="work-row work-df"
-                id="downforce"
-                data-cursor="visit"
-                href="https://www.downforceblog.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span class="mono work-index">02</span>
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/downforce-icon.png"
-                  alt="the downforce blog logo, a dark chevron mark on lime green"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="downforce">the downforce blog</span>
-                  <ul class="serif work-points">
-                    <li>formula 1 race reports and opinion pieces, written from riyadh</li>
-                    <li>28 posts across race reports, editorials, and guides</li>
-                    <li>42,000+ views</li>
-                  </ul>
-                </span>
-                <span class="mono work-meta">since 2025 · writer</span>
-                <span class="mono work-go">read <span aria-hidden="true">↗</span></span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/downforce.mp4" poster="/videos/downforce.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the downforce blog homepage, a large wordmark above a photo of formula 1 cars"></video>
-                </span>
-              </a>
             </div>
           </div>
         </section>

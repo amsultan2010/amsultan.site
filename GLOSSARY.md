@@ -13,7 +13,7 @@ The home view: the hero, the marquee and about.
 _Avoid_: home, personal, about
 
 **Work**:
-The view holding worked and lead side by side, then built and record.
+The view holding built, lead and record, in that order.
 _Avoid_: projects, experience, proof
 
 **Life**:
@@ -23,16 +23,17 @@ _Avoid_: personal, hobbies, flicks
 ## Inside a view
 
 **Section**:
-A headed block inside a view, such as about, worked, built, lead or record.
+A headed block inside a view, such as about, built, lead or record.
 _Avoid_: view, page
 
-**Worked**:
-The section on the internships Abdullah has done, one row per company.
-_Avoid_: experience, jobs
-
 **Built**:
-The section on the products Abdullah made.
-_Avoid_: projects, work
+The section on what Abdullah made, in two groups: internships (one row per company) and
+projects (the products he made himself).
+_Avoid_: work, experience
+
+**Group**:
+One of the two labelled halves of built: internships or projects.
+_Avoid_: subsection, category
 
 **Lead**:
 The section on the groups Abdullah leads or has led.

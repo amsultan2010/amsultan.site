@@ -1441,6 +1441,32 @@ html[data-view] .about {
   overflow: clip;
 }
 
+/* built holds two groups, internships then projects. each opens on a slim
+   band in the section's own ink, so the rows read as one list in two parts
+   rather than two sections */
+.work-group {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem var(--gutter) 0.85rem;
+  border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
+  color: var(--cream);
+  font-weight: inherit;
+  /* the mask the label rises out of */
+  overflow: clip;
+}
+
+.work-group .display {
+  font-size: clamp(1.3rem, 2.4vw, 2.1rem);
+  line-height: 1;
+}
+
+.work-group-count {
+  color: var(--orange);
+}
+
 /* every row is open at every width. the blurb and the shot are the content,
    not a hover reward, so nothing is hidden behind a pointer the reader may
    not have.
@@ -1460,7 +1486,8 @@ html[data-view] .about {
     "idx icon name name"
     "blurb blurb blurb blurb"
     "thumb thumb thumb thumb"
-    "meta meta meta go";
+    "meta meta meta meta"
+    "go   go   go   go";
   gap: 0.5rem 0.85rem;
   align-items: center;
   padding: 1.25rem var(--gutter) 1.5rem;
@@ -1532,7 +1559,7 @@ html[data-view] .about {
   grid-area: name;
   /* it is a .tag, so the underline should hug the word, not the grid column */
   justify-self: start;
-  font-size: clamp(1.15rem, 2.2vw, 1.85rem);
+  font-size: clamp(1.45rem, 3.2vw, 2.75rem);
   line-height: 1.05;
 }
 
@@ -1569,7 +1596,7 @@ html[data-view] .about {
 
 .work-go {
   grid-area: go;
-  justify-self: end;
+  justify-self: start;
   white-space: nowrap;
   color: var(--row-accent);
 }
@@ -1591,7 +1618,8 @@ html[data-view] .about {
    one glance rather than a scroll */
 @media (min-width: 900px) {
   .work-row {
-    grid-template-columns: 3.25rem 3rem minmax(0, 1fr) minmax(13rem, 20rem);
+    /* the shot gives way below 1350px so the date line keeps its one line */
+    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 26vw));
     grid-template-areas:
       "idx icon name  thumb"
       "idx icon blurb thumb"
@@ -1603,8 +1631,8 @@ html[data-view] .about {
   }
 
   .work-row-icon {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   .work-name {
@@ -1670,71 +1698,20 @@ html[data-view] .about {
 }
 
 
-/* worked and lead sit side by side once each half is wide enough to hold a
-   row. a half is too narrow for the shot to sit beside the copy, so the rows
-   in it keep the stacked layout every row has below 900px */
-.work-split {
-  display: grid;
+/* the date and role lines in built and lead, and built's link label. each
+   stays on one line, so on a phone the size follows the screen width */
+.work-row .work-meta,
+.work-row .work-go,
+.lead-item .lead-body .mono {
+  font-size: clamp(0.7rem, 3.2vw, 1.15rem);
+  white-space: nowrap;
 }
 
-@media (min-width: 1100px) {
-  .work-split {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  /* the stack stretches so the lead half ends level with the worked half */
-  .work-split > .lead {
-    display: flex;
-    flex-direction: column;
-    border-top: 0;
-    border-left: 2px solid var(--ink);
-  }
-
-  .work-split .stack {
-    flex: 1;
-  }
-
-  .work-split .work-row {
-    grid-template-columns: 3.25rem 3rem minmax(0, 1fr) auto;
-    grid-template-areas:
-      "idx icon name  name"
-      ".   .    blurb blurb"
-      ".   .    thumb thumb"
-      ".   .    meta  go";
-    align-items: start;
-  }
-
-  .work-split .work-name {
-    align-self: center;
-  }
-
-  .work-split .work-row-shot {
-    margin: 0.6rem 0 0.5rem;
-  }
-
-  .work-split .work-meta {
-    white-space: normal;
-  }
-
-  .work-split .work-go {
-    justify-self: end;
-  }
-
-  .work-split .section-display {
-    font-size: clamp(2.2rem, 4.6vw, 5.5rem);
-  }
-
-  .work-split .lead-num {
-    font-size: clamp(1.8rem, 3vw, 3.5rem);
-  }
-
-  /* a half panel cannot hold "data engineering" at the full-width size */
-  .work-split .stack-list {
-    font-size: clamp(1.1rem, 1.55vw, 2rem);
-  }
-
-  .work-split .lead-item {
-    grid-template-columns: clamp(4.5rem, 7vw, 7rem) minmax(0, 1fr);
+@media (min-width: 900px) {
+  .work-row .work-meta,
+  .work-row .work-go,
+  .lead-item .lead-body .mono {
+    font-size: clamp(0.95rem, 1.25vw, 1.15rem);
   }
 }
 
@@ -1843,7 +1820,7 @@ html[data-view] .about {
 
 .lead-body .mono {
   margin: 0 0 0.35rem;
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .lead-body h3 {
@@ -1853,9 +1830,9 @@ html[data-view] .about {
 }
 
 .lead-body .serif {
-  max-width: 40rem;
+  max-width: 48rem;
   margin: 0.65rem 0 0;
-  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  font-size: clamp(1.2rem, 1.75vw, 1.55rem);
   line-height: 1.25;
 }
 
@@ -1890,8 +1867,9 @@ html[data-view] .about {
   grid-area: blurb;
   display: grid;
   gap: 0.3rem;
-  max-width: 34rem;
-  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  max-width: 48rem;
+  /* matches the lead bullets below it */
+  font-size: clamp(1.2rem, 1.75vw, 1.55rem);
   opacity: 0.9;
 }
 
