@@ -185,7 +185,9 @@ function buildItem(item, variant, isClone) {
     const kind = document.createElement("span");
     kind.className = "mono rail-kind";
     kind.textContent = item.kind;
-    inner.append(kind);
+    // a stuff line is a band across the foot of its clip, so the caption under
+    // the clip is the title alone
+    (item.href ? cover : inner).append(kind);
   }
 
   caption.append(inner);
@@ -221,9 +223,18 @@ function buildArrow() {
   return svg;
 }
 
-// four ruled cells that fill the bar: the label, a ruler whose playhead tracks
-// the loop, a count, and the drag hint
-function buildHead(label, count) {
+// the word again in outline, fainter each time, running off toward the edge.
+// the same echo the section heads in work have, and it drifts on scroll like theirs
+function buildEcho(word) {
+  const run = el("span", "section-echo-run", ...Array.from({ length: 6 }, () => el("i", "", word)));
+  const echo = el("span", "section-echo", run);
+  echo.setAttribute("aria-hidden", "true");
+  return echo;
+}
+
+// the label and its echo, then a ruler whose playhead tracks the loop, then the
+// drag hint
+function buildHead(label) {
   // the last word carries the accent, the same split the about statement uses
   const cut = label.lastIndexOf(" ") + 1;
   const accent = el("span", "rail-label-accent", label.slice(cut));
@@ -245,8 +256,8 @@ function buildHead(label, count) {
     "div",
     "rail-head",
     el("div", "rail-cell rail-cell-label", masked("display rail-label", label.slice(0, cut), accent)),
+    buildEcho(label.slice(cut)),
     ruler,
-    el("div", "rail-cell rail-cell-count", masked("mono rail-count", count)),
     el("div", "rail-cell rail-cell-hint", masked("mono rail-hint", "drag"), buildArrow()),
   );
 }
@@ -258,25 +269,21 @@ function buildSectionHead(label, echo, count, note) {
   const title = el("h2", "section-display", label);
   title.dataset.split = "";
 
-  const run = el("span", "section-echo-run", ...Array.from({ length: 6 }, () => el("i", "", echo)));
-  const echoes = el("span", "section-echo", run);
-  echoes.setAttribute("aria-hidden", "true");
-
   const number = el("b", "display", String(count).padStart(2, "0"));
   number.dataset.count = count;
   number.dataset.pad = "2";
 
-  return el("header", "section-head", title, echoes, el("p", "section-meta", number, el("span", "mono", note)));
+  return el("header", "section-head", title, buildEcho(echo), el("p", "section-meta", number, el("span", "mono", note)));
 }
 
-function buildSection({ items, label, variant, noun, echo, note }) {
+function buildSection({ items, label, variant, echo, note }) {
   const section = document.createElement("section");
   section.className = `rail rail-${variant}`;
   section.setAttribute("aria-label", label);
 
   const head = echo
     ? buildSectionHead(label, echo, items.length, note)
-    : buildHead(label, `${items.length} ${noun}`);
+    : buildHead(label);
 
   const viewport = document.createElement("div");
   viewport.className = "rail-viewport";
@@ -369,9 +376,14 @@ function initHover(track) {
 
     gsap.set(caption, { yPercent: 105, autoAlpha: 0 });
 
+    // the caption box rides up with the cover, since on a fine pointer it sits
+    // over the cover's foot rather than under it
+    const box = item.querySelector(".rail-caption");
+
     const tl = gsap
       .timeline({ paused: true, defaults: { ease: "out" } })
-      .to(cover, { y: -14, scale: 1.04, duration: D.fast }, 0)
+      .to([cover, box], { y: -14, duration: D.fast }, 0)
+      .to(cover, { scale: 1.04, duration: D.fast }, 0)
       .to(caption, { yPercent: 0, autoAlpha: 1, duration: D.base }, 0.05);
 
     const enter = () => {
@@ -419,7 +431,7 @@ function initEntrance(section, track, travel) {
 // one shot, as the bar itself comes into view: the label rises out of its mask,
 // the ticks run out from the left, then the two mono cells follow
 function initHeadEntrance(head) {
-  const [label, count, hint] = head.querySelectorAll(".rail-rise");
+  const [label, hint] = head.querySelectorAll(".rail-rise");
 
   return gsap
     .timeline({
@@ -427,8 +439,9 @@ function initHeadEntrance(head) {
       scrollTrigger: { trigger: head, start: "top 88%", once: true },
     })
     .from(label, { yPercent: 125, duration: D.slow }, 0)
+    .from(head.querySelectorAll(".section-echo i"), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12)
     .from(head.querySelector(".rail-ticks"), { scaleX: 0, duration: D.slow }, 0.1)
-    .from([count, hint], { yPercent: 125, duration: D.base, stagger: 0.08 }, 0.3)
+    .from(hint, { yPercent: 125, duration: D.base }, 0.3)
     .from(head.querySelector(".rail-playhead"), { scaleY: 0, duration: D.fast }, 0.5)
     .from(head.querySelector(".rail-arrow"), { scaleX: 0, duration: D.base }, 0.5);
 }
@@ -454,14 +467,14 @@ function initSectionHeadEntrance(head) {
 // the rails mounted into life, in page order, for buildRails to animate
 const rails = [];
 
-function mountRail({ view, items, label, noun, echo, note, variant, duration, reverse = false }) {
-  const { section, head, viewport, track } = buildSection({ items, label, variant, noun, echo, note });
+function mountRail({ view, items, label, echo, note, variant, duration, reverse = false }) {
+  const { section, head, viewport, track } = buildSection({ items, label, variant, echo, note });
   view.append(section);
   rails.push({ section, head, viewport, track, duration, reverse });
 }
 
 // one rail's motion, reverted with the matchMedia this returns
-function animateRail({ section, head, viewport, track, duration, reverse }) {
+function animateRail({ section, head, viewport, track, duration, reverse }, index) {
   // a section head has no ruler and no drag hint, so both can be missing
   const carriage = head.querySelector(".rail-carriage");
   const arrow = head.querySelector(".rail-arrow");
@@ -472,11 +485,12 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
   mm.add(
     {
       fine: "(hover: hover) and (pointer: fine)",
+      wide: "(min-width: 701px)",
       motion: "(prefers-reduced-motion: no-preference)",
       reduce: "(prefers-reduced-motion: reduce)",
     },
     (context) => {
-      const { fine, reduce } = context.conditions;
+      const { fine, wide, reduce } = context.conditions;
 
       // touch gets the same loop and drag as desktop, only the hover reveal is
       // pointer only. reduced motion is the one case that falls back to a scroller
@@ -521,6 +535,21 @@ function animateRail({ section, head, viewport, track, duration, reverse }) {
       if (carriage) initHeadEntrance(head);
       else initSectionHeadEntrance(head);
       initEntrance(section, track, fine ? 12 : 10);
+
+      // the echo is hidden on a phone, so it only drifts where it shows. it runs
+      // away from the word, so a gap opens rather than a letter being cut, and
+      // each rail drifts at its own rate, the way the heads in work do
+      if (wide) {
+        gsap.fromTo(
+          head.querySelector(".section-echo-run"),
+          { xPercent: 0 },
+          {
+            xPercent: [9, 15, 6][index % 3],
+            ease: "none",
+            scrollTrigger: { trigger: head, start: "top bottom", end: "bottom top", scrub: 0.5 + (index % 3) * 0.25 },
+          },
+        );
+      }
 
       // the drag hint leans a few pixels either way, slowly, so the bar is never
       // completely still while the rail is on screen
@@ -604,7 +633,6 @@ export function initRail() {
     view,
     items: shuffle(OBJECTS),
     label: "my personal stack",
-    noun: "objects",
     variant: "object",
     // one run of the track per duration, so a longer run needs more seconds
     // just to hold its pace
@@ -627,7 +655,6 @@ export function initRail() {
     view,
     items: shuffle(WATCHING),
     label: "current watchlist",
-    noun: "titles",
     variant: "poster",
     duration: 30,
   });

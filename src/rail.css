@@ -22,19 +22,29 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  padding: clamp(0.85rem, 1.5vw, 1.35rem) clamp(1rem, 1.8vw, 1.75rem);
+  padding: clamp(0.6rem, 1.1vw, 1rem) clamp(1rem, 1.8vw, 1.75rem);
 }
 
 .rail-cell + .rail-cell {
   border-left: 2px solid var(--rail-head-rule, var(--ink));
 }
 
+/* the label sits closer to the edge than the gutter, so the word leads the bar */
 .rail-cell-label {
-  padding-left: var(--gutter);
+  padding-left: clamp(0.75rem, 1.2vw, 1.25rem);
+}
+
+/* the echo takes the slack, so the ruler is a fixed strip beside it */
+.rail-head .section-echo {
+  --head-bg: var(--rail-head-bg, var(--orange));
+  --head-ink: var(--rail-head-ink, var(--ink));
+  flex: 1 1 0;
+  font-size: clamp(1.45rem, 3.4vw, 2.75rem);
+  -webkit-text-stroke-width: clamp(1.5px, 0.16vw, 2.5px);
 }
 
 .rail-cell-ruler {
-  flex: 1 1 0;
+  flex: 0 1 clamp(7rem, 16vw, 16rem);
   min-width: 0;
 }
 
@@ -113,10 +123,12 @@
   transform-origin: 0 50%;
 }
 
-/* the top only needs room for a hovered cover to lift into */
+/* clipped across only: a hovered cover lifts a little past the top padding, and
+   clipping it there would shave its edge */
 .rail-viewport {
-  overflow: hidden;
-  padding: 1.25rem 0 1.75rem;
+  overflow-x: clip;
+  overflow-y: visible;
+  padding: 0.9rem 0 1rem;
 }
 
 .rail-track {
@@ -157,7 +169,7 @@
 
 .rail-caption {
   overflow: hidden;
-  margin-top: 0.7rem;
+  margin-top: 0.55rem;
 }
 
 .rail-caption-inner {
@@ -177,6 +189,44 @@
   flex: 0 0 auto;
   font-size: 0.72rem;
   opacity: 0.62;
+}
+
+/* with a fine pointer the stack and watchlist captions only show on hover, so
+   they sit over the foot of the item instead of keeping an empty row under it:
+   a cream band on a poster, an ink tag under an object. the cover scales from
+   its foot so that foot stays level with the caption as both lift */
+@media (hover: hover) and (pointer: fine) {
+  .rail-item {
+    position: relative;
+  }
+
+  .rail-cover {
+    transform-origin: 50% 100%;
+  }
+
+  .rail-poster .rail-caption,
+  .rail-object .rail-caption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .rail-poster .rail-caption-inner {
+    padding: 0.45rem 0.6rem;
+    background: var(--cream);
+    border-top: 2px solid var(--ink);
+  }
+
+  .rail-object .rail-caption-inner {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 0.3rem 0.55rem;
+    color: var(--cream);
+    background: var(--ink);
+  }
 }
 
 /* reduced motion falls back to a native scroller, captions always on screen */
@@ -230,14 +280,9 @@
   }
 }
 
-/* under this the label, the count and the hint no longer fit on one line. the
-   count is the one that can go, and the label gives up a couple of pixels on
-   the narrowest phones so the bar stays a single row */
+/* under this the label gives up a few pixels on the narrowest phones so the
+   bar stays a single row */
 @media (max-width: 560px) {
-  .rail-cell-count {
-    display: none;
-  }
-
   .rail-cell-label {
     padding-right: 0.75rem;
   }
@@ -276,7 +321,7 @@
    wide object gets a wide cell and nothing is letterboxed down to a sliver */
 .rail-object {
   --rail-u: clamp(7.25rem, 10.75vw, 11.75rem);
-  --rail-pad: 0.5rem;
+  --rail-pad: 0.25rem;
   /* only the lower rail carries the closing rule. this one runs straight into
      the dark section below */
   border-bottom: 0;
@@ -352,14 +397,18 @@
 }
 
 /* the title is about 11.6 of its own em wide. at this size it sits on one line
-   beside the count with room left for the echo, down to the 900px layout below */
+   beside the count with a good run of echo left, down to the 900px layout below */
 .rail-stuff .section-display,
 .rail-stuff .section-echo {
-  font-size: min(5.4vw, 5.5rem);
+  font-size: min(4.8vw, 5.5rem);
 }
 
 .rail-stuff .section-display {
   white-space: nowrap;
+}
+
+.rail-stuff .section-head .section-display {
+  padding-left: clamp(0.75rem, 1.2vw, 1.25rem);
 }
 
 /* an ink shadow would vanish into the ink ground */
@@ -386,13 +435,6 @@
   object-fit: cover;
 }
 
-/* the line under each name is a sentence, too long to sit beside it */
-.rail-stuff .rail-caption-inner {
-  flex-direction: column;
-  align-items: start;
-  gap: 0.35rem;
-}
-
 /* the name is always on screen, so it carries the weight of a heading */
 .rail-stuff .rail-title {
   font-family: var(--display);
@@ -400,8 +442,27 @@
   font-weight: 800;
 }
 
+/* the line about each game is a band across the foot of its clip, raised on
+   hover. with no hover nothing would raise it, and left on a phone sized clip
+   it would cover a third of it, so there it does not show */
 .rail-stuff .rail-kind {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem 0.7rem;
   font-size: 0.85rem;
+  line-height: 1.3;
+  color: var(--ink);
+  background: var(--orange);
+  border-top: 2px solid var(--ink);
+  opacity: 1;
+}
+
+@media not all and (hover: hover) and (pointer: fine) {
+  .rail-stuff .rail-kind {
+    display: none;
+  }
 }
 
 /* under 900px the long title needs the whole bar to stay on one line, so the
