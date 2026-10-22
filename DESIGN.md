@@ -18,6 +18,8 @@ colors:
   df-teal: "#0a3940"
   df-paper: "#f2ecdf"
   df-lime: "#c6e33a"
+  cy-black: "#000000"
+  cy-white: "#ffffff"
 typography:
   display:
     fontFamily: "Unbounded, sans-serif"
@@ -101,7 +103,7 @@ Three colours run the site; every other colour belongs to someone else's product
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours
-- **fschoolai** (fs-white, fs-ink, fs-blue), **crosscode** (cc-black, cc-white), **the downforce blog** (df-teal, df-paper, df-lime), **z combinator** (zc-purple). Each is read from that product's shipped css and used only on rows about it.
+- **cycls** (cy-black, cy-white), **fschoolai** (fs-white, fs-ink, fs-blue), **crosscode** (cc-black, cc-white), **the downforce blog** (df-teal, df-paper, df-lime), **z combinator** (zc-purple). Each is read from that product's shipped css and used only on rows about it.
 
 ### Named Rules
 **The Three Colour Rule.** The site's own surfaces use only orange, ink and cream. A new colour enters only as another product's brand, on that product's row.
