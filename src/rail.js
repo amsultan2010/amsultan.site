@@ -342,7 +342,10 @@ function initDrag(track, auto, setHead, onScreen, toProgress) {
 function initHover(track) {
   const unbind = [...track.children].map((item) => {
     const cover = item.querySelector(".rail-cover");
-    const caption = item.querySelector(".rail-caption-inner");
+    // a stuff title stays on screen, so only the line under it is revealed
+    const caption = item.querySelector(
+      item.matches(".rail-item-stuff") ? ".rail-kind" : ".rail-caption-inner",
+    );
 
     gsap.set(caption, { yPercent: 105, autoAlpha: 0 });
 
