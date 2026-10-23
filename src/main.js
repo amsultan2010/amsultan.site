@@ -419,12 +419,13 @@ function initClips() {
   ["touchend", "click"].forEach((type) => document.addEventListener(type, playClips, { passive: true }));
 }
 
-// at the bottom of a view, the next stop in the nav hops to say there is more
+// once say hello is on screen, the next stop in the nav hops to say there is more
 const NEXT = { me: "/work", work: "/life", life: "/resume" };
 function initNextNudge() {
   const root = document.documentElement;
+  const hello = document.querySelector(".contact-link");
   const update = () => {
-    const atEnd = window.innerHeight + window.scrollY >= root.scrollHeight - 8;
+    const atEnd = hello.getBoundingClientRect().top < window.innerHeight;
     const next = atEnd ? NEXT[root.dataset.view] : null;
     $$(".primary-nav a").forEach((link) =>
       link.classList.toggle("is-next", link.getAttribute("href") === next),
