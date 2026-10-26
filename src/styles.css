@@ -2817,7 +2817,7 @@ section[id],
     font-size: 0.8rem;
   }
 
-  /* four cells have to stay on one line for the bar to read as one bar */
+  /* the cells have to stay on one line for the bar to read as one bar */
   .hero-orbit span {
     padding: 0.45rem 0.6rem;
   }
