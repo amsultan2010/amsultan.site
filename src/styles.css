@@ -2461,8 +2461,8 @@ html[data-view] .about {
   color: var(--orange-deep);
 }
 
-/* life, between the stack and the games. a still grid: the words stay put,
-   and a hover only flips the caption bar */
+/* life, between the stack and the games. each band is a short uneven row.
+   the caption sits on the photo, and a fine pointer only reveals it on hover */
 .facts {
   --head-bg: var(--ink);
   --head-ink: var(--cream);
@@ -2478,42 +2478,65 @@ html[data-view] .about {
   justify-content: space-between;
   gap: 1rem;
   margin: 0;
-  padding: 0.55rem var(--gutter) 0.5rem;
+  padding: 0.32rem var(--gutter) 0.28rem;
   background: var(--ink);
   color: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
 
 .facts-label .display {
-  font-size: clamp(1.3rem, 2.4vw, 2.1rem);
+  font-size: clamp(1.05rem, 1.7vw, 1.4rem);
   line-height: 1;
 }
 
 .facts-label .mono {
   color: var(--orange);
-  font-size: 0.85rem;
+  font-size: 0.75rem;
 }
 
+/* one short band per group. widths and heights step so the frames aren't a
+   matched set, and the band is only as tall as its tallest photo */
 .facts-row {
-  display: grid;
+  display: flex;
+  align-items: flex-end;
+  height: clamp(8.25rem, 12vw, 10.5rem);
+  background: var(--cream);
+  border-bottom: 2px solid var(--ink);
 }
 
-.facts-row[data-cols="4"] {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
+.facts-lived .facts-cell:nth-child(1) { --w: 1.45; --h: 100%; }
+.facts-lived .facts-cell:nth-child(2) { --w: 0.95; --h: 76%; }
+.facts-lived .facts-cell:nth-child(3) { --w: 1.2; --h: 88%; }
+.facts-lived .facts-cell:nth-child(4) { --w: 0.78; --h: 66%; }
 
-.facts-row[data-cols="3"] {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
+.facts-snacks .facts-cell:nth-child(1) { --w: 1.25; --h: 100%; }
+.facts-snacks .facts-cell:nth-child(2) { --w: 0.72; --h: 72%; }
+.facts-snacks .facts-cell:nth-child(3) { --w: 1.05; --h: 84%; }
+
+.facts-food .facts-cell:nth-child(1) { --w: 0.88; --h: 90%; }
+.facts-food .facts-cell:nth-child(2) { --w: 1.28; --h: 70%; }
+.facts-food .facts-cell:nth-child(3) { --w: 0.82; --h: 100%; }
+.facts-food .facts-cell:nth-child(4) { --w: 1.08; --h: 78%; }
+
+.facts-games .facts-cell:nth-child(1) { --w: 1.45; --h: 72%; }
+.facts-games .facts-cell:nth-child(2) { --w: 0.78; --h: 100%; }
+.facts-games .facts-cell:nth-child(3) { --w: 1.12; --h: 82%; }
+.facts-games .facts-cell:nth-child(4) { --w: 0.95; --h: 90%; }
+
+.facts-travel .facts-cell:nth-child(1) { --w: 1.4; --h: 100%; }
+.facts-travel .facts-cell:nth-child(2) { --w: 1.05; --h: 80%; }
+.facts-travel .facts-cell:nth-child(3) { --w: 0.82; --h: 68%; }
 
 .facts-cell {
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  flex: var(--w, 1) 1 0;
+  height: var(--h, 100%);
   min-width: 0;
   margin: 0;
+  overflow: hidden;
   background: var(--cream);
+  border-top: 2px solid var(--ink);
   border-right: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
 }
 
 .facts-row .facts-cell:last-child {
@@ -2521,9 +2544,8 @@ html[data-view] .about {
 }
 
 .facts-frame {
-  display: block;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
+  position: absolute;
+  inset: 0;
   background: var(--cream);
 }
 
@@ -2535,73 +2557,104 @@ html[data-view] .about {
   object-position: center;
 }
 
-.facts-hold {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
+.facts-frame img[src$="san-francisco.jpg"] {
+  object-position: center 78%;
 }
 
-.facts-hold .display {
-  font-size: clamp(1.25rem, 2.4vw, 2.4rem);
-  line-height: 0.95;
-  text-align: center;
-  text-wrap: balance;
+.facts-frame img[src$="houston.jpg"] {
+  object-position: center 48%;
+}
+
+.facts-frame img[src$="karachi.jpg"] {
+  object-position: 34% 40%;
+}
+
+.facts-frame img[src$="sourdough.jpg"] {
+  object-position: center 40%;
+}
+
+.facts-frame img[src$="godofwar.jpg"] {
+  object-position: center 30%;
 }
 
 .facts-cap {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  gap: 0.2rem;
-  padding: 0.6rem 0.75rem 0.7rem;
-  border-top: 2px solid var(--ink);
-  background: var(--cream);
-  color: var(--ink);
+  gap: 0.12rem;
+  margin: 0;
+  padding: 0.38rem 0.55rem 0.42rem;
+  background: var(--ink);
+  color: var(--cream);
+  pointer-events: none;
 }
 
 .facts-cap .display {
-  font-size: clamp(1.05rem, 1.35vw, 1.4rem);
+  font-size: clamp(0.85rem, 1.05vw, 1.05rem);
   line-height: 0.95;
   text-wrap: balance;
 }
 
 .facts-cap .mono {
-  font-size: 0.75rem;
+  color: var(--orange);
+  font-size: 0.68rem;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .facts-cap {
-    transition: background-color 200ms ease, color 200ms ease;
+    opacity: 0;
+    transform: translateY(0.35rem);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+
+  .facts-frame img {
+    transition: transform 320ms ease;
   }
 
   .facts-cell:hover .facts-cap {
-    background: var(--ink);
-    color: var(--cream);
+    opacity: 1;
+    transform: none;
   }
 
-  .facts-cell:hover .facts-cap .mono {
-    color: var(--orange);
+  .facts-cell:hover .facts-frame img {
+    transform: scale(1.045);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .facts-cap {
+  .facts-cap,
+  .facts-frame img {
     transition: none;
+  }
+
+  .facts-cell:hover .facts-frame img {
+    transform: none;
   }
 }
 
 @media (max-width: 700px) {
-  .facts-row[data-cols="4"],
-  .facts-row[data-cols="3"] {
+  .facts-row {
+    display: grid;
     grid-template-columns: 1fr 1fr;
+    height: auto;
   }
 
-  .facts-row .facts-cell:nth-child(2n) {
+  .facts-cell {
+    height: 6.75rem;
+    border-top: 0;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .facts-cell:nth-child(2n) {
     border-right: 0;
   }
 
-  .facts-row[data-cols="3"] .facts-cell:last-child {
+  .facts-snacks .facts-cell:last-child,
+  .facts-travel .facts-cell:last-child {
     grid-column: 1 / -1;
     border-right: 0;
   }
