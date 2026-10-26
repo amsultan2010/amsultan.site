@@ -37,7 +37,7 @@ const WATCHING = [
 // two rows, in this order. a clip name loads /videos/<clip>.mp4 and .jpg.
 // a game with no clip yet gets a still until the video exists.
 const GAMES_TOP = [
-  { title: "parselands", kind: "an endless runner where a llama parses pdfs", clip: "parselands",
+  { title: "parselands", kind: "llamaindex-themed 2d sidescroller", clip: "parselands",
     href: "https://parselands.grok.me" },
   { title: "flipside", kind: "a puzzle on a mobius strip", clip: "flipside",
     href: "https://flipside-game.grok.me" },
@@ -50,9 +50,9 @@ const GAMES_TOP = [
 const GAMES_BOTTOM = [
   { title: "five nights at altman's", kind: "five nights at freddy's, with tech execs", clip: "fnaa",
     href: "https://fnaa.grok.me" },
-  { title: "f1 but it's minecraft", kind: "formula one, in minecraft",
+  { title: "f1 but it's minecraft", kind: "literally just the title",
     href: "https://f1butitsminecraft.grok.me" },
-  { title: "flappy jay", kind: "a flappy bird game",
+  { title: "flappy jay", kind: "bluejay-themed flappy bird",
     href: "https://flappyjay.grok.me" },
   { title: "off course", kind: "a two-player rally. one drives, the other reshapes the land",
     href: "https://off-course.grok.me" },
