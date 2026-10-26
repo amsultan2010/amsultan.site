@@ -1,4 +1,4 @@
-/* the three rails, owned by workstream ws-3 */
+/* the life rails, owned by workstream ws-3 */
 .rail {
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
@@ -416,11 +416,14 @@
   box-shadow: 0.4rem 0.4rem 0 var(--orange);
 }
 
-/* the stuff rail: each cover is a 16:9 clip that links to its game. there are
-   only five, so the width follows the viewport: five of them always run past the
-   screen edge and the wrap never shows a gap */
+.rail-stuff .rail-viewport + .rail-viewport {
+  border-top: 2px solid var(--cream);
+}
+
+/* the stuff rail: each cover is a 16:9 clip that links to its game. --stuff-w
+   keeps one run wider than the screen when a row has only three or four */
 .rail-stuff .rail-item {
-  width: max(15rem, 24vw);
+  width: max(15rem, var(--stuff-w, 28vw));
 }
 
 .rail-stuff .rail-cover {
@@ -433,6 +436,30 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.rail-hold {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.7rem;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.rail-hold-name {
+  font-family: var(--display);
+  font-size: clamp(1.15rem, 1.7vw, 1.7rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.rail-hold-note {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
 }
 
 /* the name is always on screen, so it carries the weight of a heading */

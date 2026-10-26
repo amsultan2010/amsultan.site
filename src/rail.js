@@ -1,6 +1,5 @@
-// three draggable rails: the objects i actually keep around, the stupid stuff i
-// made, then film and show covers. together they are the whole life view, so
-// all three mount into it.
+// draggable rails: the objects i actually keep around, two rows of small games,
+// then film and show covers. together they are the whole life view.
 // the markup is built once, the motion each time life is shown
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -35,18 +34,27 @@ const WATCHING = [
     alt: "jojo's bizarre adventure steel ball run poster: riders racing horses down a desert canyon under a blue sky" },
 ];
 
-// each one a claude artifact. its clip and poster are /videos/<clip>.mp4 and .jpg
-const STUFF = [
-  { title: "flipside", kind: "a puzzle on a mobius strip", clip: "flipside",
-    href: "https://claude.ai/artifact/RxX379rCanHjP7ZEtjbnrW" },
-  { title: "five nights at altman's", kind: "five nights at freddy's, with tech execs", clip: "fnaa",
-    href: "https://claude.ai/artifact/EVSx5Z8PuxaGoCpwMMyDF9" },
+// two rows, in this order. a clip name loads /videos/<clip>.mp4 and .jpg.
+// a game with no clip yet gets a still until the video exists.
+// tesla tricks has no grok link yet, so it still opens the old artifact
+const GAMES_TOP = [
   { title: "parselands", kind: "an endless runner where a llama parses pdfs", clip: "parselands",
-    href: "https://claude.ai/artifact/Dma4tHZzpwyzdJxiuFALj9" },
+    href: "https://parselands.grok.me" },
+  { title: "flipside", kind: "a puzzle on a mobius strip", clip: "flipside",
+    href: "https://flipside-game.grok.me" },
   { title: "saudi surfers", kind: "subway surfers, but in riyadh, past its famous landmarks", clip: "saudisurfers",
-    href: "https://claude.ai/artifact/3JZp6mZvVnEmYVxnnX7zig" },
+    href: "https://saudisurfers.grok.me" },
   { title: "tesla tricks", kind: "a game built around the tesla roadster", clip: "tesla",
     href: "https://claude.ai/artifact/4eraPAM9XVeLjrtHuSkobX" },
+];
+
+const GAMES_BOTTOM = [
+  { title: "five nights at altman's", kind: "five nights at freddy's, with tech execs", clip: "fnaa",
+    href: "https://fnaa.grok.me" },
+  { title: "f1 but it's minecraft", kind: "formula one, in minecraft",
+    href: "https://f1butitsminecraft.grok.me" },
+  { title: "flappy jay", kind: "a flappy bird game",
+    href: "https://flappyjay.grok.me" },
 ];
 
 // trim is the solid part of each cutout inside its own file, as [x, y, w, h] in
@@ -150,13 +158,25 @@ function buildClip(name) {
   return video;
 }
 
+// a game with no clip yet. the title under the frame already names it
+function buildHold(item) {
+  const hold = el(
+    "span",
+    "rail-hold",
+    el("span", "rail-hold-name", item.title),
+    el("span", "mono rail-hold-note", "clip soon"),
+  );
+  hold.setAttribute("aria-hidden", "true");
+  return hold;
+}
+
 function buildItem(item, variant, isClone) {
   const figure = document.createElement("figure");
   figure.className = `rail-item rail-item-${variant}`;
   if (isClone) figure.setAttribute("aria-hidden", "true");
   if (item.trim) fitObject(figure, item);
 
-  // a stuff cover is the link to its artifact. the caption only shows on hover,
+  // a stuff cover is the link to its game. the kind line only shows on hover,
   // so the link carries its own name
   const cover = document.createElement(item.href ? "a" : "div");
   cover.className = "rail-cover";
@@ -168,7 +188,9 @@ function buildItem(item, variant, isClone) {
     cover.setAttribute("aria-label", `${item.title}, ${item.kind}`);
     if (isClone) cover.tabIndex = -1;
   }
-  cover.append(item.clip ? buildClip(item.clip) : buildImage(item, isClone));
+  if (item.clip) cover.append(buildClip(item.clip));
+  else if (item.src) cover.append(buildImage(item, isClone));
+  else cover.append(buildHold(item));
 
   const caption = document.createElement("figcaption");
   caption.className = "rail-caption";
@@ -276,15 +298,7 @@ function buildSectionHead(label, echo, count, note) {
   return el("header", "section-head", title, buildEcho(echo), el("p", "section-meta", number, el("span", "mono", note)));
 }
 
-function buildSection({ items, label, variant, echo, note }) {
-  const section = document.createElement("section");
-  section.className = `rail rail-${variant}`;
-  section.setAttribute("aria-label", label);
-
-  const head = echo
-    ? buildSectionHead(label, echo, items.length, note)
-    : buildHead(label);
-
+function buildTrack(items, variant) {
   const viewport = document.createElement("div");
   viewport.className = "rail-viewport";
 
@@ -298,11 +312,30 @@ function buildSection({ items, label, variant, echo, note }) {
     track.style.setProperty("--rise", rise.toFixed(3));
   }
 
+  // one run has to be wider than the screen or the wrap shows a gap. fewer
+  // games means a wider frame
+  if (variant === "stuff") {
+    track.style.setProperty("--stuff-w", items.length < 4 ? "34vw" : "28vw");
+  }
+
   // two identical runs, so an xPercent wrap of -50 lands on a matching frame
   items.forEach((item) => track.append(buildItem(item, variant, false)));
   items.forEach((item) => track.append(buildItem(item, variant, true)));
 
   viewport.append(track);
+  return { viewport, track };
+}
+
+function buildSection({ items, label, variant, echo, note }) {
+  const section = document.createElement("section");
+  section.className = `rail rail-${variant}`;
+  section.setAttribute("aria-label", label);
+
+  const head = echo
+    ? buildSectionHead(label, echo, items.length, note)
+    : buildHead(label);
+
+  const { viewport, track } = buildTrack(items, variant);
   section.append(head, viewport);
 
   return { section, head, viewport, track };
@@ -415,7 +448,7 @@ function initHover(track) {
 }
 
 // the hover owns each cover's y, so the entrance travels on yPercent
-function initEntrance(section, track, travel) {
+function initEntrance(trigger, track, travel) {
   const covers = [...track.querySelectorAll(".rail-cover")];
 
   return gsap.from(covers, {
@@ -424,7 +457,7 @@ function initEntrance(section, track, travel) {
     duration: D.slow,
     stagger: 0.045,
     ease: "out",
-    scrollTrigger: { trigger: section, start: "top 85%", once: true },
+    scrollTrigger: { trigger, start: "top 85%", once: true },
   });
 }
 
@@ -474,10 +507,11 @@ function mountRail({ view, items, label, echo, note, variant, duration, reverse 
 }
 
 // one rail's motion, reverted with the matchMedia this returns
-function animateRail({ section, head, viewport, track, duration, reverse }, index) {
-  // a section head has no ruler and no drag hint, so both can be missing
-  const carriage = head.querySelector(".rail-carriage");
-  const arrow = head.querySelector(".rail-arrow");
+function animateRail({ head, viewport, track, duration, reverse }, index) {
+  // a section head has no ruler and no drag hint, and the second game row has
+  // no head of its own. both can be missing
+  const carriage = head?.querySelector(".rail-carriage") ?? null;
+  const arrow = head?.querySelector(".rail-arrow") ?? null;
   const mm = gsap.matchMedia();
 
   // matchMedia only runs this when at least one condition matches, so the
@@ -533,13 +567,13 @@ function animateRail({ section, head, viewport, track, duration, reverse }, inde
         gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
       }
       if (carriage) initHeadEntrance(head);
-      else initSectionHeadEntrance(head);
-      initEntrance(section, track, fine ? 12 : 10);
+      else if (head) initSectionHeadEntrance(head);
+      initEntrance(viewport, track, fine ? 12 : 10);
 
       // the echo is hidden on a phone, so it only drifts where it shows. it runs
       // away from the word, so a gap opens rather than a letter being cut, and
       // each rail drifts at its own rate, the way the heads in work do
-      if (wide) {
+      if (wide && head) {
         gsap.fromTo(
           head.querySelector(".section-echo-run"),
           { xPercent: 0 },
@@ -562,7 +596,7 @@ function animateRail({ section, head, viewport, track, duration, reverse }, inde
       // an off screen rail still costs a transform write every frame, so park it
       // until it is actually in view
       const inView = ScrollTrigger.create({
-        trigger: section,
+        trigger: viewport,
         start: "top bottom",
         end: "bottom top",
         onToggle: (self) => {
@@ -624,11 +658,47 @@ export function buildRails() {
   return () => motion.forEach((mm) => mm.revert());
 }
 
+// one section head, two tracks. the head counts every game. each track runs
+// the other way from the rail above it
+function mountGames(view) {
+  const rows = [
+    { items: GAMES_TOP, duration: 56, reverse: true },
+    { items: GAMES_BOTTOM, duration: 40, reverse: false },
+  ];
+  const section = document.createElement("section");
+  section.className = "rail rail-stuff";
+  section.setAttribute("aria-label", "stupid stuff i made");
+
+  const head = buildSectionHead(
+    "stupid stuff i made",
+    "stuff",
+    rows.reduce((sum, row) => sum + row.items.length, 0),
+    "small games, every one opens",
+  );
+  section.append(head);
+
+  rows.forEach((row, index) => {
+    const { viewport, track } = buildTrack(row.items, "stuff");
+    section.append(viewport);
+    rails.push({
+      section,
+      head: index === 0 ? head : null,
+      viewport,
+      track,
+      duration: row.duration,
+      reverse: row.reverse,
+    });
+  });
+
+  view.append(section);
+}
+
 export function initRail() {
   const view = document.querySelector('.view[data-view-name="life"]');
   if (!view) return;
 
-  // the stack first, then stupid stuff, then the watchlist
+  // the stack first, then the two game rows, then the watchlist. each one
+  // runs the other way from the one above it
   mountRail({
     view,
     items: shuffle(OBJECTS),
@@ -639,17 +709,7 @@ export function initRail() {
     duration: 52,
   });
 
-  // each rail runs the other way from the one above it, at its own pace
-  mountRail({
-    view,
-    items: shuffle(STUFF),
-    label: "stupid stuff i made",
-    echo: "stuff",
-    note: "claude artifacts, every clip opens one",
-    variant: "stuff",
-    duration: 64,
-    reverse: true,
-  });
+  mountGames(view);
 
   mountRail({
     view,
@@ -657,6 +717,7 @@ export function initRail() {
     label: "current watchlist",
     variant: "poster",
     duration: 30,
+    reverse: true,
   });
 
   // the sections land after first paint, so when life is the first view every
