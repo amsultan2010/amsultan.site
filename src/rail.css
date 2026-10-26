@@ -422,7 +422,7 @@
 }
 
 .rail-stuff .rail-viewport + .rail-viewport {
-  border-top: 2px solid var(--cream);
+  border-top: 2px solid var(--white);
 }
 
 /* the stuff rail: each cover is a 16:9 clip that links to its game. --stuff-w
