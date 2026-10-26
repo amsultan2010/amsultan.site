@@ -1,7 +1,7 @@
 :root {
   --orange: #ff8c00;
   --orange-deep: #d36b00;
-  --cream: #fdfbd4;
+  --cream: #fff4e8;
   --white: #ffffff;
   --ink: #120e0c;
   --ink-soft: rgba(18, 14, 12, 0.62);
@@ -160,7 +160,7 @@ html[data-view] .view-life .rail:last-child {
   gap: 0.75rem;
   padding: var(--gutter);
   background: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   pointer-events: none;
 }
 
@@ -323,7 +323,7 @@ html[data-view] .view-life .rail:last-child {
 .primary-nav a:hover,
 .primary-nav a.is-active,
 .primary-nav a[aria-current="page"] {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -400,7 +400,7 @@ html[data-view] .view-life .rail:last-child {
   }
 
   50% {
-    color: var(--cream);
+    color: var(--white);
   }
 }
 
@@ -409,7 +409,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .brand:hover .brand-mark {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -426,7 +426,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .header-cta:hover {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -452,7 +452,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .pill:hover {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   transform: translate(-2px, -2px);
   box-shadow: 0.4rem 0.4rem 0 var(--orange-deep);
@@ -674,14 +674,14 @@ html[data-view] .view-life .rail:last-child {
 
 .hero-orbit span {
   padding: 0.5rem 0.95rem;
-  color: var(--cream);
+  color: var(--white);
   font-family: var(--mono);
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 .hero-orbit span + span {
-  border-left: 2px solid color-mix(in srgb, var(--cream) 30%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--white) 30%, transparent);
 }
 
 .hero-foot {
@@ -765,7 +765,7 @@ html[data-view] .view-life .rail:last-child {
 
 /* about */
 .about {
-  background: var(--cream);
+  background: var(--white);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -791,7 +791,7 @@ html[data-view] .about {
   margin: 0;
   padding: clamp(1.8rem, 4vw, 3.6rem) var(--gutter) clamp(2rem, 4.2vw, 3.8rem);
   overflow: hidden;
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   font-size: clamp(1.4rem, 6.4vw, 8.25rem);
   line-height: 1;
@@ -824,22 +824,22 @@ html[data-view] .about {
    so the stroke is painted first and a ground-coloured fill covers the seams */
 .about-line-stroke .about-line-text {
   color: var(--ink);
-  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--cream);
+  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--white);
   paint-order: stroke fill;
 }
 
 .about-line-stroke:hover .about-line-text {
-  color: var(--cream);
+  color: var(--white);
 }
 
 .about-line-accent {
   color: var(--orange);
 }
 
-/* the same cream outline the middle line wears, so the orange holds its edge
+/* the same white outline the middle line wears, so the orange holds its edge
    against the network behind it */
 .about-line-accent .about-line-text {
-  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--cream);
+  -webkit-text-stroke: clamp(2px, 0.28vw, 4.5px) var(--white);
   paint-order: stroke fill;
 }
 
@@ -912,7 +912,7 @@ html[data-view] .about {
 
 /* the one claim still in progress is set a size up on the dark ground */
 .about-points .about-point-now {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   font-size: 1.14em;
 }
@@ -1002,7 +1002,7 @@ html[data-view] .about {
 .about-closer em {
   display: inline-block;
   padding: 0.02em 0.22em 0.1em;
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   margin-right: 0.16em;
   font-style: normal;
@@ -1030,7 +1030,7 @@ html[data-view] .about {
   margin: 0;
   padding: 0.75rem var(--gutter);
   overflow: hidden;
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -1079,7 +1079,7 @@ html[data-view] .about {
 }
 
 .about-facts div:nth-child(2) dd.display {
-  color: var(--cream);
+  color: var(--white);
   -webkit-text-stroke: clamp(3px, 0.4vw, 6px) var(--ink);
   paint-order: stroke fill;
 }
@@ -1134,14 +1134,14 @@ html[data-view] .about {
   gap: 1rem;
   padding: clamp(0.85rem, 1.7vw, 1.4rem) var(--gutter);
   overflow: hidden;
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   transition: color 200ms ease;
 }
 
 .action-cell + .action-cell {
   --fill: var(--ink);
-  --fill-ink: var(--cream);
+  --fill-ink: var(--white);
   border-left: 2px solid var(--ink);
   color: var(--ink);
   background: var(--white);
@@ -1154,7 +1154,7 @@ html[data-view] .about {
 }
 
 .action-cell:first-child:focus-visible {
-  outline-color: var(--cream);
+  outline-color: var(--white);
 }
 
 /* the hover colour is a layer that wipes up from the floor of the cell */
@@ -1323,7 +1323,7 @@ html[data-view] .about {
   --head-ink: var(--ink);
   --head-rule: var(--ink);
   --head-accent: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   overflow: clip;
 }
@@ -1338,8 +1338,8 @@ html[data-view] .about {
   gap: 1rem;
   margin: 0;
   padding: 1.05rem var(--gutter) 0.95rem;
-  border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
-  color: var(--cream);
+  border-bottom: 2px solid color-mix(in srgb, var(--white) 22%, transparent);
+  color: var(--white);
   font-weight: inherit;
   /* the mask the label rises out of */
   overflow: clip;
@@ -1363,7 +1363,7 @@ html[data-view] .about {
    rules below ever name a colour */
 .work-row {
   --row-bg: var(--ink);
-  --row-fg: var(--cream);
+  --row-fg: var(--white);
   --row-accent: var(--orange);
   --row-rule: color-mix(in srgb, var(--row-fg) 30%, transparent);
   position: relative;
@@ -1722,16 +1722,16 @@ html[data-view] .about {
    row rather than a section of its own */
 .lead-zc {
   background: var(--zc);
-  color: var(--cream);
+  color: var(--white);
 }
 
 .lead-zc:hover {
-  color: var(--cream);
+  color: var(--white);
   background: var(--zc-deep);
 }
 
 .lead-zc .lead-num {
-  border-right-color: color-mix(in srgb, var(--cream) 35%, transparent);
+  border-right-color: color-mix(in srgb, var(--white) 35%, transparent);
 }
 
 .lead-zc .lead-body .mono {
@@ -1751,7 +1751,7 @@ html[data-view] .about {
   flex: 0 0 auto;
   width: clamp(2.1rem, 3.4vw, 2.9rem);
   height: clamp(2.1rem, 3.4vw, 2.9rem);
-  border: 2px solid var(--cream);
+  border: 2px solid var(--white);
   box-shadow: 0.22rem 0.22rem 0 var(--ink);
 }
 
@@ -1772,7 +1772,7 @@ html[data-view] .about {
 }
 
 .lead-zc .lead-points li::before {
-  background: var(--cream);
+  background: var(--white);
 }
 
 .zc-cta {
@@ -1795,12 +1795,12 @@ html[data-view] .about {
 
 .zc-cta:hover {
   background: transparent;
-  color: var(--cream);
+  color: var(--white);
 }
 
 .zc-cta:active {
   background: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   box-shadow: 0.08rem 0.08rem 0 var(--ink);
 }
 
@@ -1830,7 +1830,7 @@ html[data-view] .about {
 }
 
 .stack-fluent {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -1850,7 +1850,7 @@ html[data-view] .about {
 }
 
 .stack-fluent .stack-label {
-  border-bottom-color: color-mix(in srgb, var(--cream) 22%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--white) 22%, transparent);
 }
 
 .stack-label .display {
@@ -1939,9 +1939,9 @@ html[data-view] .about {
 /* record */
 .record {
   --head-bg: var(--ink);
-  --head-ink: var(--cream);
-  --head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
-  background: var(--cream);
+  --head-ink: var(--white);
+  --head-rule: color-mix(in srgb, var(--white) 22%, transparent);
+  background: var(--white);
 }
 
 /* the label takes the slot a lead row gives its number */
@@ -1952,7 +1952,7 @@ html[data-view] .about {
   gap: 1rem;
   margin: 0;
   padding: 0.6rem var(--gutter);
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -2074,7 +2074,7 @@ html[data-view] .about {
 
 .record-chips b {
   padding: 0.15rem 0.4rem;
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   font-weight: 500;
 }
@@ -2165,7 +2165,7 @@ html[data-view] .about {
   .record-label {
     flex-direction: column;
     padding: 0.95rem var(--gutter) 0.9rem;
-    border-bottom: 2px solid color-mix(in srgb, var(--cream) 22%, transparent);
+    border-bottom: 2px solid color-mix(in srgb, var(--white) 22%, transparent);
   }
 
   .record-cells {
@@ -2318,7 +2318,7 @@ html[data-view] .about {
 }
 
 .contact-card:hover {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
   box-shadow: 0.62rem 0.62rem 0 var(--orange-deep);
 }
@@ -2335,7 +2335,7 @@ html[data-view] .about {
 
 .contact-card-featured {
   background: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   border-color: var(--ink);
   box-shadow: 0.5rem 0.5rem 0 var(--orange);
 }
@@ -2594,7 +2594,7 @@ html[data-view] .about {
   gap: 1rem;
   padding: 1.15rem var(--gutter) calc(1.15rem + var(--safe-b));
   background: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   border-top: 2px solid var(--ink);
 }
 
@@ -3011,12 +3011,12 @@ section[id],
 }
 
 .tag:hover {
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
 .tag:focus-visible {
-  outline: 3px solid var(--cream);
+  outline: 3px solid var(--white);
   outline-offset: 3px;
 }
 

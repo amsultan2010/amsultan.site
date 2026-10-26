@@ -4,7 +4,7 @@ description: abdullah sultan's portfolio, one lowercase page in three views
 colors:
   signal-orange: "#ff8c00"
   signal-orange-deep: "#d36b00"
-  warm-cream: "#fdfbd4"
+  warm-cream: "#fff4e8"
   paper-white: "#ffffff"
   ink: "#120e0c"
   ink-soft: "rgba(18, 14, 12, 0.62)"
@@ -77,14 +77,14 @@ components:
 
 **Creative North Star: "The Lowercase Poster"**
 
-A flat printed-poster page: an amber ground, ink rules 2px thick, cream fields, white paper, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
+A flat printed-poster page: an amber ground, ink rules 2px thick, white paper, a little warm cream, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
 
 The page is sectioned like a broadsheet, with air inside each band. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
 
 Anything that points at another product wears that product's own colours inside the site, so the portfolio becomes a frame for real work.
 
 **Key Characteristics:**
-- amber ground, cream fields, white paper, ink for type and rules
+- amber ground, white paper, a little cream, ink for type and rules
 - 2px ink rules between everything, zero radius
 - hard offset shadows, zero blur; hover lifts off the shadow, press sinks into it
 - all text lowercase
@@ -100,8 +100,8 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): `#fdfbd4`, the resting fields (about, record, the life rails) and the type on ink.
-- **Paper White** (paper-white): `#ffffff`, the chrome and the paper objects: header, marquee, pills, portrait frame, contact frame, logo marks.
+- **Warm Cream** (warm-cream): `#fff4e8`, a light warm note used less than white: the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
+- **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about and record fields, the life rails, the header, the marquee, the frames, and the type on ink.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours

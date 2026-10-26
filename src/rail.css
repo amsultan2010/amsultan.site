@@ -1,6 +1,6 @@
 /* the life rails, owned by workstream ws-3 */
 .rail {
-  background: var(--cream);
+  background: var(--white);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -71,7 +71,7 @@
 }
 
 .rail-label-accent {
-  color: var(--rail-head-accent, var(--cream));
+  color: var(--rail-head-accent, var(--white));
 }
 
 /* the ruler: short ticks on every step and a tall one on every fifth. these two
@@ -224,7 +224,7 @@
     width: fit-content;
     margin: 0 auto;
     padding: 0.3rem 0.55rem;
-    color: var(--cream);
+    color: var(--white);
     background: var(--ink);
   }
 }
@@ -299,18 +299,18 @@
 }
 
 /* each rail takes its own ground and head colours, so the three read as three
-   sections and not one bar printed three times: the stack is cream on ink,
+   sections and not one bar printed three times: the stack is white on ink,
    stupid stuff keeps its old section head over an ink ground, and the watchlist
-   is a cream head over an orange ground */
+   is a white head over an orange ground */
 .rail-object {
   --rail-head-bg: var(--ink);
-  --rail-head-ink: var(--cream);
-  --rail-head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
+  --rail-head-ink: var(--white);
+  --rail-head-rule: color-mix(in srgb, var(--white) 22%, transparent);
   --rail-head-accent: var(--orange);
 }
 
 .rail-poster {
-  --rail-head-bg: var(--cream);
+  --rail-head-bg: var(--white);
   --rail-head-accent: var(--ink);
   background: var(--orange);
 }
@@ -319,7 +319,7 @@
   opacity: 0.85;
 }
 
-/* the object rail: cutouts sit straight on the cream ground, so no frame and no
+/* the object rail: cutouts sit straight on the white ground, so no frame and no
    fill. --rail-u is the side of the square every cutout is given in area, each
    item then reshapes that square to its own aspect ratio through --span, so a
    wide object gets a wide cell and nothing is letterboxed down to a sliver */
@@ -365,7 +365,7 @@
 }
 
 /* the flag is a flat field, so a hairline keeps its edge from bleeding into the
-   cream ground. every other object is a cutout and needs no frame */
+   white ground. every other object is a cutout and needs no frame */
 .rail-object .rail-cover img[src$="saudi.png"] {
   border: 1px solid var(--line-soft);
 }
@@ -397,7 +397,7 @@
 .rail-stuff {
   --head-bg: var(--orange);
   --head-accent: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   background: var(--ink);
 }
 
