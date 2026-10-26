@@ -10,7 +10,7 @@ web
 
 Primary readers:
 
-- Someone who might grab coffee, talk startups, or teach him data engineering.
+- Someone who might grab coffee, talk startups, or teach him machine learning and AI.
 - A founder or hiring manager deciding whether to work with him.
 - Someone who searched the name and needs the right Abdullah Sultan: Abdullah Muhammad Sultan, also amsultan or amsultan2010.
 
@@ -20,7 +20,7 @@ A school or college reader looking at the class of 2028 record is a secondary au
 
 amsultan.site is Abdullah Muhammad Sultan's portfolio. It shows who he is, the work he has shipped, and how to reach him.
 
-A visit succeeds when the reader believes the published record, reaches out, or both. Reaching out means LinkedIn, coffee, or a conversation about teaching him data engineering. Believing the record means checking the products, GitHub, and résumé.
+A visit succeeds when the reader believes the published record, reaches out, or both. Reaching out means LinkedIn, coffee, or a conversation about teaching him machine learning and AI. Believing the record means checking the products, GitHub, and résumé.
 
 ## Positioning
 
@@ -30,7 +30,7 @@ The canonical site for this person. It is the page that both names Abdullah Muha
 
 He is an 11th-grade student at the American International School Riyadh, in the full IB Diploma Programme, class of 2028, based in Riyadh. The live site is https://www.amsultan.site. The apex host redirects there.
 
-Readers use three views of one page: `/` (about and contact), `/work` (internships, projects, leadership, record), and `/life` (personal stack, small games, watchlist). `/resume` is the full résumé. Every view ends in contact: LinkedIn ("say hello"), the résumé, GitHub, and X (@amsultan2010). The published contact line is "grab coffee, talk about startups, or help me learn data engineering," with "reply within a day."
+Readers use three views of one page: `/` (about and contact), `/work` (internships, projects, leadership, record), and `/life` (personal stack, small games, watchlist). `/resume` is the full résumé. Every view ends in contact: LinkedIn ("say hello"), the résumé, GitHub, and X (@amsultan2010). The published contact line is "grab coffee, talk about startups, or help me learn machine learning and ai," with "reply within a day."
 
 The résumé source is a Google Doc, embedded by `resume.html`. Edit the doc, not the repo.
 

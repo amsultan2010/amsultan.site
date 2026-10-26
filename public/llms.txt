@@ -1,7 +1,7 @@
 # Abdullah Sultan
 
 > Abdullah Sultan is a student founder based in Riyadh, Saudi Arabia. He is
-> self-learning machine learning, AI engineering and data science through
+> self-learning machine learning and artificial intelligence through
 > Kaggle, DataCamp, 3Blue1Brown and StatQuest. He has shipped AI products at an
 > early-stage startup, builds developer tools, and runs a student-run startup
 > incubator.
@@ -67,7 +67,7 @@ Canonical site: https://www.amsultan.site/
 
 - [Home](https://www.amsultan.site/): About and contact.
 - [Work](https://www.amsultan.site/work): Built (internships and projects), lead, and record.
-- [Life](https://www.amsultan.site/life): The personal stack, small games made as Claude artifacts, and the watchlist.
+- [Life](https://www.amsultan.site/life): The personal stack, small games, and the watchlist.
 - [Resume](https://www.amsultan.site/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
 
