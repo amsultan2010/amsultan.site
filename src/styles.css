@@ -499,7 +499,7 @@ html[data-view] .view-life .rail:last-child {
   width: 120%;
   height: 120%;
   color: var(--ink);
-  opacity: 0.34;
+  opacity: 0.16;
 }
 
 .topo-drift {
@@ -531,15 +531,6 @@ html[data-view] .view-life .rail:last-child {
   opacity: 0.55;
 }
 
-.shape-ring-sm {
-  top: 62%;
-  left: 22%;
-  right: auto;
-  width: min(9vw, 4.2rem);
-  height: min(9vw, 4.2rem);
-  opacity: 0.4;
-}
-
 .shape-block {
   bottom: 20%;
   left: 6%;
@@ -550,17 +541,6 @@ html[data-view] .view-life .rail:last-child {
   box-shadow: 0.35rem 0.35rem 0 var(--ink);
 }
 
-.shape-block-sm {
-  top: 22%;
-  left: auto;
-  right: 24%;
-  bottom: auto;
-  width: min(8vw, 3.6rem);
-  height: min(8vw, 3.6rem);
-  opacity: 0.45;
-  box-shadow: 0.22rem 0.22rem 0 var(--ink);
-}
-
 .shape-pill {
   top: 30%;
   left: 10%;
@@ -569,16 +549,6 @@ html[data-view] .view-life .rail:last-child {
   border-radius: 999px;
   background: var(--ink);
   opacity: 0.32;
-}
-
-.shape-pill-tall {
-  top: auto;
-  bottom: 34%;
-  left: auto;
-  right: 8%;
-  width: 1.55rem;
-  height: min(12vw, 5.5rem);
-  opacity: 0.28;
 }
 
 .shape-slash {
@@ -593,15 +563,6 @@ html[data-view] .view-life .rail:last-child {
   transform-origin: center;
 }
 
-.shape-slash-b {
-  top: 24%;
-  left: 28%;
-  right: auto;
-  width: min(12vw, 5.5rem);
-  transform: rotate(18deg);
-  opacity: 0.35;
-}
-
 .shape-dot {
   bottom: 28%;
   right: 11%;
@@ -611,87 +572,6 @@ html[data-view] .view-life .rail:last-child {
   background: var(--white);
   box-shadow: 0.2rem 0.2rem 0 var(--ink);
   opacity: 1;
-}
-
-.shape-dot-b {
-  top: 42%;
-  left: 5%;
-  right: auto;
-  bottom: auto;
-  width: 0.75rem;
-  height: 0.75rem;
-  opacity: 0.7;
-}
-
-.shape-square {
-  top: 68%;
-  right: 30%;
-  width: min(6vw, 2.8rem);
-  height: min(6vw, 2.8rem);
-  background: transparent;
-  opacity: 0.45;
-  transform: rotate(12deg);
-}
-
-.shape-tri {
-  top: 38%;
-  right: 4%;
-  width: 0;
-  height: 0;
-  border: 0;
-  border-left: 1.1rem solid transparent;
-  border-right: 1.1rem solid transparent;
-  border-bottom: 1.9rem solid var(--ink);
-  background: transparent;
-  opacity: 0.28;
-}
-
-.shape-ring-xs {
-  top: 80%;
-  left: auto;
-  right: 38%;
-  width: min(6vw, 2.6rem);
-  height: min(6vw, 2.6rem);
-  opacity: 0.32;
-}
-
-.shape-dot-c {
-  top: 14%;
-  left: 13%;
-  right: auto;
-  bottom: auto;
-  width: 0.6rem;
-  height: 0.6rem;
-  opacity: 0.6;
-}
-
-.shape-slash-c {
-  top: auto;
-  bottom: 13%;
-  left: auto;
-  right: 27%;
-  width: min(9vw, 4.4rem);
-  transform: rotate(42deg);
-  opacity: 0.3;
-}
-
-.shape-square-b {
-  top: 76%;
-  right: auto;
-  left: 13%;
-  width: min(5vw, 2.2rem);
-  height: min(5vw, 2.2rem);
-  opacity: 0.34;
-  transform: rotate(-16deg);
-}
-
-.shape-pill-sm {
-  top: 9%;
-  left: auto;
-  right: 31%;
-  width: min(8vw, 3.4rem);
-  height: 1.05rem;
-  opacity: 0.24;
 }
 
 .hero-rail {
@@ -1399,27 +1279,21 @@ html[data-view] .about {
 
 /* stepped, not a gradient: each repeat is flatly fainter than the one before */
 .section-echo i:nth-child(1) {
-  opacity: 0.62;
+  opacity: 0.36;
 }
 
 .section-echo i:nth-child(2) {
-  opacity: 0.44;
+  opacity: 0.22;
 }
 
 .section-echo i:nth-child(3) {
-  opacity: 0.3;
+  opacity: 0.12;
 }
 
-.section-echo i:nth-child(4) {
-  opacity: 0.2;
-}
-
-.section-echo i:nth-child(5) {
-  opacity: 0.13;
-}
-
+.section-echo i:nth-child(4),
+.section-echo i:nth-child(5),
 .section-echo i:nth-child(6) {
-  opacity: 0.08;
+  opacity: 0.06;
 }
 
 .section-meta {
@@ -2937,18 +2811,7 @@ section[id],
   }
 
   .shape-pill,
-  .shape-slash,
-  .shape-tri,
-  .shape-square,
-  .shape-ring-sm,
-  .shape-block-sm,
-  .shape-pill-tall,
-  .shape-slash-b,
-  .shape-ring-xs,
-  .shape-dot-c,
-  .shape-slash-c,
-  .shape-square-b,
-  .shape-pill-sm {
+  .shape-slash {
     display: none;
   }
 
