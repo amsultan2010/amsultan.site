@@ -2461,15 +2461,25 @@ html[data-view] .about {
   color: var(--orange-deep);
 }
 
-/* life, between the stack and the games. each band is a short uneven row.
-   the caption sits on the photo, and a fine pointer only reveals it on hover */
+/* life, between the stack and the games. one height for every photo, widths
+   stepped like brick courses so the joints never line up. a fine pointer
+   only reveals the caption on hover */
 .facts {
-  --head-bg: var(--ink);
-  --head-ink: var(--cream);
-  --head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
-  --head-accent: var(--orange);
+  --head-bg: var(--orange);
+  --head-ink: var(--ink);
+  --head-rule: var(--ink);
+  --head-accent: var(--cream);
   background: var(--cream);
   color: var(--ink);
+}
+
+.facts .section-display,
+.facts .section-echo {
+  font-size: clamp(1.85rem, 5.2vw, 4.4rem);
+}
+
+.facts .section-display {
+  white-space: nowrap;
 }
 
 .facts-label {
@@ -2479,63 +2489,102 @@ html[data-view] .about {
   gap: 1rem;
   margin: 0;
   padding: 0.32rem var(--gutter) 0.28rem;
-  background: var(--ink);
   color: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
 
 .facts-label .display {
-  font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+  font-size: clamp(1rem, 1.55vw, 1.3rem);
   line-height: 1;
 }
 
 .facts-label .mono {
-  color: var(--orange);
   font-size: 0.75rem;
 }
 
-/* one short band per group. widths and heights step so the frames aren't a
-   matched set, and the band is only as tall as its tallest photo */
+.facts-lived .facts-label {
+  background: #1d4e89;
+}
+
+.facts-lived .facts-label .mono {
+  color: #ffc14d;
+}
+
+.facts-snacks .facts-label {
+  background: #e6b325;
+  color: var(--ink);
+}
+
+.facts-snacks .facts-label .mono {
+  color: var(--ink);
+}
+
+.facts-food .facts-label {
+  background: #ff4d1a;
+  color: var(--ink);
+}
+
+.facts-food .facts-label .mono {
+  color: var(--cream);
+}
+
+.facts-games .facts-label {
+  background: #1f7a4d;
+}
+
+.facts-games .facts-label .mono {
+  color: #f2c14e;
+}
+
+.facts-travel .facts-label {
+  background: #3d3a9a;
+}
+
+.facts-travel .facts-label .mono {
+  color: #ffc14d;
+}
+
+/* one height. each course uses different widths so a joint in one row
+   falls in the middle of a brick in the next */
 .facts-row {
   display: flex;
-  align-items: flex-end;
-  height: clamp(8.25rem, 12vw, 10.5rem);
+  align-items: stretch;
+  height: clamp(7.5rem, 11vw, 9.25rem);
   background: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
 
-.facts-lived .facts-cell:nth-child(1) { --w: 1.45; --h: 100%; }
-.facts-lived .facts-cell:nth-child(2) { --w: 0.95; --h: 76%; }
-.facts-lived .facts-cell:nth-child(3) { --w: 1.2; --h: 88%; }
-.facts-lived .facts-cell:nth-child(4) { --w: 0.78; --h: 66%; }
+.facts-lived .facts-cell:nth-child(1) { --w: 1.55; }
+.facts-lived .facts-cell:nth-child(2) { --w: 0.9; }
+.facts-lived .facts-cell:nth-child(3) { --w: 1.25; }
+.facts-lived .facts-cell:nth-child(4) { --w: 0.7; }
 
-.facts-snacks .facts-cell:nth-child(1) { --w: 1.25; --h: 100%; }
-.facts-snacks .facts-cell:nth-child(2) { --w: 0.72; --h: 72%; }
-.facts-snacks .facts-cell:nth-child(3) { --w: 1.05; --h: 84%; }
+.facts-snacks .facts-cell:nth-child(1) { --w: 0.85; }
+.facts-snacks .facts-cell:nth-child(2) { --w: 1.45; }
+.facts-snacks .facts-cell:nth-child(3) { --w: 1.15; }
 
-.facts-food .facts-cell:nth-child(1) { --w: 0.88; --h: 90%; }
-.facts-food .facts-cell:nth-child(2) { --w: 1.28; --h: 70%; }
-.facts-food .facts-cell:nth-child(3) { --w: 0.82; --h: 100%; }
-.facts-food .facts-cell:nth-child(4) { --w: 1.08; --h: 78%; }
+.facts-food .facts-cell:nth-child(1) { --w: 1.1; }
+.facts-food .facts-cell:nth-child(2) { --w: 0.75; }
+.facts-food .facts-cell:nth-child(3) { --w: 1.4; }
+.facts-food .facts-cell:nth-child(4) { --w: 1; }
 
-.facts-games .facts-cell:nth-child(1) { --w: 1.45; --h: 72%; }
-.facts-games .facts-cell:nth-child(2) { --w: 0.78; --h: 100%; }
-.facts-games .facts-cell:nth-child(3) { --w: 1.12; --h: 82%; }
-.facts-games .facts-cell:nth-child(4) { --w: 0.95; --h: 90%; }
+.facts-games .facts-cell:nth-child(1) { --w: 0.72; }
+.facts-games .facts-cell:nth-child(2) { --w: 1.35; }
+.facts-games .facts-cell:nth-child(3) { --w: 1.05; }
+.facts-games .facts-cell:nth-child(4) { --w: 1.2; }
 
-.facts-travel .facts-cell:nth-child(1) { --w: 1.4; --h: 100%; }
-.facts-travel .facts-cell:nth-child(2) { --w: 1.05; --h: 80%; }
-.facts-travel .facts-cell:nth-child(3) { --w: 0.82; --h: 68%; }
+.facts-travel .facts-cell:nth-child(1) { --w: 1.2; }
+.facts-travel .facts-cell:nth-child(2) { --w: 0.8; }
+.facts-travel .facts-cell:nth-child(3) { --w: 1.45; }
 
 .facts-cell {
   position: relative;
   flex: var(--w, 1) 1 0;
-  height: var(--h, 100%);
+  height: 100%;
   min-width: 0;
   margin: 0;
   overflow: hidden;
   background: var(--cream);
-  border-top: 2px solid var(--ink);
   border-right: 2px solid var(--ink);
 }
 
