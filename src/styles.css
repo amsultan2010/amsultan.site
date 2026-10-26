@@ -136,12 +136,11 @@ html[data-view="life"] .view[data-view-name="life"] {
   display: block;
 }
 
-/* the hero clears the fixed header with its own padding. work and life open on
-   a head instead, which rides up under the header so the header's lower part
-   sits over its top edge. phones keep a clear gap, set further down */
+/* the hero clears the fixed header with its own padding. work and life open
+   below the header, with a gap under its shadow. phones keep their own gap */
 html[data-view] .view[data-view-name="work"],
 html[data-view] .view-life {
-  padding-top: calc(1rem + var(--header-h) + 1.15rem + var(--safe-t));
+  padding-top: calc(1rem + var(--header-h) + 1.75rem + var(--safe-t));
 }
 
 /* life butts straight onto contact, so the last rail hands its bottom rule to
@@ -2362,8 +2361,8 @@ html[data-view] .about {
   --head-bg: var(--orange);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
-  --head-accent: var(--cream);
-  background: var(--cream);
+  --head-accent: var(--ink);
+  background: var(--white);
   color: var(--ink);
 }
 
@@ -2379,14 +2378,14 @@ html[data-view] .about {
 .facts-board {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.9rem;
-  padding: 0.9rem var(--gutter) 1.15rem;
+  gap: 1.35rem;
+  padding: 1.2rem var(--gutter) 1.65rem;
 }
 
 .facts-group {
   min-width: 0;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
 }
 
 .facts-travel {
@@ -2399,8 +2398,8 @@ html[data-view] .about {
   justify-content: space-between;
   gap: 0.75rem;
   margin: 0;
-  padding: 0.4rem 0.7rem 0.35rem;
-  color: var(--cream);
+  padding: 0.7rem 0.95rem;
+  color: var(--white);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -2431,12 +2430,12 @@ html[data-view] .about {
 }
 
 .facts-food .facts-label {
-  background: #ff4d1a;
+  background: var(--orange);
   color: var(--ink);
 }
 
 .facts-food .facts-label .mono {
-  color: var(--cream);
+  color: var(--ink);
 }
 
 .facts-games .facts-label {
@@ -2460,10 +2459,10 @@ html[data-view] .about {
 .facts-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-auto-rows: clamp(5.25rem, 8vw, 6.75rem);
-  gap: 0.55rem;
+  grid-auto-rows: clamp(8rem, 12vw, 11rem);
+  gap: 0.85rem;
   margin: 0;
-  padding: 0.55rem;
+  padding: 0.85rem;
 }
 
 .facts-snacks .facts-cell:first-child {
@@ -2472,7 +2471,7 @@ html[data-view] .about {
 
 .facts-travel .facts-row {
   grid-template-columns: 1.25fr 0.9fr 1.15fr;
-  grid-auto-rows: clamp(6rem, 10vw, 8rem);
+  grid-auto-rows: clamp(9rem, 14vw, 12.5rem);
 }
 
 .facts-cell {
@@ -2480,14 +2479,14 @@ html[data-view] .about {
   min-width: 0;
   margin: 0;
   overflow: hidden;
-  background: var(--cream);
+  background: var(--white);
   border: 2px solid var(--ink);
 }
 
 .facts-frame {
   position: absolute;
   inset: 0;
-  background: var(--cream);
+  background: var(--white);
 }
 
 .facts-frame img {
@@ -2528,9 +2527,9 @@ html[data-view] .about {
   flex-direction: column;
   gap: 0.12rem;
   margin: 0;
-  padding: 0.38rem 0.55rem 0.42rem;
+  padding: 0.55rem 0.75rem 0.6rem;
   background: var(--ink);
-  color: var(--cream);
+  color: var(--white);
   pointer-events: none;
 }
 
@@ -2577,14 +2576,16 @@ html[data-view] .about {
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
   .facts-board {
     grid-template-columns: 1fr;
   }
+}
 
+@media (max-width: 700px) {
   .facts-travel .facts-row {
     grid-template-columns: 1fr;
-    grid-auto-rows: 7rem;
+    grid-auto-rows: 9.5rem;
   }
 }
 
@@ -2655,7 +2656,7 @@ section[id],
   /* the header spans the width here, so it would cover the heading itself */
   html[data-view] .view[data-view-name="work"],
   html[data-view] .view-life {
-    padding-top: calc(1rem + var(--header-h) + 1.15rem + var(--safe-t));
+    padding-top: calc(1rem + var(--header-h) + 1.75rem + var(--safe-t));
   }
 
   .primary-nav a {
@@ -2789,13 +2790,13 @@ section[id],
   }
 
   .hero {
-    padding-top: 5.85rem;
+    padding-top: 6.35rem;
     min-height: auto;
   }
 
   html[data-view] .view[data-view-name="work"],
   html[data-view] .view-life {
-    padding-top: 5.85rem;
+    padding-top: 6.35rem;
   }
 
   .hero-title {
