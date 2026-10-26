@@ -50,11 +50,11 @@ const GAMES_TOP = [
 const GAMES_BOTTOM = [
   { title: "five nights at altman's", kind: "five nights at freddy's, with tech execs", clip: "fnaa",
     href: "https://fnaa.grok.me" },
-  { title: "f1 but it's minecraft", kind: "literally just the title",
+  { title: "f1 but it's minecraft", kind: "literally just the title", clip: "f1butitsminecraft",
     href: "https://f1butitsminecraft.grok.me" },
-  { title: "flappy jay", kind: "bluejay-themed flappy bird",
+  { title: "flappy jay", kind: "bluejay-themed flappy bird", clip: "flappyjay",
     href: "https://flappyjay.grok.me" },
-  { title: "off course", kind: "a two-player rally. one drives, the other reshapes the land",
+  { title: "off course", kind: "a two-player rally. one drives, the other reshapes the land", clip: "offcourse",
     href: "https://off-course.grok.me" },
 ];
 

@@ -13,14 +13,14 @@ const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)"
 // read off :root, so the three colours are not copied into a fourth file
 function palettes() {
   const css = getComputedStyle(document.documentElement);
-  const [orange, cream, ink] = ["--orange", "--cream", "--ink"].map((name) =>
+  const [orange, white, ink] = ["--orange", "--white", "--ink"].map((name) =>
     css.getPropertyValue(name).trim(),
   );
   return {
-    // on the orange ground: ink wiring, a neuron flashes cream and then ink
-    orange: { ground: orange, line: ink, hot: ink, heat: 0.6, head: cream, flash: cream, after: ink, ring: 0.8 },
-    // on the ink ground: cream wiring, a neuron flashes orange and then cream
-    ink: { ground: ink, line: cream, hot: orange, heat: 0.9, head: cream, flash: orange, after: cream, ring: 0.5 },
+    // on the orange ground: ink wiring, a neuron flashes white and then ink
+    orange: { ground: orange, line: ink, hot: ink, heat: 0.6, head: white, flash: white, after: ink, ring: 0.8 },
+    // on the ink ground: white wiring, a neuron flashes orange and then white
+    ink: { ground: ink, line: white, hot: orange, heat: 0.9, head: white, flash: orange, after: white, ring: 0.5 },
   };
 }
 

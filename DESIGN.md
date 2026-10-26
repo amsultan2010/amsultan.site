@@ -2,9 +2,10 @@
 name: amsultan.site
 description: abdullah sultan's portfolio, one lowercase page in three views
 colors:
-  signal-orange: "#ff4d1a"
-  signal-orange-deep: "#e03a0a"
-  warm-cream: "#fffaf5"
+  signal-orange: "#ff8c00"
+  signal-orange-deep: "#d36b00"
+  warm-cream: "#fff4e8"
+  paper-white: "#ffffff"
   ink: "#120e0c"
   ink-soft: "rgba(18, 14, 12, 0.62)"
   line: "rgba(18, 14, 12, 0.55)"
@@ -44,11 +45,11 @@ rounded:
   none: "0"
   dot: "999px"
 spacing:
-  gutter: "clamp(1rem, 2.4vw, 2.5rem)"
+  gutter: "clamp(1.55rem, 3.6vw, 4rem)"
   header-h: "5.1rem"
 components:
   section-head:
-    backgroundColor: "{colors.warm-cream}"
+    backgroundColor: "{colors.paper-white}"
     textColor: "{colors.ink}"
     typography: "{typography.display}"
     rounded: "{rounded.none}"
@@ -76,14 +77,14 @@ components:
 
 **Creative North Star: "The Lowercase Poster"**
 
-A loud, flat, printed-poster page: one signal-orange ground, ink rules 2px thick, cream panels, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
+A flat printed-poster page: an amber ground, ink rules 2px thick, white paper, a little warm cream, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
 
-The page is dense and sectioned like a broadsheet. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
+The page is sectioned like a broadsheet, with air inside each band. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
 
 Anything that points at another product wears that product's own colours inside the site, so the portfolio becomes a frame for real work.
 
 **Key Characteristics:**
-- signal-orange ground, ink and cream only for the site's own surfaces
+- amber ground, white paper, a little cream, ink for type and rules
 - 2px ink rules between everything, zero radius
 - hard offset shadows, zero blur; hover lifts off the shadow, press sinks into it
 - all text lowercase
@@ -92,21 +93,22 @@ Anything that points at another product wears that product's own colours inside 
 
 ## Colors
 
-Three colours run the site; every other colour belongs to someone else's product.
+Four colours run the site; every other colour belongs to someone else's product.
 
 ### Primary
-- **Signal Orange** (signal-orange): the page ground and the head bands. Its deep variant (signal-orange-deep) is only for pressed and shadow states on orange.
+- **Signal Orange** (signal-orange): `#ff8c00`, the page ground, the head bands, and the pressable cards. Its deep variant (signal-orange-deep) is only for pressed and shadow states on orange. Orange is a field. Type on it is ink. Orange is never type on white or cream.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): panels, the header pill, text on ink.
+- **Warm Cream** (warm-cream): `#fff4e8`, a light warm note used less than white: the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
+- **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about and record fields, the life rails, the header, the marquee, the frames, and the type on ink.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours
 - **cycls** (cy-black, cy-white), **fschoolai** (fs-white, fs-ink, fs-blue), **crosscode** (cc-black, cc-white), **the downforce blog** (df-teal, df-paper, df-lime), **z combinator** (zc-purple). Each is read from that product's shipped css and used only on rows about it.
 
 ### Named Rules
-**The Three Colour Rule.** The site's own surfaces use only orange, ink and cream. A new colour enters only as another product's brand, on that product's row.
+**The Four Colour Rule.** The site's own surfaces use only orange, cream, white, and ink. A new colour enters only as another product's brand, on that product's row.
 
 **The Borrowed Brand Rule.** A row about a product sets `--row-bg`, `--row-fg` and `--row-accent` from that product's palette; layout rules never name a colour.
 
@@ -156,7 +158,7 @@ A full-width band: the display word on the left with a mask it rises out of, an 
 A full-width link: mono index, square brand icon with a hard shadow, display name as a hover-preview tag, serif bullets, mono date-and-role line, a "visit ↗" label, and a looping muted clip in a framed box. It wears its product's brand colours and has an accent edge on its leading side that widens on hover.
 
 ### Lead item
-A ruled row with a big display number in its own left column and a body of mono meta, display title and serif bullets. Hover flips it to cream with orange text. z combinator wears its own purple and Archivo.
+A ruled row with a big display number in its own left column and a body of mono meta, display title and serif bullets. Hover flips it to white with ink text. z combinator wears its own purple and Archivo.
 
 ### Tag
 Inline text with a 1px underline. On hover it inverts (ink ground, cream text) and shows a preview image from `public/images/tags/`.
@@ -165,7 +167,7 @@ Inline text with a 1px underline. On hover it inverts (ink ground, cream text) a
 Orange card, 2px ink border, ink card shadow at rest; magnetic on fine pointers.
 
 ### Navigation
-A fixed cream pill header with a 2px ink border, centred at the top. View links are real `<a href>`s to `/`, `/work` and `/life`.
+A fixed white pill header with a 2px ink border, centred at the top. View links are real `<a href>`s to `/`, `/work` and `/life`.
 
 ## Do's and Don'ts
 
@@ -177,6 +179,7 @@ A fixed cream pill header with a 2px ink border, centred at the top. View links 
 
 ### Don't:
 - **Don't** blur a shadow or round a corner.
-- **Don't** add a fourth site colour; new colour comes only from a product's brand.
+- **Don't** add a fifth site colour; new colour comes only from a product's brand.
+- **Don't** set orange type on white or cream. Orange is a field, and the type on it is ink.
 - **Don't** capitalise anything on the page.
 - **Don't** hide content behind hover; hover only adds emphasis.

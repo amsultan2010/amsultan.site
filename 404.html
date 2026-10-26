@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ff4d1a" />
+    <meta name="theme-color" content="#ff8c00" />
     <meta name="robots" content="noindex" />
     <meta
       name="description"
@@ -21,12 +21,13 @@
     <title>404 not found | Abdullah Sultan</title>
     <style>
       :root {
-        --orange: #ff4d1a;
-        --cream: #fffaf5;
+        --orange: #ff8c00;
+        --cream: #fff4e8;
+        --white: #ffffff;
         --ink: #120e0c;
         --ink-soft: rgba(18, 14, 12, 0.62);
         --line-soft: rgba(18, 14, 12, 0.2);
-        --gutter: clamp(1rem, 2.4vw, 2.5rem);
+        --gutter: clamp(1.35rem, 3.1vw, 3.4rem);
         --display: "Unbounded", sans-serif;
         --serif: "Newsreader", Georgia, serif;
         --mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -66,7 +67,7 @@
       }
 
       a:focus-visible {
-        outline: 3px solid var(--cream);
+        outline: 3px solid var(--white);
         outline-offset: 3px;
       }
 
@@ -94,7 +95,8 @@
       }
 
       .top a:hover {
-        color: var(--cream);
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
       }
 
       /* a press drops back to ink and picks up a rule, so it reads on top of the hover */
@@ -124,7 +126,7 @@
         max-width: 34rem;
         font-size: clamp(1.05rem, 2.2vw, 1.5rem);
         line-height: 1.4;
-        color: var(--ink-soft);
+        color: var(--ink);
       }
 
       .home {
@@ -132,20 +134,16 @@
         display: inline-block;
         padding: 0.85rem 1.4rem;
         background: var(--ink);
-        color: var(--cream);
+        color: var(--white);
         font-family: var(--mono);
         font-size: 0.75rem;
         letter-spacing: 0.08em;
         transition: background 0.2s ease, color 0.2s ease;
       }
 
-      .home:hover {
-        background: var(--cream);
-        color: var(--orange);
-      }
-
+      .home:hover,
       .home:active {
-        background: var(--cream);
+        background: var(--white);
         color: var(--ink);
       }
 
@@ -155,7 +153,7 @@
         gap: 1rem;
         padding-top: 1rem;
         border-top: 1px solid var(--line-soft);
-        color: var(--ink-soft);
+        color: var(--ink);
       }
     </style>
     <script type="module">

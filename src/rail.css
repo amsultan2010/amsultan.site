@@ -1,6 +1,6 @@
 /* the life rails, owned by workstream ws-3 */
 .rail {
-  background: var(--cream);
+  background: var(--white);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -22,7 +22,7 @@
   display: flex;
   flex: 0 0 auto;
   align-items: center;
-  padding: clamp(0.6rem, 1.1vw, 1rem) clamp(1rem, 1.8vw, 1.75rem);
+  padding: clamp(0.9rem, 1.6vw, 1.4rem) clamp(1.15rem, 2vw, 2rem);
 }
 
 .rail-cell + .rail-cell {
@@ -71,7 +71,7 @@
 }
 
 .rail-label-accent {
-  color: var(--rail-head-accent, var(--cream));
+  color: var(--rail-head-accent, var(--white));
 }
 
 /* the ruler: short ticks on every step and a tall one on every fifth. these two
@@ -128,7 +128,7 @@
 .rail-viewport {
   overflow-x: clip;
   overflow-y: visible;
-  padding: 0.9rem 0 1rem;
+  padding: clamp(1.85rem, 3vw, 2.6rem) 0 clamp(2.1rem, 3.4vw, 3rem);
 }
 
 .rail-track {
@@ -143,7 +143,7 @@
      measure exactly half the track and the wrap has no seam */
   flex: 0 0 auto;
   width: clamp(11rem, 15vw, 16rem);
-  margin: 0 clamp(1rem, 2vw, 2rem) 0 0;
+  margin: 0 clamp(1.75rem, 3.2vw, 3.4rem) 0 0;
 }
 
 .rail-cover {
@@ -224,7 +224,7 @@
     width: fit-content;
     margin: 0 auto;
     padding: 0.3rem 0.55rem;
-    color: var(--cream);
+    color: var(--white);
     background: var(--ink);
   }
 }
@@ -299,23 +299,27 @@
 }
 
 /* each rail takes its own ground and head colours, so the three read as three
-   sections and not one bar printed three times: the stack is cream on ink,
+   sections and not one bar printed three times: the stack is white on ink,
    stupid stuff keeps its old section head over an ink ground, and the watchlist
-   is a cream head over an orange ground */
+   is a white head over an orange ground */
 .rail-object {
   --rail-head-bg: var(--ink);
-  --rail-head-ink: var(--cream);
-  --rail-head-rule: color-mix(in srgb, var(--cream) 22%, transparent);
+  --rail-head-ink: var(--white);
+  --rail-head-rule: color-mix(in srgb, var(--white) 22%, transparent);
   --rail-head-accent: var(--orange);
 }
 
 .rail-poster {
-  --rail-head-bg: var(--cream);
-  --rail-head-accent: var(--orange);
+  --rail-head-bg: var(--white);
+  --rail-head-accent: var(--ink);
   background: var(--orange);
 }
 
-/* the object rail: cutouts sit straight on the cream ground, so no frame and no
+.rail-poster .rail-kind {
+  opacity: 0.85;
+}
+
+/* the object rail: cutouts sit straight on the white ground, so no frame and no
    fill. --rail-u is the side of the square every cutout is given in area, each
    item then reshapes that square to its own aspect ratio through --span, so a
    wide object gets a wide cell and nothing is letterboxed down to a sliver */
@@ -361,7 +365,7 @@
 }
 
 /* the flag is a flat field, so a hairline keeps its edge from bleeding into the
-   cream ground. every other object is a cutout and needs no frame */
+   white ground. every other object is a cutout and needs no frame */
 .rail-object .rail-cover img[src$="saudi.png"] {
   border: 1px solid var(--line-soft);
 }
@@ -392,8 +396,8 @@
 
 .rail-stuff {
   --head-bg: var(--orange);
-  --head-accent: var(--cream);
-  color: var(--cream);
+  --head-accent: var(--ink);
+  color: var(--white);
   background: var(--ink);
 }
 
@@ -418,7 +422,7 @@
 }
 
 .rail-stuff .rail-viewport + .rail-viewport {
-  border-top: 2px solid var(--cream);
+  border-top: 2px solid var(--white);
 }
 
 /* the stuff rail: each cover is a 16:9 clip that links to its game. --stuff-w
@@ -445,8 +449,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0.7rem;
-  background: var(--cream);
+  padding: 0.85rem;
+  background: var(--white);
   color: var(--ink);
 }
 
