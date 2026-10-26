@@ -80,7 +80,7 @@
 
 @media (max-width: 700px) {
   .resume {
-    padding-top: calc(5.5rem + var(--safe-t));
+    padding-top: calc(6.35rem + var(--safe-t));
   }
 
   .resume-download {

@@ -45,7 +45,7 @@ rounded:
   none: "0"
   dot: "999px"
 spacing:
-  gutter: "clamp(1.35rem, 3.1vw, 3.4rem)"
+  gutter: "clamp(1.55rem, 3.6vw, 4rem)"
   header-h: "5.1rem"
 components:
   section-head:
