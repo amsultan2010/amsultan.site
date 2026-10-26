@@ -723,7 +723,7 @@ export function buildRails() {
 
 // one section head, two tracks. the head counts every game. each track runs
 // the other way from the rail above it
-function mountGames(view) {
+function mountGames(view, before) {
   const rows = [
     { items: GAMES_TOP, duration: 56, reverse: true },
     { items: GAMES_BOTTOM, duration: 40, reverse: false },
@@ -753,16 +753,15 @@ function mountGames(view) {
     });
   });
 
-  view.append(section);
+  view.insertBefore(section, before);
 }
 
 export function initRail() {
   const view = document.querySelector('.view[data-view-name="life"]');
   if (!view) return;
 
-  // the stack first, then the facts grid (already in the html), then the two
-  // game rows, then the watchlist. each rail runs the other way from the one
-  // above it
+  // the stack first, then stupid stuff, then the favorites grid already in the
+  // html, then the watchlist. each rail runs the other way from the one above it
   const facts = view.querySelector(".facts");
   mountRail({
     view,
@@ -775,7 +774,7 @@ export function initRail() {
     duration: 52,
   });
 
-  mountGames(view);
+  mountGames(view, facts);
 
   mountRail({
     view,
