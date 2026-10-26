@@ -323,7 +323,7 @@
   --rail-u: clamp(7.25rem, 10.75vw, 11.75rem);
   --rail-pad: 0.25rem;
   /* only the lower rail carries the closing rule. this one runs straight into
-     the dark section below */
+     the section below */
   border-bottom: 0;
 }
 
@@ -368,7 +368,8 @@
 
 /* a hard shadow thickens thin dark lettering into a smear, so the two wordmark
    logos go without one */
-.rail-object .rail-cover img[src$="claude.png"],
+.rail-object .rail-cover img[src$="grokbot.png"],
+.rail-object .rail-cover img[src$="cursor.png"],
 .rail-object .rail-cover img[src$="astonmartin.png"] {
   filter: none;
 }

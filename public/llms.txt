@@ -67,7 +67,7 @@ Canonical site: https://www.amsultan.site/
 
 - [Home](https://www.amsultan.site/): About and contact.
 - [Work](https://www.amsultan.site/work): Built (internships and projects), lead, and record.
-- [Life](https://www.amsultan.site/life): The personal stack, small games, and the watchlist.
+- [Life](https://www.amsultan.site/life): The personal stack, a few facts, small games, and the watchlist.
 - [Resume](https://www.amsultan.site/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
 

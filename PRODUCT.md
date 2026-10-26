@@ -30,7 +30,7 @@ The canonical site for this person. It is the page that both names Abdullah Muha
 
 He is an 11th-grade student at the American International School Riyadh, in the full IB Diploma Programme, class of 2028, based in Riyadh. The live site is https://www.amsultan.site. The apex host redirects there.
 
-Readers use three views of one page: `/` (about and contact), `/work` (internships, projects, leadership, record), and `/life` (personal stack, small games, watchlist). `/resume` is the full résumé. Every view ends in contact: LinkedIn ("say hello"), the résumé, GitHub, and X (@amsultan2010). The published contact line is "grab coffee, talk about startups, or help me learn machine learning and ai," with "reply within a day."
+Readers use three views of one page: `/` (about and contact), `/work` (internships, projects, leadership, record), and `/life` (personal stack, a few facts, small games, watchlist). `/resume` is the full résumé. Every view ends in contact: LinkedIn ("say hello"), the résumé, GitHub, and X (@amsultan2010). The published contact line is "grab coffee, talk about startups, or help me learn machine learning and ai," with "reply within a day."
 
 The résumé source is a Google Doc, embedded by `resume.html`. Edit the doc, not the repo.
 
