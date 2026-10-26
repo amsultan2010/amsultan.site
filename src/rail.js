@@ -92,9 +92,15 @@ const OBJECTS = [
   { title: "smash main", src: "/images/objects/incineroar.png", w: 247, h: 241,
     trim: [22, 2, 213, 233],
     alt: "incineroar, a red and black wrestler cat pokemon, in a fighting stance" },
-  { title: "my second brain", src: "/images/objects/claude.png", w: 520, h: 112,
-    trim: [0, 0, 520, 112],
-    alt: "the claude wordmark beside its orange asterisk mark" },
+  { title: "my second brain", src: "/images/objects/grok.png", w: 560, h: 548,
+    trim: [0, 0, 555, 531], mark: true,
+    alt: "the grok mark, a hooked ring cut by a diagonal slash" },
+  { title: "first employee", src: "/images/objects/grokbot.png", w: 664, h: 127,
+    trim: [0, 0, 664, 127], mark: true,
+    alt: "the grok bot mark, a black sphere beside the words grok bot" },
+  { title: "how i larp being technical", src: "/images/objects/cursor.png", w: 1024, h: 244,
+    trim: [0, 0, 1024, 244], mark: true,
+    alt: "the cursor mark, a dark cube with a white triangle beside the word cursor" },
 ];
 
 // fisher-yates, so the order is genuinely different every load rather than a
@@ -108,8 +114,26 @@ function shuffle(list) {
   return out;
 }
 
-// the widest cutout is held to this many base widths, or the claude wordmark at
-// 4.6 to 1 would take a third of the screen on its own
+// the three marks stay apart: shuffle everything else, then drop the marks
+// into the gaps so grok, grok bot, and cursor never land as a run
+function spreadMarks(list) {
+  const marks = shuffle(list.filter((item) => item.mark));
+  const rest = shuffle(list.filter((item) => !item.mark));
+  const total = rest.length + marks.length;
+  const gap = Math.floor(total / marks.length);
+  const at = new Set(marks.map((_, i) => 1 + i * gap));
+  const out = [];
+  let r = 0;
+  let m = 0;
+  for (let i = 0; i < total; i += 1) {
+    if (at.has(i) && m < marks.length) out.push(marks[m++]);
+    else out.push(rest[r++]);
+  }
+  return out;
+}
+
+// the widest cutout is held to this many base widths, or a wordmark at about
+// 5 to 1 would take a third of the screen on its own
 const MAX_SPAN = 1.9;
 
 // equal visible area: every cutout covers a square of one base unit, reshaped to
@@ -501,9 +525,10 @@ function initSectionHeadEntrance(head) {
 // the rails mounted into life, in page order, for buildRails to animate
 const rails = [];
 
-function mountRail({ view, items, label, echo, note, variant, duration, reverse = false }) {
+function mountRail({ view, items, label, echo, note, variant, duration, reverse = false, before = null }) {
   const { section, head, viewport, track } = buildSection({ items, label, variant, echo, note });
-  view.append(section);
+  if (before) view.insertBefore(section, before);
+  else view.append(section);
   rails.push({ section, head, viewport, track, duration, reverse });
 }
 
@@ -651,12 +676,49 @@ function animateRail({ head, viewport, track, duration, reverse }, index) {
   return mm;
 }
 
+// the facts grid is html, so its entrance lives with the rails that bookend it
+function animateFacts() {
+  const section = document.querySelector(".facts");
+  if (!section) return () => {};
+  const mm = gsap.matchMedia();
+  mm.add(
+    {
+      motion: "(prefers-reduced-motion: no-preference)",
+      reduce: "(prefers-reduced-motion: reduce)",
+    },
+    (context) => {
+      if (context.conditions.reduce) return undefined;
+      const head = section.querySelector(".section-head");
+      const headTl = head ? initSectionHeadEntrance(head) : null;
+      const tweens = [...section.querySelectorAll(".facts-row")].map((row) =>
+        gsap.from(row.children, {
+          clipPath: "inset(0% 0% 100% 0%)",
+          duration: D.base,
+          stagger: 0.06,
+          ease: "out",
+          clearProps: "clipPath",
+          scrollTrigger: { trigger: row, start: "top 86%", once: true },
+        }),
+      );
+      return () => {
+        headTl?.kill();
+        tweens.forEach((tween) => tween.kill());
+      };
+    },
+  );
+  return () => mm.revert();
+}
+
 // called by main.js each time life is shown. the cleanup it returns reverts
 // every rail's matchMedia, which runs the cleanup above: loop, drag, hover,
 // sway, parking and nudge all stop, and the entrances are ready to replay
 export function buildRails() {
   const motion = rails.map(animateRail);
-  return () => motion.forEach((mm) => mm.revert());
+  const stopFacts = animateFacts();
+  return () => {
+    motion.forEach((mm) => mm.revert());
+    stopFacts();
+  };
 }
 
 // one section head, two tracks. the head counts every game. each track runs
@@ -698,11 +760,14 @@ export function initRail() {
   const view = document.querySelector('.view[data-view-name="life"]');
   if (!view) return;
 
-  // the stack first, then the two game rows, then the watchlist. each one
-  // runs the other way from the one above it
+  // the stack first, then the facts grid (already in the html), then the two
+  // game rows, then the watchlist. each rail runs the other way from the one
+  // above it
+  const facts = view.querySelector(".facts");
   mountRail({
     view,
-    items: shuffle(OBJECTS),
+    before: facts,
+    items: spreadMarks(OBJECTS),
     label: "my personal stack",
     variant: "object",
     // one run of the track per duration, so a longer run needs more seconds
