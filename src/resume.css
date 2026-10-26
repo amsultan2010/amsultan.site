@@ -37,12 +37,12 @@
   font-size: 1.15rem;
   color: var(--cream);
   background: var(--ink);
-  box-shadow: 0.42rem 0.42rem 0 var(--cream);
+  box-shadow: 0.42rem 0.42rem 0 var(--white);
 }
 
 .resume-download:hover {
   color: var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
 }
 
@@ -65,7 +65,7 @@
   min-height: 28rem;
   place-items: center;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.42rem 0.42rem 0 var(--ink);
 }
 

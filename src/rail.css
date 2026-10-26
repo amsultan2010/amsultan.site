@@ -311,8 +311,12 @@
 
 .rail-poster {
   --rail-head-bg: var(--cream);
-  --rail-head-accent: var(--orange);
+  --rail-head-accent: var(--ink);
   background: var(--orange);
+}
+
+.rail-poster .rail-kind {
+  opacity: 0.85;
 }
 
 /* the object rail: cutouts sit straight on the cream ground, so no frame and no
@@ -392,7 +396,7 @@
 
 .rail-stuff {
   --head-bg: var(--orange);
-  --head-accent: var(--cream);
+  --head-accent: var(--ink);
   color: var(--cream);
   background: var(--ink);
 }

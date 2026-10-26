@@ -1,7 +1,8 @@
 :root {
-  --orange: #ff4d1a;
-  --orange-deep: #e03a0a;
-  --cream: #fffaf5;
+  --orange: #ff8c00;
+  --orange-deep: #d36b00;
+  --cream: #fdfbd4;
+  --white: #ffffff;
   --ink: #120e0c;
   --ink-soft: rgba(18, 14, 12, 0.62);
   --line: rgba(18, 14, 12, 0.55);
@@ -87,7 +88,7 @@ a {
 
 a:focus-visible,
 button:focus-visible {
-  outline: 3px solid var(--cream);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
 }
 
@@ -96,7 +97,7 @@ main:focus {
   outline: none;
 }
 
-/* a cream ring on a cream ground is no ring at all */
+/* a light ring on the white header is no ring at all */
 .site-header a:focus-visible,
 .site-header button:focus-visible,
 .contact-frame a:focus-visible {
@@ -200,7 +201,7 @@ html[data-view] .view-life .rail:last-child {
   left: 0;
   width: 100%;
   height: 5px;
-  background: var(--cream);
+  background: var(--ink);
   transform: scaleX(0);
   transform-origin: left;
 }
@@ -213,7 +214,7 @@ html[data-view] .view-life .rail:last-child {
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  background: var(--cream);
+  background: var(--white);
   mix-blend-mode: difference;
   opacity: 0;
   pointer-events: none;
@@ -228,7 +229,7 @@ html[data-view] .view-life .rail:last-child {
   width: 3.5rem;
   height: 3.5rem;
   background: transparent;
-  border: 2px solid var(--cream);
+  border: 2px solid var(--white);
 }
 
 .cursor span {
@@ -236,7 +237,7 @@ html[data-view] .view-life .rail:last-child {
   place-items: center;
   width: 100%;
   height: 100%;
-  color: var(--cream);
+  color: var(--white);
   font-family: var(--mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
@@ -248,7 +249,7 @@ html[data-view] .view-life .rail:last-child {
   width: 4.75rem;
   height: 4.75rem;
   background: transparent;
-  border: 2px solid var(--cream);
+  border: 2px solid var(--white);
 }
 
 .cursor.is-labelled span {
@@ -267,7 +268,7 @@ html[data-view] .view-life .rail:last-child {
   min-height: 4.8rem;
   padding: 0.36rem;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   transform: translateX(-50%);
   box-shadow: 0.42rem 0.42rem 0 var(--ink);
 }
@@ -327,7 +328,7 @@ html[data-view] .view-life .rail:last-child {
 
 .primary-nav a:active,
 .header-cta:active {
-  color: var(--cream);
+  color: var(--ink);
   background: var(--orange-deep);
 }
 
@@ -445,7 +446,7 @@ html[data-view] .view-life .rail:last-child {
      transition keeps the stale value, which left it resting low after its entrance */
   transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
   color: var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);
 }
 
@@ -543,8 +544,8 @@ html[data-view] .view-life .rail:last-child {
   left: 6%;
   width: min(15vw, 7rem);
   height: min(15vw, 7rem);
-  background: var(--cream);
-  opacity: 0.6;
+  background: var(--white);
+  opacity: 0.92;
   box-shadow: 0.35rem 0.35rem 0 var(--ink);
 }
 
@@ -606,9 +607,9 @@ html[data-view] .view-life .rail:last-child {
   width: 1.05rem;
   height: 1.05rem;
   border-radius: 50%;
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.2rem 0.2rem 0 var(--ink);
-  opacity: 0.85;
+  opacity: 1;
 }
 
 .shape-dot-b {
@@ -702,7 +703,7 @@ html[data-view] .view-life .rail:last-child {
   margin: 0 var(--gutter);
   padding: 0.85rem 1rem;
   border: 2px solid var(--ink);
-  background: color-mix(in srgb, var(--cream) 18%, transparent);
+  background: color-mix(in srgb, var(--white) 28%, transparent);
   box-shadow: 0.3rem 0.3rem 0 var(--ink);
 }
 
@@ -743,7 +744,7 @@ html[data-view] .view-life .rail:last-child {
   width: fit-content;
   padding: 0.4rem 0.7rem;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
 
@@ -787,7 +788,7 @@ html[data-view] .view-life .rail:last-child {
   margin-top: 0.5rem;
   border: 2px solid var(--ink);
   background: var(--ink);
-  box-shadow: 0.28rem 0.28rem 0 var(--cream);
+  box-shadow: 0.28rem 0.28rem 0 var(--white);
 }
 
 .hero-orbit span {
@@ -827,7 +828,7 @@ html[data-view] .view-life .rail:last-child {
   overflow: hidden;
   border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
 }
 
 .marquee-track {
@@ -850,7 +851,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .marquee-track b {
-  color: var(--orange);
+  color: var(--ink);
   font-weight: 800;
 }
 
@@ -1009,10 +1010,10 @@ html[data-view] .about {
   border-top: 0;
 }
 
-/* the number is a display cut at a size orange still reads at on cream */
+/* ink on the cream rows. the in-progress row sits on ink, so its number stays orange */
 .about-points li::before {
   content: counter(point, decimal-leading-zero);
-  color: var(--orange);
+  color: var(--ink);
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(1.3rem, 2.5vw, 2.4rem);
@@ -1023,7 +1024,7 @@ html[data-view] .about {
 .about-points strong {
   font-weight: 600;
   text-decoration: underline;
-  text-decoration-color: var(--orange);
+  text-decoration-color: currentColor;
   text-decoration-thickness: 0.16em;
   text-underline-offset: 0.18em;
 }
@@ -1035,6 +1036,7 @@ html[data-view] .about {
   font-size: 1.14em;
 }
 
+.about-points .about-point-now::before,
 .about-point-now strong {
   color: var(--orange);
 }
@@ -1075,7 +1077,7 @@ html[data-view] .about {
   height: 100%;
   overflow: hidden;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
 }
 
 .portrait-mask img {
@@ -1092,7 +1094,7 @@ html[data-view] .about {
   bottom: 1.5rem;
   padding: 0.45rem 0.7rem;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   transform: rotate(3deg);
   box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
@@ -1124,7 +1126,7 @@ html[data-view] .about {
   margin-right: 0.16em;
   font-style: normal;
   transform: rotate(-2deg);
-  box-shadow: 0.13em 0.13em 0 var(--cream);
+  box-shadow: 0.13em 0.13em 0 var(--white);
 }
 
 .about-closer-mark {
@@ -1201,8 +1203,18 @@ html[data-view] .about {
   paint-order: stroke fill;
 }
 
+.about-facts div:nth-child(3) {
+  background: var(--orange);
+  color: var(--ink);
+}
+
+.about-facts div:nth-child(3) dt {
+  color: var(--ink);
+  opacity: 0.75;
+}
+
 .about-facts div:nth-child(3) dd.display {
-  color: var(--orange);
+  color: var(--ink);
 }
 
 .fact-note {
@@ -1251,7 +1263,7 @@ html[data-view] .about {
   --fill-ink: var(--cream);
   border-left: 2px solid var(--ink);
   color: var(--ink);
-  background: var(--cream);
+  background: var(--white);
 }
 
 .action-cell:hover,
@@ -1336,7 +1348,7 @@ html[data-view] .about {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: stretch;
   color: var(--head-ink, var(--ink));
-  background: var(--head-bg, var(--cream));
+  background: var(--head-bg, var(--white));
   border-bottom: 2px solid var(--head-rule, var(--ink));
 }
 
@@ -1370,7 +1382,7 @@ html[data-view] .about {
   letter-spacing: -0.06em;
   white-space: nowrap;
   /* stroke under a ground-coloured fill, so only the outer contour shows */
-  color: var(--head-bg, var(--cream));
+  color: var(--head-bg, var(--white));
   -webkit-text-stroke: clamp(2px, 0.26vw, 4px) var(--head-ink, var(--ink));
   paint-order: stroke fill;
 }
@@ -1435,7 +1447,7 @@ html[data-view] .about {
   --head-bg: var(--orange);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
-  --head-accent: var(--cream);
+  --head-accent: var(--ink);
   color: var(--cream);
   background: var(--ink);
   overflow: clip;
@@ -1725,7 +1737,7 @@ html[data-view] .about {
 /* lead now sits straight under the last built row, which is near ink, so its
    head takes the cream ground the rail between them used to supply */
 .lead {
-  --head-bg: var(--cream);
+  --head-bg: var(--white);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
   background: var(--orange);
@@ -1747,8 +1759,8 @@ html[data-view] .about {
 }
 
 .lead-item:hover {
-  color: var(--orange);
-  background: var(--cream);
+  color: var(--ink);
+  background: var(--white);
 }
 
 .lead-num {
@@ -1844,7 +1856,7 @@ html[data-view] .about {
 }
 
 .lead-zc .lead-num {
-  border-right-color: rgba(255, 250, 245, 0.35);
+  border-right-color: color-mix(in srgb, var(--cream) 35%, transparent);
 }
 
 .lead-zc .lead-body .mono {
@@ -1895,8 +1907,8 @@ html[data-view] .about {
   min-height: 2.9rem;
   margin-top: 1rem;
   padding: 0.7rem 1.1rem;
-  border: 2px solid var(--cream);
-  background: var(--cream);
+  border: 2px solid var(--white);
+  background: var(--white);
   color: var(--zc);
   font-family: var(--archivo);
   font-size: 0.92rem;
@@ -1926,7 +1938,7 @@ html[data-view] .about {
 }
 
 /* two panels under the rows. what is solid sits filled on ink, what is still
-   going in sits outlined on cream: the split the hero name makes */
+   going in sits outlined on white: the split the hero name makes */
 .stack {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1948,7 +1960,7 @@ html[data-view] .about {
 }
 
 .stack-learning {
-  background: var(--cream);
+  background: var(--white);
 }
 
 .stack-label {
@@ -1979,14 +1991,14 @@ html[data-view] .about {
 }
 
 .stack-learning .stack-label .mono {
-  color: var(--orange-deep);
+  color: var(--ink);
 }
 
 /* a small live mark: this list is the one still being added to */
 .stack-pulse {
   width: 0.55rem;
   height: 0.55rem;
-  background: var(--orange);
+  background: var(--ink);
   animation: live-pulse 1.4s ease-in-out infinite;
 }
 
@@ -2020,6 +2032,10 @@ html[data-view] .about {
   font-style: normal;
 }
 
+.stack-learning .stack-list li > i {
+  color: var(--ink);
+}
+
 .stack-word {
   white-space: nowrap;
   transition: color 200ms ease, background 200ms ease;
@@ -2035,7 +2051,7 @@ html[data-view] .about {
 }
 
 .stack-learning .stack-word {
-  color: var(--cream);
+  color: var(--white);
   -webkit-text-stroke: clamp(2px, 0.24vw, 3.5px) var(--ink);
   paint-order: stroke fill;
 }
@@ -2113,7 +2129,7 @@ html[data-view] .about {
   aspect-ratio: 1;
   overflow: hidden;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -2290,8 +2306,8 @@ html[data-view] .about {
 
 @media (hover: hover) and (pointer: fine) {
   .record-awards .record-cell:hover {
-    color: var(--orange);
-    background: var(--cream);
+    color: var(--ink);
+    background: var(--white);
   }
 
   .record-cell:hover .record-mark {
@@ -2321,7 +2337,7 @@ html[data-view] .about {
   gap: 1.35rem;
   padding: clamp(1.1rem, 2.1vw, 1.6rem);
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
 }
 
@@ -2338,7 +2354,7 @@ html[data-view] .about {
 }
 
 .contact-kicker {
-  color: var(--orange);
+  color: var(--ink);
 }
 
 .contact-status {
@@ -2352,7 +2368,7 @@ html[data-view] .about {
   width: 0.45rem;
   height: 0.45rem;
   border-radius: 50%;
-  background: var(--orange);
+  background: var(--ink);
   animation: live-pulse 1.4s ease-in-out infinite;
 }
 
@@ -2372,7 +2388,10 @@ html[data-view] .about {
 }
 
 .contact-link:hover {
-  color: var(--orange);
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.08em;
 }
 
 .contact-link .split-char {
@@ -2453,12 +2472,12 @@ html[data-view] .about {
 
 .contact-card-featured:hover {
   color: var(--ink);
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 0.62rem 0.62rem 0 var(--orange);
 }
 
 .contact-card-featured:hover .mono {
-  color: var(--orange-deep);
+  color: var(--ink);
 }
 
 /* life, between stupid stuff and the watchlist. groups are boxes in pairs,
@@ -2720,6 +2739,11 @@ html[data-view] .about {
 .back-to-top:hover,
 .back-to-top:active {
   color: var(--orange);
+}
+
+.site-footer a:focus-visible,
+.site-footer button:focus-visible {
+  outline-color: var(--white);
 }
 
 section[id],
@@ -3140,7 +3164,7 @@ section[id],
   width: 300px;
   border: 1px solid var(--ink);
   border-radius: 0;
-  background: var(--cream);
+  background: var(--white);
   box-shadow: 10px 10px 0 var(--ink);
   pointer-events: none;
   visibility: hidden;
@@ -3150,7 +3174,7 @@ section[id],
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-bottom: 1px solid var(--ink);
-  background: var(--cream);
+  background: var(--white);
 }
 
 .tag-preview-frame img {
