@@ -36,7 +36,6 @@ const WATCHING = [
 
 // two rows, in this order. a clip name loads /videos/<clip>.mp4 and .jpg.
 // a game with no clip yet gets a still until the video exists.
-// tesla tricks has no grok link yet, so it still opens the old artifact
 const GAMES_TOP = [
   { title: "parselands", kind: "an endless runner where a llama parses pdfs", clip: "parselands",
     href: "https://parselands.grok.me" },
@@ -45,7 +44,7 @@ const GAMES_TOP = [
   { title: "saudi surfers", kind: "subway surfers, but in riyadh, past its famous landmarks", clip: "saudisurfers",
     href: "https://saudisurfers.grok.me" },
   { title: "tesla tricks", kind: "a game built around the tesla roadster", clip: "tesla",
-    href: "https://claude.ai/artifact/4eraPAM9XVeLjrtHuSkobX" },
+    href: "https://teslatricks.grok.me" },
 ];
 
 const GAMES_BOTTOM = [
@@ -55,6 +54,8 @@ const GAMES_BOTTOM = [
     href: "https://f1butitsminecraft.grok.me" },
   { title: "flappy jay", kind: "a flappy bird game",
     href: "https://flappyjay.grok.me" },
+  { title: "off course", kind: "a two-player rally. one drives, the other reshapes the land",
+    href: "https://off-course.grok.me" },
 ];
 
 // trim is the solid part of each cutout inside its own file, as [x, y, w, h] in
