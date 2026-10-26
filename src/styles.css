@@ -143,6 +143,17 @@ html[data-view] .view-life {
   padding-top: calc(1rem + var(--header-h) + 1.75rem + var(--safe-t));
 }
 
+/* life sits on white, with a gap between the rails, so the orange heads
+   don't stack into one slab */
+html[data-view="life"] .view-life {
+  background: var(--white);
+  padding-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+
+html[data-view="life"] .view-life > * + * {
+  margin-top: clamp(2rem, 4.5vw, 3.75rem);
+}
+
 /* life butts straight onto contact, so the last rail hands its bottom rule to
    contact's top one instead of stacking a second line under it */
 html[data-view] .view-life .rail:last-child {
