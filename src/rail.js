@@ -177,7 +177,9 @@ function buildClip(name) {
   video.muted = true;
   video.setAttribute("muted", "");
   video.loop = true;
+  video.setAttribute("loop", "");
   video.playsInline = true;
+  video.setAttribute("playsinline", "");
   video.preload = "none";
   video.setAttribute("aria-hidden", "true");
   return video;
