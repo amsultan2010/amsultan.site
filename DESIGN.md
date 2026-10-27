@@ -4,7 +4,7 @@ description: abdullah sultan's portfolio, one lowercase page in three views
 colors:
   signal-orange: "#ff5c00"
   signal-orange-deep: "#d34400"
-  warm-cream: "#fff4e8"
+  warm-cream: "#fce5c0"
   paper-white: "#ffffff"
   ink: "#120e0c"
   ink-soft: "rgba(18, 14, 12, 0.62)"
@@ -100,7 +100,7 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): `#fff4e8`, a warm note used less than white: the header, the hero rail and kicker, the marquee, the basics sheet, the message-me cell, the lead head, the learning panel, the academics row, the contact card, the gaps between life rails, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
+- **Warm Cream** (warm-cream): `#fce5c0`, a warm note used less than white: the header, the hero rail and kicker, the marquee, the basics sheet, the message-me cell, the lead head, the learning panel, the academics row, the contact card, the gaps between life rails, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
 - **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about field, the life rails, the favorites board, the frames, and the type on ink.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 

@@ -38,7 +38,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 - All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`;
   `button` and `input` need it set on them. Meta tags, JSON-LD and `llms.txt` keep case.
-- Colour is `--orange` (the page ground), `--white` (most light surfaces and the type on ink), `--cream` (`#fff4e8`, bands and gaps through the page, still less than white), and `--ink`. Outlines are white. Orange is never type on white or cream. Fonts are Unbounded (`.display`),
+- Colour is `--orange` (the page ground), `--white` (most light surfaces and the type on ink), `--cream` (`#fce5c0`, bands and gaps through the page, still less than white), and `--ink`. Outlines are white. Orange is never type on white or cream. Fonts are Unbounded (`.display`),
   Newsreader (`.serif`) and IBM Plex Mono (`.mono`), loaded from Google Fonts.
 - Radii are 0, or fully round on dots. Shadows are hard offsets with zero blur. Rules are 2px
   `--ink`. Hover lifts an element off its shadow and `:active` sinks it back.
