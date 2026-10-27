@@ -1,7 +1,7 @@
 :root {
-  --orange: #ff6800;
-  --orange-deep: #d34d00;
-  --cream: #fff4e8;
+  --orange: #ff5c00;
+  --orange-deep: #d34400;
+  --cream: #fce5c0;
   --white: #ffffff;
   --ink: #120e0c;
   --ink-soft: rgba(18, 14, 12, 0.62);
@@ -143,8 +143,8 @@ html[data-view] .view-life {
   padding-top: calc(1rem + var(--header-h) + 1.75rem + var(--safe-t));
 }
 
-/* life sits on cream, with a white rail in each gap, so the orange heads
-   don't stack into one slab */
+/* life sits on cream, rails included, so the orange heads don't stack
+   into one slab */
 html[data-view="life"] .view-life {
   background: var(--cream);
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
@@ -775,7 +775,7 @@ html[data-view] .view-life .rail:last-child {
 
 /* about */
 .about {
-  background: var(--white);
+  background: var(--cream);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -968,7 +968,7 @@ html[data-view] .about {
   height: 100%;
   overflow: hidden;
   border: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
 }
 
 .portrait-mask img {
@@ -1240,7 +1240,7 @@ html[data-view] .about {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: stretch;
   color: var(--head-ink, var(--ink));
-  background: var(--head-bg, var(--white));
+  background: var(--head-bg, var(--cream));
   border-bottom: 2px solid var(--head-rule, var(--ink));
 }
 
@@ -1274,7 +1274,7 @@ html[data-view] .about {
   letter-spacing: -0.06em;
   white-space: nowrap;
   /* stroke under a ground-coloured fill, so only the outer contour shows */
-  color: var(--head-bg, var(--white));
+  color: var(--head-bg, var(--cream));
   -webkit-text-stroke: clamp(2px, 0.26vw, 4px) var(--head-ink, var(--ink));
   paint-order: stroke fill;
 }
@@ -1646,7 +1646,7 @@ html[data-view] .about {
 
 .lead-item:hover {
   color: var(--ink);
-  background: var(--white);
+  background: var(--cream);
 }
 
 .lead-item:last-child {
@@ -1832,7 +1832,7 @@ html[data-view] .about {
   --head-bg: var(--ink);
   --head-ink: var(--white);
   --head-rule: color-mix(in srgb, var(--white) 22%, transparent);
-  background: var(--white);
+  background: var(--cream);
 }
 
 /* the label takes the slot a lead row gives its number */
@@ -1899,7 +1899,7 @@ html[data-view] .about {
   aspect-ratio: 1;
   overflow: hidden;
   border: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
@@ -2077,7 +2077,7 @@ html[data-view] .about {
 @media (hover: hover) and (pointer: fine) {
   .record-awards .record-cell:hover {
     color: var(--ink);
-    background: var(--white);
+    background: var(--cream);
   }
 
   .record-cell:hover .record-mark {
@@ -2242,7 +2242,7 @@ html[data-view] .about {
 
 .contact-card-featured:hover {
   color: var(--ink);
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 0.62rem 0.62rem 0 var(--orange);
 }
 
@@ -2257,7 +2257,7 @@ html[data-view] .about {
   --head-ink: var(--ink);
   --head-rule: var(--ink);
   --head-accent: var(--ink);
-  background: var(--white);
+  background: var(--cream);
   color: var(--ink);
 }
 
@@ -2347,7 +2347,7 @@ html[data-view] .about {
   display: block;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background: var(--white);
+  background: var(--cream);
   border: 2px solid var(--ink);
 }
 
@@ -2411,6 +2411,25 @@ html[data-view] .about {
 
   .facts-cell:hover .facts-frame img {
     transform: scale(1.045);
+  }
+
+  /* the name sits on the photo and only comes up under the pointer. a touch
+     screen has no hover, so there the caption stays under the frame */
+  .facts-cap {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    z-index: 1;
+    padding: 0.55rem 0.5rem 0.6rem;
+    background: var(--cream);
+    border-top: 2px solid var(--ink);
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .facts-cell:hover .facts-cap {
+    opacity: 1;
   }
 }
 
@@ -2870,7 +2889,7 @@ section[id],
   width: 300px;
   border: 1px solid var(--ink);
   border-radius: 0;
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 10px 10px 0 var(--ink);
   pointer-events: none;
   visibility: hidden;
@@ -2880,7 +2899,7 @@ section[id],
   aspect-ratio: 4 / 3;
   overflow: hidden;
   border-bottom: 1px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
 }
 
 .tag-preview-frame img {
