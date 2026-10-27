@@ -405,10 +405,18 @@ function revealLines(selector, start = "top 85%") {
 // the clips of the view on screen play the whole time it is shown, reduced
 // motion included, and the clips of the other views pause
 function playClips() {
+  const current = document.documentElement.dataset.view;
   $$("video[data-clip]").forEach((clip) => {
-    if (clip.closest(".view").dataset.viewName === document.documentElement.dataset.view) {
-      clip.play().catch(() => {});
-    } else clip.pause();
+    const on = clip.closest(".view")?.dataset.viewName === current;
+    // life clips stay in the dom on every view, so they only buffer once life
+    // is the one on screen, and then they keep looping for the whole visit
+    if (clip.classList.contains("rail-video")) {
+      clip.autoplay = on;
+      clip.loop = true;
+      if (on) clip.preload = "auto";
+    }
+    if (on) clip.play().catch(() => {});
+    else clip.pause();
   });
 }
 
