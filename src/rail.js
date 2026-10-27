@@ -164,14 +164,12 @@ function buildImage(item, isClone) {
   return img;
 }
 
-// work clips are played from main.js. a game clip waits until it is near the screen
+// playClips in main.js plays every one of these for the whole time life is open
 function buildClip(name) {
   const video = document.createElement("video");
   video.className = "rail-video";
   video.dataset.clip = "";
-  // src stays off until the clip is near the screen, so eight loops are not
-  // all downloading the moment life opens
-  video.dataset.src = `/videos/${name}.mp4`;
+  video.src = `/videos/${name}.mp4`;
   video.poster = `/videos/${name}.jpg`;
   video.width = 960;
   video.height = 540;
@@ -180,52 +178,9 @@ function buildClip(name) {
   video.setAttribute("muted", "");
   video.loop = true;
   video.playsInline = true;
-  video.preload = "none";
+  video.preload = "auto";
   video.setAttribute("aria-hidden", "true");
   return video;
-}
-
-// posters show immediately. the file is fetched only once a clip is about to
-// enter, and an offscreen one pauses so it is not decoding in the background
-function armClip(video) {
-  if (video.dataset.armed) return;
-  video.dataset.armed = "1";
-  video.preload = "auto";
-  video.src = video.dataset.src;
-}
-
-let clipSync = 0;
-export function syncRailClips() {
-  const onLife = document.documentElement.dataset.view === "life";
-  document.querySelectorAll("video.rail-video").forEach((video) => {
-    const rect = video.getBoundingClientRect();
-    const near =
-      rect.width > 0 &&
-      rect.left < window.innerWidth + 120 &&
-      rect.right > -120 &&
-      rect.top < window.innerHeight + 80 &&
-      rect.bottom > -80;
-    if (!onLife || !near) {
-      video.pause();
-      return;
-    }
-    armClip(video);
-    video.play().catch(() => {});
-  });
-}
-
-function syncRailClipsSoon() {
-  const now = performance.now();
-  if (now - clipSync < 200) return;
-  clipSync = now;
-  syncRailClips();
-}
-
-function watchClips(root) {
-  const observer = new IntersectionObserver(() => syncRailClips(), {
-    rootMargin: "80px 120px",
-  });
-  root.querySelectorAll("video.rail-video").forEach((video) => observer.observe(video));
 }
 
 // a game with no clip yet. the title under the frame already names it
@@ -445,7 +400,6 @@ function initDrag(track, auto, setHead, onScreen, toProgress) {
     gsap.set(track, { x: px });
     // the auto tween is paused under a drag, so the playhead is fed from here
     setHead(-px / run);
-    syncRailClipsSoon();
   };
 
   return Draggable.create(track, {
@@ -630,7 +584,6 @@ function animateRail({ head, viewport, track, duration, reverse }, index) {
         modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
         onUpdate() {
           setHead(toProgress(this.progress()));
-          syncRailClipsSoon();
         },
       });
 
@@ -804,7 +757,6 @@ function mountGames(view, before) {
   });
 
   view.insertBefore(section, before);
-  watchClips(section);
 }
 
 export function initRail() {
