@@ -279,7 +279,7 @@ html[data-view] .view-life .rail:last-child {
   min-height: 4.8rem;
   padding: 0.36rem;
   border: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
   transform: translateX(-50%);
   box-shadow: 0.42rem 0.42rem 0 var(--ink);
 }
@@ -457,7 +457,7 @@ html[data-view] .view-life .rail:last-child {
      transition keeps the stale value, which left it resting low after its entrance */
   transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
   color: var(--ink);
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 0.28rem 0.28rem 0 var(--ink);
 }
 
@@ -719,7 +719,7 @@ html[data-view] .view-life .rail:last-child {
   overflow: hidden;
   border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
 }
 
 .marquee-track {
@@ -985,7 +985,7 @@ html[data-view] .about {
   bottom: 1.5rem;
   padding: 0.45rem 0.7rem;
   border: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
   transform: rotate(3deg);
   box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
@@ -1058,6 +1058,7 @@ html[data-view] .about {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
   padding: 0;
+  background: var(--cream);
 }
 
 .about-facts div {
@@ -1089,7 +1090,7 @@ html[data-view] .about {
 }
 
 .about-facts div:nth-child(2) dd.display {
-  color: var(--white);
+  color: var(--cream);
   -webkit-text-stroke: clamp(3px, 0.4vw, 6px) var(--ink);
   paint-order: stroke fill;
 }
@@ -1622,7 +1623,7 @@ html[data-view] .about {
 /* lead now sits straight under the last built row, which is near ink, so its
    head takes the cream ground the rail between them used to supply */
 .lead {
-  --head-bg: var(--white);
+  --head-bg: var(--cream);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
   background: var(--orange);
