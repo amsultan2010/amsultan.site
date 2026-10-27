@@ -100,8 +100,8 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): `#fff4e8`, a light warm note used less than white: the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
-- **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about and record fields, the life rails, the header, the marquee, the frames, and the type on ink.
+- **Warm Cream** (warm-cream): `#fff4e8`, a light warm note used less than white: the header, the marquee, the basics sheet, the lead head, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
+- **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about and record fields, the life rails, the frames, and the type on ink.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours
@@ -167,7 +167,7 @@ Inline text with a 1px underline. On hover it inverts (ink ground, cream text) a
 Orange card, 2px ink border, ink card shadow at rest; magnetic on fine pointers.
 
 ### Navigation
-A fixed white pill header with a 2px ink border, centred at the top. View links are real `<a href>`s to `/`, `/work` and `/life`.
+A fixed cream pill header with a 2px ink border, centred at the top. View links are real `<a href>`s to `/`, `/work` and `/life`.
 
 ## Do's and Don'ts
 
