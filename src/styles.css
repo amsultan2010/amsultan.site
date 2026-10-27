@@ -2532,6 +2532,25 @@ html[data-view] .about {
   .facts-cell:hover .facts-frame img {
     transform: scale(1.045);
   }
+
+  /* the name sits on the photo and only comes up under the pointer. a touch
+     screen has no hover, so there the caption stays under the frame */
+  .facts-cap {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    left: 2px;
+    z-index: 1;
+    padding: 0.55rem 0.5rem 0.6rem;
+    background: var(--cream);
+    border-top: 2px solid var(--ink);
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+
+  .facts-cell:hover .facts-cap {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
