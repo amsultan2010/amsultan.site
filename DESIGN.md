@@ -2,8 +2,8 @@
 name: amsultan.site
 description: abdullah sultan's portfolio, one lowercase page in three views
 colors:
-  signal-orange: "#ff8c00"
-  signal-orange-deep: "#d36b00"
+  signal-orange: "#ff7900"
+  signal-orange-deep: "#d35b00"
   warm-cream: "#fff4e8"
   paper-white: "#ffffff"
   ink: "#120e0c"
@@ -96,7 +96,7 @@ Anything that points at another product wears that product's own colours inside 
 Four colours run the site; every other colour belongs to someone else's product.
 
 ### Primary
-- **Signal Orange** (signal-orange): `#ff8c00`, the page ground, the head bands, and the pressable cards. Its deep variant (signal-orange-deep) is only for pressed and shadow states on orange. Orange is a field. Type on it is ink. Orange is never type on white or cream.
+- **Signal Orange** (signal-orange): `#ff7900`, the page ground, the head bands, and the pressable cards. Its deep variant (signal-orange-deep) is only for pressed and shadow states on orange. Orange is a field. Type on it is ink. Orange is never type on white or cream.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
