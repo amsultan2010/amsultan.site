@@ -167,6 +167,16 @@
   filter: grayscale(1) contrast(0.92);
 }
 
+/* a grayscale filter on a cutout clips the part that hangs out of the cell,
+   so the row looks broken the moment one object is hovered */
+.rail-object .rail-track.is-dimmed .rail-item:not(.is-hot) .rail-cover {
+  filter: none;
+}
+
+.rail-object .rail-item.is-hot {
+  z-index: 1;
+}
+
 .rail-caption {
   overflow: hidden;
   margin-top: 0.55rem;

@@ -164,7 +164,7 @@ function buildImage(item, isClone) {
   return img;
 }
 
-// playClips in main.js plays and pauses every data-clip video with its view
+// playClips in main.js plays every one of these for the whole time life is open
 function buildClip(name) {
   const video = document.createElement("video");
   video.className = "rail-video";
@@ -437,14 +437,17 @@ function initHover(track) {
     gsap.set(caption, { yPercent: 105, autoAlpha: 0 });
 
     // the caption box rides up with the cover, since on a fine pointer it sits
-    // over the cover's foot rather than under it
+    // over the cover's foot rather than under it. a stack cutout already hangs
+    // out of its cell, so lifting and scaling it on hover shoves it through the
+    // head rule and into the next object
     const box = item.querySelector(".rail-caption");
+    const cutout = item.matches(".rail-item-object");
 
-    const tl = gsap
-      .timeline({ paused: true, defaults: { ease: "out" } })
-      .to([cover, box], { y: -14, duration: D.fast }, 0)
-      .to(cover, { scale: 1.04, duration: D.fast }, 0)
-      .to(caption, { yPercent: 0, autoAlpha: 1, duration: D.base }, 0.05);
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "out" } });
+    if (!cutout) {
+      tl.to([cover, box], { y: -14, duration: D.fast }, 0).to(cover, { scale: 1.04, duration: D.fast }, 0);
+    }
+    tl.to(caption, { yPercent: 0, autoAlpha: 1, duration: D.base }, cutout ? 0 : 0.05);
 
     const enter = () => {
       item.classList.add("is-hot");
