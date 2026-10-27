@@ -1649,6 +1649,10 @@ html[data-view] .about {
   background: var(--white);
 }
 
+.lead-item:last-child {
+  border-bottom: 0;
+}
+
 .lead-num {
   display: grid;
   place-items: center;
@@ -1822,130 +1826,6 @@ html[data-view] .about {
 .zc-cta:hover span {
   transform: translate(0.15rem, -0.15rem);
 }
-
-/* two panels under the rows. what is solid sits filled on ink, what is still
-   going in sits outlined on white: the split the hero name makes */
-.stack {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.stack-panel {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.stack-panel + .stack-panel {
-  border-left: 2px solid var(--ink);
-}
-
-.stack-fluent {
-  color: var(--white);
-  background: var(--ink);
-}
-
-.stack-learning {
-  background: var(--cream);
-}
-
-.stack-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 0;
-  padding: 0.75rem var(--gutter);
-  overflow: hidden;
-  border-bottom: 2px solid var(--ink);
-}
-
-.stack-fluent .stack-label {
-  border-bottom-color: color-mix(in srgb, var(--white) 22%, transparent);
-}
-
-.stack-label .display {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
-  line-height: 1.1;
-}
-
-.stack-label .mono {
-  color: var(--orange);
-}
-
-.stack-learning .stack-label .mono {
-  color: var(--ink);
-}
-
-/* a small live mark: this list is the one still being added to */
-.stack-pulse {
-  width: 0.55rem;
-  height: 0.55rem;
-  background: var(--ink);
-  animation: live-pulse 1.4s ease-in-out infinite;
-}
-
-.stack-list {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-  gap: 0.18em 0;
-  margin: 0;
-  padding: clamp(0.9rem, 1.8vw, 1.5rem) var(--gutter) clamp(1rem, 1.9vw, 1.6rem);
-  list-style: none;
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(1.3rem, 2.9vw, 2.6rem);
-  line-height: 1.1;
-  letter-spacing: -0.055em;
-}
-
-/* each word sits in its own mask, with room under the baseline for tails */
-.stack-list li {
-  display: flex;
-  align-items: baseline;
-  overflow: hidden;
-  padding: 0.04em 0 0.16em;
-}
-
-.stack-list li > i {
-  margin: 0 0.3em;
-  color: var(--orange);
-  font-style: normal;
-}
-
-.stack-learning .stack-list li > i {
-  color: var(--ink);
-}
-
-.stack-word {
-  white-space: nowrap;
-  transition: color 200ms ease, background 200ms ease;
-}
-
-.stack-list .tag {
-  cursor: default;
-}
-
-.stack-fluent .stack-word:hover {
-  color: var(--ink);
-  background: var(--cream);
-}
-
-.stack-learning .stack-word {
-  color: var(--cream);
-  -webkit-text-stroke: clamp(2px, 0.24vw, 3.5px) var(--ink);
-  paint-order: stroke fill;
-}
-
-.stack-learning li:hover .stack-word {
-  color: var(--ink);
-}
-
 
 /* record */
 .record {
@@ -2728,15 +2608,6 @@ section[id],
   .marquee-track {
     gap: 1.15rem;
     padding: 1rem 0;
-  }
-
-  .stack {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .stack-panel + .stack-panel {
-    border-left: 0;
-    border-top: 2px solid var(--ink);
   }
 
   /* the echo needs a wide bar to read as an echo. on a phone the count cell

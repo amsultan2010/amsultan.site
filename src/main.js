@@ -1297,18 +1297,6 @@ function buildWork() {
     }
   });
 
-  // fluent and learning: the label rises in its bar, then every word rises out
-  // of its own mask, the second panel a beat behind the first
-  $$(".stack-panel").forEach((panel, index) => {
-    gsap
-      .timeline({
-        defaults: { ease: E.out },
-        scrollTrigger: { trigger: panel, start: "top 90%", once: true },
-      })
-      .from($$(".stack-label > *", panel), { yPercent: 140, duration: D.base, stagger: 0.06 }, index * 0.1)
-      .from($$(".stack-list li > *", panel), { yPercent: 125, duration: D.slow, stagger: 0.05 }, index * 0.1 + 0.12);
-  });
-
   $$(".record-cells").forEach((cells) => {
     const marks = $$(".record-mark", cells);
     const reveal = gsap
