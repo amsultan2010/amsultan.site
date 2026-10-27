@@ -201,10 +201,10 @@ export function syncRailClips() {
     const rect = video.getBoundingClientRect();
     const near =
       rect.width > 0 &&
-      rect.left < window.innerWidth + 480 &&
-      rect.right > -480 &&
-      rect.top < window.innerHeight + 240 &&
-      rect.bottom > -240;
+      rect.left < window.innerWidth + 120 &&
+      rect.right > -120 &&
+      rect.top < window.innerHeight + 80 &&
+      rect.bottom > -80;
     if (!onLife || !near) {
       video.pause();
       return;
@@ -223,7 +223,7 @@ function syncRailClipsSoon() {
 
 function watchClips(root) {
   const observer = new IntersectionObserver(() => syncRailClips(), {
-    rootMargin: "240px 480px",
+    rootMargin: "80px 120px",
   });
   root.querySelectorAll("video.rail-video").forEach((video) => observer.observe(video));
 }
