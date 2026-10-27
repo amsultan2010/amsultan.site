@@ -7,7 +7,7 @@ import { CustomEase } from "gsap/CustomEase";
 import { inject } from "@vercel/analytics";
 import { initSmoothScroll, lenis, lockScroll } from "./scroll.js";
 import "./styles.css";
-import { buildRails, initRail } from "./rail.js";
+import { buildRails, initRail, syncRailClips } from "./rail.js";
 import { createNetwork } from "./network.js";
 
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
@@ -405,7 +405,8 @@ function revealLines(selector, start = "top 85%") {
 // the clips of the view on screen play the whole time it is shown, reduced
 // motion included, and the clips of the other views pause
 function playClips() {
-  $$("video[data-clip]").forEach((clip) => {
+  syncRailClips();
+  $$("video[data-clip]:not(.rail-video)").forEach((clip) => {
     if (clip.closest(".view").dataset.viewName === document.documentElement.dataset.view) {
       clip.play().catch(() => {});
     } else clip.pause();
