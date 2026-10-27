@@ -42,7 +42,7 @@
 
 .resume-download:hover {
   color: var(--ink);
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
 }
 
@@ -65,7 +65,7 @@
   min-height: 28rem;
   place-items: center;
   border: 2px solid var(--ink);
-  background: var(--white);
+  background: var(--cream);
   box-shadow: 0.42rem 0.42rem 0 var(--ink);
 }
 

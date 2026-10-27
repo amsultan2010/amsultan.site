@@ -49,7 +49,7 @@ spacing:
   header-h: "5.1rem"
 components:
   section-head:
-    backgroundColor: "{colors.paper-white}"
+    backgroundColor: "{colors.warm-cream}"
     textColor: "{colors.ink}"
     typography: "{typography.display}"
     rounded: "{rounded.none}"
@@ -77,14 +77,14 @@ components:
 
 **Creative North Star: "The Lowercase Poster"**
 
-A flat printed-poster page: an amber ground, ink rules 2px thick, white paper, a little warm cream, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
+A flat printed-poster page: an amber ground, ink rules 2px thick, cream paper, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
 
 The page is sectioned like a broadsheet, with air inside each band. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
 
 Anything that points at another product wears that product's own colours inside the site, so the portfolio becomes a frame for real work.
 
 **Key Characteristics:**
-- amber ground, white paper, a little cream, ink for type and rules
+- amber ground, cream paper, ink for type and rules
 - 2px ink rules between everything, zero radius
 - hard offset shadows, zero blur; hover lifts off the shadow, press sinks into it
 - all text lowercase
@@ -100,8 +100,8 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ### Neutral
 - **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): `#fce5c0`, a warm note used less than white: the header, the hero rail and kicker, the marquee, the basics sheet, the message-me cell, the lead head, the learning panel, the academics row, the contact card, the gaps between life rails, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
-- **Paper White** (paper-white): `#ffffff`, most of the light surfaces. The about field, the life rails, the favorites board, the frames, and the type on ink.
+- **Warm Cream** (warm-cream): `#fce5c0`, the light ground. The header, the hero rail and kicker, the marquee, the about field, the basics sheet, the message-me cell, the lead head, the learning panel, the record, the academics row, the contact card, the life rails, the favorites board, the frames, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
+- **Paper White** (paper-white): `#ffffff`, the type on ink, and the outlines. A light surface of the site itself sits on cream.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours
