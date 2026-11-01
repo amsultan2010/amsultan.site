@@ -10,6 +10,11 @@
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
+  /* the file's ascender is 1.5em of empty space. the ink is 1.05 / 0.28,
+     and the old line-heights clip the letters without this. */
+  ascent-override: 105%;
+  descent-override: 28%;
+  line-gap-override: 0%;
 }
 
 @font-face {
@@ -18,6 +23,9 @@
   font-weight: 400 900;
   font-style: italic;
   font-display: swap;
+  ascent-override: 105%;
+  descent-override: 28%;
+  line-gap-override: 0%;
 }
 
 @font-face {

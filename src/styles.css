@@ -130,7 +130,7 @@ main:focus {
 }
 
 /* departure mono is a pixel face. grayscale smoothing blurs the grid */
-:is(.mono, .brand, .primary-nav a, .header-cta, .pill, .hero-orbit span, .arrow-swap) {
+:is(.mono, .brand, .primary-nav a, .header-cta, .pill, .hero-orbit span, .arrow-swap, .cursor span) {
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -261,8 +261,8 @@ html[data-view] .view-life .rail:last-child {
   height: 100%;
   color: var(--white);
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  letter-spacing: 0;
   opacity: 0;
   transition: opacity 160ms ease;
 }
@@ -2327,7 +2327,8 @@ html[data-view] .about {
 
 .facts-label .mono {
   color: var(--ink);
-  font-size: 0.75rem;
+  font-size: 11px;
+  letter-spacing: 0;
 }
 
 /* four photos sit two by two. three sit in one even row. equal columns,
@@ -2412,7 +2413,8 @@ html[data-view] .about {
 
 .facts-cap .mono {
   color: var(--ink);
-  font-size: 0.68rem;
+  font-size: 11px;
+  letter-spacing: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
