@@ -1,3 +1,5 @@
+@import "./fonts.css";
+
 :root {
   --orange: #ff5c00;
   --orange-deep: #d34400;
@@ -9,13 +11,14 @@
   --line-soft: rgba(18, 14, 12, 0.2);
   --gutter: clamp(1.55rem, 3.6vw, 4rem);
   --header-h: 5.1rem;
-  --display: "Unbounded", sans-serif;
-  --serif: "Newsreader", Georgia, serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
-  /* z combinator carries its own brand inside the site: its purple and its face */
+  --display: "Brodine", sans-serif;
+  --serif: "Geist Serif", Georgia, serif;
+  --mono: "Departure Mono", ui-monospace, monospace;
+  /* z combinator and downforce carry their own faces: cabinet grotesk, satoshi */
   --zc: #5a0fe8;
   --zc-deep: #4409c0;
-  --archivo: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --cabinet: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --satoshi: "Satoshi", "Helvetica Neue", Arial, sans-serif;
   /* the built rows and the marquee wear the palette of the thing they point
      at. every value is read from that site's shipped css */
   --fs-bg: #ffffff;
@@ -59,6 +62,8 @@ body {
   line-height: 1.55;
   text-transform: lowercase;
   text-rendering: optimizeLegibility;
+  /* one cut per family: a missing bold or italic stays the real face */
+  font-synthesis: none;
   /* no line ends on one lonely word: text avoids it, short display lines split evenly */
   text-wrap: pretty;
 }
@@ -122,6 +127,12 @@ main:focus {
   letter-spacing: 0.04em;
   text-transform: lowercase;
   font-weight: 500;
+}
+
+/* departure mono is a pixel face. grayscale smoothing blurs the grid */
+:is(.mono, .brand, .primary-nav a, .header-cta, .pill, .hero-orbit span, .arrow-swap) {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* views: the inline script in the head names one before first paint and only
@@ -760,7 +771,7 @@ html[data-view] .view-life .rail:last-child {
 
 .marquee-zc {
   color: var(--zc);
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   letter-spacing: -0.03em;
 }
 
@@ -768,7 +779,7 @@ html[data-view] .view-life .rail:last-child {
   padding: 0.14em 0.55em 0.2em;
   color: var(--df-fg);
   background: var(--df-bg);
-  font-family: var(--archivo);
+  font-family: var(--satoshi);
   letter-spacing: -0.03em;
   box-shadow: 0.2em 0.2em 0 var(--df-accent);
 }
@@ -1750,7 +1761,7 @@ html[data-view] .about {
 }
 
 .lead-zc .lead-body .mono {
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-weight: 500;
   letter-spacing: 0.02em;
   opacity: 0.82;
@@ -1771,7 +1782,7 @@ html[data-view] .about {
 }
 
 .lead-zc h3 {
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-weight: 800;
   letter-spacing: -0.04em;
 }
@@ -1779,7 +1790,7 @@ html[data-view] .about {
 .lead-lede {
   max-width: 30ch;
   margin: 0.55rem 0 0;
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-size: clamp(1.05rem, 1.7vw, 1.35rem);
   font-weight: 700;
   line-height: 1.15;
@@ -1800,7 +1811,7 @@ html[data-view] .about {
   border: 2px solid var(--white);
   background: var(--white);
   color: var(--zc);
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.01em;

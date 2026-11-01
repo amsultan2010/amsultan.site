@@ -1,0 +1,53 @@
+/* self-hosted. brodine, geist serif and departure mono are one cut each,
+   so a weight range stops a request for 800 from painting a fake bold.
+   cabinet grotesk and satoshi are variable: the range drives the wght
+   axis, because the file itself defaults to black. swap keeps the words
+   readable before the file arrives. */
+
+@font-face {
+  font-family: "Brodine";
+  src: url("/fonts/brodine-regular.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Brodine";
+  src: url("/fonts/brodine-italic.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Serif";
+  src: url("/fonts/geist-serif-regular.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/departure-mono-regular.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cabinet Grotesk";
+  src: url("/fonts/cabinet-grotesk-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/fonts/satoshi-variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
