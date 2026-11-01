@@ -1,3 +1,5 @@
+@import "./fonts.css";
+
 :root {
   --orange: #ff5c00;
   --orange-deep: #d34400;
@@ -9,13 +11,14 @@
   --line-soft: rgba(18, 14, 12, 0.2);
   --gutter: clamp(1.55rem, 3.6vw, 4rem);
   --header-h: 5.1rem;
-  --display: "Unbounded", sans-serif;
-  --serif: "Newsreader", Georgia, serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
-  /* z combinator carries its own brand inside the site: its purple and its face */
+  --display: "Brodine", sans-serif;
+  --serif: "Geist Serif", Georgia, serif;
+  --mono: "Departure Mono", ui-monospace, monospace;
+  /* z combinator and downforce carry their own faces: cabinet grotesk, satoshi */
   --zc: #5a0fe8;
   --zc-deep: #4409c0;
-  --archivo: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --cabinet: "Cabinet Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --satoshi: "Satoshi", "Helvetica Neue", Arial, sans-serif;
   /* the built rows and the marquee wear the palette of the thing they point
      at. every value is read from that site's shipped css */
   --fs-bg: #ffffff;
@@ -59,6 +62,8 @@ body {
   line-height: 1.55;
   text-transform: lowercase;
   text-rendering: optimizeLegibility;
+  /* one cut per family: a missing bold or italic stays the real face */
+  font-synthesis: none;
   /* no line ends on one lonely word: text avoids it, short display lines split evenly */
   text-wrap: pretty;
 }
@@ -110,6 +115,8 @@ main:focus {
   font-weight: 800;
   letter-spacing: -0.055em;
   text-transform: lowercase;
+  /* digits reach 1.05em and tails 0.28em. under that, the line box cuts them. */
+  line-height: 1.4;
 }
 
 .serif {
@@ -122,6 +129,12 @@ main:focus {
   letter-spacing: 0.04em;
   text-transform: lowercase;
   font-weight: 500;
+}
+
+/* departure mono is a pixel face. grayscale smoothing blurs the grid */
+:is(.mono, .brand, .primary-nav a, .header-cta, .pill, .hero-orbit span, .arrow-swap, .cursor span) {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* views: the inline script in the head names one before first paint and only
@@ -250,8 +263,8 @@ html[data-view] .view-life .rail:last-child {
   height: 100%;
   color: var(--white);
   font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  letter-spacing: 0;
   opacity: 0;
   transition: opacity 160ms ease;
 }
@@ -641,6 +654,9 @@ html[data-view] .view-life .rail:last-child {
 
 .hero-title {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: var(--display);
   font-weight: 900;
   font-size: clamp(3.8rem, 16vw, 13.5rem);
@@ -649,14 +665,19 @@ html[data-view] .view-life .rail:last-child {
   text-align: center;
 }
 
+/* flex so the two lines' margins do not collapse. the padding is the ink the
+   0.86 line box was shaving, and the negative margin hands that space back,
+   so the name stays stacked. */
 .hero-line {
   display: block;
   overflow: hidden;
   white-space: nowrap;
+  padding: 0.28em 0.06em 0.32em;
+  margin: -0.28em 0 -0.32em;
 }
 
 .hero-line-stroke {
-  margin-top: 0.05em;
+  margin-top: -0.23em;
   color: transparent;
   -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--ink);
 }
@@ -760,7 +781,7 @@ html[data-view] .view-life .rail:last-child {
 
 .marquee-zc {
   color: var(--zc);
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   letter-spacing: -0.03em;
 }
 
@@ -768,7 +789,7 @@ html[data-view] .view-life .rail:last-child {
   padding: 0.14em 0.55em 0.2em;
   color: var(--df-fg);
   background: var(--df-bg);
-  font-family: var(--archivo);
+  font-family: var(--satoshi);
   letter-spacing: -0.03em;
   box-shadow: 0.2em 0.2em 0 var(--df-accent);
 }
@@ -819,13 +840,14 @@ html[data-view] .about {
   justify-self: end;
 }
 
-/* the mask the letters rise out of. the padding keeps tails and commas inside
-   the clip, the margin hands the same space back to the layout */
+/* the mask the letters rise out of. brodine's tails and caps hang out of the
+   line box, so the padding keeps them inside the clip and the margin hands
+   the same space back to the layout */
 .about-line-text {
   display: block;
   overflow: hidden;
-  padding: 0.08em 0.04em 0.2em 0;
-  margin: -0.08em 0 -0.2em;
+  padding: 0.3em 0.08em 0.4em 0;
+  margin: -0.3em 0 -0.4em;
   transition: color 240ms ease;
 }
 
@@ -908,7 +930,7 @@ html[data-view] .about {
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(1.3rem, 2.5vw, 2.4rem);
-  line-height: 1;
+  line-height: 1.4;
   letter-spacing: -0.055em;
 }
 
@@ -1005,7 +1027,7 @@ html[data-view] .about {
 
 .about-closer-text {
   font-size: clamp(1.5rem, 4.1vw, 4rem);
-  line-height: 1.12;
+  line-height: 1.4;
   text-wrap: balance;
 }
 
@@ -1046,7 +1068,7 @@ html[data-view] .about {
 
 .sheet-label .display {
   font-size: clamp(0.95rem, 1.3vw, 1.15rem);
-  line-height: 1.1;
+  line-height: 1.4;
 }
 
 .sheet-label .mono {
@@ -1085,7 +1107,7 @@ html[data-view] .about {
 .about-facts dd.display {
   align-self: end;
   font-size: clamp(2.4rem, 7.2vw, 7.25rem);
-  line-height: 0.9;
+  line-height: 1.4;
   letter-spacing: -0.06em;
 }
 
@@ -1198,7 +1220,10 @@ html[data-view] .about {
 .action-cell strong,
 .action-cell .arrow-swap {
   font-size: clamp(1.4rem, 3.4vw, 3.1rem);
-  line-height: 1;
+}
+
+.action-cell strong {
+  line-height: 1.4;
 }
 
 /* the display face has no arrows, so these come from the mono, at its weight */
@@ -1320,7 +1345,7 @@ html[data-view] .about {
 .section-meta b {
   color: var(--head-accent, var(--orange));
   font-size: clamp(1.7rem, 3.6vw, 3rem);
-  line-height: 0.9;
+  line-height: 1.4;
 }
 
 .section-meta .mono {
@@ -1358,7 +1383,7 @@ html[data-view] .about {
 
 .work-group .display {
   font-size: clamp(1.3rem, 2.4vw, 2.1rem);
-  line-height: 1;
+  line-height: 1.4;
 }
 
 .work-group-count {
@@ -1457,7 +1482,7 @@ html[data-view] .about {
   /* it is a .tag, so the underline should hug the word, not the grid column */
   justify-self: start;
   font-size: clamp(1.45rem, 3.2vw, 2.75rem);
-  line-height: 1.05;
+  line-height: 1.4;
 }
 
 .work-row .tag:hover {
@@ -1659,7 +1684,7 @@ html[data-view] .about {
   padding: 1.45rem clamp(0.75rem, 1.6vw, 1.4rem);
   border-right: 2px solid var(--ink);
   font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1;
+  line-height: 1.4;
 }
 
 .lead-body {
@@ -1674,7 +1699,7 @@ html[data-view] .about {
 .lead-body h3 {
   margin: 0;
   font-size: clamp(1.6rem, 3.2vw, 3rem);
-  line-height: 0.95;
+  line-height: 1.4;
 }
 
 .lead-body .serif {
@@ -1750,7 +1775,7 @@ html[data-view] .about {
 }
 
 .lead-zc .lead-body .mono {
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-weight: 500;
   letter-spacing: 0.02em;
   opacity: 0.82;
@@ -1771,7 +1796,7 @@ html[data-view] .about {
 }
 
 .lead-zc h3 {
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-weight: 800;
   letter-spacing: -0.04em;
 }
@@ -1779,7 +1804,7 @@ html[data-view] .about {
 .lead-lede {
   max-width: 30ch;
   margin: 0.55rem 0 0;
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-size: clamp(1.05rem, 1.7vw, 1.35rem);
   font-weight: 700;
   line-height: 1.15;
@@ -1800,7 +1825,7 @@ html[data-view] .about {
   border: 2px solid var(--white);
   background: var(--white);
   color: var(--zc);
-  font-family: var(--archivo);
+  font-family: var(--cabinet);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -1849,7 +1874,7 @@ html[data-view] .about {
 
 .record-label .display {
   font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-  line-height: 1;
+  line-height: 1.4;
 }
 
 .record-label .mono {
@@ -1887,7 +1912,7 @@ html[data-view] .about {
 
 .record-stat {
   font-size: clamp(2.6rem, 6vw, 4.75rem);
-  line-height: 0.9;
+  line-height: 1.4;
   letter-spacing: -0.07em;
 }
 
@@ -1938,7 +1963,7 @@ html[data-view] .about {
 
 .record-text strong {
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
-  line-height: 1.1;
+  line-height: 1.4;
 }
 
 .record-awards .record-text strong {
@@ -2147,7 +2172,7 @@ html[data-view] .about {
   font-family: var(--display);
   font-weight: 900;
   font-size: clamp(3.4rem, 12vw, 9.5rem);
-  line-height: 0.82;
+  line-height: 1.4;
   letter-spacing: -0.07em;
 }
 
@@ -2204,7 +2229,7 @@ html[data-view] .about {
 
 .contact-card .display {
   font-size: clamp(1.35rem, 2.4vw, 1.9rem);
-  line-height: 1;
+  line-height: 1.4;
 }
 
 .contact-card-go {
@@ -2311,12 +2336,13 @@ html[data-view] .about {
 
 .facts-label .display {
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
-  line-height: 1.05;
+  line-height: 1.4;
 }
 
 .facts-label .mono {
   color: var(--ink);
-  font-size: 0.75rem;
+  font-size: 11px;
+  letter-spacing: 0;
 }
 
 /* four photos sit two by two. three sit in one even row. equal columns,
@@ -2395,13 +2421,14 @@ html[data-view] .about {
 
 .facts-cap .display {
   font-size: clamp(0.85rem, 1.05vw, 1.05rem);
-  line-height: 0.95;
+  line-height: 1.4;
   text-wrap: balance;
 }
 
 .facts-cap .mono {
   color: var(--ink);
-  font-size: 0.68rem;
+  font-size: 11px;
+  letter-spacing: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {

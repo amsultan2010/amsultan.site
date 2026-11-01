@@ -23,21 +23,21 @@ colors:
   cy-white: "#ffffff"
 typography:
   display:
-    fontFamily: "Unbounded, sans-serif"
+    fontFamily: "Brodine, sans-serif"
     fontSize: "clamp(2.2rem, 7vw, 5.5rem)"
     fontWeight: 800
     lineHeight: 0.95
     letterSpacing: "-0.06em"
   title:
-    fontFamily: "Unbounded, sans-serif"
+    fontFamily: "Brodine, sans-serif"
     fontSize: "clamp(1.15rem, 2.2vw, 1.85rem)"
     fontWeight: 800
     lineHeight: 1.05
     letterSpacing: "-0.055em"
   body:
-    fontFamily: "Newsreader, Georgia, serif"
+    fontFamily: "Geist Serif, Georgia, serif"
   label:
-    fontFamily: "IBM Plex Mono, ui-monospace, monospace"
+    fontFamily: "Departure Mono, ui-monospace, monospace"
     fontSize: "0.95rem"
     fontWeight: 500
     letterSpacing: "0.04em"
@@ -77,7 +77,7 @@ components:
 
 **Creative North Star: "The Lowercase Poster"**
 
-A flat printed-poster page: an amber ground, ink rules 2px thick, cream paper, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: an extra-bold wide display face for headings, a bookish serif for what was done, a mono for the facts (dates, roles, counts).
+A flat printed-poster page: an amber ground, ink rules 2px thick, cream paper, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: a heavy display face for headings, a high-contrast serif for what was done, a pixel mono for the facts (dates, roles, counts).
 
 The page is sectioned like a broadsheet, with air inside each band. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
 
@@ -114,20 +114,24 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ## Typography
 
-**Display Font:** Unbounded (sans-serif fallback)
-**Body Font:** Newsreader (Georgia fallback)
-**Label/Mono Font:** IBM Plex Mono (ui-monospace fallback)
+**Display Font:** Brodine (sans-serif fallback). One regular cut plus an italic. A request from 700 to 900 uses that regular cut. The file's vertical metrics are overridden to the ink (ascent 105%, descent 28%). Display line boxes are 1.4 so the digits and the tails sit inside them. The hero name and the about statement keep their tight leading, and the masks around those lines are padded so the clip does not shave the letters once they have risen.
+**Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so an italic request stays roman.
+**Label/Mono Font:** Departure Mono (ui-monospace fallback). A pixel face, crisp at increments of 11px. One regular cut. Small captions that can sit on that grid are 11px with no tracking. The running label stays 0.95rem, because 22px overflows the nav and the one-line meta.
 
-**Character:** a wide, heavy display face shouting the section word, a calm serif for the substance, and a mono for metadata. The contrast between the three is the hierarchy.
+**Guest wordmarks:** Cabinet Grotesk on z combinator (the marquee name and the lead row). Satoshi on the downforce marquee name. Both are Fontshare faces, used only there.
+
+**Character:** a heavy display face shouting the section word, a high-contrast serif for the substance, and a pixel mono for metadata. The contrast between the three is the hierarchy.
 
 ### Hierarchy
 - **Display** (800, clamp(2.2rem, 7vw, 5.5rem), 0.95, -0.06em): section words in head bands ("built", "lead").
 - **Title** (800, clamp(1.15rem, 2.2vw, 1.85rem), 1.05): row and item names.
-- **Body** (Newsreader, regular): bullet points and ledes.
-- **Label** (Plex Mono 500, 0.95rem, 0.04em): dates, roles, counts, link labels ("visit ↗").
+- **Body** (Geist Serif, regular): bullet points and ledes.
+- **Label** (Departure Mono, 0.95rem, 0.04em): dates, roles, counts, link labels ("visit ↗").
 
 ### Named Rules
 **The Lowercase Rule.** All visible text is lowercase. `body` sets it; `button` and `input` set it themselves. Only meta tags, JSON-LD and llms.txt keep case.
+
+**The Pixel Step.** Departure Mono is set at 11px where that size still fits. A fluid line that has to shrink to stay on one row stays fluid.
 
 ## Layout
 
@@ -158,7 +162,7 @@ A full-width band: the display word on the left with a mask it rises out of, an 
 A full-width link: mono index, square brand icon with a hard shadow, display name as a hover-preview tag, serif bullets, mono date-and-role line, a "visit ↗" label, and a looping muted clip in a framed box. It wears its product's brand colours and has an accent edge on its leading side that widens on hover.
 
 ### Lead item
-A ruled row with a big display number in its own left column and a body of mono meta, display title and serif bullets. Hover flips it to white with ink text. z combinator wears its own purple and Archivo.
+A ruled row with a big display number in its own left column and a body of mono meta, display title and serif bullets. Hover flips it to white with ink text. z combinator wears its own purple and Cabinet Grotesk.
 
 ### Tag
 Inline text with a 1px underline. On hover it inverts (ink ground, cream text) and shows a preview image from `public/images/tags/`.

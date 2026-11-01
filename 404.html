@@ -12,12 +12,9 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" href="/icons/abdullah-apple-touch.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Unbounded:wght@500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="/fonts/brodine-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-serif-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/src/fonts.css" />
     <title>404 not found | Abdullah Sultan</title>
     <style>
       :root {
@@ -28,9 +25,9 @@
         --ink-soft: rgba(18, 14, 12, 0.62);
         --line-soft: rgba(18, 14, 12, 0.2);
         --gutter: clamp(1.35rem, 3.1vw, 3.4rem);
-        --display: "Unbounded", sans-serif;
-        --serif: "Newsreader", Georgia, serif;
-        --mono: "IBM Plex Mono", ui-monospace, monospace;
+        --display: "Brodine", sans-serif;
+        --serif: "Geist Serif", Georgia, serif;
+        --mono: "Departure Mono", ui-monospace, monospace;
       }
 
       * {
@@ -54,6 +51,7 @@
         font-family: var(--serif);
         text-transform: lowercase;
         text-rendering: optimizeLegibility;
+        font-synthesis: none;
       }
 
       ::selection {
@@ -73,9 +71,11 @@
 
       .mono {
         font-family: var(--mono);
-        font-size: 0.7rem;
-        letter-spacing: 0.04em;
+        font-size: 11px;
+        letter-spacing: 0;
         font-weight: 500;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       .top {
@@ -117,7 +117,7 @@
         font-family: var(--display);
         font-weight: 800;
         letter-spacing: -0.055em;
-        line-height: 0.9;
+        line-height: 1.4;
         font-size: clamp(4rem, 22vw, 16rem);
       }
 
@@ -136,8 +136,10 @@
         background: var(--ink);
         color: var(--white);
         font-family: var(--mono);
-        font-size: 0.75rem;
-        letter-spacing: 0.08em;
+        font-size: 11px;
+        letter-spacing: 0;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
         transition: background 0.2s ease, color 0.2s ease;
       }
 
