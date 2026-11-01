@@ -57,7 +57,7 @@
    for ascenders and descenders, a mask cut to the line box would shave them */
 .rail-mask {
   overflow: hidden;
-  padding: 0.18em 0.08em 0.18em 0;
+  padding: 0.16em 0.1em 0.2em 0;
 }
 
 .rail-rise {
@@ -66,7 +66,7 @@
 
 .rail-label {
   font-size: clamp(1.45rem, 3.4vw, 2.75rem);
-  line-height: 0.95;
+  line-height: 1.4;
   white-space: nowrap;
 }
 
@@ -470,7 +470,7 @@
   font-family: var(--display);
   font-size: clamp(1.15rem, 1.7vw, 1.7rem);
   font-weight: 800;
-  line-height: 0.95;
+  line-height: 1.4;
   letter-spacing: -0.055em;
 }
 
@@ -484,6 +484,8 @@
   font-family: var(--display);
   font-size: clamp(1rem, 1.5vw, 1.35rem);
   font-weight: 800;
+  line-height: 1.4;
+  padding-block: 0.14em;
 }
 
 /* the line about each game is a band across the foot of its clip, raised on

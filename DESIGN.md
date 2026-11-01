@@ -114,7 +114,7 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ## Typography
 
-**Display Font:** Brodine (sans-serif fallback). One regular cut plus an italic. A request from 700 to 900 uses that regular cut. The file's vertical metrics are overridden to the ink (ascent 105%, descent 28%) so the existing line-heights do not clip the letters.
+**Display Font:** Brodine (sans-serif fallback). One regular cut plus an italic. A request from 700 to 900 uses that regular cut. The file's vertical metrics are overridden to the ink (ascent 105%, descent 28%). Display line boxes are 1.4 so the digits and the tails sit inside them. The hero name and the about statement keep their tight leading, and the masks around those lines are padded so the clip does not shave the letters once they have risen.
 **Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so an italic request stays roman.
 **Label/Mono Font:** Departure Mono (ui-monospace fallback). A pixel face, crisp at increments of 11px. One regular cut. Small captions that can sit on that grid are 11px with no tracking. The running label stays 0.95rem, because 22px overflows the nav and the one-line meta.
 

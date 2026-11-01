@@ -10,8 +10,9 @@
   font-weight: 400 900;
   font-style: normal;
   font-display: swap;
-  /* the file's ascender is 1.5em of empty space. the ink is 1.05 / 0.28,
-     and the old line-heights clip the letters without this. */
+  /* the file's ascender is 1.5em of empty space. the ink is 1.05 / 0.28.
+     a line box shorter than that still slices the letters, so the display
+     sizes below are opened to fit it. */
   ascent-override: 105%;
   descent-override: 28%;
   line-gap-override: 0%;
