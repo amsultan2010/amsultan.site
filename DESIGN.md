@@ -23,13 +23,13 @@ colors:
   cy-white: "#ffffff"
 typography:
   display:
-    fontFamily: "Brodine, sans-serif"
+    fontFamily: "Geist Serif, Georgia, serif"
     fontSize: "clamp(2.2rem, 7vw, 5.5rem)"
     fontWeight: 800
     lineHeight: 0.95
-    letterSpacing: "-0.06em"
+    letterSpacing: "-0.045em"
   title:
-    fontFamily: "Brodine, sans-serif"
+    fontFamily: "Geist Serif, Georgia, serif"
     fontSize: "clamp(1.15rem, 2.2vw, 1.85rem)"
     fontWeight: 800
     lineHeight: 1.05
@@ -38,7 +38,7 @@ typography:
     fontFamily: "Geist Serif, Georgia, serif"
   label:
     fontFamily: "Departure Mono, ui-monospace, monospace"
-    fontSize: "0.95rem"
+    fontSize: "1.15rem"
     fontWeight: 500
     letterSpacing: "0.04em"
 rounded:
@@ -114,24 +114,24 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ## Typography
 
-**Display Font:** Brodine (sans-serif fallback). One regular cut plus an italic. A request from 700 to 900 uses that regular cut. The file's vertical metrics are overridden to the ink (ascent 105%, descent 28%). Display line boxes are 1.4 so the digits and the tails sit inside them. The hero name and the about statement keep their tight leading, and the masks around those lines are padded so the clip does not shave the letters once they have risen.
-**Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so an italic request stays roman.
-**Label/Mono Font:** Departure Mono (ui-monospace fallback). A pixel face, crisp at increments of 11px. One regular cut. Small captions that can sit on that grid are 11px with no tracking. The running label stays 0.95rem, because 22px overflows the nav and the one-line meta.
+**Display Font:** Geist Serif (Georgia fallback), the same face as the body, at display sizes. One regular cut. Bold is not released, so a request from 700 to 900 paints that regular cut and `font-synthesis` stays off. Letter-spacing on display is -0.045em. Masks around the hero name and the about statement keep a little padding so the serifs are not clipped.
+**Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so ledes stay roman.
+**Label/Mono Font:** Departure Mono (ui-monospace fallback). A pixel face. One regular cut. Nothing on the site is set under 1.15rem (`--type-min`), which is a couple of steps above the old sector rail. Tracking on it is 0 so the pixel grid stays put. It carries dates, roles, counts, the nav, the hero rail, rail kinds, and the tag preview caption.
 
 **Guest wordmarks:** Cabinet Grotesk on z combinator (the marquee name and the lead row). Satoshi on the downforce marquee name. Both are Fontshare faces, used only there.
 
 **Character:** a heavy display face shouting the section word, a high-contrast serif for the substance, and a pixel mono for metadata. The contrast between the three is the hierarchy.
 
 ### Hierarchy
-- **Display** (800, clamp(2.2rem, 7vw, 5.5rem), 0.95, -0.06em): section words in head bands ("built", "lead").
-- **Title** (800, clamp(1.15rem, 2.2vw, 1.85rem), 1.05): row and item names.
+- **Display** (regular cut requested at 800, clamp(2.2rem, 7vw, 5.5rem), 0.95, -0.045em): section words in head bands ("built", "lead").
+- **Title** (regular cut requested at 800, clamp(1.15rem, 2.2vw, 1.85rem), 1.05): row and item names.
 - **Body** (Geist Serif, regular): bullet points and ledes.
-- **Label** (Departure Mono, 0.95rem, 0.04em): dates, roles, counts, link labels ("visit ↗").
+- **Label** (Departure Mono, 1.15rem, no tracking): dates, roles, counts, link labels ("visit ↗").
 
 ### Named Rules
 **The Lowercase Rule.** All visible text is lowercase. `body` sets it; `button` and `input` set it themselves. Only meta tags, JSON-LD and llms.txt keep case.
 
-**The Pixel Step.** Departure Mono is set at 11px where that size still fits. A fluid line that has to shrink to stay on one row stays fluid.
+**The Type Floor.** No text is set under 1.15rem. A line that used to shrink to stay on one row wraps instead, with `text-wrap: balance` so the last line is not one word.
 
 ## Layout
 

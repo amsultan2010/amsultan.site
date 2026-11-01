@@ -2,13 +2,9 @@
 
 Self-hosted for amsultan.site. None of these files is covered by the repository MIT license.
 
-## Brodine
-
-Brodine Regular and Brodine Italic (`brodine-regular.woff2`, `brodine-italic.woff2`) are licensed by the owner of this site for use on amsultan.site. They are not free to reuse.
-
 ## Geist Serif
 
-Geist Serif Regular (`geist-serif-regular.woff2`), from the Vercel `geist` package 1.9.0. SIL Open Font License 1.1. Full text: `OFL-geist.txt`.
+Geist Serif Regular (`geist-serif-regular.woff2`), from the Vercel `geist` package 1.9.0. SIL Open Font License 1.1. Full text: `OFL-geist.txt`. The release is one weight. Display type requests a heavier weight and the face file paints this regular cut, so the page never synthesizes a bold.
 
 ## Departure Mono
 
