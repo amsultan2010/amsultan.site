@@ -11,9 +11,13 @@
   --line-soft: rgba(18, 14, 12, 0.2);
   --gutter: clamp(1.55rem, 3.6vw, 4rem);
   --header-h: 5.1rem;
-  --display: "Brodine", sans-serif;
+  /* display and body are the same face. geist serif has no bold yet,
+     and the weight range in fonts.css paints the regular cut. */
+  --display: "Geist Serif", Georgia, serif;
   --serif: "Geist Serif", Georgia, serif;
   --mono: "Departure Mono", ui-monospace, monospace;
+  /* nothing on the page sits under this. sector 01 used to be 0.95rem. */
+  --type-min: 1.15rem;
   /* z combinator and downforce carry their own faces: cabinet grotesk, satoshi */
   --zc: #5a0fe8;
   --zc-deep: #4409c0;
@@ -59,6 +63,7 @@ body {
   color: var(--ink);
   background: var(--orange);
   font-family: var(--serif);
+  font-synthesis: none;
   line-height: 1.55;
   text-transform: lowercase;
   text-rendering: optimizeLegibility;
@@ -113,10 +118,8 @@ main:focus {
 .display {
   font-family: var(--display);
   font-weight: 800;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.045em;
   text-transform: lowercase;
-  /* digits reach 1.05em and tails 0.28em. under that, the line box cuts them. */
-  line-height: 1.4;
 }
 
 .serif {
@@ -125,8 +128,8 @@ main:focus {
 
 .mono {
   font-family: var(--mono);
-  font-size: 0.95rem;
-  letter-spacing: 0.04em;
+  font-size: var(--type-min);
+  letter-spacing: 0;
   text-transform: lowercase;
   font-weight: 500;
 }
@@ -213,7 +216,7 @@ html[data-view] .view-life .rail:last-child {
   font-size: clamp(2rem, 8vw, 5rem);
   font-family: var(--display);
   font-weight: 800;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.045em;
   text-transform: lowercase;
 }
 
@@ -263,7 +266,7 @@ html[data-view] .view-life .rail:last-child {
   height: 100%;
   color: var(--white);
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: var(--type-min);
   letter-spacing: 0;
   opacity: 0;
   transition: opacity 160ms ease;
@@ -305,7 +308,7 @@ html[data-view] .view-life .rail:last-child {
   justify-content: center;
   min-height: 4.1rem;
   font-family: var(--mono);
-  font-size: 1.08rem;
+  font-size: var(--type-min);
   font-weight: 600;
   text-transform: lowercase;
 }
@@ -323,7 +326,7 @@ html[data-view] .view-life .rail:last-child {
   background: var(--orange);
   color: var(--ink);
   font-family: var(--display);
-  font-size: 1.08rem;
+  font-size: var(--type-min);
   font-weight: 800;
 }
 
@@ -463,7 +466,7 @@ html[data-view] .view-life .rail:last-child {
   padding: 0.75rem 1.1rem;
   border: 2px solid var(--ink);
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: var(--type-min);
   font-weight: 600;
   text-transform: lowercase;
   /* no transform here: the pill is magnetic, and gsap reading a transform mid
@@ -654,30 +657,26 @@ html[data-view] .view-life .rail:last-child {
 
 .hero-title {
   margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   font-family: var(--display);
   font-weight: 900;
   font-size: clamp(3.8rem, 16vw, 13.5rem);
-  line-height: 0.86;
-  letter-spacing: -0.07em;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
   text-align: center;
 }
 
-/* flex so the two lines' margins do not collapse. the padding is the ink the
-   0.86 line box was shaving, and the negative margin hands that space back,
-   so the name stays stacked. */
+/* the mask the letters rise out of. a little room for the serifs, handed
+   back so the two lines stay stacked. */
 .hero-line {
   display: block;
   overflow: hidden;
   white-space: nowrap;
-  padding: 0.28em 0.06em 0.32em;
-  margin: -0.28em 0 -0.32em;
+  padding: 0.08em 0.04em 0.14em;
+  margin: -0.08em -0.04em -0.14em;
 }
 
 .hero-line-stroke {
-  margin-top: -0.23em;
+  margin-top: 0.02em;
   color: transparent;
   -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--ink);
 }
@@ -707,7 +706,7 @@ html[data-view] .view-life .rail:last-child {
   padding: 0.5rem 0.95rem;
   color: var(--white);
   font-family: var(--mono);
-  font-size: 0.9rem;
+  font-size: var(--type-min);
   font-weight: 600;
 }
 
@@ -732,7 +731,7 @@ html[data-view] .view-life .rail:last-child {
   margin: 0;
   font-size: clamp(1.25rem, 2.1vw, 1.9rem);
   line-height: 1.45;
-  font-style: italic;
+  text-wrap: balance;
 }
 
 /* marquee */
@@ -749,7 +748,7 @@ html[data-view] .view-life .rail:last-child {
   align-items: center;
   padding: 1.05rem 0;
   font-family: var(--display);
-  font-size: clamp(1.1rem, 2.2vw, 2rem);
+  font-size: clamp(1.2rem, 2.2vw, 2rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   text-transform: lowercase;
@@ -840,14 +839,14 @@ html[data-view] .about {
   justify-self: end;
 }
 
-/* the mask the letters rise out of. brodine's tails and caps hang out of the
-   line box, so the padding keeps them inside the clip and the margin hands
+/* the mask the letters rise out of. geist's vertical metrics run past the
+   em, so the padding keeps the serifs inside the clip and the margin hands
    the same space back to the layout */
 .about-line-text {
   display: block;
   overflow: hidden;
-  padding: 0.3em 0.08em 0.4em 0;
-  margin: -0.3em 0 -0.4em;
+  padding: 0.42em 0.06em 0.48em 0;
+  margin: -0.42em 0 -0.48em;
   transition: color 240ms ease;
 }
 
@@ -879,7 +878,7 @@ html[data-view] .about {
   margin-top: 0.42em;
   padding: 0.4em 0.6em;
   border: 2px solid currentColor;
-  font-size: clamp(0.62rem, 1.05vw, 0.95rem);
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
   line-height: 1;
 }
 
@@ -915,7 +914,7 @@ html[data-view] .about {
   align-items: center;
   padding: clamp(1.35rem, 2.4vw, 2.15rem) var(--gutter);
   border-top: 2px solid var(--ink);
-  text-wrap: pretty;
+  text-wrap: balance;
   counter-increment: point;
 }
 
@@ -930,8 +929,8 @@ html[data-view] .about {
   font-family: var(--display);
   font-weight: 800;
   font-size: clamp(1.3rem, 2.5vw, 2.4rem);
-  line-height: 1.4;
-  letter-spacing: -0.055em;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .about-points strong {
@@ -1027,7 +1026,7 @@ html[data-view] .about {
 
 .about-closer-text {
   font-size: clamp(1.5rem, 4.1vw, 4rem);
-  line-height: 1.4;
+  line-height: 1.12;
   text-wrap: balance;
 }
 
@@ -1067,8 +1066,8 @@ html[data-view] .about {
 }
 
 .sheet-label .display {
-  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
-  line-height: 1.4;
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  line-height: 1.1;
 }
 
 .sheet-label .mono {
@@ -1107,8 +1106,8 @@ html[data-view] .about {
 .about-facts dd.display {
   align-self: end;
   font-size: clamp(2.4rem, 7.2vw, 7.25rem);
-  line-height: 1.4;
-  letter-spacing: -0.06em;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
 }
 
 .about-facts div:nth-child(2) dd.display {
@@ -1132,7 +1131,7 @@ html[data-view] .about {
 }
 
 .fact-note {
-  font-size: 0.82rem;
+  font-size: var(--type-min);
   opacity: 0.75;
 }
 
@@ -1213,17 +1212,14 @@ html[data-view] .about {
 }
 
 .action-text .mono {
-  font-size: 0.82rem;
+  font-size: var(--type-min);
   opacity: 0.75;
 }
 
 .action-cell strong,
 .action-cell .arrow-swap {
   font-size: clamp(1.4rem, 3.4vw, 3.1rem);
-}
-
-.action-cell strong {
-  line-height: 1.4;
+  line-height: 1;
 }
 
 /* the display face has no arrows, so these come from the mono, at its weight */
@@ -1275,7 +1271,7 @@ html[data-view] .about {
   font-weight: 800;
   font-size: clamp(2.2rem, 7vw, 5.5rem);
   line-height: 0.95;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.045em;
   text-transform: lowercase;
 }
 
@@ -1296,7 +1292,7 @@ html[data-view] .about {
   font-weight: 800;
   font-size: clamp(2.2rem, 7vw, 5.5rem);
   line-height: 0.95;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.045em;
   white-space: nowrap;
   /* stroke under a ground-coloured fill, so only the outer contour shows */
   color: var(--head-bg, var(--cream));
@@ -1336,7 +1332,7 @@ html[data-view] .about {
   display: grid;
   align-content: center;
   gap: 0.4rem;
-  max-width: 15rem;
+  max-width: 18rem;
   margin: 0;
   padding: 0.6rem var(--gutter) 0.6rem clamp(1rem, 2vw, 1.75rem);
   border-left: 2px solid var(--head-rule, var(--ink));
@@ -1345,12 +1341,13 @@ html[data-view] .about {
 .section-meta b {
   color: var(--head-accent, var(--orange));
   font-size: clamp(1.7rem, 3.6vw, 3rem);
-  line-height: 1.4;
+  line-height: 0.95;
 }
 
 .section-meta .mono {
-  font-size: 0.8rem;
-  line-height: 1.3;
+  font-size: var(--type-min);
+  line-height: 1.35;
+  text-wrap: balance;
 }
 
 /* work */
@@ -1383,7 +1380,7 @@ html[data-view] .about {
 
 .work-group .display {
   font-size: clamp(1.3rem, 2.4vw, 2.1rem);
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .work-group-count {
@@ -1482,7 +1479,8 @@ html[data-view] .about {
   /* it is a .tag, so the underline should hug the word, not the grid column */
   justify-self: start;
   font-size: clamp(1.45rem, 3.2vw, 2.75rem);
-  line-height: 1.4;
+  line-height: 1.05;
+  text-wrap: balance;
 }
 
 .work-row .tag:hover {
@@ -1621,27 +1619,17 @@ html[data-view] .about {
 }
 
 
-/* the date and role lines in built and lead, and built's link label. each
-   stays on one line, so on a phone the size follows the screen width. built's
-   line also carries "visit", so it runs a step smaller there */
+/* dates and roles stay readable on a phone by wrapping, instead of shrinking
+   onto one line. the link label stays one line. */
 .work-row .work-meta,
 .work-row .work-go,
 .lead-item .lead-body .mono {
-  font-size: clamp(0.6rem, 3.1vw, 1.15rem);
-  white-space: nowrap;
+  font-size: var(--type-min);
+  text-wrap: balance;
 }
 
-.work-row .work-meta,
 .work-row .work-go {
-  font-size: clamp(0.55rem, 2.75vw, 1.15rem);
-}
-
-@media (min-width: 900px) {
-  .work-row .work-meta,
-  .work-row .work-go,
-  .lead-item .lead-body .mono {
-    font-size: clamp(0.9rem, 1.25vw, 1.15rem);
-  }
+  white-space: nowrap;
 }
 
 /* lead */
@@ -1684,7 +1672,7 @@ html[data-view] .about {
   padding: 1.45rem clamp(0.75rem, 1.6vw, 1.4rem);
   border-right: 2px solid var(--ink);
   font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .lead-body {
@@ -1699,7 +1687,8 @@ html[data-view] .about {
 .lead-body h3 {
   margin: 0;
   font-size: clamp(1.6rem, 3.2vw, 3rem);
-  line-height: 1.4;
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
 .lead-body .serif {
@@ -1743,6 +1732,7 @@ html[data-view] .about {
   max-width: 48rem;
   /* matches the lead bullets below it */
   font-size: clamp(1.2rem, 1.75vw, 1.55rem);
+  text-wrap: balance;
   opacity: 0.9;
 }
 
@@ -1755,7 +1745,8 @@ html[data-view] .about {
   gap: 0.55rem;
   max-width: 44rem;
   margin-top: 0.65rem;
-  font-size: clamp(1rem, 1.3vw, 1.12rem);
+  font-size: clamp(1.15rem, 1.45vw, 1.35rem);
+  text-wrap: balance;
 }
 
 /* z combinator keeps its own colour and face, but only as a highlight on one
@@ -1805,7 +1796,7 @@ html[data-view] .about {
   max-width: 30ch;
   margin: 0.55rem 0 0;
   font-family: var(--cabinet);
-  font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+  font-size: clamp(1.15rem, 1.7vw, 1.45rem);
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -1826,7 +1817,7 @@ html[data-view] .about {
   background: var(--white);
   color: var(--zc);
   font-family: var(--cabinet);
-  font-size: 0.92rem;
+  font-size: var(--type-min);
   font-weight: 700;
   letter-spacing: 0.01em;
   transition: background 180ms ease, color 180ms ease;
@@ -1873,8 +1864,8 @@ html[data-view] .about {
 }
 
 .record-label .display {
-  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-  line-height: 1.4;
+  font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+  line-height: 1;
 }
 
 .record-label .mono {
@@ -1912,8 +1903,8 @@ html[data-view] .about {
 
 .record-stat {
   font-size: clamp(2.6rem, 6vw, 4.75rem);
-  line-height: 1.4;
-  letter-spacing: -0.07em;
+  line-height: 0.9;
+  letter-spacing: -0.05em;
 }
 
 /* a square mark leads every other entry: the real logo where there is one */
@@ -1962,17 +1953,18 @@ html[data-view] .about {
 }
 
 .record-text strong {
-  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
-  line-height: 1.4;
+  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
+  line-height: 1.15;
+  text-wrap: balance;
 }
 
 .record-awards .record-text strong {
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  font-size: clamp(1.2rem, 1.8vw, 1.6rem);
   line-height: 1.02;
 }
 
 .record-text > .mono {
-  font-size: 0.82rem;
+  font-size: var(--type-min);
   opacity: 0.75;
 }
 
@@ -1980,7 +1972,7 @@ html[data-view] .about {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
-  font-size: 0.8rem;
+  font-size: var(--type-min);
   opacity: 1;
 }
 
@@ -2034,7 +2026,7 @@ html[data-view] .about {
   padding: 0.2rem 0.5rem;
   color: var(--dc);
   background: var(--dc-ink);
-  font-size: 0.72rem;
+  font-size: var(--type-min);
 }
 
 .record-status i {
@@ -2172,8 +2164,8 @@ html[data-view] .about {
   font-family: var(--display);
   font-weight: 900;
   font-size: clamp(3.4rem, 12vw, 9.5rem);
-  line-height: 1.4;
-  letter-spacing: -0.07em;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
 }
 
 .contact-link {
@@ -2198,7 +2190,6 @@ html[data-view] .about {
   font-size: clamp(1.2rem, 2vw, 1.65rem);
   line-height: 1.35;
   text-wrap: balance;
-  font-style: italic;
   color: var(--ink-soft);
 }
 
@@ -2229,7 +2220,7 @@ html[data-view] .about {
 
 .contact-card .display {
   font-size: clamp(1.35rem, 2.4vw, 1.9rem);
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .contact-card-go {
@@ -2336,12 +2327,13 @@ html[data-view] .about {
 
 .facts-label .display {
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
-  line-height: 1.4;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .facts-label .mono {
   color: var(--ink);
-  font-size: 11px;
+  font-size: var(--type-min);
   letter-spacing: 0;
 }
 
@@ -2420,14 +2412,14 @@ html[data-view] .about {
 }
 
 .facts-cap .display {
-  font-size: clamp(0.85rem, 1.05vw, 1.05rem);
-  line-height: 1.4;
+  font-size: clamp(1.15rem, 1.35vw, 1.4rem);
+  line-height: 1.1;
   text-wrap: balance;
 }
 
 .facts-cap .mono {
   color: var(--ink);
-  font-size: 11px;
+  font-size: var(--type-min);
   letter-spacing: 0;
 }
 
@@ -2667,7 +2659,7 @@ section[id],
   }
 
   .section-meta {
-    max-width: 10.5rem;
+    max-width: 14rem;
   }
 
   .zc-cta {
@@ -2823,7 +2815,7 @@ section[id],
 
   .hero-orbit span,
   .hero-kicker {
-    font-size: 0.8rem;
+    font-size: var(--type-min);
   }
 
   /* the cells have to stay on one line for the bar to read as one bar */
@@ -2846,7 +2838,7 @@ section[id],
   }
 
   .mono {
-    font-size: 0.85rem;
+    font-size: var(--type-min);
   }
 }
 
@@ -2936,8 +2928,9 @@ section[id],
 }
 
 .tag-preview-caption {
-  padding: 0.4rem 0.6rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.04em;
+  padding: 0.55rem 0.7rem;
+  font-family: var(--mono);
+  font-size: var(--type-min);
+  letter-spacing: 0;
 }
 

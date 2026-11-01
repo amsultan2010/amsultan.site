@@ -12,8 +12,8 @@
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/icons/abdullah-favicon.png" />
     <link rel="apple-touch-icon" href="/icons/abdullah-apple-touch.png" />
-    <link rel="preload" href="/fonts/brodine-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/geist-serif-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/departure-mono-regular.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="/src/fonts.css" />
     <title>404 not found | Abdullah Sultan</title>
     <style>
@@ -25,7 +25,7 @@
         --ink-soft: rgba(18, 14, 12, 0.62);
         --line-soft: rgba(18, 14, 12, 0.2);
         --gutter: clamp(1.35rem, 3.1vw, 3.4rem);
-        --display: "Brodine", sans-serif;
+        --display: "Geist Serif", Georgia, serif;
         --serif: "Geist Serif", Georgia, serif;
         --mono: "Departure Mono", ui-monospace, monospace;
       }
@@ -71,7 +71,7 @@
 
       .mono {
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: 1.15rem;
         letter-spacing: 0;
         font-weight: 500;
         -webkit-font-smoothing: none;
@@ -116,15 +116,15 @@
         margin: 0;
         font-family: var(--display);
         font-weight: 800;
-        letter-spacing: -0.055em;
-        line-height: 1.4;
+        letter-spacing: -0.045em;
+        line-height: 0.9;
         font-size: clamp(4rem, 22vw, 16rem);
       }
 
       .lede {
         margin: 0;
         max-width: 34rem;
-        font-size: clamp(1.05rem, 2.2vw, 1.5rem);
+        font-size: clamp(1.15rem, 2.2vw, 1.5rem);
         line-height: 1.4;
         color: var(--ink);
       }
@@ -136,7 +136,7 @@
         background: var(--ink);
         color: var(--white);
         font-family: var(--mono);
-        font-size: 11px;
+        font-size: 1.15rem;
         letter-spacing: 0;
         -webkit-font-smoothing: none;
         -moz-osx-font-smoothing: grayscale;

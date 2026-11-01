@@ -1,33 +1,8 @@
-/* self-hosted. brodine, geist serif and departure mono are one cut each,
+/* self-hosted. geist serif is one regular cut (bold is not released yet),
    so a weight range stops a request for 800 from painting a fake bold.
-   cabinet grotesk and satoshi are variable: the range drives the wght
-   axis, because the file itself defaults to black. swap keeps the words
-   readable before the file arrives. */
-
-@font-face {
-  font-family: "Brodine";
-  src: url("/fonts/brodine-regular.woff2") format("woff2");
-  font-weight: 400 900;
-  font-style: normal;
-  font-display: swap;
-  /* the file's ascender is 1.5em of empty space. the ink is 1.05 / 0.28.
-     a line box shorter than that still slices the letters, so the display
-     sizes below are opened to fit it. */
-  ascent-override: 105%;
-  descent-override: 28%;
-  line-gap-override: 0%;
-}
-
-@font-face {
-  font-family: "Brodine";
-  src: url("/fonts/brodine-italic.woff2") format("woff2");
-  font-weight: 400 900;
-  font-style: italic;
-  font-display: swap;
-  ascent-override: 105%;
-  descent-override: 28%;
-  line-gap-override: 0%;
-}
+   departure mono is one regular cut. cabinet grotesk and satoshi are
+   variable: the range drives the wght axis, because the file itself
+   defaults to black. swap keeps the words readable before the file arrives. */
 
 @font-face {
   font-family: "Geist Serif";

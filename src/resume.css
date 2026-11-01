@@ -27,7 +27,7 @@
 .resume-title {
   margin: 0;
   font-size: clamp(2.8rem, 9vw, 6.5rem);
-  line-height: 1.4;
+  line-height: 0.95;
 }
 
 /* the one action on the page, so it is the pill turned up: bigger, and ink */
