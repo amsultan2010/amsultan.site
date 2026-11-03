@@ -793,6 +793,13 @@ html[data-view] .view-life .rail:last-child {
   box-shadow: 0.2em 0.2em 0 var(--df-accent);
 }
 
+.marquee-cy {
+  padding: 0.14em 0.5em 0.2em;
+  color: var(--cy-fg);
+  background: var(--cy-bg);
+  letter-spacing: -0.02em;
+}
+
 /* about */
 .about {
   background: var(--cream);
