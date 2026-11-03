@@ -399,7 +399,7 @@ html[data-view] .view-life .rail:last-child {
   font-weight: 700;
   line-height: 1;
   text-align: center;
-  /* the hard shadow keeps the orange flash readable on the orange ground */
+  /* the hard shadow keeps the flash readable on any ground */
   text-shadow: 0.18rem 0.18rem 0 var(--ink);
   content: "↑" / "";
   pointer-events: none;
@@ -420,13 +420,14 @@ html[data-view] .view-life .rail:last-child {
   }
 }
 
+/* flashes between z combinator purple and downforce green */
 @keyframes next-arrow-flash {
   0% {
-    color: var(--orange);
+    color: var(--zc);
   }
 
   50% {
-    color: var(--white);
+    color: var(--df-accent);
   }
 }
 
