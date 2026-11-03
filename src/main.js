@@ -600,7 +600,8 @@ function initRouter() {
 let aboutNet;
 
 function initAboutNetwork() {
-  aboutNet = createNetwork($(".about-net"), { ground: "ink" });
+  // drawn ahead of the front too, so it is always there and the pass only lights it up
+  aboutNet = createNetwork($(".about-net"), { ground: "ink", ahead: "ink" });
 }
 
 function initLoader(onDone) {

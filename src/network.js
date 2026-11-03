@@ -20,7 +20,8 @@ function palettes() {
     // on the orange ground: ink wiring, a neuron flashes white and then ink
     orange: { ground: orange, line: ink, hot: ink, heat: 0.6, head: white, flash: white, after: ink, ring: 0.8 },
     // on the ink ground: white wiring, a neuron flashes orange and then white
-    ink: { ground: ink, line: white, hot: orange, heat: 0.9, head: white, flash: orange, after: white, ring: 0.5 },
+    // resting neurons are orange with full white rings, so the network never reads as black on black
+    ink: { ground: ink, line: white, hot: orange, heat: 0.9, head: white, flash: white, after: orange, rest: orange, ring: 1, wire: 2 },
   };
 }
 
@@ -153,7 +154,7 @@ export function createNetwork(canvas, { ground, ahead }) {
     // every connection, faint
     ctx.strokeStyle = p.line;
     ctx.lineWidth = 1;
-    ctx.globalAlpha = wiring;
+    ctx.globalAlpha = Math.min(1, wiring * (p.wire || 1));
     ctx.beginPath();
     edges.forEach(({ from: a, to: b }) => {
       ctx.moveTo(nodes[a].x, nodes[a].y);
@@ -202,7 +203,7 @@ export function createNetwork(canvas, { ground, ahead }) {
       ctx.beginPath();
       ctx.arc(x - lift, y - lift, radius, 0, Math.PI * 2);
       ctx.globalAlpha = 1;
-      ctx.fillStyle = a > 0.55 ? p.flash : a > 0.12 ? p.after : p.ground;
+      ctx.fillStyle = a > 0.55 ? p.flash : a > 0.12 ? p.after : p.rest || p.ground;
       ctx.fill();
       ctx.globalAlpha = a > 0 ? 1 : p.ring;
       ctx.strokeStyle = p.line;
