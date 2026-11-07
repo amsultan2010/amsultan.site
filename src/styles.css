@@ -39,6 +39,11 @@
      certification still in progress */
   --dc: #03ef62;
   --dc-ink: #05192d;
+  /* linkedin blue and github's dark grey, only on their contact cards */
+  --in: #0a66c2;
+  --in-deep: #004182;
+  --gh: #2f3338;
+  --gh-deep: #1c2024;
   /* notched phones: the page paints edge to edge, these push content back in */
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -606,13 +611,20 @@ html[data-view] .view-life .rail:last-child {
   z-index: 2;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 0.5rem 1.25rem;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 0 var(--gutter);
   padding: 0.85rem 1rem;
   border: 2px solid var(--ink);
   background: var(--cream);
   box-shadow: 0.3rem 0.3rem 0 var(--ink);
+}
+
+/* riyadh stays on the left. the clock takes the slack so the time and the
+   live mark sit together on the right */
+.hero-rail [data-clock] {
+  margin-left: auto;
 }
 
 .hero-rail-live {
@@ -963,6 +975,8 @@ html[data-view] .about {
 
 .about-portrait {
   position: relative;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: var(--gutter);
   background:
@@ -976,40 +990,49 @@ html[data-view] .about {
     var(--orange);
 }
 
-/* the frame carries the tilt and the size, so the hard shadow can sit behind
-   the mask: the mask's own clip-path would cut a shadow off */
-.portrait-frame {
-  position: relative;
-  aspect-ratio: 982 / 1400;
-  transform: rotate(-3deg);
-}
-
-.portrait-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
-  transform: translate(0.55rem, 0.55rem);
-}
-
-.portrait-mask {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
+/* one window, three photos. the track is two identical runs so a -50% shift
+   lands on the same frame. margin, not gap, keeps the two runs equal.
+   each photo is one view wide, so the column stays full beside the points */
+.portrait-rail {
+  container-type: size;
+  flex: 1 1 auto;
+  min-height: clamp(22rem, 34vw, 36rem);
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 2px solid var(--ink);
-  background: var(--cream);
+  background: var(--ink);
+  box-shadow: 0.45rem 0.45rem 0 var(--ink);
 }
 
-.portrait-mask img {
-  display: block;
-  width: 100%;
+.portrait-rail.is-running {
+  overflow: hidden;
+}
+
+.portrait-track {
+  display: flex;
   height: 100%;
+  width: max-content;
+}
+
+.portrait-shot {
+  flex: 0 0 auto;
+  display: block;
+  width: 100cqw;
+  height: 100%;
+  max-width: none;
+  margin-right: 2px;
   object-fit: cover;
-  filter: contrast(1.08) saturate(1.15);
+  object-position: center 28%;
+}
+
+/* he stands on the right of this frame, so a cover crop has to look there */
+.portrait-shot-stage {
+  object-position: 82% center;
 }
 
 .about-portrait figcaption {
   position: absolute;
+  z-index: 2;
   right: 1.5rem;
   bottom: 1.5rem;
   padding: 0.45rem 0.7rem;
@@ -2274,6 +2297,66 @@ html[data-view] .about {
   color: var(--ink);
 }
 
+/* each network keeps its own colour. hover stays in that colour, a step darker,
+   so the card does not fall back to the orange row */
+.contact-card.contact-card-in {
+  background: var(--in);
+  color: var(--white);
+}
+
+.contact-card.contact-card-gh {
+  background: var(--gh);
+  color: var(--white);
+}
+
+.contact-card.contact-card-x {
+  background: var(--white);
+  color: var(--ink);
+}
+
+.contact-card.contact-card-in .mono,
+.contact-card.contact-card-gh .mono,
+.contact-card.contact-card-in:hover .mono,
+.contact-card.contact-card-gh:hover .mono {
+  color: var(--white);
+  opacity: 1;
+}
+
+.contact-card.contact-card-x .mono,
+.contact-card.contact-card-x:hover .mono {
+  color: var(--ink);
+  opacity: 1;
+}
+
+.contact-card.contact-card-in:hover {
+  background: var(--in-deep);
+  color: var(--white);
+  box-shadow: 0.62rem 0.62rem 0 var(--ink);
+}
+
+.contact-card.contact-card-gh:hover {
+  background: var(--gh-deep);
+  color: var(--white);
+  box-shadow: 0.62rem 0.62rem 0 var(--ink);
+}
+
+.contact-card.contact-card-x:hover {
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow: 0.62rem 0.62rem 0 var(--ink);
+}
+
+.contact-card.contact-card-in:active,
+.contact-card.contact-card-gh:active,
+.contact-card.contact-card-x:active {
+  box-shadow: 0.15rem 0.15rem 0 var(--ink);
+}
+
+.contact-frame .contact-card-in:focus-visible,
+.contact-frame .contact-card-gh:focus-visible {
+  outline-color: var(--white);
+}
+
 /* life, between stupid stuff and the watchlist. one category at a time,
    title centered, every photo in that category the same frame */
 .facts {
@@ -2580,22 +2663,26 @@ section[id],
     border-top: 2px solid var(--ink);
   }
 
-  /* no room to step the lines across, so they stack flush and run larger */
+  /* the two lines are the heading, so they sit in the middle of the band
+     and take the width the words actually need */
   .about-statement {
-    font-size: clamp(1.3rem, 6.8vw, 4.5rem);
+    justify-items: center;
+    font-size: clamp(1.55rem, 8.2vw, 5rem);
+    text-align: center;
   }
 
   .about-line:nth-child(n) {
-    justify-self: start;
+    justify-self: center;
   }
 
   .about-line-tag {
     display: none;
   }
 
-  .portrait-frame {
-    width: min(100%, 20rem);
-    margin-inline: auto;
+  .portrait-rail {
+    flex: none;
+    height: clamp(18rem, 78vw, 28rem);
+    min-height: 0;
   }
 }
 
@@ -2634,16 +2721,35 @@ section[id],
     padding: 0 0.35rem;
   }
 
-  /* the rail wrapped ragged with space-between; two columns keeps it square */
-  .hero-rail {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem 1.15rem;
-    padding: 0.95rem 1rem;
+  /* one short strip. the desktop bar's padding and type made this two rows tall */
+  .hero-rail.mono {
+    flex-wrap: nowrap;
+    gap: 0.45rem 0.7rem;
+    margin-bottom: 0.15rem;
+    padding: 0.22rem 0.5rem;
+    font-size: 0.78rem;
+    line-height: 1.15;
+    box-shadow: 0.12rem 0.12rem 0 var(--ink);
   }
 
-  .hero-rail span:nth-child(even) {
-    justify-self: end;
+  .hero-rail-live {
+    gap: 0.28rem;
+  }
+
+  .hero-rail-live i {
+    width: 0.32rem;
+    height: 0.32rem;
+  }
+
+  .hero-stage {
+    gap: 0.85rem;
+    padding: 1.15rem var(--gutter) 1rem;
+  }
+
+  .hero-kicker.mono {
+    padding: 0.12rem 0.38rem;
+    box-shadow: 0.1rem 0.1rem 0 var(--ink);
+    font-size: 0.78rem;
   }
 
   /* compositor layers cost more than the drift is worth on a phone */
@@ -2686,8 +2792,8 @@ section[id],
   }
 
   .hero-title {
-    font-size: clamp(2.8rem, 15vw, 4.2rem);
-    line-height: 0.92;
+    font-size: clamp(3.6rem, 20vw, 6.4rem);
+    line-height: 0.86;
   }
 
   .hero-line-stroke {
@@ -2711,9 +2817,8 @@ section[id],
     width: 100%;
   }
 
-  .portrait-frame {
-    width: min(100%, 16rem);
-    transform: none;
+  .portrait-rail {
+    height: clamp(16rem, 92vw, 24rem);
   }
 
   .about-actions {
@@ -2818,11 +2923,10 @@ section[id],
   }
 
   .hero-title {
-    font-size: clamp(2.4rem, 14.5vw, 3.6rem);
+    font-size: clamp(3.25rem, 19vw, 4.8rem);
   }
 
-  .hero-orbit span,
-  .hero-kicker {
+  .hero-orbit span {
     font-size: var(--type-min);
   }
 

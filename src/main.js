@@ -1122,21 +1122,6 @@ function buildMe(ctx) {
     },
   );
 
-  gsap.fromTo(
-    ".portrait-mask",
-    { clipPath: "inset(16% 12% 16% 12%)" },
-    {
-      clipPath: "inset(0% 0% 0% 0%)",
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".about-portrait",
-        start: "top 80%",
-        end: "top 45%",
-        scrub: 0.5,
-      },
-    },
-  );
-
   gsap.from(".about-portrait figcaption", {
     y: 16,
     autoAlpha: 0,
@@ -1146,19 +1131,6 @@ function buildMe(ctx) {
       trigger: ".about-portrait",
       start: "top 70%",
       once: true,
-    },
-  });
-
-  // two more parallax rates so depth reads as depth, not as one shared drift
-  gsap.set(".portrait-mask img", { scale: 1.14 });
-  gsap.to(".portrait-mask img", {
-    yPercent: -7,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 0.7,
     },
   });
 
@@ -1172,6 +1144,51 @@ function buildMe(ctx) {
       scrub: 1,
     },
   });
+
+  return initPortraitRail();
+}
+
+// the about photos run to the right. two identical runs, so leaving at 0 and
+// arriving from -50 is the same frame. the loop parks when the rail is off screen
+function initPortraitRail() {
+  const rail = $(".portrait-rail");
+  const track = $(".portrait-track");
+  if (!rail || !track || reducedMotion()) return undefined;
+
+  $$("[data-clone]", track).forEach((node) => node.remove());
+  $$(".portrait-shot", track).forEach((shot) => {
+    const clone = shot.cloneNode(true);
+    clone.dataset.clone = "true";
+    clone.alt = "";
+    clone.setAttribute("aria-hidden", "true");
+    track.append(clone);
+  });
+  rail.classList.add("is-running");
+
+  const tween = gsap.fromTo(
+    track,
+    { xPercent: -50 },
+    {
+      xPercent: 0,
+      duration: 26,
+      ease: "none",
+      repeat: -1,
+      modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
+    },
+  );
+  const gate = ScrollTrigger.create({
+    trigger: rail,
+    start: "top bottom",
+    end: "bottom top",
+    onToggle: (self) => (self.isActive ? tween.play() : tween.pause()),
+  });
+  if (!gate.isActive) tween.pause();
+
+  return () => {
+    rail.classList.remove("is-running");
+    $$("[data-clone]", track).forEach((node) => node.remove());
+    gsap.set(track, { clearProps: "transform" });
+  };
 }
 
 // work: built, lead and record
@@ -1407,7 +1424,6 @@ function initMotion() {
   // once, for all three views, and a switch is an instant swap
   if (reducedMotion()) {
     gsap.set(".scroll-progress", { scaleX: 1 });
-    gsap.set(".portrait-mask", { clipPath: "inset(0% 0% 0% 0%)" });
     buildCounters($$("[data-count]"));
     buildRails();
     return;
