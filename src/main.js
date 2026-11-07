@@ -588,7 +588,7 @@ let aboutNet;
 
 function initAboutNetwork() {
   // drawn ahead of the front too, so it is always there and the pass only lights it up
-  aboutNet = createNetwork($(".about-net"), { ground: "ink", ahead: "ink" });
+  aboutNet = createNetwork($(".about-net"), { ground: "ice", ahead: "ice" });
 }
 
 function initLoader(onDone) {
@@ -818,11 +818,11 @@ function buildMe(ctx) {
   const marqueeTween = gsap
     .to(".marquee-track", {
       xPercent: -50,
-      duration: 24,
+      duration: 12,
       repeat: -1,
       ease: "none",
     })
-    .totalTime(24 * 500);
+    .totalTime(12 * 500);
 
   // same treatment for the marquee: it only earns its frame cost while visible
   const marqueeEl = $(".marquee");
@@ -1177,8 +1177,8 @@ function initPortraitRail() {
 
 // work: built, lead and record
 function buildWork() {
-  // section heads: the word rises out of its own bar, its echoes slide in from
-  // the edge they run off, and the count cell opens from that same edge
+  // section heads: the word rises out of its own bar and its echoes slide in
+  // from the edge they run off
   $$(".section-head").forEach((head) => {
     gsap
       .timeline({
@@ -1186,13 +1186,7 @@ function buildWork() {
         scrollTrigger: { trigger: head, start: "top 88%", once: true },
       })
       .from($$(".section-display .split-char", head), { yPercent: 125, duration: D.slow, stagger: 0.03 }, 0)
-      .from($$(".section-echo i", head), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12)
-      .fromTo(
-        $(".section-meta", head),
-        { clipPath: "inset(0% 0% 0% 100%)" },
-        { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: E.inOut, clearProps: "clipPath" },
-        0.2,
-      );
+      .from($$(".section-echo i", head), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12);
   });
 
   // the echo is hidden on a phone, so its scrub only exists where it shows. each
@@ -1343,19 +1337,6 @@ function buildContact() {
     scrollTrigger: {
       trigger: ".contact-title",
       start: "top 85%",
-      once: true,
-    },
-  });
-
-  gsap.from(".contact-top > *", {
-    y: 28,
-    autoAlpha: 0,
-    duration: 0.6,
-    stagger: 0.07,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".contact-frame",
-      start: "top 82%",
       once: true,
     },
   });
