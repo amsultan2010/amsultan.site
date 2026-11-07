@@ -1013,7 +1013,9 @@ html[data-view] .about {
   object-position: 88% center;
 }
 
-/* the punchline gets a band of its own, stars on both ends, the line centered */
+/* the punchline gets a band of its own, stars on both ends, the line centered.
+   the band is the container. the text cannot query itself, and a container on
+   the text clips the rotated word and its stamp. */
 .about-closer {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -1025,15 +1027,15 @@ html[data-view] .about {
   border-top: 2px solid var(--ink);
   background: var(--orange);
   text-align: center;
+  container-type: inline-size;
 }
 
 .about-closer-text {
   display: grid;
   justify-items: center;
   width: 100%;
-  container-type: inline-size;
-  font-size: clamp(1.15rem, 4.6vw, 5.2rem);
-  font-size: min(5.2rem, 4.05cqi);
+  font-size: clamp(1.15rem, 3.6vw, 4.4rem);
+  font-size: min(5.2rem, calc((100cqi - 2 * clamp(2.2rem, 6vw, 5.5rem) - 2 * clamp(0.65rem, 2vw, 2rem) - 1.25rem) / 16.6));
   line-height: 1.05;
   text-align: center;
 }
@@ -2937,7 +2939,7 @@ section[id],
   }
 
   .about-closer-text {
-    font-size: min(1.7rem, 4.65cqi);
+    font-size: min(1.7rem, calc((100cqi - 2 * 1.35rem - 2 * 0.4rem - 0.75rem) / 16.4));
   }
 
   .about-closer em {
