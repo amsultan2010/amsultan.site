@@ -575,9 +575,8 @@ function initRouter() {
 
   window.addEventListener("popstate", () => requestView(viewFromPath(), false));
 
-  // the owner asked for this emoji. it lives in the tab title only, never on the page
   document.addEventListener("visibilitychange", () => {
-    document.title = document.hidden ? "please come back 😭" : TITLES[wanted];
+    document.title = document.hidden ? "please come back" : TITLES[wanted];
   });
 
   $$("[data-back-to-top]").forEach((button) => button.addEventListener("click", scrollToTop));
