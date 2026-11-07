@@ -405,19 +405,23 @@ function initMarquee() {
     [...track.children].forEach((node) => track.append(stamp(node.cloneNode(true))));
 
     const half = track.scrollWidth / 2;
+    // a negative timeScale stops dead at time 0. the playhead starts deep in
+    // the loop, including after a resize rebuild, or an upward scroll parks it.
     marqueeTween = gsap.to(track, {
       xPercent: -50,
       duration: half / 180,
       ease: "none",
       repeat: -1,
+      paused: true,
     });
+    marqueeTween.totalTime(marqueeTween.duration() * 500);
     gate = ScrollTrigger.create({
       trigger: rail,
       start: "top bottom",
       end: "bottom top",
       onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
     });
-    if (!gate.isActive) marqueeTween.pause();
+    if (gate.isActive) marqueeTween.play();
   };
 
   build();
