@@ -969,7 +969,7 @@ html[data-view] .about {
 
 /* the table and his torso sit in the lower half, so the crop looks there */
 .portrait-shot-night {
-  width: clamp(16rem, 42vw, 22rem);
+  width: clamp(14rem, 32vw, 18rem);
   object-position: center 82%;
 }
 
@@ -2140,23 +2140,42 @@ html[data-view] .about {
 
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1.15rem;
   margin-top: 0.5rem;
 }
 
 .contact-card {
   display: grid;
-  gap: 0.65rem;
-  align-content: space-between;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: start;
+  column-gap: 0.85rem;
   min-height: 8.25rem;
   padding: 1.15rem;
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
+  text-align: left;
   /* cards rest in the raised state; magnetic js owns transform on hover */
   box-shadow: 0.5rem 0.5rem 0 var(--ink);
   transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.contact-card-copy {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  min-width: 0;
+  text-align: left;
+}
+
+.contact-logo {
+  width: 3rem;
+  height: 3rem;
+  max-width: none;
+  object-fit: cover;
+  justify-self: end;
 }
 
 .contact-card .mono {
@@ -2787,33 +2806,16 @@ section[id],
     grid-template-columns: 1fr;
   }
 
-  /* stacked, not "label go": the long email overlapped its own label */
   .contact-card {
     min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "label"
-      "title"
-      "go";
-    gap: 0.45rem;
     padding: 1.15rem 1.1rem;
-    text-align: center;
-    justify-items: center;
-  }
-
-  .contact-card .mono:first-child {
-    grid-area: label;
-  }
-
-  .contact-card .display {
-    grid-area: title;
+    text-align: left;
+    justify-items: start;
   }
 
   .contact-card-go {
-    grid-area: go;
-    justify-self: center;
+    justify-self: start;
     align-self: start;
-    margin-top: 0.15rem;
   }
 
   .site-footer {
@@ -2853,6 +2855,11 @@ section[id],
 
   .contact-title {
     font-size: clamp(2.6rem, 15vw, 4rem);
+  }
+
+  .contact-logo {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 
   .work-row {
