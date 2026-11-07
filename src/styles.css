@@ -1028,9 +1028,18 @@ html[data-view] .about {
 }
 
 .about-closer-text {
-  font-size: clamp(1.9rem, 5.2vw, 5.2rem);
+  display: grid;
+  justify-items: center;
+  width: 100%;
+  container-type: inline-size;
+  font-size: clamp(1.15rem, 4.6vw, 5.2rem);
+  font-size: min(5.2rem, 4.05cqi);
   line-height: 1.05;
-  text-wrap: pretty;
+  text-align: center;
+}
+
+.about-closer-line {
+  white-space: nowrap;
 }
 
 .about-closer em {
@@ -2917,8 +2926,24 @@ section[id],
     border-top: 2px solid var(--ink);
   }
 
+  .about-closer {
+    gap: 0.4rem;
+    padding-inline: 0.7rem;
+  }
+
   .about-closer-mark {
     align-self: center;
+    width: 1.35rem;
+  }
+
+  .about-closer-text {
+    font-size: min(1.7rem, 4.65cqi);
+  }
+
+  .about-closer em {
+    padding-inline: 0.12em;
+    margin-right: 0.08em;
+    box-shadow: 0.08em 0.08em 0 var(--white);
   }
 
   .about-facts div {
