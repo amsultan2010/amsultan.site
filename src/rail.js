@@ -311,13 +311,13 @@ function buildHead(label) {
   );
 }
 
-// stupid stuff keeps the head it had as its own section: the word, its outline
-// echoing off to the edge, then the note. main.js splits the word into chars
-function buildSectionHead(label, echo, note) {
+// stupid stuff keeps the head it had as its own section: the word, then its
+// outline echoing off to the edge. main.js splits the word into chars
+function buildSectionHead(label, echo) {
   const title = el("h2", "section-display", label);
   title.dataset.split = "";
 
-  return el("header", "section-head", title, buildEcho(echo), el("p", "section-meta", el("span", "mono", note)));
+  return el("header", "section-head", title, buildEcho(echo));
 }
 
 function buildTrack(items, variant) {
@@ -348,14 +348,12 @@ function buildTrack(items, variant) {
   return { viewport, track };
 }
 
-function buildSection({ items, label, variant, echo, note }) {
+function buildSection({ items, label, variant, echo }) {
   const section = document.createElement("section");
   section.className = `rail rail-${variant}`;
   section.setAttribute("aria-label", label);
 
-  const head = echo
-    ? buildSectionHead(label, echo, note)
-    : buildHead(label);
+  const head = echo ? buildSectionHead(label, echo) : buildHead(label);
 
   const { viewport, track } = buildTrack(items, variant);
   section.append(head, viewport);
@@ -505,7 +503,7 @@ function initHeadEntrance(head) {
 }
 
 // the section heads in work enter the same way: the chars rise out of the
-// word's padding, the echoes slide in, and the count opens from its edge
+// word's padding and the echoes slide in
 function initSectionHeadEntrance(head) {
   return gsap
     .timeline({
@@ -513,20 +511,14 @@ function initSectionHeadEntrance(head) {
       scrollTrigger: { trigger: head, start: "top 88%", once: true },
     })
     .from(head.querySelectorAll(".split-char"), { yPercent: 125, duration: D.slow, stagger: 0.03 }, 0)
-    .from(head.querySelectorAll(".section-echo i"), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12)
-    .fromTo(
-      head.querySelector(".section-meta"),
-      { clipPath: "inset(0% 0% 0% 100%)" },
-      { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: "inOut", clearProps: "clipPath" },
-      0.2,
-    );
+    .from(head.querySelectorAll(".section-echo i"), { xPercent: 70, autoAlpha: 0, duration: D.slow, stagger: 0.06 }, 0.12);
 }
 
 // the rails mounted into life, in page order, for buildRails to animate
 const rails = [];
 
-function mountRail({ view, items, label, echo, note, variant, duration, reverse = false, before = null }) {
-  const { section, head, viewport, track } = buildSection({ items, label, variant, echo, note });
+function mountRail({ view, items, label, echo, variant, duration, reverse = false, before = null }) {
+  const { section, head, viewport, track } = buildSection({ items, label, variant, echo });
   if (before) view.insertBefore(section, before);
   else view.append(section);
   rails.push({ section, head, viewport, track, duration, reverse });
@@ -732,7 +724,7 @@ function mountGames(view, before) {
   section.className = "rail rail-stuff";
   section.setAttribute("aria-label", "stupid stuff i made");
 
-  const head = buildSectionHead("stupid stuff i made", "stuff", "small games, every one opens");
+  const head = buildSectionHead("stupid stuff i made", "stuff");
   section.append(head);
 
   rows.forEach((row, index) => {

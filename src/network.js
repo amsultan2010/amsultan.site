@@ -22,6 +22,21 @@ function palettes() {
     // on the ink ground: white wiring, a neuron flashes orange and then white
     // resting neurons are orange with full white rings, so the network never reads as black on black
     ink: { ground: ink, line: white, hot: orange, heat: 0.9, head: white, flash: white, after: orange, rest: orange, ring: 1, wire: 2 },
+    // behind the statement: an ice web on the cyan band. cyan rings and a
+    // signal-red firing are the only accents
+    ice: {
+      ground: white,
+      line: white,
+      ringInk: ink,
+      hot: orange,
+      heat: 1,
+      head: orange,
+      flash: orange,
+      after: white,
+      rest: white,
+      ring: 1,
+      wire: 3,
+    },
   };
 }
 
@@ -206,7 +221,7 @@ export function createNetwork(canvas, { ground, ahead }) {
       ctx.fillStyle = a > 0.55 ? p.flash : a > 0.12 ? p.after : p.rest || p.ground;
       ctx.fill();
       ctx.globalAlpha = a > 0 ? 1 : p.ring;
-      ctx.strokeStyle = p.line;
+      ctx.strokeStyle = p.ringInk || p.line;
       ctx.lineWidth = ringWidth;
       ctx.stroke();
     });

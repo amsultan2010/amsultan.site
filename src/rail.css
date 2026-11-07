@@ -281,6 +281,11 @@
     width: 10.5rem;
   }
 
+  .rail-poster .rail-item {
+    width: 7.35rem;
+    margin-right: 0.6rem;
+  }
+
   /* no spare width for a ruler on a phone, so the label takes the slack and
      the bar stays one compact row */
   .rail-cell-ruler {
@@ -528,16 +533,5 @@
 
   .rail-stuff .section-display {
     font-size: min(calc((100vw - 3rem) / 11.6), 5.5rem);
-  }
-
-  .rail-stuff .section-meta {
-    grid-auto-flow: column;
-    justify-content: start;
-    align-items: center;
-    gap: 0.75rem;
-    max-width: none;
-    padding-left: var(--gutter);
-    border-left: 0;
-    border-top: 2px solid var(--head-rule, var(--ink));
   }
 }

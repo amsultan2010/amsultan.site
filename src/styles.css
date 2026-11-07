@@ -776,7 +776,7 @@ html[data-view] .view-life .rail:last-child {
   display: flex;
   width: max-content;
   align-items: center;
-  padding: 1.05rem 0;
+  padding: 0.7rem 0;
   font-family: var(--display);
   font-size: clamp(1.2rem, 2.2vw, 2rem);
   font-weight: 800;
@@ -788,11 +788,12 @@ html[data-view] .view-life .rail:last-child {
 /* spacing is a margin, not a flex gap, so two runs measure exactly half the
    track and the -50% wrap lands on a matching frame */
 .marquee-track > * {
-  margin-right: 1.5rem;
+  margin-right: 0.7rem;
 }
 
 .marquee-track b {
   color: var(--ink);
+  font-size: 0.5em;
   font-weight: 800;
 }
 
@@ -815,7 +816,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .marquee-df {
-  padding: 0.14em 0.55em 0.2em;
+  padding: 0.08em 0.32em 0.12em;
   color: var(--df-fg);
   background: var(--df-bg);
   font-family: var(--satoshi);
@@ -824,7 +825,7 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .marquee-cy {
-  padding: 0.14em 0.5em 0.2em;
+  padding: 0.08em 0.32em 0.12em;
   color: var(--cy-fg);
   background: var(--cy-bg);
   letter-spacing: 0;
@@ -1255,13 +1256,13 @@ html[data-view] .about {
   color: inherit;
 }
 
-/* section heads: the word, then its own outline echoing off toward the edge,
-   then a ruled cell that says how much sits underneath. the bar is full from
-   one gutter to the other instead of one word and a blank. each bar takes a
-   ground unlike whatever sits just above it, so the section reads as a new one */
+/* section heads: the word, then its own outline echoing off toward the edge.
+   the bar is full from one gutter to the other instead of one word and a
+   blank. each bar takes a ground unlike whatever sits just above it, so the
+   section reads as a new one */
 .section-head {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: stretch;
   color: var(--head-ink, var(--ink));
   background: var(--head-bg, var(--cream));
@@ -1331,22 +1332,6 @@ html[data-view] .about {
   opacity: 0.06;
 }
 
-.section-meta {
-  display: grid;
-  align-content: center;
-  gap: 0.4rem;
-  max-width: 18rem;
-  margin: 0;
-  padding: 0.6rem var(--gutter) 0.6rem clamp(1rem, 2vw, 1.75rem);
-  border-left: 2px solid var(--head-rule, var(--ink));
-}
-
-.section-meta .mono {
-  font-size: var(--type-min);
-  line-height: 1.35;
-  text-wrap: pretty;
-}
-
 /* work */
 .work {
   --head-bg: var(--cream);
@@ -1401,9 +1386,9 @@ html[data-view] .about {
     "blurb blurb"
     "thumb thumb"
     "foot foot";
-  gap: 1.15rem 1.35rem;
+  gap: 0.8rem 1rem;
   align-items: center;
-  padding: 1.9rem var(--gutter) 2.05rem;
+  padding: 1.25rem var(--gutter) 1.4rem;
   border-bottom: 2px solid var(--ink);
   color: var(--row-fg);
   background: var(--row-bg);
@@ -1467,6 +1452,8 @@ html[data-view] .about {
   grid-area: name;
   /* it is a .tag, so the underline should hug the word, not the grid column */
   justify-self: start;
+  min-width: 0;
+  max-width: 100%;
   font-size: clamp(1.45rem, 3.2vw, 2.75rem);
   line-height: 1.05;
   text-wrap: pretty;
@@ -1537,8 +1524,11 @@ html[data-view] .about {
   transition: width 220ms ease, opacity 220ms ease;
 }
 
-/* every other internship and project flips: logo on the right, copy on the right */
+/* every other internship and project flips: logo on the right, copy on the right.
+   the name has to take the wide column. leaving the columns as icon-then-name
+   parks the title in the 2.5rem logo track and it runs off the phone */
 .work-list .work-row:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) 2.5rem;
   grid-template-areas:
     "name icon"
     "blurb blurb"
@@ -1744,7 +1734,7 @@ html[data-view] .about {
 }
 
 .lead-body {
-  padding: 1.75rem var(--gutter) 1.9rem;
+  padding: 1.2rem var(--gutter) 1.35rem;
 }
 
 .lead-body .mono {
@@ -1797,6 +1787,7 @@ html[data-view] .about {
   grid-area: blurb;
   display: grid;
   gap: 0.55rem;
+  min-width: 0;
   max-width: 48rem;
   /* matches the lead bullets below it */
   font-size: clamp(1.2rem, 1.75vw, 1.55rem);
@@ -1950,7 +1941,7 @@ html[data-view] .about {
   grid-template-columns: auto minmax(0, 1fr);
   gap: 1.1rem;
   align-items: center;
-  padding: 1.65rem var(--gutter);
+  padding: 1.15rem var(--gutter);
   border-top: 2px solid var(--ink);
   transition: background 220ms ease, color 220ms ease;
 }
@@ -1978,7 +1969,7 @@ html[data-view] .about {
 .record-mark {
   display: grid;
   place-items: center;
-  width: 3.75rem;
+  width: 4.6rem;
   aspect-ratio: 1;
   overflow: hidden;
   border: 2px solid var(--ink);
@@ -2021,8 +2012,8 @@ html[data-view] .about {
 }
 
 .record-text strong {
-  font-size: clamp(1.2rem, 1.6vw, 1.45rem);
-  line-height: 1.15;
+  font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+  line-height: 1.1;
   text-wrap: pretty;
 }
 
@@ -2032,7 +2023,7 @@ html[data-view] .about {
 }
 
 .record-text > .mono {
-  font-size: var(--type-min);
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
   opacity: 0.75;
 }
 
@@ -2205,44 +2196,12 @@ html[data-view] .about {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 2.15rem;
-  padding: clamp(1.7rem, 3vw, 2.5rem);
+  gap: 1.2rem;
+  padding: clamp(1.15rem, 2.2vw, 1.7rem);
   border: 2px solid var(--ink);
   color: var(--ink);
   background: var(--cream);
   box-shadow: 0.55rem 0.55rem 0 var(--orange);
-}
-
-.contact-top {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem 1.5rem;
-  text-align: center;
-}
-
-.contact-kicker,
-.contact-status {
-  margin: 0;
-}
-
-.contact-kicker {
-  color: var(--ink);
-}
-
-.contact-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  color: var(--ink-soft);
-}
-
-.contact-status .status-dot {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: var(--ink);
-  animation: live-pulse 1.4s ease-in-out infinite;
 }
 
 .contact-title {
@@ -2296,8 +2255,8 @@ html[data-view] .about {
   align-items: center;
   justify-items: start;
   column-gap: 0.85rem;
-  min-height: 8.25rem;
-  padding: 1.15rem;
+  min-height: 0;
+  padding: 0.9rem 1rem;
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
@@ -2316,19 +2275,20 @@ html[data-view] .about {
 }
 
 .contact-logo {
-  width: 3rem;
-  height: 3rem;
+  width: clamp(4.4rem, 18vw, 6.5rem);
+  height: clamp(4.4rem, 18vw, 6.5rem);
   max-width: none;
   object-fit: cover;
   justify-self: end;
 }
 
 .contact-card .mono {
+  font-size: clamp(1.15rem, 1.5vw, 1.4rem);
   opacity: 0.75;
 }
 
 .contact-card .display {
-  font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+  font-size: clamp(1.85rem, 3vw, 2.7rem);
   line-height: 1;
 }
 
@@ -2464,10 +2424,10 @@ html[data-view] .about {
 .facts-board {
   display: flex;
   flex-direction: column;
-  gap: clamp(3rem, 6vw, 5rem);
+  gap: clamp(1.25rem, 2.2vw, 1.85rem);
   width: min(72rem, 100%);
   margin-inline: auto;
-  padding: clamp(2rem, 4vw, 3.25rem) var(--gutter) clamp(2.5rem, 5vw, 4rem);
+  padding: clamp(1.1rem, 2vw, 1.6rem) var(--gutter) clamp(1.3rem, 2.4vw, 1.9rem);
 }
 
 .facts-group {
@@ -2486,7 +2446,7 @@ html[data-view] .about {
   flex-direction: column;
   align-items: center;
   gap: 0.4rem;
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.6rem;
   padding: 0;
   color: var(--ink);
   text-align: center;
@@ -2512,18 +2472,18 @@ html[data-view] .about {
   letter-spacing: 0;
 }
 
-/* four photos sit two by two. three sit in one even row. equal columns,
-   so a shared ratio makes every frame in the category the same height */
+/* one row per category, so the five groups are a few screens instead of a
+   long stack. four across, three across */
 .facts-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem 1.25rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
   margin: 0;
 }
 
 .facts-snacks .facts-row,
 .facts-travel .facts-row {
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .facts-cell {
@@ -2638,16 +2598,27 @@ html[data-view] .about {
   }
 }
 
-@media (max-width: 800px) {
-  .facts-snacks .facts-row,
-  .facts-travel .facts-row {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 700px) {
   .facts-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .facts-snacks .facts-row,
+  .facts-travel .facts-row {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .facts-frame {
+    aspect-ratio: 1;
+  }
+
+  .facts-cap {
+    padding: 0.35rem 0.1rem 0;
+  }
+
+  .facts-cap .display {
+    font-size: var(--type-min);
   }
 }
 
@@ -2846,8 +2817,8 @@ section[id],
   }
 
   .marquee-track {
-    gap: 1.15rem;
-    padding: 1rem 0;
+    gap: 0;
+    padding: 0.7rem 0;
   }
 
   /* the echo needs a wide bar to read as an echo */
@@ -2864,15 +2835,6 @@ section[id],
 
   .section-echo {
     display: none;
-  }
-
-  .section-meta {
-    max-width: none;
-    width: 100%;
-    justify-items: center;
-    text-align: center;
-    border-left: 0;
-    border-top: 2px solid var(--head-rule, var(--ink));
   }
 
   .zc-cta {
@@ -3068,14 +3030,13 @@ section[id],
     font-size: clamp(2.6rem, 15vw, 4rem);
   }
 
-  .contact-logo {
-    width: 2.4rem;
-    height: 2.4rem;
-  }
-
   .work-row {
     grid-template-columns: 2.25rem minmax(0, 1fr);
-    gap: 0.85rem 1rem;
+    gap: 0.7rem 0.85rem;
+  }
+
+  .work-list .work-row:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) 2.25rem;
   }
 
   .work-row-icon {
