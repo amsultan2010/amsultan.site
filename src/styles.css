@@ -969,7 +969,7 @@ html[data-view] .about {
 
 /* the table and his torso sit in the lower half, so the crop looks there */
 .portrait-shot-night {
-  width: clamp(16rem, 42vw, 22rem);
+  width: clamp(14rem, 32vw, 18rem);
   object-position: center 82%;
 }
 
