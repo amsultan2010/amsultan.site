@@ -323,16 +323,12 @@ html[data-view] .view-life .rail:last-child {
 }
 
 .brand-mark {
-  display: grid;
+  display: block;
   width: 3.1rem;
   height: 3.1rem;
-  place-items: center;
+  object-fit: cover;
   border: 2px solid var(--ink);
   background: var(--orange);
-  color: var(--ink);
-  font-family: var(--display);
-  font-size: var(--type-min);
-  font-weight: 800;
 }
 
 .primary-nav {
@@ -434,15 +430,6 @@ html[data-view] .view-life .rail:last-child {
   50% {
     color: var(--df-accent);
   }
-}
-
-.brand-mark {
-  transition: background 180ms ease, color 180ms ease;
-}
-
-.brand:hover .brand-mark {
-  color: var(--white);
-  background: var(--ink);
 }
 
 .brand:active .brand-mark {
@@ -908,49 +895,25 @@ html[data-view] .about {
   background: var(--orange);
 }
 
-.about-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(15rem, 0.6fr);
-}
-
-/* every claim is its own ruled cell and stretches evenly into the height the
-   portrait sets beside it */
+/* every claim is its own ruled cell under the portrait rail */
 .about-points {
   display: grid;
-  grid-auto-rows: 1fr;
   margin: 0;
   padding: 0;
-  border-right: 2px solid var(--ink);
   list-style: none;
-  counter-reset: point;
   font-size: clamp(1.15rem, 2vw, 1.85rem);
   line-height: 1.5;
 }
 
 .about-points li {
-  display: grid;
-  grid-template-columns: clamp(2.3rem, 4.2vw, 4rem) minmax(0, 1fr);
-  gap: clamp(0.85rem, 1.6vw, 1.5rem);
-  align-items: center;
   padding: clamp(1.35rem, 2.4vw, 2.15rem) var(--gutter);
   border-top: 2px solid var(--ink);
+  text-align: center;
   text-wrap: balance;
-  counter-increment: point;
 }
 
 .about-points li:first-child {
   border-top: 0;
-}
-
-/* ink on the cream rows. the in-progress row sits on ink, so its number stays orange */
-.about-points li::before {
-  content: counter(point, decimal-leading-zero);
-  color: var(--ink);
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: clamp(1.3rem, 2.5vw, 2.4rem);
-  line-height: 1;
-  letter-spacing: -0.04em;
 }
 
 .about-points strong {
@@ -968,40 +931,20 @@ html[data-view] .about {
   font-size: 1.14em;
 }
 
-.about-points .about-point-now::before,
 .about-point-now strong {
   color: var(--orange);
 }
 
-.about-portrait {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: var(--gutter);
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      transparent,
-      transparent 12px,
-      rgba(18, 14, 12, 0.08) 12px,
-      rgba(18, 14, 12, 0.08) 13px
-    ),
-    var(--orange);
-}
-
-/* one window, three photos. the track is two identical runs so a -50% shift
-   lands on the same frame. margin, not gap, keeps the two runs equal.
-   each photo is one view wide, so the column stays full beside the points */
+/* a full-bleed rail. two identical runs, so a -50% shift lands on the same
+   frame. each photo keeps its own width so several sit on screen at once */
 .portrait-rail {
-  container-type: size;
-  flex: 1 1 auto;
-  min-height: clamp(22rem, 34vw, 36rem);
+  height: clamp(14rem, 28vw, 18rem);
+  margin: 0;
   overflow-x: auto;
   overflow-y: hidden;
-  border: 2px solid var(--ink);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
   background: var(--ink);
-  box-shadow: 0.45rem 0.45rem 0 var(--ink);
 }
 
 .portrait-rail.is-running {
@@ -1017,47 +960,42 @@ html[data-view] .about {
 .portrait-shot {
   flex: 0 0 auto;
   display: block;
-  width: 100cqw;
+  width: auto;
   height: 100%;
   max-width: none;
   margin-right: 2px;
   object-fit: cover;
-  object-position: center 28%;
 }
 
-/* he stands on the right of this frame, so a cover crop has to look there */
+/* the table and his torso sit in the lower half, so the crop looks there */
+.portrait-shot-night {
+  width: clamp(16rem, 42vw, 22rem);
+  object-position: center 82%;
+}
+
+/* he stands on the right, so a short frame has to look there */
 .portrait-shot-stage {
-  object-position: 82% center;
+  width: clamp(8rem, 14vw, 12rem);
+  object-position: 88% center;
 }
 
-.about-portrait figcaption {
-  position: absolute;
-  z-index: 2;
-  right: 1.5rem;
-  bottom: 1.5rem;
-  padding: 0.45rem 0.7rem;
-  border: 2px solid var(--ink);
-  background: var(--cream);
-  transform: rotate(3deg);
-  box-shadow: 0.25rem 0.25rem 0 var(--ink);
-}
-
-/* the punchline gets a band of its own, the full width of the section, with
-   the one phrase that matters stamped on in reverse */
+/* the punchline gets a band of its own, stars on both ends, the line centered */
 .about-closer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(1rem, 3vw, 3rem);
+  justify-items: center;
+  gap: clamp(0.65rem, 2vw, 2rem);
   margin: 0;
-  padding: clamp(1.2rem, 2.8vw, 2.5rem) var(--gutter) clamp(1.4rem, 3vw, 2.75rem);
+  padding: clamp(1.4rem, 3vw, 2.8rem) var(--gutter);
   border-top: 2px solid var(--ink);
   background: var(--orange);
+  text-align: center;
 }
 
 .about-closer-text {
-  font-size: clamp(1.5rem, 4.1vw, 4rem);
-  line-height: 1.12;
+  font-size: clamp(1.9rem, 5.2vw, 5.2rem);
+  line-height: 1.05;
   text-wrap: balance;
 }
 
@@ -1073,7 +1011,7 @@ html[data-view] .about {
 }
 
 .about-closer-mark {
-  width: clamp(3rem, 8vw, 7.5rem);
+  width: clamp(2.2rem, 6vw, 5.5rem);
   height: auto;
   color: var(--ink);
 }
@@ -1087,8 +1025,9 @@ html[data-view] .about {
 .sheet-label {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
+  text-align: center;
   margin: 0;
   padding: 0.75rem var(--gutter);
   overflow: hidden;
@@ -1369,12 +1308,6 @@ html[data-view] .about {
   border-left: 2px solid var(--head-rule, var(--ink));
 }
 
-.section-meta b {
-  color: var(--head-accent, var(--orange));
-  font-size: clamp(1.7rem, 3.6vw, 3rem);
-  line-height: 0.95;
-}
-
 .section-meta .mono {
   font-size: var(--type-min);
   line-height: 1.35;
@@ -1398,8 +1331,9 @@ html[data-view] .about {
 .work-group {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
+  text-align: center;
   margin: 0;
   padding: 1.35rem var(--gutter) 1.2rem;
   border-bottom: 2px solid color-mix(in srgb, var(--white) 22%, transparent);
@@ -1412,10 +1346,6 @@ html[data-view] .about {
 .work-group .display {
   font-size: clamp(1.3rem, 2.4vw, 2.1rem);
   line-height: 1;
-}
-
-.work-group-count {
-  color: var(--orange);
 }
 
 /* every row is open at every width. the blurb and the shot are the content,
@@ -1432,12 +1362,12 @@ html[data-view] .about {
   --row-rule: color-mix(in srgb, var(--row-fg) 30%, transparent);
   position: relative;
   display: grid;
-  grid-template-columns: 2.25rem 2.5rem minmax(0, 1fr) auto;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
   grid-template-areas:
-    "idx icon name name"
-    "blurb blurb blurb blurb"
-    "thumb thumb thumb thumb"
-    "foot foot foot foot";
+    "icon name"
+    "blurb blurb"
+    "thumb thumb"
+    "foot foot";
   gap: 1.15rem 1.35rem;
   align-items: center;
   padding: 1.9rem var(--gutter) 2.05rem;
@@ -1484,11 +1414,6 @@ html[data-view] .about {
   --row-bg: var(--cy-bg);
   --row-fg: var(--cy-fg);
   --row-accent: var(--cy-fg);
-}
-
-.work-index {
-  grid-area: idx;
-  color: var(--row-accent);
 }
 
 .work-row-icon {
@@ -1576,11 +1501,11 @@ html[data-view] .about {
 @media (min-width: 900px) {
   .work-row {
     /* the shot gives way below 1350px so the date line keeps its one line */
-    grid-template-columns: 3.25rem 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 24vw));
+    grid-template-columns: 3.5rem minmax(0, 1fr) minmax(13rem, min(22rem, 24vw));
     grid-template-areas:
-      "idx icon name  thumb"
-      "idx icon blurb thumb"
-      "idx icon foot  thumb";
+      "icon name  thumb"
+      "icon blurb thumb"
+      "icon foot  thumb";
     gap: 0.85rem 1.85rem;
     align-items: start;
     padding: 1.85rem var(--gutter);
@@ -1682,8 +1607,6 @@ html[data-view] .about {
 }
 
 .lead-item {
-  display: grid;
-  grid-template-columns: clamp(5rem, 12vw, 11rem) minmax(0, 1fr);
   border-bottom: 2px solid var(--ink);
   transition: background 220ms ease, color 220ms ease;
 }
@@ -1695,15 +1618,6 @@ html[data-view] .about {
 
 .lead-item:last-child {
   border-bottom: 0;
-}
-
-.lead-num {
-  display: grid;
-  place-items: center;
-  padding: 1.45rem clamp(0.75rem, 1.6vw, 1.4rem);
-  border-right: 2px solid var(--ink);
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1;
 }
 
 .lead-body {
@@ -1790,10 +1704,6 @@ html[data-view] .about {
 .lead-zc:hover {
   color: var(--white);
   background: var(--zc-deep);
-}
-
-.lead-zc .lead-num {
-  border-right-color: color-mix(in srgb, var(--white) 35%, transparent);
 }
 
 .lead-zc .lead-body .mono {
@@ -1886,8 +1796,9 @@ html[data-view] .about {
 .record-label {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  justify-content: center;
   gap: 1rem;
+  text-align: center;
   margin: 0;
   padding: 0.6rem var(--gutter);
   color: var(--white);
@@ -2162,8 +2073,9 @@ html[data-view] .about {
 .contact-top {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   gap: 0.75rem 1.5rem;
+  text-align: center;
 }
 
 .contact-kicker,
@@ -2197,6 +2109,7 @@ html[data-view] .about {
   font-size: clamp(3.4rem, 12vw, 9.5rem);
   line-height: 0.9;
   letter-spacing: -0.045em;
+  text-align: center;
 }
 
 .contact-link {
@@ -2220,6 +2133,7 @@ html[data-view] .about {
   margin: 0;
   font-size: clamp(1.2rem, 2vw, 1.65rem);
   line-height: 1.35;
+  text-align: center;
   text-wrap: balance;
   color: var(--ink-soft);
 }
@@ -2640,29 +2554,10 @@ section[id],
   .primary-nav a {
     flex: 1 1 auto;
   }
-
-  .about-grid {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-  }
 }
 
 /* the portrait column gets too narrow to read as a portrait below this */
 @media (max-width: 820px) {
-  .about-grid {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .about-portrait {
-    order: -1;
-  }
-
-  .about-points {
-    border-right: 0;
-    border-top: 2px solid var(--ink);
-  }
-
   /* the two lines are the heading, so they sit in the middle of the band
      and take the width the words actually need */
   .about-statement {
@@ -2677,12 +2572,6 @@ section[id],
 
   .about-line-tag {
     display: none;
-  }
-
-  .portrait-rail {
-    flex: none;
-    height: clamp(18rem, 78vw, 28rem);
-    min-height: 0;
   }
 }
 
@@ -2762,10 +2651,16 @@ section[id],
     padding: 1rem 0;
   }
 
-  /* the echo needs a wide bar to read as an echo. on a phone the count cell
-     takes the space beside the word instead */
+  /* the echo needs a wide bar to read as an echo */
   .section-head {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .section-head .section-display {
+    padding-inline: var(--gutter);
+    text-align: center;
   }
 
   .section-echo {
@@ -2773,12 +2668,18 @@ section[id],
   }
 
   .section-meta {
-    max-width: 14rem;
+    max-width: none;
+    width: 100%;
+    justify-items: center;
+    text-align: center;
+    border-left: 0;
+    border-top: 2px solid var(--head-rule, var(--ink));
   }
 
   .zc-cta {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    margin-inline: auto;
+    justify-content: center;
   }
 
   .hero {
@@ -2811,14 +2712,16 @@ section[id],
 
   .hero-foot {
     grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .hero-intro {
+    text-align: center;
   }
 
   .hero-foot .pill {
     width: 100%;
-  }
-
-  .portrait-rail {
-    height: clamp(16rem, 92vw, 24rem);
   }
 
   .about-actions {
@@ -2831,7 +2734,26 @@ section[id],
   }
 
   .about-closer-mark {
-    align-self: start;
+    align-self: center;
+  }
+
+  .about-facts div {
+    text-align: center;
+    justify-items: center;
+  }
+
+  .lead-body,
+  .lead-lede {
+    text-align: center;
+  }
+
+  .lead-head,
+  .lead-points {
+    justify-content: center;
+  }
+
+  .lead-points {
+    justify-items: center;
   }
 
   .about-facts {
@@ -2845,15 +2767,6 @@ section[id],
 
   .about-facts dd.display {
     font-size: clamp(2.8rem, 15vw, 4.5rem);
-  }
-
-  .lead-item {
-    grid-template-columns: 3.5rem 1fr;
-  }
-
-  .lead-num {
-    font-size: 1.25rem;
-    padding: 0.8rem 0.4rem;
   }
 
   .contact {
@@ -2884,6 +2797,8 @@ section[id],
       "go";
     gap: 0.45rem;
     padding: 1.15rem 1.1rem;
+    text-align: center;
+    justify-items: center;
   }
 
   .contact-card .mono:first-child {
@@ -2896,14 +2811,15 @@ section[id],
 
   .contact-card-go {
     grid-area: go;
-    justify-self: start;
+    justify-self: center;
     align-self: start;
     margin-top: 0.15rem;
   }
 
   .site-footer {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    text-align: center;
     gap: 0.75rem;
   }
 
@@ -2940,7 +2856,7 @@ section[id],
   }
 
   .work-row {
-    grid-template-columns: 2rem 2.25rem minmax(0, 1fr);
+    grid-template-columns: 2.25rem minmax(0, 1fr);
     gap: 0.85rem 1rem;
   }
 

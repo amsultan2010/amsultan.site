@@ -312,17 +312,12 @@ function buildHead(label) {
 }
 
 // stupid stuff keeps the head it had as its own section: the word, its outline
-// echoing off to the edge, then a count. main.js splits the word into chars and
-// counts the number up, the same as every other section head
-function buildSectionHead(label, echo, count, note) {
+// echoing off to the edge, then the note. main.js splits the word into chars
+function buildSectionHead(label, echo, note) {
   const title = el("h2", "section-display", label);
   title.dataset.split = "";
 
-  const number = el("b", "display", String(count).padStart(2, "0"));
-  number.dataset.count = count;
-  number.dataset.pad = "2";
-
-  return el("header", "section-head", title, buildEcho(echo), el("p", "section-meta", number, el("span", "mono", note)));
+  return el("header", "section-head", title, buildEcho(echo), el("p", "section-meta", el("span", "mono", note)));
 }
 
 function buildTrack(items, variant) {
@@ -359,7 +354,7 @@ function buildSection({ items, label, variant, echo, note }) {
   section.setAttribute("aria-label", label);
 
   const head = echo
-    ? buildSectionHead(label, echo, items.length, note)
+    ? buildSectionHead(label, echo, note)
     : buildHead(label);
 
   const { viewport, track } = buildTrack(items, variant);
@@ -737,12 +732,7 @@ function mountGames(view, before) {
   section.className = "rail rail-stuff";
   section.setAttribute("aria-label", "stupid stuff i made");
 
-  const head = buildSectionHead(
-    "stupid stuff i made",
-    "stuff",
-    rows.reduce((sum, row) => sum + row.items.length, 0),
-    "small games, every one opens",
-  );
+  const head = buildSectionHead("stupid stuff i made", "stuff", "small games, every one opens");
   section.append(head);
 
   rows.forEach((row, index) => {
