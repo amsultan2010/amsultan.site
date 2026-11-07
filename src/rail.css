@@ -1,7 +1,7 @@
 /* the life rails, owned by workstream ws-3 */
 .rail {
   background: var(--cream);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid var(--orange);
 }
 
 /* the head is a row of ruled cells that fills the bar edge to edge: label,
@@ -153,7 +153,7 @@
   border: 1px solid var(--line-soft);
   background: var(--ink);
   transition: filter 320ms ease, opacity 320ms ease;
-  box-shadow: 0.4rem 0.4rem 0 var(--ink);
+  box-shadow: 0.4rem 0.4rem 0 var(--orange);
 }
 
 .rail-cover img {
