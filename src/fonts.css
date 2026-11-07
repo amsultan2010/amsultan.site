@@ -1,8 +1,9 @@
 /* self-hosted. geist serif is one regular cut (bold is not released yet),
    so a weight range stops a request for 800 from painting a fake bold.
-   departure mono is one regular cut. cabinet grotesk and satoshi are
-   variable: the range drives the wght axis, because the file itself
-   defaults to black. swap keeps the words readable before the file arrives. */
+   host grotesk light is the thin cut used everywhere the mono face was.
+   cabinet grotesk and satoshi are variable: the range drives the wght axis,
+   because the file itself defaults to black. swap keeps the words readable
+   before the file arrives. */
 
 @font-face {
   font-family: "Geist Serif";
@@ -13,9 +14,9 @@
 }
 
 @font-face {
-  font-family: "Departure Mono";
-  src: url("/fonts/departure-mono-regular.woff2") format("woff2");
-  font-weight: 400 700;
+  font-family: "Host Grotesk";
+  src: url("/fonts/host-grotesk-light.woff2") format("woff2");
+  font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }

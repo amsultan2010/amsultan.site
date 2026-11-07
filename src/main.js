@@ -1101,43 +1101,75 @@ function buildMe(ctx) {
   return initPortraitRail();
 }
 
-// the about photos run to the right. two identical runs, so leaving at 0 and
-// arriving from -50 is the same frame. the loop parks when the rail is off screen
+// the about photos run to the right, forever. one run has to be wider than the
+// rail or the -50% wrap shows the empty ground, then the loop snaps back into it.
+// the loop parks only while the rail is off screen
 function initPortraitRail() {
   const rail = $(".portrait-rail");
   const track = $(".portrait-track");
   if (!rail || !track || reducedMotion()) return undefined;
 
-  $$("[data-clone]", track).forEach((node) => node.remove());
-  $$(".portrait-shot", track).forEach((shot) => {
-    const clone = shot.cloneNode(true);
-    clone.dataset.clone = "true";
-    clone.alt = "";
-    clone.setAttribute("aria-hidden", "true");
-    track.append(clone);
-  });
-  rail.classList.add("is-running");
+  const base = $$(".portrait-shot", track);
+  let tween;
+  let gate;
+  let frame = 0;
 
-  const tween = gsap.fromTo(
-    track,
-    { xPercent: -50 },
-    {
-      xPercent: 0,
-      duration: 12,
-      ease: "none",
-      repeat: -1,
-      modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
-    },
-  );
-  const gate = ScrollTrigger.create({
-    trigger: rail,
-    start: "top bottom",
-    end: "bottom top",
-    onToggle: (self) => (self.isActive ? tween.play() : tween.pause()),
-  });
-  if (!gate.isActive) tween.pause();
+  const stamp = (node) => {
+    node.dataset.clone = "true";
+    node.alt = "";
+    node.setAttribute("aria-hidden", "true");
+    return node;
+  };
+
+  const build = () => {
+    tween?.kill();
+    gate?.kill();
+    $$("[data-clone]", track).forEach((node) => node.remove());
+    gsap.set(track, { clearProps: "transform" });
+
+    // keep adding sets until one run covers the rail. a short run is the gap
+    let guard = 0;
+    while (track.scrollWidth <= rail.clientWidth && guard < 8) {
+      base.forEach((shot) => track.append(stamp(shot.cloneNode(true))));
+      guard += 1;
+    }
+
+    $$(".portrait-shot", track).forEach((shot) => track.append(stamp(shot.cloneNode(true))));
+    rail.classList.add("is-running");
+
+    const half = track.scrollWidth / 2;
+    tween = gsap.fromTo(
+      track,
+      { xPercent: -50 },
+      {
+        xPercent: 0,
+        duration: half / 175,
+        ease: "none",
+        repeat: -1,
+        modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
+      },
+    );
+    gate = ScrollTrigger.create({
+      trigger: rail,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => (self.isActive ? tween.play() : tween.pause()),
+    });
+    if (!gate.isActive) tween.pause();
+  };
+
+  build();
+  const onResize = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(build);
+  };
+  window.addEventListener("resize", onResize);
 
   return () => {
+    cancelAnimationFrame(frame);
+    window.removeEventListener("resize", onResize);
+    tween?.kill();
+    gate?.kill();
     rail.classList.remove("is-running");
     $$("[data-clone]", track).forEach((node) => node.remove());
     gsap.set(track, { clearProps: "transform" });

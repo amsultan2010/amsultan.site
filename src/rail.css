@@ -142,7 +142,7 @@
   /* the gutter lives on the item, not as a flex gap, so two runs of twelve
      measure exactly half the track and the wrap has no seam */
   flex: 0 0 auto;
-  width: clamp(11rem, 15vw, 16rem);
+  width: clamp(12.25rem, 15vw, 16rem);
   margin: 0 clamp(1.75rem, 3.2vw, 3.4rem) 0 0;
 }
 
@@ -200,7 +200,7 @@
   font-family: var(--mono);
   font-size: var(--type-min);
   letter-spacing: 0;
-  text-wrap: balance;
+  text-wrap: pretty;
   opacity: 0.85;
 }
 
@@ -325,7 +325,8 @@
 .rail-poster {
   --rail-head-bg: var(--cream);
   --rail-head-accent: var(--ink);
-  background: var(--orange);
+  color: var(--white);
+  background: var(--ink);
 }
 
 .rail-poster .rail-kind {
@@ -405,9 +406,7 @@
   font-family: var(--mono);
   font-size: var(--type-min);
   letter-spacing: 0;
-  text-wrap: balance;
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: grayscale;
+  text-wrap: pretty;
 }
 
 .rail-stuff {
@@ -475,7 +474,7 @@
   font-size: clamp(1.15rem, 1.7vw, 1.7rem);
   font-weight: 800;
   line-height: 1;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .rail-hold-note {

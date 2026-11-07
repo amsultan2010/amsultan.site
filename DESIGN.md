@@ -2,14 +2,14 @@
 name: amsultan.site
 description: abdullah sultan's portfolio, one lowercase page in three views
 colors:
-  signal-orange: "#ff5c00"
-  signal-orange-deep: "#d34400"
-  warm-cream: "#fce5c0"
-  paper-white: "#ffffff"
-  ink: "#120e0c"
-  ink-soft: "rgba(18, 14, 12, 0.62)"
-  line: "rgba(18, 14, 12, 0.55)"
-  line-soft: "rgba(18, 14, 12, 0.2)"
+  signal-orange: "#f54937"
+  signal-orange-deep: "#c73828"
+  warm-cream: "#d5eef2"
+  paper-white: "#d5eef2"
+  ink: "#073b4c"
+  ink-soft: "rgba(7, 59, 76, 0.62)"
+  line: "rgba(7, 59, 76, 0.55)"
+  line-soft: "rgba(7, 59, 76, 0.2)"
   zc-purple: "#5a0fe8"
   fs-white: "#ffffff"
   fs-ink: "#1d1d1f"
@@ -27,20 +27,20 @@ typography:
     fontSize: "clamp(2.2rem, 7vw, 5.5rem)"
     fontWeight: 800
     lineHeight: 0.95
-    letterSpacing: "-0.045em"
+    letterSpacing: "0"
   title:
     fontFamily: "Geist Serif, Georgia, serif"
     fontSize: "clamp(1.15rem, 2.2vw, 1.85rem)"
     fontWeight: 800
     lineHeight: 1.05
-    letterSpacing: "-0.055em"
+    letterSpacing: "0"
   body:
     fontFamily: "Geist Serif, Georgia, serif"
   label:
-    fontFamily: "Departure Mono, ui-monospace, monospace"
+    fontFamily: "Host Grotesk, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.15rem"
-    fontWeight: 500
-    letterSpacing: "0.04em"
+    fontWeight: 300
+    letterSpacing: "0"
 rounded:
   none: "0"
   dot: "999px"
@@ -96,12 +96,11 @@ Anything that points at another product wears that product's own colours inside 
 Four colours run the site; every other colour belongs to someone else's product.
 
 ### Primary
-- **Signal Orange** (signal-orange): `#ff5c00`, the page ground, the head bands, and the pressable cards. Its deep variant (signal-orange-deep) is only for pressed and shadow states on orange. Orange is a field. Type on it is ink. Orange is never type on white or cream.
+- **Signal** (signal-orange): `#f54937`, the accent. Buttons, the filled hero name "sultan", the accent line, the orbit, and the pressable orange card. Its deep variant is only for pressed and shadow states. It is not the page ground.
 
 ### Neutral
-- **Ink** (ink): text, every rule, every shadow, and the ground of the work section.
-- **Warm Cream** (warm-cream): `#fce5c0`, the light ground. The header, the hero rail and kicker, the marquee, the about field, the basics sheet, the message-me cell, the lead head, the learning panel, the record, the academics row, the contact card, the life rails, the favorites board, the frames, the see-work pill, the portrait caption, the certification cells, the poster captions, selection, and a hover chip. Outlines and strokes are white, never cream.
-- **Paper White** (paper-white): `#ffffff`, the type on ink, and the outlines. A light surface of the site itself sits on cream.
+- **Ink** (ink): `#073b4c`, the dark main. The page ground, the hero, text on ice, every rule, and the work section.
+- **Ice** (warm-cream and paper-white): `#d5eef2`, the light main. The header, the hero rail and kicker, the marquee, the about field, type on the dark ground, and the outlines.
 - **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
 
 ### Borrowed brand colours
@@ -114,35 +113,35 @@ Four colours run the site; every other colour belongs to someone else's product.
 
 ## Typography
 
-**Display Font:** Geist Serif (Georgia fallback), the same face as the body, at display sizes. One regular cut. Bold is not released, so a request from 700 to 900 paints that regular cut and `font-synthesis` stays off. Letter-spacing on display is -0.045em. Masks around the hero name and the about statement keep a little padding so the serifs are not clipped.
+**Display Font:** Geist Serif (Georgia fallback), the same face as the body, at display sizes. One regular cut. Bold is not released, so a request from 700 to 900 paints that regular cut and `font-synthesis` stays off. Letter-spacing on display is 0. Masks around the hero name and the about statement keep a little padding so the serifs are not clipped.
 **Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so ledes stay roman.
-**Label/Mono Font:** Departure Mono (ui-monospace fallback). A pixel face. One regular cut. Nothing on the site is set under 1.15rem (`--type-min`), which is a couple of steps above the old sector rail. Tracking on it is 0 so the pixel grid stays put. It carries dates, roles, counts, the nav, the hero rail, rail kinds, and the tag preview caption.
+**Label/Mono Font:** Host Grotesk Light. The thinnest cut the family ships (300), and a weight range so a bolder request still paints that cut. Nothing on the site is set under 1.15rem (`--type-min`). It carries dates, roles, counts, the nav, the hero rail, rail kinds, and the tag preview caption.
 
 **Guest wordmarks:** Cabinet Grotesk on z combinator (the marquee name and the lead row). Satoshi on the downforce marquee name. Both are Fontshare faces, used only there.
 
-**Character:** a heavy display face shouting the section word, a high-contrast serif for the substance, and a pixel mono for metadata. The contrast between the three is the hierarchy.
+**Character:** a heavy display face shouting the section word, a high-contrast serif for the substance, and a thin grotesk for metadata. The contrast between the three is the hierarchy.
 
 ### Hierarchy
-- **Display** (regular cut requested at 800, clamp(2.2rem, 7vw, 5.5rem), 0.95, -0.045em): section words in head bands ("built", "lead").
+- **Display** (regular cut requested at 800, clamp(2.2rem, 7vw, 5.5rem), 0.95, no tracking): section words in head bands ("built", "lead").
 - **Title** (regular cut requested at 800, clamp(1.15rem, 2.2vw, 1.85rem), 1.05): row and item names.
 - **Body** (Geist Serif, regular): bullet points and ledes.
-- **Label** (Departure Mono, 1.15rem, no tracking): dates, roles, counts, link labels ("visit ↗").
+- **Label** (Host Grotesk Light, 1.15rem, no tracking): dates, roles, counts, link labels ("visit ↗").
 
 ### Named Rules
 **The Lowercase Rule.** All visible text is lowercase. `body` sets it; `button` and `input` set it themselves. Only meta tags, JSON-LD and llms.txt keep case.
 
-**The Type Floor.** No text is set under 1.15rem. A line that used to shrink to stay on one row wraps instead, with `text-wrap: balance` so the last line is not one word.
+**The Type Floor.** No text is set under 1.15rem. On a phone, long lines use `text-wrap: pretty` so a word stays on the line it fits and the last line is not one word alone.
 
 ## Layout
 
-Full-bleed sections, each a head band over a stack of rows separated by 2px ink rules. Horizontal padding is the fluid gutter. Below 900px rows stack: index, icon and name on one line, then bullets, then the clip, then meta. From 900px a work row puts the clip in its own column beside the copy. Other breakpoints in use: 1240, 1100, 960, 820, 700, 620–899 and 430px; js mirrors the 900, 820 and 700px ones.
+Full-bleed sections, each a head band over a stack of rows separated by 2px ink rules. Horizontal padding is the fluid gutter. Below 900px rows stack: index, icon and name on one line, then bullets, then the clip, then meta. From 900px a work row puts the clip in its own column beside the copy. Other breakpoints in use: 1240, 1100, 960, 820, 700, 620 to 899, and 430px. js mirrors the 900, 820 and 700px ones.
 
 ## Elevation & Depth
 
 Flat surfaces with hard offset shadows. A shadow is a solid block of ink (or orange on ink, or a brand accent on a brand row) offset down and right, never blurred. Shadows mark things you can press or open.
 
 ### Shadow Vocabulary
-- **Chip** (`0.22rem–0.28rem` offset, ink): small icons and chips.
+- **Chip** (`0.22rem` to `0.28rem` offset, ink): small icons and chips.
 - **Card** (`0.5rem 0.5rem 0 ink`): contact cards at rest.
 - **Shot** (`0.4rem 0.4rem 0 var(--row-accent)`): clip frames in work rows; grows to 0.6rem on hover.
 

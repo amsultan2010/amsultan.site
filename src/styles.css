@@ -1,21 +1,22 @@
 @import "./fonts.css";
 
 :root {
-  --orange: #ff5c00;
-  --orange-deep: #d34400;
-  --cream: #fce5c0;
-  --white: #ffffff;
-  --ink: #120e0c;
-  --ink-soft: rgba(18, 14, 12, 0.62);
-  --line: rgba(18, 14, 12, 0.55);
-  --line-soft: rgba(18, 14, 12, 0.2);
+  /* ice signal. cyan and ice are the two mains, signal red is the accent. */
+  --orange: #f54937;
+  --orange-deep: #c73828;
+  --cream: #d5eef2;
+  --white: #d5eef2;
+  --ink: #073b4c;
+  --ink-soft: rgba(7, 59, 76, 0.62);
+  --line: rgba(7, 59, 76, 0.55);
+  --line-soft: rgba(7, 59, 76, 0.2);
   --gutter: clamp(1.55rem, 3.6vw, 4rem);
   --header-h: 5.1rem;
   /* display and body are the same face. geist serif has no bold yet,
      and the weight range in fonts.css paints the regular cut. */
   --display: "Geist Serif", Georgia, serif;
   --serif: "Geist Serif", Georgia, serif;
-  --mono: "Departure Mono", ui-monospace, monospace;
+  --mono: "Host Grotesk", "Helvetica Neue", Arial, sans-serif;
   /* nothing on the page sits under this. sector 01 used to be 0.95rem. */
   --type-min: 1.15rem;
   /* z combinator and downforce carry their own faces: cabinet grotesk, satoshi */
@@ -57,7 +58,7 @@
 
 html {
   scroll-behavior: auto;
-  background: var(--orange);
+  background: var(--ink);
   /* ios bumps font sizes on rotate unless this is pinned */
   -webkit-text-size-adjust: 100%;
 }
@@ -65,8 +66,8 @@ html {
 body {
   margin: 0;
   overflow-x: hidden;
-  color: var(--ink);
-  background: var(--orange);
+  color: var(--white);
+  background: var(--ink);
   font-family: var(--serif);
   font-synthesis: none;
   line-height: 1.55;
@@ -79,7 +80,7 @@ body {
 }
 
 :where(h1, h2, h3, strong, .display) {
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 ::selection {
@@ -123,7 +124,7 @@ main:focus {
 .display {
   font-family: var(--display);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   text-transform: lowercase;
 }
 
@@ -136,13 +137,7 @@ main:focus {
   font-size: var(--type-min);
   letter-spacing: 0;
   text-transform: lowercase;
-  font-weight: 500;
-}
-
-/* departure mono is a pixel face. grayscale smoothing blurs the grid */
-:is(.mono, .brand, .primary-nav a, .header-cta, .pill, .hero-orbit span, .arrow-swap, .cursor span) {
-  -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: grayscale;
+  font-weight: 300;
 }
 
 /* views: the inline script in the head names one before first paint and only
@@ -167,6 +162,7 @@ html[data-view] .view-life {
 /* life sits on cream, rails included, so the orange heads don't stack
    into one slab */
 html[data-view="life"] .view-life {
+  color: var(--ink);
   background: var(--cream);
   padding-bottom: clamp(2rem, 4vw, 3.5rem);
 }
@@ -221,7 +217,7 @@ html[data-view] .view-life .rail:last-child {
   font-size: clamp(2rem, 8vw, 5rem);
   font-family: var(--display);
   font-weight: 800;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   text-transform: lowercase;
 }
 
@@ -233,7 +229,7 @@ html[data-view] .view-life .rail:last-child {
   left: 0;
   width: 100%;
   height: 5px;
-  background: var(--ink);
+  background: var(--orange);
   transform: scaleX(0);
   transform-origin: left;
 }
@@ -300,6 +296,7 @@ html[data-view] .view-life .rail:last-child {
   min-height: 4.8rem;
   padding: 0.36rem;
   border: 2px solid var(--ink);
+  color: var(--ink);
   background: var(--cream);
   transform: translateX(-50%);
   box-shadow: 0.42rem 0.42rem 0 var(--ink);
@@ -501,7 +498,8 @@ html[data-view] .view-life .rail:last-child {
   grid-template-rows: auto 1fr auto;
   padding-top: calc(1rem + var(--header-h) + 0.85rem + var(--safe-t));
   overflow: hidden;
-  background: var(--orange);
+  color: var(--white);
+  background: var(--ink);
 }
 
 .hero-bg {
@@ -517,7 +515,7 @@ html[data-view] .view-life .rail:last-child {
   inset: -10%;
   width: 120%;
   height: 120%;
-  color: var(--ink);
+  color: var(--white);
   opacity: 0.16;
 }
 
@@ -536,7 +534,7 @@ html[data-view] .view-life .rail:last-child {
 
 .hero-shape {
   position: absolute;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--white);
   will-change: transform;
 }
 
@@ -557,7 +555,7 @@ html[data-view] .view-life .rail:last-child {
   height: min(15vw, 7rem);
   background: var(--cream);
   opacity: 0.92;
-  box-shadow: 0.35rem 0.35rem 0 var(--ink);
+  box-shadow: 0.35rem 0.35rem 0 var(--white);
 }
 
 .shape-pill {
@@ -566,7 +564,7 @@ html[data-view] .view-life .rail:last-child {
   width: min(13vw, 6rem);
   height: 1.55rem;
   border-radius: 999px;
-  background: var(--ink);
+  background: var(--white);
   opacity: 0.32;
 }
 
@@ -576,7 +574,7 @@ html[data-view] .view-life .rail:last-child {
   width: min(16vw, 8rem);
   height: 2px;
   border: 0;
-  background: var(--ink);
+  background: var(--white);
   opacity: 0.5;
   transform: rotate(-28deg);
   transform-origin: center;
@@ -589,7 +587,7 @@ html[data-view] .view-life .rail:last-child {
   height: 1.05rem;
   border-radius: 50%;
   background: var(--cream);
-  box-shadow: 0.2rem 0.2rem 0 var(--ink);
+  box-shadow: 0.2rem 0.2rem 0 var(--white);
   opacity: 1;
 }
 
@@ -604,6 +602,7 @@ html[data-view] .view-life .rail:last-child {
   margin: 0 var(--gutter);
   padding: 0.85rem 1rem;
   border: 2px solid var(--ink);
+  color: var(--ink);
   background: var(--cream);
   box-shadow: 0.3rem 0.3rem 0 var(--ink);
 }
@@ -651,6 +650,7 @@ html[data-view] .view-life .rail:last-child {
   width: fit-content;
   padding: 0.4rem 0.7rem;
   border: 2px solid var(--ink);
+  color: var(--ink);
   background: var(--cream);
   box-shadow: 0.25rem 0.25rem 0 var(--ink);
 }
@@ -661,7 +661,7 @@ html[data-view] .view-life .rail:last-child {
   font-weight: 900;
   font-size: clamp(3.8rem, 16vw, 13.5rem);
   line-height: 0.9;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   text-align: center;
 }
 
@@ -677,13 +677,22 @@ html[data-view] .view-life .rail:last-child {
 
 .hero-line-stroke {
   margin-top: 0.02em;
-  color: transparent;
-  -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--ink);
+  color: var(--orange);
+  -webkit-text-stroke: clamp(1.5px, 0.18vw, 3px) var(--white);
+  paint-order: stroke fill;
 }
 
 .split-word {
   display: inline-block;
   white-space: nowrap;
+}
+
+/* a phrase that should move together. if it does not fit the rest of the line
+   it drops as a whole, so the last line is not one leftover word. if the
+   phrase itself is wider than the column, it wraps inside the box. */
+.keep {
+  display: inline-block;
+  max-width: 100%;
 }
 
 .split-char {
@@ -698,20 +707,20 @@ html[data-view] .view-life .rail:last-child {
   justify-content: center;
   margin-top: 0.5rem;
   border: 2px solid var(--ink);
-  background: var(--ink);
+  background: var(--orange);
   box-shadow: 0.28rem 0.28rem 0 var(--white);
 }
 
 .hero-orbit span {
   padding: 0.5rem 0.95rem;
-  color: var(--white);
+  color: var(--ink);
   font-family: var(--mono);
   font-size: var(--type-min);
   font-weight: 600;
 }
 
 .hero-orbit span + span {
-  border-left: 2px solid color-mix(in srgb, var(--white) 30%, transparent);
+  border-left: 2px solid color-mix(in srgb, var(--ink) 30%, transparent);
 }
 
 .hero-foot {
@@ -723,7 +732,7 @@ html[data-view] .view-life .rail:last-child {
   gap: 1.5rem;
   margin: 0 var(--gutter) var(--gutter);
   padding: 2.15rem 0 0;
-  border-top: 2px solid var(--ink);
+  border-top: 2px solid var(--white);
 }
 
 .hero-intro {
@@ -731,7 +740,7 @@ html[data-view] .view-life .rail:last-child {
   margin: 0;
   font-size: clamp(1.25rem, 2.1vw, 1.9rem);
   line-height: 1.45;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 /* marquee */
@@ -739,6 +748,7 @@ html[data-view] .view-life .rail:last-child {
   overflow: hidden;
   border-top: 2px solid var(--ink);
   border-bottom: 2px solid var(--ink);
+  color: var(--ink);
   background: var(--cream);
 }
 
@@ -750,7 +760,7 @@ html[data-view] .view-life .rail:last-child {
   font-family: var(--display);
   font-size: clamp(1.2rem, 2.2vw, 2rem);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   text-transform: lowercase;
   will-change: transform;
 }
@@ -781,7 +791,7 @@ html[data-view] .view-life .rail:last-child {
 .marquee-zc {
   color: var(--zc);
   font-family: var(--cabinet);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
 }
 
 .marquee-df {
@@ -789,7 +799,7 @@ html[data-view] .view-life .rail:last-child {
   color: var(--df-fg);
   background: var(--df-bg);
   font-family: var(--satoshi);
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
   box-shadow: 0.2em 0.2em 0 var(--df-accent);
 }
 
@@ -797,12 +807,13 @@ html[data-view] .view-life .rail:last-child {
   padding: 0.14em 0.5em 0.2em;
   color: var(--cy-fg);
   background: var(--cy-bg);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 /* about */
 .about {
   background: var(--cream);
+  color: var(--ink);
   border-bottom: 2px solid var(--ink);
 }
 
@@ -817,13 +828,14 @@ html[data-view] .about {
   outline-offset: -5px;
 }
 
-/* the statement is the section's heading: two lines stepping across the band
-   from one gutter to the other, sized off the viewport so the longest fits */
+/* the statement is the section's heading: both lines centered, sized off the
+   viewport so the longest still fits the band */
 .about-statement {
   /* its own stacking context, so the network can sit between the ink and the type */
   position: relative;
   isolation: isolate;
   display: grid;
+  justify-items: center;
   gap: 0.1em;
   margin: 0;
   padding: clamp(2.2rem, 4.6vw, 4.2rem) var(--gutter) clamp(2.5rem, 5vw, 4.4rem);
@@ -832,6 +844,7 @@ html[data-view] .about {
   background: var(--ink);
   font-size: clamp(1.4rem, 6.4vw, 8.25rem);
   line-height: 1;
+  text-align: center;
 }
 
 .about-line {
@@ -842,8 +855,8 @@ html[data-view] .about {
   white-space: nowrap;
 }
 
-.about-line:nth-child(2) {
-  justify-self: end;
+.about-line:nth-child(n) {
+  justify-self: center;
 }
 
 /* the mask the letters rise out of. geist's vertical metrics run past the
@@ -909,7 +922,7 @@ html[data-view] .about {
   padding: clamp(1.35rem, 2.4vw, 2.15rem) var(--gutter);
   border-top: 2px solid var(--ink);
   text-align: center;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .about-points li:first-child {
@@ -969,7 +982,7 @@ html[data-view] .about {
 
 /* the table and his torso sit in the lower half, so the crop looks there */
 .portrait-shot-night {
-  width: clamp(16rem, 42vw, 22rem);
+  width: clamp(14rem, 32vw, 18rem);
   object-position: center 82%;
 }
 
@@ -996,7 +1009,7 @@ html[data-view] .about {
 .about-closer-text {
   font-size: clamp(1.9rem, 5.2vw, 5.2rem);
   line-height: 1.05;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .about-closer em {
@@ -1077,7 +1090,7 @@ html[data-view] .about {
   align-self: end;
   font-size: clamp(2.4rem, 7.2vw, 7.25rem);
   line-height: 0.95;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
 }
 
 .about-facts div:nth-child(2) dd.display {
@@ -1241,7 +1254,7 @@ html[data-view] .about {
   font-weight: 800;
   font-size: clamp(2.2rem, 7vw, 5.5rem);
   line-height: 0.95;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   text-transform: lowercase;
 }
 
@@ -1262,7 +1275,7 @@ html[data-view] .about {
   font-weight: 800;
   font-size: clamp(2.2rem, 7vw, 5.5rem);
   line-height: 0.95;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   white-space: nowrap;
   /* stroke under a ground-coloured fill, so only the outer contour shows */
   color: var(--head-bg, var(--cream));
@@ -1311,15 +1324,15 @@ html[data-view] .about {
 .section-meta .mono {
   font-size: var(--type-min);
   line-height: 1.35;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 /* work */
 .work {
-  --head-bg: var(--orange);
+  --head-bg: var(--cream);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
-  --head-accent: var(--ink);
+  --head-accent: var(--orange);
   color: var(--white);
   background: var(--ink);
   overflow: clip;
@@ -1436,7 +1449,7 @@ html[data-view] .about {
   justify-self: start;
   font-size: clamp(1.45rem, 3.2vw, 2.75rem);
   line-height: 1.05;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .work-row .tag:hover {
@@ -1581,7 +1594,7 @@ html[data-view] .about {
 .work-row .work-go,
 .lead-item .lead-body .mono {
   font-size: var(--type-min);
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .work-row .work-go {
@@ -1595,9 +1608,10 @@ html[data-view] .about {
   --head-bg: var(--cream);
   --head-ink: var(--ink);
   --head-rule: var(--ink);
-  background: var(--orange);
-  border-top: 2px solid var(--ink);
-  border-bottom: 2px solid var(--ink);
+  color: var(--white);
+  background: var(--ink);
+  border-top: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
 }
 
 .lead-list {
@@ -1607,7 +1621,7 @@ html[data-view] .about {
 }
 
 .lead-item {
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid color-mix(in srgb, var(--white) 22%, transparent);
   transition: background 220ms ease, color 220ms ease;
 }
 
@@ -1633,7 +1647,7 @@ html[data-view] .about {
   margin: 0;
   font-size: clamp(1.6rem, 3.2vw, 3rem);
   line-height: 0.95;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .lead-body .serif {
@@ -1677,7 +1691,7 @@ html[data-view] .about {
   max-width: 48rem;
   /* matches the lead bullets below it */
   font-size: clamp(1.2rem, 1.75vw, 1.55rem);
-  text-wrap: balance;
+  text-wrap: pretty;
   opacity: 0.9;
 }
 
@@ -1691,7 +1705,7 @@ html[data-view] .about {
   max-width: 44rem;
   margin-top: 0.65rem;
   font-size: clamp(1.15rem, 1.45vw, 1.35rem);
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 /* z combinator keeps its own colour and face, but only as a highlight on one
@@ -1730,7 +1744,7 @@ html[data-view] .about {
 .lead-zc h3 {
   font-family: var(--cabinet);
   font-weight: 800;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .lead-lede {
@@ -1740,7 +1754,7 @@ html[data-view] .about {
   font-size: clamp(1.15rem, 1.7vw, 1.45rem);
   font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .lead-zc .lead-points li::before {
@@ -1789,6 +1803,7 @@ html[data-view] .about {
   --head-bg: var(--ink);
   --head-ink: var(--white);
   --head-rule: color-mix(in srgb, var(--white) 22%, transparent);
+  color: var(--ink);
   background: var(--cream);
 }
 
@@ -1836,7 +1851,8 @@ html[data-view] .about {
 }
 
 .record-awards .record-cell {
-  background: var(--orange);
+  color: var(--white);
+  background: var(--ink);
 }
 
 .record-body .record-cells:not(.record-awards):not(.record-certs) {
@@ -1846,7 +1862,7 @@ html[data-view] .about {
 .record-stat {
   font-size: clamp(2.6rem, 6vw, 4.75rem);
   line-height: 0.9;
-  letter-spacing: -0.05em;
+  letter-spacing: 0;
 }
 
 /* a square mark leads every other entry: the real logo where there is one */
@@ -1884,6 +1900,7 @@ html[data-view] .about {
 }
 
 .record-mark-text {
+  color: var(--ink);
   background: var(--orange);
   font-size: 1.15rem;
   line-height: 1;
@@ -1897,7 +1914,7 @@ html[data-view] .about {
 .record-text strong {
   font-size: clamp(1.2rem, 1.6vw, 1.45rem);
   line-height: 1.15;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .record-awards .record-text strong {
@@ -2055,8 +2072,9 @@ html[data-view] .about {
   position: relative;
   padding: clamp(2.6rem, 5vw, 4.2rem) var(--gutter) clamp(2.8rem, 5vw, 4.4rem);
   overflow: hidden;
-  background: var(--orange);
-  border-top: 2px solid var(--ink);
+  color: var(--white);
+  background: var(--ink);
+  border-top: 2px solid var(--white);
 }
 
 .contact-frame {
@@ -2066,6 +2084,7 @@ html[data-view] .about {
   gap: 2.15rem;
   padding: clamp(1.7rem, 3vw, 2.5rem);
   border: 2px solid var(--ink);
+  color: var(--ink);
   background: var(--cream);
   box-shadow: 0.55rem 0.55rem 0 var(--ink);
 }
@@ -2108,7 +2127,7 @@ html[data-view] .about {
   font-weight: 900;
   font-size: clamp(3.4rem, 12vw, 9.5rem);
   line-height: 0.9;
-  letter-spacing: -0.045em;
+  letter-spacing: 0;
   text-align: center;
 }
 
@@ -2131,32 +2150,53 @@ html[data-view] .about {
 
 .contact-pitch {
   margin: 0;
+  font-family: var(--mono);
+  font-weight: 300;
   font-size: clamp(1.2rem, 2vw, 1.65rem);
   line-height: 1.35;
   text-align: center;
-  text-wrap: balance;
+  text-wrap: pretty;
   color: var(--ink-soft);
 }
 
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 1.15rem;
   margin-top: 0.5rem;
 }
 
 .contact-card {
   display: grid;
-  gap: 0.65rem;
-  align-content: space-between;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: start;
+  column-gap: 0.85rem;
   min-height: 8.25rem;
   padding: 1.15rem;
   border: 2px solid var(--ink);
   background: var(--orange);
   color: var(--ink);
+  text-align: left;
   /* cards rest in the raised state; magnetic js owns transform on hover */
   box-shadow: 0.5rem 0.5rem 0 var(--ink);
   transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.contact-card-copy {
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+  min-width: 0;
+  text-align: left;
+}
+
+.contact-logo {
+  width: 3rem;
+  height: 3rem;
+  max-width: none;
+  object-fit: cover;
+  justify-self: end;
 }
 
 .contact-card .mono {
@@ -2274,10 +2314,10 @@ html[data-view] .about {
 /* life, between stupid stuff and the watchlist. one category at a time,
    title centered, every photo in that category the same frame */
 .facts {
-  --head-bg: var(--orange);
-  --head-ink: var(--ink);
-  --head-rule: var(--ink);
-  --head-accent: var(--ink);
+  --head-bg: var(--ink);
+  --head-ink: var(--white);
+  --head-rule: color-mix(in srgb, var(--white) 22%, transparent);
+  --head-accent: var(--orange);
   background: var(--cream);
   color: var(--ink);
 }
@@ -2333,7 +2373,7 @@ html[data-view] .about {
 .facts-label .display {
   font-size: clamp(1.35rem, 2.2vw, 1.85rem);
   line-height: 1.1;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .facts-label .mono {
@@ -2419,7 +2459,7 @@ html[data-view] .about {
 .facts-cap .display {
   font-size: clamp(1.15rem, 1.35vw, 1.4rem);
   line-height: 1.1;
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .facts-cap .mono {
@@ -2578,6 +2618,35 @@ section[id],
 @media (max-width: 700px) {
   :root {
     --gutter: 1.25rem;
+  }
+
+  /* balance evens a heading into a one-word last line on a phone. pretty keeps
+     the line full and only breaks when the words actually run out of room. */
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  .display,
+  .about-closer-text,
+  .hero-intro,
+  .contact-pitch,
+  .lead-lede,
+  .section-display,
+  .work-name {
+    text-wrap: pretty;
+  }
+
+  .facts .section-display {
+    white-space: normal;
+  }
+
+  /* the kind was sharing the caption row, so a title wrapped beside a short
+     word and left one word on a line of its own */
+  .rail-poster .rail-caption-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
   }
 
   .cursor {
@@ -2747,6 +2816,21 @@ section[id],
     text-align: center;
   }
 
+  /* the date and the role share the row with the link, which was squeezing
+     the role onto a line of its own */
+  .work-foot {
+    flex-wrap: wrap;
+    row-gap: 0.35rem;
+  }
+
+  .work-meta {
+    flex: 1 1 100%;
+  }
+
+  .lead-body h3 {
+    font-size: clamp(1.35rem, 6.2vw, 1.7rem);
+  }
+
   .lead-head,
   .lead-points {
     justify-content: center;
@@ -2787,33 +2871,16 @@ section[id],
     grid-template-columns: 1fr;
   }
 
-  /* stacked, not "label go": the long email overlapped its own label */
   .contact-card {
     min-height: 0;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "label"
-      "title"
-      "go";
-    gap: 0.45rem;
     padding: 1.15rem 1.1rem;
-    text-align: center;
-    justify-items: center;
-  }
-
-  .contact-card .mono:first-child {
-    grid-area: label;
-  }
-
-  .contact-card .display {
-    grid-area: title;
+    text-align: left;
+    justify-items: start;
   }
 
   .contact-card-go {
-    grid-area: go;
-    justify-self: center;
+    justify-self: start;
     align-self: start;
-    margin-top: 0.15rem;
   }
 
   .site-footer {
@@ -2853,6 +2920,11 @@ section[id],
 
   .contact-title {
     font-size: clamp(2.6rem, 15vw, 4rem);
+  }
+
+  .contact-logo {
+    width: 2.4rem;
+    height: 2.4rem;
   }
 
   .work-row {
