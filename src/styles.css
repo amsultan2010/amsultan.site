@@ -1720,12 +1720,17 @@ html[data-view] .about {
 }
 
 .lead-list .lead-item:nth-child(even) .lead-points {
+  width: 100%;
+  max-width: none;
   justify-items: end;
 }
 
 .lead-list .lead-item:nth-child(even) .lead-points li {
+  width: fit-content;
+  max-width: 100%;
   padding-left: 0;
   padding-right: 1.05rem;
+  text-align: right;
 }
 
 .lead-list .lead-item:nth-child(even) .lead-points li::before {
@@ -1754,6 +1759,24 @@ html[data-view] .about {
   margin: 0.65rem 0 0;
   font-size: clamp(1.2rem, 1.75vw, 1.55rem);
   line-height: 1.25;
+}
+
+/* the lede and the bullets are blocks, so text-align does not move them.
+   they have to be centered as boxes, or the title sits in the middle and
+   the rest stays on the left */
+.lead-zc .lead-lede,
+.lead-zc .lead-points {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.lead-zc .lead-points {
+  justify-items: center;
+}
+
+.lead-zc .lead-points li {
+  text-align: left;
 }
 
 
