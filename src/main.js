@@ -1143,7 +1143,7 @@ function initPortraitRail() {
       { xPercent: -50 },
       {
         xPercent: 0,
-        duration: half / 220,
+        duration: half / 175,
         ease: "none",
         repeat: -1,
         modifiers: { xPercent: gsap.utils.wrap(-50, 0) },

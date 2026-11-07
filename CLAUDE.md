@@ -38,7 +38,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 - All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`;
   `button` and `input` need it set on them. Meta tags, JSON-LD and `llms.txt` keep case.
-- Colour is `--orange` (the page ground), `--cream` (`#fce5c0`, the light surfaces), `--white` (the type on ink, and the outlines), and `--ink`. Orange is never type on white or cream. Fonts are Geist Serif (`.display` and `.serif`) and Departure Mono (`.mono`), self-hosted in `public/fonts`. Geist Serif ships regular only, so a weight request still paints that cut. Cabinet Grotesk and Satoshi are the z combinator and downforce wordmarks. `--type-min` (1.15rem) is the smallest type.
+- Colour is ice signal. `--ink` (`#073b4c`, the dark main and the page ground), `--cream` and `--white` (`#d5eef2`, the light main, the paper and the type on ink), and `--orange` (`#f54937`, the signal accent: buttons, the hero's filled sultan, the accent line). `--orange-deep` is only the pressed and shadow red. Fonts are Geist Serif (`.display` and `.serif`) and Host Grotesk Light (`.mono`), self-hosted in `public/fonts`. Geist Serif ships regular only, so a weight request still paints that cut. Host Grotesk is the light cut for every weight. Cabinet Grotesk and Satoshi are the z combinator and downforce wordmarks. `--type-min` (1.15rem) is the smallest type.
 - Radii are 0, or fully round on dots. Shadows are hard offsets with zero blur. Rules are 2px
   `--ink`. Hover lifts an element off its shadow and `:active` sinks it back.
 - Rows about another product wear that product's own colours: `--cy-*`, `--fs-*`, `--cc-*`, `--df-*`, `--zc`.

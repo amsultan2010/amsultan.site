@@ -6,9 +6,9 @@ Self-hosted for amsultan.site. None of these files is covered by the repository 
 
 Geist Serif Regular (`geist-serif-regular.woff2`), from the Vercel `geist` package 1.9.0. SIL Open Font License 1.1. Full text: `OFL-geist.txt`. The release is one weight. Display type requests a heavier weight and the face file paints this regular cut, so the page never synthesizes a bold.
 
-## Departure Mono
+## Host Grotesk
 
-Departure Mono Regular 1.500 (`departure-mono-regular.woff2`) by Helena Zhang. SIL Open Font License 1.1. Full text: `OFL-departure-mono.txt`. The face is a pixel font: it renders crisply at 11px increments.
+Host Grotesk Light (`host-grotesk-light.woff2`) by Ivo Gabrowitsch, The Foundry Types, and contributors. SIL Open Font License 1.1. Full text: `OFL-host-grotesk.txt`. The site uses the light cut, the thinnest weight the family ships, everywhere a mono label used to be.
 
 ## Cabinet Grotesk and Satoshi
 
