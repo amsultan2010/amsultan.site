@@ -54,6 +54,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 - Every `repeat: -1` tween is paused off screen by a ScrollTrigger `onToggle`. Each effect checks
   `finePointer()` and `reducedMotion()` itself.
 - Run the `anti-ai-site` and `gsap-max` skills before shipping visual changes.
+- Each concern is its own commit, written when that concern is done. The rail, the closer, a card colour, and the favicon are four commits. Do not fold finished slices into one commit at the end.
 
 ## Deploy
 
