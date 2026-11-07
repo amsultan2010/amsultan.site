@@ -141,28 +141,16 @@ function initWorkRowHover() {
   if (!finePointer() || reducedMotion()) return;
 
   $$(".work-row").forEach((row) => {
-    const index = $(".work-index", row);
     const icon = $(".work-row-icon", row);
     const name = $(".work-name", row);
-    const digits = index?.textContent ?? "";
 
-    // choreographed, so it cannot be a css transition: three parts on three offsets
+    // choreographed, so it cannot be a css transition: the mark and the name
     const tl = gsap
       .timeline({ paused: true, defaults: { duration: D.fast, ease: E.out } })
-      .to(index, { scale: 1.3, transformOrigin: "left center" }, 0)
-      .to(icon, { rotate: -7, scale: 1.08 }, 0.03)
-      .to(name, { x: 8 }, 0.06);
+      .to(icon, { rotate: -7, scale: 1.08 }, 0)
+      .to(name, { x: 8 }, 0.03);
 
-    row.addEventListener("pointerenter", () => {
-      tl.play();
-      if (digits) {
-        gsap.to(index, {
-          duration: 0.5,
-          ease: "none",
-          scrambleText: { text: digits, chars: "0123456789", speed: 0.8 },
-        });
-      }
-    });
+    row.addEventListener("pointerenter", () => tl.play());
     row.addEventListener("pointerleave", () => tl.reverse());
   });
 }
@@ -783,21 +771,6 @@ function initHeroParallax() {
   );
 }
 
-// the number swells while its row is hovered. bound once for the same reason
-// as the parallax. hover owns the scale, so the entrance stays on yPercent
-function initLeadHover() {
-  if (!finePointer() || reducedMotion()) return;
-
-  $$(".lead-item").forEach((item) => {
-    item.addEventListener("pointerenter", () => {
-      gsap.to($(".lead-num", item), { scale: 1.12, duration: 0.3, ease: "power2.out" });
-    });
-    item.addEventListener("pointerleave", () => {
-      gsap.to($(".lead-num", item), { scale: 1, duration: 0.35, ease: "power2.out" });
-    });
-  });
-}
-
 // each view's motion lives in its own gsap.context, built when the view is
 // shown and reverted when it is left, so every entrance replays on a visit and
 // every loop dies with its view. a builder is handed that context for whatever
@@ -1030,7 +1003,7 @@ function buildMe(ctx) {
   // phrase is stamped onto it from above
   const closer = $(".about-closer");
   if (closer) {
-    const mark = $(".about-closer-mark", closer);
+    const marks = $$(".about-closer-mark", closer);
 
     gsap
       .timeline({ scrollTrigger: { trigger: closer, start: "top 84%", once: true } })
@@ -1046,23 +1019,26 @@ function buildMe(ctx) {
         0,
       )
       .from(".about-closer em", { scale: 1.6, autoAlpha: 0, duration: D.fast, ease: "power4.in" }, 0.8)
-      .from(mark, { scale: 0, duration: D.slow, ease: E.out }, 0.3);
+      .from(marks, { scale: 0, duration: D.slow, ease: E.out, stagger: 0.08 }, 0.3);
 
-    // the mark turns with the scroll, and its arms keep turning on their own
+    // both marks turn with the scroll, and their arms keep turning on their own
     // for as long as the band is on screen
-    gsap.to(mark, {
+    gsap.to(marks, {
       rotate: 200,
       ease: "none",
       scrollTrigger: { trigger: closer, start: "top bottom", end: "bottom top", scrub: 1 },
     });
 
-    const spin = gsap.to($("g", mark), {
-      rotate: 360,
-      svgOrigin: "50 50",
-      duration: 26,
-      repeat: -1,
-      ease: "none",
-    });
+    const spin = gsap.to(
+      marks.map((mark) => $("g", mark)),
+      {
+        rotate: 360,
+        svgOrigin: "50 50",
+        duration: 26,
+        repeat: -1,
+        ease: "none",
+      },
+    );
     const spinView = ScrollTrigger.create({
       trigger: closer,
       start: "top bottom",
@@ -1122,29 +1098,6 @@ function buildMe(ctx) {
     },
   );
 
-  gsap.from(".about-portrait figcaption", {
-    y: 16,
-    autoAlpha: 0,
-    duration: 0.5,
-    ease: "power3.out",
-    scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top 70%",
-      once: true,
-    },
-  });
-
-  gsap.to(".about-portrait figcaption", {
-    y: -34,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".about-portrait",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1,
-    },
-  });
-
   return initPortraitRail();
 }
 
@@ -1170,7 +1123,7 @@ function initPortraitRail() {
     { xPercent: -50 },
     {
       xPercent: 0,
-      duration: 26,
+      duration: 12,
       ease: "none",
       repeat: -1,
       modifiers: { xPercent: gsap.utils.wrap(-50, 0) },
@@ -1234,25 +1187,18 @@ function buildWork() {
     });
   });
 
-  // the two group bands in built: the label rises out of its band and the
-  // count opens from the edge it sits on, like a small section head
+  // the two group bands in built: the label rises out of its band
   $$(".work-group").forEach((group) => {
     gsap
       .timeline({
         defaults: { ease: E.out },
         scrollTrigger: { trigger: group, start: "top 88%", once: true },
       })
-      .from($(".display", group), { yPercent: 110, duration: D.base }, 0)
-      .fromTo(
-        $(".work-group-count", group),
-        { clipPath: "inset(0% 0% 0% 100%)" },
-        { clipPath: "inset(0% 0% 0% 0%)", duration: D.base, ease: E.inOut, clearProps: "clipPath" },
-        0.1,
-      );
+      .from($(".display", group), { yPercent: 110, duration: D.base }, 0);
   });
 
-  // each built row is staged on its own trigger. hover owns the index scale,
-  // the mark's rotation and the name's x, so the entrance stays off all three:
+  // each built row is staged on its own trigger. hover owns the mark's
+  // rotation and the name's x, so the entrance stays off both:
   // a hover that lands mid-entrance would otherwise record the wrong rest state
   $$(".work-row").forEach((row) => {
     const shot = $(".work-row-shot", row);
@@ -1262,8 +1208,7 @@ function buildWork() {
         defaults: { ease: E.out },
         scrollTrigger: { trigger: row, start: "top 84%", once: true },
       })
-      .from($(".work-index", row), { yPercent: 120, autoAlpha: 0, duration: D.base }, 0)
-      .from($(".work-row-icon", row), { y: 22, autoAlpha: 0, duration: D.base }, 0.05)
+      .from($(".work-row-icon", row), { y: 22, autoAlpha: 0, duration: D.base }, 0)
       .fromTo(
         $(".work-name", row),
         { clipPath: "inset(0% 100% 0% 0%)" },
@@ -1289,7 +1234,7 @@ function buildWork() {
           { clipPath: "inset(-8% -8% -10% -8%)", clearProps: "clipPath" },
           0,
         )
-        .from($("img", shot), { scale: 1.3, clearProps: "transform" }, 0);
+        .from($(".work-row-thumb", shot), { scale: 1.3, clearProps: "transform" }, 0);
     }
   });
 
@@ -1307,8 +1252,7 @@ function buildWork() {
           once: true,
         },
       })
-      .from($(".lead-num", item), { yPercent: 70, autoAlpha: 0, duration: D.base }, 0)
-      .from($(".lead-body .mono", item), { y: 18, autoAlpha: 0, duration: D.fast }, 0.05)
+      .from($(".lead-body .mono", item), { y: 18, autoAlpha: 0, duration: D.fast }, 0)
       .from(chars, { yPercent: 110, autoAlpha: 0, duration: D.base, stagger: 0.02 }, 0.1)
       .from($$(".lead-points li, .zc-cta", item), {
         y: 16,
@@ -1472,7 +1416,6 @@ initArrowSwap();
 initActionFill();
 initNavScramble();
 initHeroParallax();
-initLeadHover();
 initNextNudge();
 initClips();
 initRouter();
