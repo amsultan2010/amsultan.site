@@ -37,11 +37,12 @@ Canonical site: https://www.amsultan.site/
 
 ## Lead
 
-- [Z Combinator](https://www.zcombinator.dev): Founder. AIS-R's
-  first student-run startup incubator. 15 members get the resources,
-  mentorship, and opportunities they need to grow their own business within a
-  semester, while still in high school. Hosts guest speaker sessions from U.C.
-  Berkeley, University of Waterloo, Propeller, LlamaIndex, and 11x.
+- [Z Combinator](https://www.zcombinator.dev): Founder. The student-run
+  startup and AI club at AIS-R. 15 members. Sunday is build day: one minute
+  each, then the room works. Thursday is a speaker or a workshop. No
+  application, no essay, no GPA. Members who build get a month of Claude Pro.
+  Speakers so far include Imaan Sultan (LlamaIndex, UC Berkeley Haas) and
+  Zaid Farekh (Propeller, a $30 million fund).
 - Aspiring Doctors' Club (AIS-R, leader 2025-2026): Pioneered a
   tech-in-medicine curriculum using AI tools such as AlphaFold; ran a diabetes
   awareness session reaching 60+ students.
