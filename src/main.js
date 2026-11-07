@@ -357,15 +357,85 @@ function buildCounters(elements) {
 
 // the marquee speeds up and reverses with the scroll direction. the rows used
 // to skew with it too, which read as the whole page wobbling, so they don't
-function initScrollVelocity(marqueeTween) {
-  if (reducedMotion() || !marqueeTween) return;
+let marqueeTween;
+
+function initScrollVelocity() {
+  if (reducedMotion()) return;
 
   ScrollTrigger.create({
     onUpdate: (self) => {
+      if (!marqueeTween) return;
       const speed = gsap.utils.clamp(0.35, 4, Math.abs(self.getVelocity()) / 900 + 0.6);
       marqueeTween.timeScale(self.direction === -1 ? -speed : speed);
     },
   });
+}
+
+// one run has to be wider than the bar, then that run is repeated. a short
+// run leaves empty ground at the seam. a wrap() on this tween maps 0 to -50
+// and jumps the bar on the first frame, so the loop is a plain repeat.
+function initMarquee() {
+  const rail = $(".marquee");
+  const track = $(".marquee-track");
+  if (!rail || !track) return undefined;
+
+  const base = [...track.children];
+  let gate;
+  let frame = 0;
+
+  const stamp = (node) => {
+    node.dataset.clone = "true";
+    node.setAttribute("aria-hidden", "true");
+    return node;
+  };
+
+  const build = () => {
+    marqueeTween?.kill();
+    gate?.kill();
+    $$("[data-clone]", track).forEach((node) => node.remove());
+    gsap.set(track, { clearProps: "transform" });
+
+    let guard = 0;
+    while (track.scrollWidth <= rail.clientWidth && guard < 8) {
+      base.forEach((node) => track.append(stamp(node.cloneNode(true))));
+      guard += 1;
+    }
+    if (reducedMotion()) return;
+
+    [...track.children].forEach((node) => track.append(stamp(node.cloneNode(true))));
+
+    const half = track.scrollWidth / 2;
+    marqueeTween = gsap.to(track, {
+      xPercent: -50,
+      duration: half / 180,
+      ease: "none",
+      repeat: -1,
+    });
+    gate = ScrollTrigger.create({
+      trigger: rail,
+      start: "top bottom",
+      end: "bottom top",
+      onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
+    });
+    if (!gate.isActive) marqueeTween.pause();
+  };
+
+  build();
+  const onResize = () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(build);
+  };
+  window.addEventListener("resize", onResize);
+
+  return () => {
+    cancelAnimationFrame(frame);
+    window.removeEventListener("resize", onResize);
+    marqueeTween?.kill();
+    marqueeTween = undefined;
+    gate?.kill();
+    $$("[data-clone]", track).forEach((node) => node.remove());
+    gsap.set(track, { clearProps: "transform" });
+  };
 }
 
 // masked line reveal, the default for body copy: lines rise out of an overflow
@@ -813,34 +883,6 @@ function buildMe(ctx) {
       0.35,
     );
 
-  // a scroll up plays the loop backwards, and a loop played backwards stops dead
-  // at its start, so the playhead begins a long way in
-  const marqueeTween = gsap
-    .to(".marquee-track", {
-      xPercent: -50,
-      duration: 12,
-      repeat: -1,
-      ease: "none",
-    })
-    .totalTime(12 * 500);
-
-  // same treatment for the marquee: it only earns its frame cost while visible
-  const marqueeEl = $(".marquee");
-  if (marqueeEl && marqueeTween) {
-    const marqueeView = ScrollTrigger.create({
-      trigger: marqueeEl,
-      start: "top bottom",
-      end: "bottom top",
-      // built before the hero pin above it, so it must be measured after the pin
-      refreshPriority: -1,
-      onToggle: (self) => (self.isActive ? marqueeTween.play() : marqueeTween.pause()),
-    });
-    // it starts below the fold, where no toggle fires until it is reached
-    if (!marqueeView.isActive) marqueeTween.pause();
-  }
-
-  initScrollVelocity(marqueeTween);
-
   // explicit fromTo + immediateRender:false, otherwise this scrub timeline samples
   // its start values while the intro `from` tweens still hold them at 0 and the
   // hero bg/rail stay invisible until a reload happens to win the race. the two
@@ -923,6 +965,12 @@ function buildMe(ctx) {
         0,
       );
   });
+
+  // after the hero pin, so the bar's trigger is measured with the pin spacer in
+  // place. built before the pin, the trigger ends while the bar is still on screen
+  // and the names freeze.
+  const stopMarquee = initMarquee();
+  initScrollVelocity();
 
   // scrubbed drifts differ by width, and the wide ones do not exist on a phone
   const drift = gsap.matchMedia();
@@ -1097,7 +1145,11 @@ function buildMe(ctx) {
     },
   );
 
-  return initPortraitRail();
+  const stopPortraits = initPortraitRail();
+  return () => {
+    stopMarquee?.();
+    stopPortraits?.();
+  };
 }
 
 // the about photos run to the right, forever. one run has to be wider than the
