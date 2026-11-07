@@ -40,11 +40,11 @@
      certification still in progress */
   --dc: #03ef62;
   --dc-ink: #05192d;
-  /* linkedin blue and github's dark grey, only on their contact cards */
+  /* linkedin blue and github black, only on their contact cards */
   --in: #0a66c2;
   --in-deep: #004182;
-  --gh: #2f3338;
-  --gh-deep: #1c2024;
+  --gh: #000000;
+  --gh-deep: #000000;
   /* notched phones: the page paints edge to edge, these push content back in */
   --safe-t: env(safe-area-inset-top, 0px);
   --safe-b: env(safe-area-inset-bottom, 0px);
