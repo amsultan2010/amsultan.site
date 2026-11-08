@@ -39,4 +39,4 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
-Sitemap: https://www.amsultan.site/sitemap.xml
+Sitemap: https://sultanisso.cool/sitemap.xml

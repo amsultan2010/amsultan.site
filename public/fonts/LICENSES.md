@@ -1,6 +1,6 @@
 # Font licenses
 
-Self-hosted for amsultan.site. None of these files is covered by the repository MIT license.
+Self-hosted for sultanisso.cool. None of these files is covered by the repository MIT license.
 
 ## Geist Serif
 

@@ -1,6 +1,6 @@
 # amsultan.site
 
-Abdullah Sultan's portfolio, live at https://www.amsultan.site. One hand-written page in HTML, CSS
+Abdullah Sultan's portfolio, live at https://sultanisso.cool. One hand-written page in HTML, CSS
 and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8.1 builds it, GSAP
 3.15 and Lenis 1.3 move it, Vercel hosts it. Node 24 (`.nvmrc`). The repo is public, MIT licensed.
 
@@ -60,7 +60,7 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 Vercel project `abdullahsultan`, connected to GitHub `amsultan2010/amsultan.site`. A push to `main`
 deploys production. Any other pushed branch gets a preview, which is `noindex` and behind Vercel
-login. `amsultan.site` redirects to `www.amsultan.site`, the canonical host. There are no env vars.
+login. `sultanisso.cool` is the canonical host. `www.sultanisso.cool`, `amsultan.site`, and `www.amsultan.site` redirect there. There are no env vars.
 
 ## Gotchas
 
