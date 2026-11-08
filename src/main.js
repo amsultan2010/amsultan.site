@@ -718,12 +718,12 @@ function initLoader(onDone) {
   });
 }
 
-function initHeroMotion() {
-  const topo = $(".hero-topo");
-  const drift = $(".topo-drift");
-  const layers = $$(".topo-layer");
-  const shapes = $$("[data-shape]");
-  if (!topo || reducedMotion()) return;
+function initFieldMotion(root) {
+  const topo = $(".hero-topo", root);
+  const drift = $(".topo-drift", root);
+  const layers = $$(".topo-layer", root);
+  const shapes = $$("[data-shape]", root);
+  if (!root || !topo || reducedMotion()) return;
 
   // solid contour drift, no dashoffset (that was chopping the lines)
   if (drift) {
@@ -771,12 +771,16 @@ function initHeroMotion() {
     { y: -32, x: -6, rotate: -9, duration: 3.1 },
   ];
 
+  // contact's shapes live in a short ink band. the hero's travel would walk
+  // them under the card or out of the section
+  const reach = root.matches(".contact") ? 0.22 : 1;
+
   shapes.forEach((shape, index) => {
     const motion = bounce[index % bounce.length];
     gsap.set(shape, { transformOrigin: "50% 50%" });
     gsap.to(shape, {
-      y: motion.y,
-      x: motion.x,
+      y: motion.y * reach,
+      x: motion.x * reach,
       rotate: `+=${motion.rotate}`,
       duration: motion.duration,
       repeat: -1,
@@ -787,35 +791,39 @@ function initHeroMotion() {
   });
 
   // the strip is one joined bar, so it breathes as one piece. yPercent, because
-  // the hero exit scrub already owns y on this element
-  gsap.to(".hero-orbit", {
-    yPercent: -12,
-    duration: 2.6,
-    repeat: -1,
-    yoyo: true,
-    ease: "sine.inOut",
-  });
-
-  // the hero keeps roughly twenty looping tweens alive. once it is scrolled past
-  // they are still writing transforms every frame for nothing, which is most of
-  // the jank further down the page
-  const hero = $(".hero");
-  if (hero) {
-    const ambient = [drift, topo, $(".hero-orbit"), ...layers, ...shapes].filter(Boolean);
-    const park = (active) =>
-      gsap
-        .getTweensOf(ambient)
-        .filter((tween) => tween.repeat() === -1)
-        .forEach((tween) => (active ? tween.play() : tween.pause()));
-    const heroView = ScrollTrigger.create({
-      trigger: hero,
-      start: "top bottom",
-      end: "bottom top",
-      onToggle: (self) => park(self.isActive),
+  // the hero exit scrub already owns y on this element. contact has no strip
+  const orbit = $(".hero-orbit", root);
+  if (orbit) {
+    gsap.to(orbit, {
+      yPercent: -12,
+      duration: 2.6,
+      repeat: -1,
+      yoyo: true,
+      ease: "sine.inOut",
     });
-    // scrolled past before the intro landed, so no toggle comes to park them
-    if (!heroView.isActive) park(false);
   }
+
+  // loops stay alive only while their field is on screen. the hero keeps about
+  // twenty of them, and writing those transforms off screen is most of the
+  // jank further down the page
+  const ambient = [drift, topo, orbit, ...layers, ...shapes].filter(Boolean);
+  const park = (active) =>
+    gsap
+      .getTweensOf(ambient)
+      .filter((tween) => tween.repeat() === -1)
+      .forEach((tween) => (active ? tween.play() : tween.pause()));
+  const fieldView = ScrollTrigger.create({
+    trigger: root,
+    start: "top bottom",
+    end: "bottom top",
+    onToggle: (self) => park(self.isActive),
+  });
+  // scrolled past before the intro landed, so no toggle comes to park them
+  if (!fieldView.isActive) park(false);
+}
+
+function initHeroMotion() {
+  initFieldMotion($(".hero"));
 }
 
 // the contour field leans away from the pointer. bound once, apart from the me
@@ -825,7 +833,7 @@ function initHeroParallax() {
   if (!finePointer() || reducedMotion()) return;
 
   const hero = $(".hero");
-  const topo = $(".hero-topo");
+  const topo = $(".hero-topo", hero);
   if (!hero || !topo) return;
 
   const moveX = gsap.quickTo(topo, "x", { duration: 0.9, ease: "power3.out" });
@@ -875,14 +883,14 @@ function buildMe(ctx) {
     .from(".hero-kicker, .hero-orbit span", { y: 16, autoAlpha: 0, duration: 0.5, stagger: 0.04 }, 0.4)
     // yPercent, because the see work pill is magnetic and quickTo owns its y
     .from(".hero-foot > *", { yPercent: 40, autoAlpha: 0, duration: 0.55, stagger: 0.08 }, 0.48)
-    .from(".hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12)
+    .from(".hero .hero-bg", { autoAlpha: 0, duration: 1.05 }, 0.12)
     .from(
-      ".hero-topo path",
+      ".hero .hero-topo path",
       { drawSVG: "0% 0%", duration: 1.3, stagger: 0.04, ease: "power2.out" },
       0.2,
     )
     .from(
-      "[data-shape]",
+      ".hero [data-shape]",
       { scale: 0, autoAlpha: 0, duration: 0.7, stagger: { each: 0.035, from: "random" } },
       0.35,
     );
@@ -927,13 +935,13 @@ function buildMe(ctx) {
         0,
       )
       .fromTo(
-        ".hero-bg",
+        ".hero .hero-bg",
         { scale: 1, opacity: 1 },
         { scale: 1.22, opacity: 0.22, immediateRender: false },
         0,
       )
       .fromTo(
-        ".hero-shapes",
+        ".hero .hero-shapes",
         { scale: 1, opacity: 1 },
         { scale: 1.45, opacity: 0, immediateRender: false },
         0,
@@ -963,7 +971,7 @@ function buildMe(ctx) {
         0,
       )
       .fromTo(
-        ".hero-bg",
+        ".hero .hero-bg",
         { yPercent: 0, opacity: 1 },
         { yPercent: 18, opacity: 0.35, immediateRender: false },
         0,
@@ -1384,6 +1392,8 @@ function buildWork() {
 
 // contact ends every view, so its entrances replay with each one
 function buildContact() {
+  initFieldMotion($(".contact"));
+
   gsap.from(".contact-link .split-char", {
     yPercent: 110,
     autoAlpha: 0,

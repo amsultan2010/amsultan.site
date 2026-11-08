@@ -615,10 +615,10 @@ html[data-view] .view-life .rail:last-child {
   position: relative;
   z-index: 2;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem 1.25rem;
-  justify-content: flex-start;
   margin: 0 var(--gutter);
   padding: 0.85rem 1rem;
   border: 2px solid var(--ink);
@@ -627,24 +627,18 @@ html[data-view] .view-life .rail:last-child {
   box-shadow: 0.3rem 0.3rem 0 var(--orange);
 }
 
-/* riyadh stays on the left. the clock takes the slack so the time and the
-   live mark sit together on the right */
+/* the clock is pulled out of the row so it sits on the bar's midpoint.
+   riyadh and the address hold the two ends */
 .hero-rail [data-clock] {
-  margin-left: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  transform: translate(-50%, -50%);
 }
 
-.hero-rail-live {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.hero-rail-live i {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 50%;
-  background: var(--ink);
-  animation: live-pulse 1.4s ease-in-out infinite;
+.hero-rail-site {
+  text-align: right;
 }
 
 @keyframes live-pulse {
@@ -2226,6 +2220,46 @@ html[data-view] .about {
   border-top: 2px solid var(--orange);
 }
 
+/* the same contour field as the hero, sitting on the ink behind the card.
+   shapes stay in the ink band so the cream card does not cover them */
+.contact .shape-ring {
+  top: 0.45rem;
+  right: 0.55rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.contact .shape-block {
+  bottom: 0.55rem;
+  left: 0.6rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  box-shadow: 0.22rem 0.22rem 0 var(--white);
+}
+
+.contact .shape-pill {
+  top: auto;
+  bottom: 0.7rem;
+  left: calc(50% - 1.2rem);
+  right: auto;
+  width: 2.4rem;
+  height: 0.7rem;
+}
+
+.contact .shape-slash {
+  top: 0.7rem;
+  right: auto;
+  left: 0.55rem;
+  width: 2.2rem;
+}
+
+.contact .shape-dot {
+  top: auto;
+  right: 0.55rem;
+  bottom: 0.45rem;
+  left: auto;
+}
+
 .contact-frame {
   position: relative;
   z-index: 1;
@@ -2816,22 +2850,12 @@ section[id],
 
   /* one short strip. the desktop bar's padding and type made this two rows tall */
   .hero-rail.mono {
-    flex-wrap: nowrap;
     gap: 0.45rem 0.7rem;
     margin-bottom: 0.15rem;
     padding: 0.22rem 0.5rem;
-    font-size: 0.78rem;
+    font-size: 0.68rem;
     line-height: 1.15;
     box-shadow: 0.12rem 0.12rem 0 var(--orange);
-  }
-
-  .hero-rail-live {
-    gap: 0.28rem;
-  }
-
-  .hero-rail-live i {
-    width: 0.32rem;
-    height: 0.32rem;
   }
 
   .hero-stage {
@@ -2948,6 +2972,19 @@ section[id],
     box-shadow: 0.08em 0.08em 0 var(--white);
   }
 
+  /* three even lines: the stamp sits between the two phrases */
+  .about-closer-line:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.06em;
+    white-space: normal;
+  }
+
+  .about-closer-line:first-child em {
+    margin-right: 0;
+  }
+
   .about-facts div {
     text-align: center;
     justify-items: center;
@@ -2972,6 +3009,24 @@ section[id],
 
   .contact {
     padding: 1.6rem var(--gutter) 1.9rem;
+  }
+
+  .contact .shape-ring {
+    top: 0.22rem;
+    width: 1.1rem;
+    height: 1.1rem;
+  }
+
+  .contact .shape-block {
+    bottom: 0.28rem;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .contact .shape-dot {
+    bottom: 0.4rem;
+    width: 0.5rem;
+    height: 0.5rem;
   }
 
   .contact-frame {
