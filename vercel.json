@@ -4,6 +4,18 @@
   "buildCommand": "npm run build",
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "amsultan.site" }],
+      "destination": "https://sultanisso.cool/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.amsultan.site" }],
+      "destination": "https://sultanisso.cool/:path*",
+      "permanent": true
+    },
+    {
       "source": "/resume.html",
       "destination": "/resume",
       "permanent": true

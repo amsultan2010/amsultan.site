@@ -9,7 +9,7 @@
 > Not to be confused with other people named Abdullah Sultan. This is Abdullah
 > Muhammad Sultan, also known as amsultan or amsultan2010.
 
-Canonical site: https://www.amsultan.site/
+Canonical site: https://sultanisso.cool/
 
 ## Built
 
@@ -65,10 +65,10 @@ Canonical site: https://www.amsultan.site/
 
 ## Pages
 
-- [Home](https://www.amsultan.site/): About and contact.
-- [Work](https://www.amsultan.site/work): Built (internships and projects), lead, and record.
-- [Life](https://www.amsultan.site/life): The personal stack, a few facts, small games, and the watchlist.
-- [Resume](https://www.amsultan.site/resume): Full resume, with a PDF download: education,
+- [Home](https://sultanisso.cool/): About and contact.
+- [Work](https://sultanisso.cool/work): Built (internships and projects), lead, and record.
+- [Life](https://sultanisso.cool/life): The personal stack, a few facts, small games, and the watchlist.
+- [Resume](https://sultanisso.cool/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
 
 ## Elsewhere

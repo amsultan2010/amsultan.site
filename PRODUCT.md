@@ -18,7 +18,7 @@ A school or college reader looking at the class of 2028 record is a secondary au
 
 ## Product Purpose
 
-amsultan.site is Abdullah Muhammad Sultan's portfolio. It shows who he is, the work he has shipped, and how to reach him.
+This is Abdullah Muhammad Sultan's portfolio, published at https://sultanisso.cool. It shows who he is, the work he has shipped, and how to reach him.
 
 A visit succeeds when the reader believes the published record, reaches out, or both. Reaching out means LinkedIn, coffee, or a conversation about teaching him machine learning and AI. Believing the record means checking the products, GitHub, and résumé.
 
@@ -28,7 +28,7 @@ The canonical site for this person. It is the page that both names Abdullah Muha
 
 ## Operating Context
 
-He is an 11th-grade student at the American International School Riyadh, in the full IB Diploma Programme, class of 2028, based in Riyadh. The live site is https://www.amsultan.site. The apex host redirects there.
+He is an 11th-grade student at the American International School Riyadh, in the full IB Diploma Programme, class of 2028, based in Riyadh. The live site is https://sultanisso.cool. `www.sultanisso.cool`, `amsultan.site`, and `www.amsultan.site` redirect there.
 
 Readers use three views of one page: `/` (about and contact), `/work` (internships, projects, leadership, record), and `/life` (personal stack, a few facts, small games, watchlist). `/resume` is the full résumé. Every view ends in contact: LinkedIn ("say hello"), the résumé, GitHub, and X (@amsultan2010). The published contact line is "grab coffee, talk about startups, or help me learn machine learning and ai," with "reply within a day."
 
@@ -48,7 +48,7 @@ Open:
 
 - Whether future work must keep the current license split. The repo publishes code as MIT and leaves writing, name, photos, and project images personal.
 
-No API keys or environment variables. Hosted on Vercel (project `abdullahsultan`). Canonical host is www.amsultan.site.
+No API keys or environment variables. Hosted on Vercel (project `abdullahsultan`). Canonical host is sultanisso.cool.
 
 ## Brand Commitments
 
