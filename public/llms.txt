@@ -37,7 +37,7 @@ Canonical site: https://sultanisso.cool/
 
 ## Lead
 
-- [Z Combinator](https://www.zcombinator.dev): Founder. The student run
+- [Z Combinator](https://www.zcombinator.club): Founder. The student run
   startup incubator and AI club at AIS-R. Helping 15 members get fluent and
   technical with AI, and growing and funding students' personal businesses
   over a semester. Speakers so far include Imaan Sultan (LlamaIndex, UC
