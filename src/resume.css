@@ -37,17 +37,21 @@
   font-size: 1.15rem;
   color: var(--white);
   background: var(--ink);
-  box-shadow: 0.42rem 0.42rem 0 var(--white);
+  box-shadow: 0.62rem 0.62rem 0 var(--orange);
 }
 
 .resume-download:hover {
   color: var(--ink);
   background: var(--cream);
-  box-shadow: 0.55rem 0.55rem 0 var(--ink);
+  box-shadow: 0.78rem 0.78rem 0 var(--orange-deep);
+}
+
+.resume-download:focus-visible {
+  outline-color: var(--orange);
 }
 
 .resume-download:active {
-  box-shadow: 0.08rem 0.08rem 0 var(--ink);
+  box-shadow: 0.12rem 0.12rem 0 var(--orange-deep);
 }
 
 .resume-download span {

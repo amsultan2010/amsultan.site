@@ -74,6 +74,13 @@
   color: var(--rail-head-accent, var(--white));
 }
 
+/* the word is already the case it should render in. body and .display lowercase
+   the rest of the page, and must not touch this label or its echo */
+.rail-poster .rail-label,
+.rail-poster .section-echo {
+  text-transform: none;
+}
+
 /* the ruler: short ticks on every step and a tall one on every fifth. these two
    gradients are drawn marks, the only ones in the rails */
 .rail-ruler {
@@ -153,7 +160,7 @@
   border: 1px solid var(--line-soft);
   background: var(--ink);
   transition: filter 320ms ease, opacity 320ms ease;
-  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+  box-shadow: 0.5rem 0.5rem 0 var(--orange);
 }
 
 .rail-cover img {
@@ -217,7 +224,6 @@
     transform-origin: 50% 100%;
   }
 
-  .rail-poster .rail-caption,
   .rail-object .rail-caption {
     position: absolute;
     right: 0;
@@ -225,12 +231,6 @@
     left: 0;
     margin: 0;
     pointer-events: none;
-  }
-
-  .rail-poster .rail-caption-inner {
-    padding: 0.45rem 0.6rem;
-    background: var(--cream);
-    border-top: 2px solid var(--ink);
   }
 
   .rail-object .rail-caption-inner {
@@ -334,8 +334,35 @@
   background: var(--ink);
 }
 
-.rail-poster .rail-kind {
-  opacity: 0.85;
+/* the title sits on the poster and stays hidden until hover, focus, or a tap.
+   ink on cream: a white title on this band was an empty-looking strip */
+.rail-poster .rail-item {
+  position: relative;
+}
+
+.rail-poster .rail-caption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.rail-poster .rail-caption-inner {
+  padding: 0.45rem 0.6rem;
+  color: var(--ink);
+  background: var(--cream);
+  border-top: 2px solid var(--ink);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.rail-poster .rail-item:hover .rail-caption-inner,
+.rail-poster .rail-item:focus-within .rail-caption-inner,
+.rail-poster .rail-item.is-open .rail-caption-inner {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* the object rail: cutouts sit straight on the cream ground, so no frame and no
@@ -438,7 +465,7 @@
 
 /* an ink shadow would vanish into the ink ground */
 .rail-stuff .rail-cover {
-  box-shadow: 0.4rem 0.4rem 0 var(--orange);
+  box-shadow: 0.5rem 0.5rem 0 var(--orange);
 }
 
 .rail-stuff .rail-viewport + .rail-viewport {
