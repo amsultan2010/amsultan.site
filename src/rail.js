@@ -201,6 +201,8 @@ function buildItem(item, variant, isClone) {
   const figure = document.createElement("figure");
   figure.className = `rail-item rail-item-${variant}`;
   if (isClone) figure.setAttribute("aria-hidden", "true");
+  // posters have no hover on a phone, so a tap or a keyboard focus can name them
+  if (variant === "poster" && !isClone) figure.tabIndex = 0;
   if (item.trim) fitObject(figure, item);
 
   // a stuff cover is the link to its game. the kind line only shows on hover,
@@ -230,13 +232,12 @@ function buildItem(item, variant, isClone) {
   title.textContent = item.title;
   inner.append(title);
 
-  if (item.kind) {
+  // posters never render a kind. the title is the only caption, and only on hover
+  if (item.kind && variant !== "poster") {
     const kind = document.createElement("span");
     kind.className = "mono rail-kind";
     kind.textContent = item.kind;
-    // a stuff line is a band across the foot of its clip, so the caption under
-    // the clip is the title alone
-    (item.href ? cover : inner).append(kind);
+    cover.append(kind);
   }
 
   caption.append(inner);
@@ -454,12 +455,21 @@ function initHover(track) {
       tl.reverse();
     };
 
+    const hide = () => {
+      if (item.matches(".rail-item-poster") && (item.matches(":hover") || item.matches(":focus-within"))) return;
+      leave();
+    };
+
     item.addEventListener("pointerenter", enter);
-    item.addEventListener("pointerleave", leave);
+    item.addEventListener("pointerleave", hide);
+    item.addEventListener("focusin", enter);
+    item.addEventListener("focusout", hide);
 
     return () => {
       item.removeEventListener("pointerenter", enter);
-      item.removeEventListener("pointerleave", leave);
+      item.removeEventListener("pointerleave", hide);
+      item.removeEventListener("focusin", enter);
+      item.removeEventListener("focusout", hide);
       item.classList.remove("is-hot");
     };
   });
@@ -524,6 +534,39 @@ function mountRail({ view, items, label, echo, variant, duration, reverse = fals
   rails.push({ section, head, viewport, track, duration, reverse });
 }
 
+// poster titles stay off until hover, focus, or a tap. everything else is shown
+const captionShown = (track) =>
+  track.querySelectorAll(".rail-item:not(.rail-item-poster) .rail-caption-inner");
+
+// a drag still scrolls the row. a tap that barely moved names that poster
+function bindPosterTap(track) {
+  if (!track.querySelector(".rail-item-poster")) return () => {};
+  let startX = 0;
+  let startY = 0;
+
+  const down = (event) => {
+    startX = event.clientX;
+    startY = event.clientY;
+  };
+
+  const up = (event) => {
+    const item = event.target.closest(".rail-item-poster");
+    if (!item) return;
+    if (Math.hypot(event.clientX - startX, event.clientY - startY) > 8) return;
+    const open = item.classList.contains("is-open");
+    track.querySelectorAll(".rail-item-poster.is-open").forEach((node) => node.classList.remove("is-open"));
+    if (!open) item.classList.add("is-open");
+  };
+
+  track.addEventListener("pointerdown", down);
+  track.addEventListener("pointerup", up);
+  return () => {
+    track.removeEventListener("pointerdown", down);
+    track.removeEventListener("pointerup", up);
+    track.querySelectorAll(".rail-item-poster.is-open").forEach((node) => node.classList.remove("is-open"));
+  };
+}
+
 // one rail's motion, reverted with the matchMedia this returns
 function animateRail({ head, viewport, track, duration, reverse }, index) {
   // a section head has no ruler and no drag hint, and the second game row has
@@ -550,11 +593,9 @@ function animateRail({ head, viewport, track, duration, reverse }, index) {
 
       if (reduce) {
         gsap.set(track, { x: 0, xPercent: 0 });
-        gsap.set(track.querySelectorAll(".rail-caption-inner"), {
-          yPercent: 0,
-          autoAlpha: 1,
-        });
-        return;
+        gsap.set(captionShown(track), { yPercent: 0, autoAlpha: 1 });
+        const unpress = bindPosterTap(track);
+        return () => unpress();
       }
 
       // loop progress, 0 to 1, as a place along the ruler. the carriage is as
@@ -578,11 +619,14 @@ function animateRail({ head, viewport, track, duration, reverse }, index) {
 
       const drag = initDrag(track, auto, setHead, () => inView.isActive, toProgress);
       let unhover = null;
+      let unpress = null;
       if (fine) {
         unhover = initHover(track);
       } else {
-        // no hover on touch, so the captions just stay on screen
-        gsap.set(track.querySelectorAll(".rail-caption-inner"), { yPercent: 0, autoAlpha: 1 });
+        // no hover on touch. stack and game captions stay on screen. a poster
+        // title stays hidden until a tap, and never keeps its kind
+        gsap.set(captionShown(track), { yPercent: 0, autoAlpha: 1 });
+        unpress = bindPosterTap(track);
       }
       if (carriage) initHeadEntrance(head);
       else if (head) initSectionHeadEntrance(head);
@@ -653,6 +697,7 @@ function animateRail({ head, viewport, track, duration, reverse }, index) {
 
       return () => {
         unhover?.();
+        unpress?.();
         gsap.killTweensOf(speed);
         nudge.kill();
         inView.kill();
@@ -766,7 +811,7 @@ export function initRail() {
   mountRail({
     view,
     items: shuffle(WATCHING),
-    label: "current watchlist",
+    label: "watchlist",
     variant: "poster",
     duration: 30,
     reverse: true,
