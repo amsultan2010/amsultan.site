@@ -1209,3 +1209,109 @@ img[src$="fschoolai-icon.png"] {
   }
 }
 
+.tree-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.tree {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 4.25rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--heading);
+  font-size: 1.45rem;
+  line-height: 1.2;
+  text-decoration-color: transparent;
+}
+
+.tree img,
+.tree svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+  object-fit: contain;
+  border-radius: 0.3rem;
+}
+
+.tree:hover {
+  color: var(--accent);
+}
+
+@media (min-width: 900px) {
+  .gutters {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--heading);
+  }
+
+  .shape { display: none; }
+}
+
+@media (min-width: 1100px) {
+  .shape { display: block; }
+}
+
+@media (max-width: 760px) {
+  .stage-info > header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.35rem;
+  }
+
+  #name {
+    font-size: clamp(2.15rem, 8vw, 3.15rem);
+  }
+
+  .caption {
+    margin-top: 0.7rem;
+    font-size: 1.4rem;
+    line-height: 1.4;
+  }
+}
+
+@media (min-width: 1024px) {
+  #name { font-size: 2.85rem; }
+  .caption { font-size: 1.35rem; }
+}
+
+.stage,
+.page {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes sway {
+  from { transform: translateY(0); }
+  to { transform: translateY(-42px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig,
+  .sig-live {
+    color: var(--heading);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-enter],
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
