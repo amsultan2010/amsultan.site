@@ -267,3 +267,65 @@ function initSignature() {
   else start();
 }
 
+function initMotion() {
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: reduce)", () => {
+    gsap.set("[data-enter], [data-reveal]", { y: 0, autoAlpha: 1 });
+  });
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    initSignature();
+
+    const enter = document.querySelectorAll("[data-enter]");
+    if (enter.length) {
+      gsap.to(enter, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.08, ease: "power3.out" });
+    }
+
+    const below = [...document.querySelectorAll("[data-reveal]")].filter((el) => !el.closest("[role='tabpanel']"));
+    below.forEach((el) => {
+      gsap.fromTo(
+        el,
+        { y: 18, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.7,
+          ease: "power3.out",
+          immediateRender: false,
+          scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        },
+      );
+    });
+
+    const plate = document.querySelector(".plate img");
+    const shapes = document.querySelectorAll(".shape");
+    if (plate) gsap.set(plate, { scale: 1.08 });
+    if (plate || shapes.length) {
+      const parallax = gsap.timeline({
+        scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.7 },
+      });
+      if (plate) parallax.to(plate, { yPercent: 10, ease: "none" }, 0);
+      if (shapes.length) parallax.to(shapes, { y: (i) => 28 + i * 14, ease: "none" }, 0);
+    }
+    if (shapes.length) {
+      gsap.set(shapes, { rotation: (i, el) => Number(el.dataset.tilt || 0) });
+      gsap.to(shapes, {
+        x: (i) => (i % 2 ? 16 : -18),
+        duration: (i) => 8 + (i % 6) * 0.7,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+    }
+
+    const pfp = document.querySelector(".stage-info .pfp");
+    if (pfp) {
+      pfp.addEventListener("pointerenter", () => gsap.to(pfp, { scale: 1.045, duration: 0.45, ease: "power2.out" }));
+      pfp.addEventListener("pointerleave", () => gsap.to(pfp, { scale: 1, duration: 0.6, ease: "power2.out" }));
+    }
+  });
+}
+
+initTheme();
+initTitle();
+initTabs();
+initMotion();
