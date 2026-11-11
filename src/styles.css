@@ -989,3 +989,66 @@ img[src$="fschoolai-icon.png"] {
   transform: translateY(-2px);
 }
 
+.gutters {
+  display: none;
+}
+
+.lane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc((100% - min(50rem, 100% - 2rem)) / 2);
+  overflow: hidden;
+}
+
+.lane-left { left: 0; }
+.lane-right { right: 0; }
+
+.waves {
+  position: absolute;
+  inset: -6% 0;
+  width: 100%;
+  height: 112%;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2.15;
+  opacity: 0.9;
+}
+
+.waves path {
+  animation: sway 17s ease-in-out infinite alternate;
+}
+
+.waves path:nth-child(even) {
+  animation-duration: 23s;
+  animation-direction: alternate-reverse;
+}
+
+.shape {
+  position: absolute;
+  border: 2px solid color-mix(in srgb, var(--heading) 82%, transparent);
+  opacity: 0.95;
+}
+
+.shape.ring { border-radius: 50%; }
+
+.shape.block {
+  background: color-mix(in srgb, var(--heading) 22%, transparent);
+}
+
+.shape.pill {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--heading) 24%, transparent);
+}
+
+.shape.slash {
+  height: 0;
+  border-width: 2.5px 0 0;
+}
+
+.shape.dot {
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--heading) 62%, transparent);
+}
+
