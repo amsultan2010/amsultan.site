@@ -6,13 +6,13 @@
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "amsultan.site" }],
-      "destination": "https://sultanisso.cool/:path*",
+      "destination": "https://abdullahsultan.tech/:path*",
       "permanent": true
     },
     {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "www.amsultan.site" }],
-      "destination": "https://sultanisso.cool/:path*",
+      "destination": "https://abdullahsultan.tech/:path*",
       "permanent": true
     },
     {
