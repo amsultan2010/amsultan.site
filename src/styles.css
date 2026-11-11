@@ -338,3 +338,87 @@ h1 {
   font-weight: 500;
 }
 
+.work {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+[role="tablist"] {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.5rem;
+  padding-bottom: 0.85rem;
+}
+
+.tab-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--heading);
+  pointer-events: none;
+}
+
+[role="tab"] {
+  position: relative;
+  min-height: 44px;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.4rem;
+  cursor: pointer;
+  transition: color 0.15s linear, background 0.15s linear, border-color 0.15s linear;
+}
+
+[role="tab"]:hover {
+  border-color: var(--heading);
+  background: var(--bg-2);
+  color: var(--heading);
+}
+
+[role="tab"][aria-selected="true"] {
+  border-color: var(--heading);
+  background: var(--heading);
+  color: var(--bg);
+}
+
+[role="tab"][aria-selected="true"]:hover {
+  background: var(--heading);
+  color: var(--bg);
+}
+
+[role="tab"][aria-selected="true"]::after {
+  content: none;
+}
+
+[role="tab"]:active {
+  transform: translateY(1px);
+}
+
+.panel-label {
+  margin-bottom: 0.75rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.5rem;
+}
+
+.js .panel-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
