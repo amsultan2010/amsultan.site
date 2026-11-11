@@ -3,17 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#073b4c" />
+    <meta name="theme-color" content="#f5f2ee" />
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") theme = stored;
+        } catch (e) {}
+        var root = document.documentElement;
+        root.dataset.theme = theme;
+        root.classList.add("js");
+        root.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#1a1714" : "#f5f2ee");
+      })();
+    </script>
     <meta
       name="description"
-      content="Abdullah Sultan is a student founder in Riyadh self-teaching machine learning and artificial intelligence, with a student startup incubator and 1,700+ dev tool downloads."
+      content="Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator."
     />
     <meta name="author" content="Abdullah Sultan" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta property="og:title" content="Abdullah Sultan | student founder learning ml and ai" />
     <meta
       property="og:description"
-      content="Abdullah Sultan is a student founder in Riyadh self-teaching machine learning and artificial intelligence, with a student startup incubator and 1,700+ dev tool downloads."
+      content="Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator."
     />
     <meta property="og:image" content="https://abdullahsultan.tech/og-v3.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
@@ -30,18 +45,19 @@
     <meta name="twitter:title" content="Abdullah Sultan | student founder learning ml and ai" />
     <meta
       name="twitter:description"
-      content="Abdullah Sultan is a student founder in Riyadh self-teaching machine learning and artificial intelligence, with a student startup incubator and 1,700+ dev tool downloads."
+      content="Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator."
     />
-    <meta name="twitter:image:alt" content="Abdullah Sultan, student founder" />
     <meta name="twitter:image" content="https://abdullahsultan.tech/og-v3.jpg" />
+    <meta name="twitter:image:alt" content="Abdullah Sultan, student founder" />
     <link rel="canonical" href="https://abdullahsultan.tech/" />
-    <link rel="icon" href="/icons/site-v7.ico" sizes="any" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="32x32" href="/icons/site-32-v7.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/site-192-v7.png" />
     <link rel="apple-touch-icon" href="/icons/apple-v7.png" />
     <link rel="preload" href="/fonts/geist-serif-regular.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/host-grotesk-light.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Abdullah Sultan | student founder learning ml and ai</title>
+    <link rel="preload" href="/fonts/host-grotesk-300.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/host-grotesk-500-italic.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Abdullah Sultan - MLeng</title>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -65,8 +81,9 @@
             "url": "https://abdullahsultan.tech/",
             "mainEntityOfPage": "https://abdullahsultan.tech/",
             "image": "https://abdullahsultan.tech/images/myimage.jpg",
+            "logo": "https://abdullahsultan.tech/icons/site-192-v7.png",
             "jobTitle": "Student Founder",
-            "description": "Abdullah Sultan is a student founder in Riyadh self-teaching machine learning and artificial intelligence, with a student startup incubator and 1,700+ dev tool downloads.",
+            "description": "Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator.",
             "address": {
               "@type": "PostalAddress",
               "addressLocality": "Riyadh",
@@ -84,12 +101,6 @@
               "Model Context Protocol",
               "Command-line Interfaces",
               "Edtech"
-            ],
-            "knowsLanguage": [
-              { "@type": "Language", "name": "English", "alternateName": "en" },
-              { "@type": "Language", "name": "Urdu", "alternateName": "ur" },
-              { "@type": "Language", "name": "Hindi", "alternateName": "hi" },
-              { "@type": "Language", "name": "Spanish", "alternateName": "es" }
             ],
             "affiliation": { "@id": "https://abdullahsultan.tech/#ais-r" },
             "alumniOf": [
@@ -168,8 +179,8 @@
             "@id": "https://abdullahsultan.tech/#website",
             "url": "https://abdullahsultan.tech/",
             "name": "Abdullah Sultan",
-            "alternateName": ["amsultan", "abdullahsultan.tech", "amsultan.site", "Abdullah Sultan portfolio"],
-            "description": "Portfolio of Abdullah Sultan, student founder learning ml and ai.",
+            "alternateName": ["amsultan", "abdullahsultan.tech", "amsultan.site", "Abdullah Sultan portfolio", "Abdullah Sultan Riyadh"],
+            "description": "Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator.",
             "inLanguage": "en",
             "publisher": { "@id": "https://abdullahsultan.tech/#abdullah-sultan" },
             "about": { "@id": "https://abdullahsultan.tech/#abdullah-sultan" }
@@ -179,6 +190,7 @@
             "@id": "https://abdullahsultan.tech/#profilepage",
             "url": "https://abdullahsultan.tech/",
             "name": "Abdullah Sultan | student founder learning ml and ai",
+            "description": "Abdullah Sultan is a student founder in Riyadh teaching himself machine learning and ai, with shipped products and a student incubator.",
             "isPartOf": { "@id": "https://abdullahsultan.tech/#website" },
             "mainEntity": { "@id": "https://abdullahsultan.tech/#abdullah-sultan" },
             "inLanguage": "en"
@@ -186,730 +198,14 @@
         ]
       }
     </script>
-    <script>
-      // runs before first paint, so the right view shows with no flash
-      document.documentElement.dataset.view =
-        { "/work": "work", "/life": "life" }[location.pathname.replace(/\/$/, "")] || "me";
-    </script>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/site.js"></script>
+    <noscript>
+      <style>
+        [role="tablist"] { display: none; }
+        [role="tabpanel"][hidden] { display: block !important; }
+        [data-enter], [data-reveal] { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
   </head>
   <body>
-    <div class="scroll-progress" aria-hidden="true"></div>
-    <div class="cursor" aria-hidden="true"><span></span></div>
-    <div class="loader" aria-hidden="true">
-      <div class="loader-bar"></div>
-      <canvas class="loader-net"></canvas>
-      <p class="loader-label">booting<span data-loader-pct>0</span>%</p>
-    </div>
-
-    <header class="site-header">
-      <a class="brand magnetic" href="/" data-view-link="me" aria-label="abdullah sultan, home">
-        <img class="brand-mark" src="/icons/abdullah-favicon.png?v=7" alt="" width="512" height="512" />
-      </a>
-      <nav class="primary-nav" aria-label="primary">
-        <a href="/" data-view-link="me">me</a>
-        <a href="/work" data-view-link="work">work</a>
-        <a href="/life" data-view-link="life">life</a>
-        <a href="/resume" target="_blank" rel="noreferrer">resume</a>
-      </nav>
-      <a class="header-cta magnetic" href="https://cal.com/amsultan2010" target="_blank" rel="noreferrer">
-        coffee chat? <span><svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></a>
-    </header>
-
-    <main tabindex="-1">
-      <div class="view" data-view-name="me">
-        <section class="hero" id="top" aria-labelledby="hero-title">
-          <div class="hero-bg" aria-hidden="true">
-            <svg class="hero-topo" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-              <g class="topo-drift" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                <g class="topo-layer" stroke-width="1.6">
-                  <path d="M-80,700 C80,640 200,760 360,700 C520,640 640,560 800,600 C960,640 1080,720 1280,660" />
-                  <path d="M-80,620 C100,570 240,690 400,640 C560,570 700,500 860,550 C1020,600 1120,650 1280,590" />
-                  <path d="M-80,540 C120,500 280,620 440,560 C600,500 740,440 900,490 C1060,540 1160,580 1280,520" />
-                  <path d="M-80,460 C140,430 320,540 480,480 C640,420 780,380 940,430 C1100,480 1180,500 1280,450" />
-                  <path d="M-80,380 C160,360 360,460 520,400 C680,340 820,320 980,370 C1140,420 1200,420 1280,370" />
-                  <path d="M-80,300 C180,290 400,380 560,320 C720,260 860,260 1020,310 C1180,360 1220,340 1280,290" />
-                  <path d="M-80,220 C200,220 440,300 600,240 C760,180 900,190 1060,240 C1220,290 1240,250 1280,210" />
-                  <path d="M-80,140 C220,150 480,220 640,160 C800,100 940,120 1100,170 C1260,220 1260,160 1280,120" />
-                </g>
-                <g class="topo-layer topo-layer-soft" stroke-width="1.1">
-                  <path d="M-80,740 C60,700 180,780 340,740 C500,700 640,640 800,680 C960,720 1100,780 1280,730" />
-                  <path d="M-80,660 C90,620 220,720 380,670 C540,620 680,560 840,600 C1000,640 1140,700 1280,650" />
-                  <path d="M-80,500 C130,470 300,570 460,520 C620,470 760,420 920,460 C1080,500 1180,540 1280,490" />
-                  <path d="M-80,340 C170,330 380,420 540,370 C700,320 840,300 1000,340 C1160,380 1220,370 1280,330" />
-                  <path d="M-80,180 C210,185 460,250 620,200 C780,150 920,155 1080,200 C1240,245 1260,190 1280,155" />
-                  <path d="M-80,80 C240,90 500,150 660,100 C820,50 980,70 1140,120 C1300,170 1280,90 1280,55" />
-                </g>
-              </g>
-            </svg>
-            <div class="hero-shapes">
-              <span class="hero-shape shape-ring" data-shape></span>
-              <span class="hero-shape shape-block" data-shape></span>
-              <span class="hero-shape shape-pill" data-shape></span>
-              <span class="hero-shape shape-slash" data-shape></span>
-              <span class="hero-shape shape-dot" data-shape></span>
-            </div>
-          </div>
-
-          <div class="hero-rail mono" aria-hidden="true">
-            <span>riyadh</span>
-            <span data-clock>--:--</span>
-            <span class="hero-rail-site">abdullahsultan.tech</span>
-          </div>
-
-          <div class="hero-stage">
-            <p class="hero-kicker mono">ml engineer</p>
-            <h1 id="hero-title" class="hero-title" aria-label="abdullah sultan">
-              <span class="hero-line hero-line-fill" data-split>abdullah</span>
-              <span class="hero-line hero-line-stroke" data-split>sultan</span>
-            </h1>
-            <div class="hero-orbit" aria-hidden="true">
-              <span>ml</span>
-              <span>ai</span>
-              <span>startups</span>
-            </div>
-          </div>
-
-          <div class="hero-foot">
-            <p class="hero-intro serif">
-              teach myself machine learning and artificial intelligence. <span class="keep">build what students need.</span>
-            </p>
-            <a class="pill magnetic" href="/work" data-view-link="work">see work <span><svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h12M9 3l5 5-5 5"/></svg></span></a>
-          </div>
-        </section>
-
-        <div class="marquee" aria-hidden="true">
-          <div class="marquee-track">
-            <span class="marquee-cy">cycls</span><b>◆</b>
-            <span class="marquee-fs">fschoolai</span><b>◆</b>
-            <span class="marquee-zc">z combinator</span><b>◆</b>
-            <span class="marquee-cc">crosscode</span><b>◆</b>
-            <span class="marquee-df">downforce</span><b>◆</b>
-          </div>
-        </div>
-
-        <section class="about" id="about" aria-labelledby="about-title">
-          <h2 id="about-title" class="about-statement display" aria-label="machine learning, artificial intelligence">
-            <span class="about-line about-line-stroke">
-              <span class="about-line-text" data-split>machine learning</span>
-              <span class="about-line-tag mono" aria-hidden="true">ml</span>
-            </span>
-            <span class="about-line about-line-accent">
-              <span class="about-line-text" data-split>artificial intelligence</span>
-              <span class="about-line-tag mono" aria-hidden="true">ai</span>
-            </span>
-            <canvas class="about-net" aria-hidden="true"></canvas>
-          </h2>
-
-          <figure class="portrait-rail" data-lenis-prevent>
-            <div class="portrait-track">
-              <img class="portrait-shot" src="/images/portraits/portrait-school.jpg" alt="abdullah sultan in a classroom with a friend, holding up a peace sign" width="982" height="1400" />
-              <img class="portrait-shot portrait-shot-night" src="/images/portraits/portrait-night.jpg" alt="abdullah sultan seated outside at night, looking across a lit plaza" width="900" height="1600" />
-              <img class="portrait-shot portrait-shot-stage" src="/images/portraits/portrait-stage.jpg" alt="abdullah sultan holding a microphone on stage, the z combinator title slide behind him" width="1182" height="665" />
-              <img class="portrait-shot" src="/images/portraits/portrait-mirror.jpg" alt="abdullah sultan in a grey shirt, taking a mirror photo" width="1330" height="2364" />
-              <img class="portrait-shot" src="/images/portraits/portrait-gym.jpg" alt="abdullah sultan in headphones, taking a mirror photo at the gym" width="664" height="1182" />
-            </div>
-          </figure>
-
-          <ul class="about-points serif">
-            <li><span>interned at an early-stage startup where i shipped <strong>two essential features</strong> (and got <strong>over a million views</strong> doing so), and currently interning at a saudi startup serving <strong>over 7,000 people</strong>.</span></li>
-            <li><span>built an agentic workflow mcp that got <strong>1,700+ downloads</strong> during a trip to sf (where i also went to y combinator startup school and uc berkeley's agentic ai&nbsp;summit).</span></li>
-            <li><span>founded <strong>z combinator</strong>, the startup and ai club at ais-r helping students get technical with ai, build their own businesses, and get involved with startups.</span></li>
-            <li class="about-point-now"><span><strong>self-learning</strong> machine learning and artificial intelligence through <strong>kaggle</strong>, <strong>datacamp</strong>, <strong>3b1b</strong>, and <strong>statquest</strong>.</span></li>
-          </ul>
-
-          <p class="about-closer">
-            <svg class="about-closer-mark" viewBox="0 0 100 100" aria-hidden="true">
-              <g fill="currentColor">
-                <rect x="43" y="2" width="14" height="96" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(45 50 50)" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(90 50 50)" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(135 50 50)" />
-              </g>
-            </svg>
-            <span class="about-closer-text display"><span class="about-closer-line"><span class="closer-lead">the most cracked</span> <em>sixteen-year-old</em></span><span class="about-closer-line">you'll ever meet</span></span>
-            <svg class="about-closer-mark" viewBox="0 0 100 100" aria-hidden="true">
-              <g fill="currentColor">
-                <rect x="43" y="2" width="14" height="96" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(45 50 50)" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(90 50 50)" />
-                <rect x="43" y="2" width="14" height="96" transform="rotate(135 50 50)" />
-              </g>
-            </svg>
-          </p>
-
-          <div class="about-sheet">
-            <h3 class="sheet-label"><span class="display">the basics</span></h3>
-            <dl class="about-facts">
-              <div>
-                <dt class="mono">based</dt>
-                <dd class="display">riyadh</dd>
-                <dd class="fact-note mono">saudi arabia</dd>
-              </div>
-              <div>
-                <dt class="mono">school</dt>
-                <dd class="display">ais-r</dd>
-                <dd class="fact-note mono">american international school riyadh</dd>
-              </div>
-              <div>
-                <dt class="mono">grade</dt>
-                <dd class="display">11th</dd>
-                <dd class="fact-note mono">ib diploma, class of 2028</dd>
-              </div>
-            </dl>
-          </div>
-
-          <div class="about-actions">
-            <a class="action-cell action-cell-main" data-cursor="open" href="/resume" target="_blank" rel="noreferrer">
-              <span class="action-fill" aria-hidden="true"></span>
-              <span class="action-text">
-                <span class="mono">pdf</span>
-                <strong class="display">view resume</strong>
-              </span>
-              <span class="arrow-swap" aria-hidden="true"><span><svg class="arrow" viewBox="0 0 16 16"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span>
-            </a>
-            <a class="action-cell" data-cursor="open" href="https://www.linkedin.com/in/amsultan2010" target="_blank" rel="noreferrer">
-              <span class="action-fill" aria-hidden="true"></span>
-              <span class="action-text">
-                <span class="mono">linkedin</span>
-                <strong class="display">message me</strong>
-              </span>
-              <span class="arrow-swap" aria-hidden="true"><span><svg class="arrow" viewBox="0 0 16 16"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span>
-            </a>
-          </div>
-        </section>
-      </div>
-
-      <div class="view" data-view-name="work">
-        <section class="work" id="work" aria-labelledby="work-title">
-          <header class="section-head">
-            <h2 id="work-title" class="section-display" data-split>built</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i><i>built</i></span></span>
-          </header>
-
-          <div class="work-stage">
-            <h3 class="work-group" id="internships">
-              <span class="display">internships</span>
-            </h3>
-            <div class="work-list">
-              <a
-                class="work-row work-cy"
-                id="cycls"
-                data-cursor="visit"
-                href="https://cycls.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/cycls-icon.png"
-                  alt="cycls logo, a white slash between two sparkles on black"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="cycls">cycls</span>
-                  <ul class="serif work-points">
-                    <li>youngest ever intern at a <span class="keep">riyadh-based tech startup</span></li>
-                    <li>helping build and deploy specialized agents to over 7,000 customers</li>
-                  </ul>
-                </span>
-                <span class="work-foot">
-                  <span class="mono work-meta">fall/winter 2026 · ai engineering <span class="work-tail">intern <span class="work-go">visit <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span></span>
-                </span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/cycls.mp4" poster="/videos/cycls.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the cycls site, a grid of its ai agents: super, haseef, khitabik, imagine, injaz and tasibot"></video>
-                </span>
-              </a>
-
-              <a
-                class="work-row work-fs"
-                id="fschoolai"
-                data-cursor="visit"
-                href="https://fschoolai.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/fschoolai-icon.png"
-                  alt="fschoolai logo, a white letter f and brain mark on black"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="fschoolai">fschoolai</span>
-                  <ul class="serif work-points">
-                    <li>shipped a course-aware ai video tutor</li>
-                    <li>redesigned the landing page and dashboard</li>
-                    <li>marketing push past 1.3 million+ views, waitlist past 1,500</li>
-                    <li>helped organize a yc startup school afterparty, 80+ attendees</li>
-                  </ul>
-                </span>
-                <span class="work-foot">
-                  <span class="mono work-meta">summer 2026 · software and product <span class="work-tail">intern <span class="work-go">visit <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span></span>
-                </span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/fschoolai.mp4" poster="/videos/fschoolai.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of an fschoolai ai tutor session, with a lesson video beside a chat panel"></video>
-                </span>
-              </a>
-            </div>
-
-            <h3 class="work-group" id="projects">
-              <span class="display">projects</span>
-            </h3>
-            <div class="work-list">
-              <a
-                class="work-row work-cc"
-                id="crosscode"
-                data-cursor="visit"
-                href="https://getcrosscode.dev"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/crosscode-icon.png"
-                  alt="crosscode logo, a white x mark on black"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="crosscode">crosscode</span>
-                  <ul class="serif work-points">
-                    <li>open-source and mit-licensed agentic multiplayer coding</li>
-                    <li>1,700+ downloads on npm <span class="keep">as crosscode-cli</span></li>
-                    <li>works with claude code, codex, cursor, and any mcp client</li>
-                  </ul>
-                </span>
-                <span class="work-foot">
-                  <span class="mono work-meta">since 2026 · creator · <span class="work-tail">mit licensed <span class="work-go">visit <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span></span>
-                </span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/crosscode.mp4" poster="/videos/crosscode.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the crosscode landing page on a black background"></video>
-                </span>
-              </a>
-
-              <a
-                class="work-row work-df"
-                id="downforce"
-                data-cursor="visit"
-                href="https://www.downforceblog.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <img
-                  class="work-row-icon"
-                  src="/images/projects/downforce-icon.png"
-                  alt="the downforce blog logo, a dark chevron mark on lime green"
-                  width="512"
-                  height="512"
-                  loading="lazy"
-                />
-                <span class="work-row-main">
-                  <span class="display work-name tag" data-tag="downforce">the downforce&nbsp;blog</span>
-                  <ul class="serif work-points">
-                    <li>formula 1 race reports and opinion pieces, written from riyadh</li>
-                    <li>28 posts across race reports, editorials, and guides</li>
-                    <li>42,000+ views</li>
-                  </ul>
-                </span>
-                <span class="work-foot">
-                  <span class="mono work-meta">since 2025 · <span class="work-tail">writer <span class="work-go">read <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></span></span>
-                </span>
-                <span class="work-row-shot">
-                  <video class="work-row-thumb" data-clip src="/videos/downforce.mp4" poster="/videos/downforce.jpg" width="960" height="540" muted loop playsinline preload="none" aria-label="clip of the downforce blog homepage, a large wordmark above a photo of formula 1 cars"></video>
-                </span>
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <section class="lead" id="proof" aria-labelledby="lead-title">
-          <header class="section-head">
-            <h2 id="lead-title" class="section-display" data-split>lead</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>lead</i><i>lead</i><i>lead</i><i>lead</i><i>lead</i><i>lead</i></span></span>
-          </header>
-          <ol class="lead-list">
-            <li class="lead-item lead-zc" id="z-combinator">
-              <div class="lead-body">
-                <p class="mono">ais-r · founder · since 2026</p>
-                <div class="lead-head">
-                  <img
-                    class="zc-mark"
-                    src="/images/projects/zcombinator-icon.png"
-                    alt=""
-                    width="512"
-                    height="512"
-                    loading="lazy"
-                  />
-                  <h3 class="display">z combinator</h3>
-                </div>
-                <p class="lead-lede">the student run startup incubator and <span class="keep">ai club at ais-r.</span></p>
-                <ul class="serif lead-points">
-                  <li>helping <span data-count="15">15</span> members get fluent and technical with ai</li>
-                  <li>growing and funding students' personal businesses over a semester</li>
-                  <li>speakers so far: imaan sultan (llamaindex, berkeley) and zaid farekh (propeller, a $30 million fund)</li>
-                </ul>
-                <a class="zc-cta" href="https://www.zcombinator.club" target="_blank" rel="noreferrer" data-cursor="visit">
-                  zcombinator.club <span><svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span></a>
-              </div>
-            </li>
-            <li class="lead-item">
-              <div class="lead-body">
-                <p class="mono">sienna, tx · volunteer · summer 2026</p>
-                <h3 class="display">codeninjas</h3>
-                <ul class="serif lead-points">
-                  <li>coached <span data-count="50">50</span>+ elementary schoolers in robotics, game design, 3d modeling, and python/java</li>
-                  <li><span data-count="100">100</span>+ volunteer hours</li>
-                </ul>
-              </div>
-            </li>
-            <li class="lead-item">
-              <div class="lead-body">
-                <p class="mono">ais-r · leader · 2025-2026</p>
-                <h3 class="display">aspiring doctors’ club</h3>
-                <ul class="serif lead-points">
-                  <li>pioneered a tech-in-medicine curriculum taught with ai tools <span class="keep">such as alphafold</span></li>
-                  <li>ran a diabetes awareness session reaching <span data-count="60">60</span>+ students</li>
-                </ul>
-              </div>
-            </li>
-          </ol>
-        </section>
-
-        <section class="record" id="record" aria-labelledby="record-title">
-          <header class="section-head">
-            <h2 id="record-title" class="section-display" data-split>record</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>record</i><i>record</i><i>record</i><i>record</i><i>record</i><i>record</i></span></span>
-          </header>
-          <div class="record-body">
-            <h3 class="record-label"><span class="display">awards</span></h3>
-            <ul class="record-cells record-awards">
-              <li class="record-cell">
-                <span class="display record-stat" aria-hidden="true">1/5</span>
-                <span class="record-text">
-                  <strong class="display">inquisitive learner award</strong>
-                  <span class="mono">ais-r · 2026 · one of five <span class="keep">in the high school</span></span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="display record-stat" aria-hidden="true">1/3</span>
-                <span class="record-text">
-                  <strong class="display">grade 10 science achievement award</strong>
-                  <span class="mono">ais-r · 2026 · one of three <span class="keep">in the grade</span></span>
-                </span>
-              </li>
-            </ul>
-            <h3 class="record-label"><span class="display">academics</span></h3>
-            <ul class="record-cells">
-              <li class="record-cell">
-                <span class="record-mark record-mark-pad" aria-hidden="true">
-                  <img src="/images/logosicons/ib.png" alt="" width="256" height="256" loading="lazy" />
-                </span>
-                <span class="record-text">
-                  <strong class="display">the full ib diploma</strong>
-                  <span class="mono">ais-r · class of 2028</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="display record-mark record-mark-text" aria-hidden="true">+3</span>
-                <span class="record-text">
-                  <strong class="display">maths three grades ahead</strong>
-                  <span class="mono">highest course on offer</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark" aria-hidden="true">
-                  <img src="/images/logosicons/ap.png" alt="" width="256" height="256" loading="lazy" />
-                </span>
-                <span class="record-text">
-                  <strong class="display">four self-studied ap exams</strong>
-                  <span class="mono record-chips">
-                    <span>precalculus <b>5</b></span>
-                    <span>cs principles <b>5</b></span>
-                    <span>cs a <b>4</b></span>
-                    <span>psychology <b>4</b></span>
-                  </span>
-                </span>
-              </li>
-            </ul>
-            <h3 class="record-label"><span class="display">certifications</span></h3>
-            <ul class="record-cells record-certs">
-              <li class="record-cell record-cell-dc">
-                <span class="record-mark" aria-hidden="true">
-                  <img src="/images/logosicons/datacamp.png" alt="" width="256" height="256" loading="lazy" />
-                </span>
-                <span class="record-text">
-                  <span class="record-status mono"><i aria-hidden="true"></i> in progress</span>
-                  <strong class="display">associate ai engineer for data scientists</strong>
-                  <span class="mono">datacamp · career track · 2026</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark record-mark-anthropic" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path fill="#191919" d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" /></svg>
-                </span>
-                <span class="record-text">
-                  <strong class="display">ai fluency: framework <span class="keep">and foundations</span></strong>
-                  <span class="mono">anthropic · 2026</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path fill="#191919" d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z" /></svg>
-                </span>
-                <span class="record-text">
-                  <strong class="display">applied ai workflow foundations</strong>
-                  <span class="mono">openai · 2026</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path fill="#232f3e" d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586zm-3.24 1.214c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.423.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.191.2.47.296.838.296zm6.41.862c-.144 0-.24-.024-.304-.08-.064-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247.048 0 .096.008.144.024.048.016.12.048.2.08.271.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.416-.287-.807-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415.32-.096.655-.136 1.006-.136.175 0 .359.008.535.032.183.024.35.056.518.088.16.04.312.08.455.127.144.048.256.096.336.144a.69.69 0 0 1 .24.2.43.43 0 0 1 .071.263v.375c0 .168-.064.256-.184.256a.83.83 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.71 0 .224.08.416.24.567.159.152.454.304.877.44l1.134.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926-.144.272-.336.511-.583.703-.248.2-.543.343-.886.447-.36.111-.734.167-1.142.167z" /><path fill="#f90" d="M21.698 16.207c-2.626 1.94-6.442 2.969-9.722 2.969-4.598 0-8.74-1.7-11.87-4.526-.247-.223-.024-.527.272-.351 3.384 1.963 7.559 3.153 11.877 3.153 2.914 0 6.114-.607 9.06-1.852.439-.2.814.287.383.607zM22.792 14.961c-.336-.43-2.22-.207-3.074-.103-.255.032-.295-.192-.063-.36 1.5-1.053 3.967-.75 4.254-.399.287.36-.08 2.826-1.485 4.007-.215.184-.423.088-.327-.151.32-.79 1.03-2.57.695-2.994z" /></svg>
-                </span>
-                <span class="record-text">
-                  <strong class="display">intro to generative ai</strong>
-                  <span class="mono">aws · 2026</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark" aria-hidden="true">
-                  <svg viewBox="-1.745 7.1 7.45 7.45"><path fill="#20beff" d="M.1025 7.3475c-.0681 0-.1022.0341-.1022.102v6.752c0 .0681.034.1022.1022.1022h.7049c.068 0 .1022-.034.1022-.1023v-1.481l.4187-.3985 1.5016 1.91c.041.0477.0884.0716.143.0716h.9091c.0476 0 .0748-.0135.0817-.0407.0135-.041.0066-.075-.0206-.1023l-1.9816-2.4618 1.9002-1.8384c.0204-.0205.0237-.051.01-.092-.0137-.0339-.0408-.051-.0816-.051h-.9398c-.0477 0-.0953.024-.143.0716L.9096 11.607V7.4496c0-.0679-.0342-.102-.1022-.102z" /></svg>
-                </span>
-                <span class="record-text">
-                  <strong class="display">intro to programming</strong>
-                  <span class="mono">kaggle · 2026</span>
-                </span>
-              </li>
-              <li class="record-cell">
-                <span class="record-mark" aria-hidden="true">
-                  <svg viewBox="0 0 24 24"><path fill="#4285f4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /><path fill="#34a853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#fbbc05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#ea4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
-                </span>
-                <span class="record-text">
-                  <strong class="display">introduction to ai</strong>
-                  <span class="mono">google · 2026</span>
-                </span>
-              </li>
-            </ul>
-          </div>
-        </section>
-      </div>
-
-      <div class="view view-life" data-view-name="life">
-        <!-- rail.js inserts the stack and stupid stuff before this grid, then the watchlist after it -->
-        <section class="facts" aria-labelledby="favorites-title">
-          <header class="section-head">
-            <h2 id="favorites-title" class="section-display" data-split>favorites</h2>
-            <span class="section-echo" aria-hidden="true"><span class="section-echo-run"><i>favorites</i><i>favorites</i><i>favorites</i><i>favorites</i><i>favorites</i><i>favorites</i></span></span>
-          </header>
-
-          <div class="facts-board">
-          <div class="facts-group facts-lived">
-            <p class="facts-label"><span class="display">where i've lived</span></p>
-            <div class="facts-row">
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/manhattan.jpg" width="640" height="474" alt="the lower manhattan skyline at dusk, one world trade at the right" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">manhattan, new york</strong><span class="mono">2010-12</span></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/dhahran.jpg" width="1024" height="576" alt="the ithra building in dhahran at sunset, desert hills behind it" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">dhahran, saudi arabia</strong><span class="mono">2013-2021</span></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/shorthills.jpg" width="650" height="433" alt="an aerial view of a new jersey suburb, brick houses with green roofs and bare trees" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">short hills, new jersey</strong><span class="mono">2022-2025</span></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/riyadh.jpg" width="1024" height="575" alt="the riyadh skyline at dusk, the kingdom centre tower at the right" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">riyadh, saudi arabia</strong><span class="mono">2025-</span></figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="facts-group facts-snacks">
-            <p class="facts-label"><span class="display">regular munches</span></p>
-            <div class="facts-row">
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/sourdough.jpg" width="682" height="1024" alt="a cut sourdough loaf on a board beside a dish of olive oil and herbs" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">sourdough</strong><span class="mono">with olive oil</span></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/chocolate.jpg" width="565" height="353" alt="a stack of dark chocolate squares topped with mint" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">dark chocolate</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/kiwi.jpg" width="896" height="672" alt="sliced kiwi filling the frame, green flesh and black seeds" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">kiwi</strong></figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="facts-group facts-food">
-            <p class="facts-label"><span class="display">favorite food</span></p>
-            <div class="facts-row">
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/penne.jpg" width="819" height="1024" alt="penne in a red sauce in a white bowl, a fork resting in it" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">penne arabiata</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/sushi.jpg" width="800" height="550" alt="tuna and avocado rolls on a plate, soy sauce and chopsticks beside them" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">tuna sushi</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/steak.jpg" width="683" height="1024" alt="sliced medium-rare tenderloin on a plate with herbs" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">tenderloin steak</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/tacos.jpg" width="682" height="1024" alt="beef tacos on a platter with lettuce, tomato, cheese, and lime" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">beef tacos</strong></figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="facts-group facts-games">
-            <p class="facts-label"><span class="display">how i waste time</span></p>
-            <div class="facts-row">
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/ssbu.jpg" width="1024" height="384" alt="super smash bros ultimate key art, mario and link in front of a crowd of fighters" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">ssbu</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/godofwar.jpg" width="682" height="1024" alt="kratos and atreus standing in a boat, mountains behind them" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">god of war</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/ams2.jpg" width="1024" height="576" alt="a green porsche gt car with a shark mouth leading through a right-hand turn" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">ams2</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/rivals.jpg" width="750" height="422" alt="a marvel rivals fight in a stone hall, the hulk in the foreground" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">marvel rivals</strong></figcaption>
-              </figure>
-            </div>
-          </div>
-
-          <div class="facts-group facts-travel">
-            <p class="facts-label"><span class="display">where you can find me (besides riyadh)</span></p>
-            <div class="facts-row">
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/san-francisco.jpg" width="1024" height="597" alt="painted ladies in a row, the san francisco skyline and transamerica pyramid behind them" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">san francisco</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/houston.jpg" width="1024" height="640" alt="the houston skyline on a clear day, a tree-lined street and a green park in front" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">houston</strong></figcaption>
-              </figure>
-              <figure class="facts-cell">
-                <span class="facts-frame"><img src="/images/facts/karachi.jpg" width="1024" height="550" alt="a hazy karachi skyline, towers fading into a pale blue sky" loading="lazy" decoding="async"></span>
-                <figcaption class="facts-cap"><strong class="display">karachi</strong></figcaption>
-              </figure>
-            </div>
-          </div>
-          </div>
-        </section>
-      </div>
-
-      <section class="contact" id="contact" aria-labelledby="contact-title">
-        <div class="hero-bg" aria-hidden="true">
-          <svg class="hero-topo" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-            <g class="topo-drift" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-              <g class="topo-layer" stroke-width="1.6">
-                <path d="M-80,700 C80,640 200,760 360,700 C520,640 640,560 800,600 C960,640 1080,720 1280,660" />
-                <path d="M-80,620 C100,570 240,690 400,640 C560,570 700,500 860,550 C1020,600 1120,650 1280,590" />
-                <path d="M-80,540 C120,500 280,620 440,560 C600,500 740,440 900,490 C1060,540 1160,580 1280,520" />
-                <path d="M-80,460 C140,430 320,540 480,480 C640,420 780,380 940,430 C1100,480 1180,500 1280,450" />
-                <path d="M-80,380 C160,360 360,460 520,400 C680,340 820,320 980,370 C1140,420 1200,420 1280,370" />
-                <path d="M-80,300 C180,290 400,380 560,320 C720,260 860,260 1020,310 C1180,360 1220,340 1280,290" />
-                <path d="M-80,220 C200,220 440,300 600,240 C760,180 900,190 1060,240 C1220,290 1240,250 1280,210" />
-                <path d="M-80,140 C220,150 480,220 640,160 C800,100 940,120 1100,170 C1260,220 1260,160 1280,120" />
-              </g>
-              <g class="topo-layer topo-layer-soft" stroke-width="1.1">
-                <path d="M-80,740 C60,700 180,780 340,740 C500,700 640,640 800,680 C960,720 1100,780 1280,730" />
-                <path d="M-80,660 C90,620 220,720 380,670 C540,620 680,560 840,600 C1000,640 1140,700 1280,650" />
-                <path d="M-80,500 C130,470 300,570 460,520 C620,470 760,420 920,460 C1080,500 1180,540 1280,490" />
-                <path d="M-80,340 C170,330 380,420 540,370 C700,320 840,300 1000,340 C1160,380 1220,370 1280,330" />
-                <path d="M-80,180 C210,185 460,250 620,200 C780,150 920,155 1080,200 C1240,245 1260,190 1280,155" />
-                <path d="M-80,80 C240,90 500,150 660,100 C820,50 980,70 1140,120 C1300,170 1280,90 1280,55" />
-              </g>
-            </g>
-          </svg>
-          <div class="hero-shapes">
-            <span class="hero-shape shape-ring" data-shape></span>
-            <span class="hero-shape shape-block" data-shape></span>
-            <span class="hero-shape shape-pill" data-shape></span>
-            <span class="hero-shape shape-slash" data-shape></span>
-            <span class="hero-shape shape-dot" data-shape></span>
-          </div>
-        </div>
-        <div class="contact-frame">
-          <h2 id="contact-title" class="contact-title">
-            <a class="contact-link" href="https://www.linkedin.com/in/amsultan2010" target="_blank" rel="noreferrer" data-split>say hello</a>
-          </h2>
-
-          <p class="contact-pitch">
-            grab coffee, talk startups, or <span class="keep">larp being technical</span>
-          </p>
-
-          <div class="contact-grid">
-            <a class="contact-card contact-card-featured magnetic" data-cursor="open" href="https://cal.com/amsultan2010" target="_blank" rel="noreferrer">
-              <span class="contact-card-copy">
-                <span class="mono">chat</span>
-                <strong class="display">coffee chat?</strong>
-                <span class="contact-card-go mono">book a time <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span>
-              </span>
-              <img class="contact-logo" src="/images/contact/cal.png" alt="" width="192" height="192" />
-            </a>
-            <a
-              class="contact-card contact-card-in magnetic" data-cursor="open"
-              href="https://www.linkedin.com/in/amsultan2010"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="contact-card-copy">
-                <span class="mono">network</span>
-                <strong class="display">linkedin</strong>
-                <span class="contact-card-go mono">connect <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span>
-              </span>
-              <img class="contact-logo" src="/images/contact/linkedin.png" alt="" width="192" height="192" />
-            </a>
-            <a
-              class="contact-card contact-card-gh magnetic" data-cursor="open"
-              href="https://github.com/amsultan2010"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="contact-card-copy">
-                <span class="mono">code</span>
-                <strong class="display">github</strong>
-                <span class="contact-card-go mono">view repos <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span>
-              </span>
-              <img class="contact-logo" src="/images/contact/github.png" alt="" width="192" height="192" />
-            </a>
-            <a
-              class="contact-card contact-card-x magnetic" data-cursor="open"
-              href="https://x.com/amsultan2010"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <span class="contact-card-copy">
-                <span class="mono">social</span>
-                <strong class="display">x</strong>
-                <span class="contact-card-go mono">@amsultan2010 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M7 3h6v6"/></svg></span>
-              </span>
-              <img class="contact-logo" src="/images/contact/x.png" alt="" width="192" height="192" />
-            </a>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer mono">
-      <span>© 2026 abdullah sultan</span>
-      <button type="button" class="back-to-top" data-back-to-top>back to top <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13V3M3 8l5-5 5 5"/></svg></button>
-    </footer>
-  </body>
-</html>
+    <a class="skip" href="#content">skip to content</a>
