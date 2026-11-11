@@ -229,3 +229,41 @@ async function fitSignature(sig) {
   probe.remove();
 }
 
+function drawFace(live, pen, face) {
+  const sig = live.closest("[data-sig]");
+  const tl = gsap.timeline();
+  tl.to(live, { clipPath: "inset(0 0 0 100%)", duration: 0.22, ease: "power2.in" }, 0)
+    .to(pen, { scaleX: 0, transformOrigin: "right center", duration: 0.22, ease: "power2.in" }, 0)
+    .add(() => {
+      live.classList.remove("is-base", "is-script", "is-serif");
+      live.classList.add(face.cls);
+      live.style.color = face.color;
+      if (sig) sig.style.color = face.color;
+    })
+    .set(live, { clipPath: "inset(0 100% 0 0)" })
+    .set(pen, { scaleX: 0, transformOrigin: "left center" })
+    .to(live, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.62, ease: "power2.out" })
+    .to(pen, { scaleX: 1, duration: 0.62, ease: "power2.out" }, "<");
+  return tl;
+}
+
+function initSignature() {
+  const sig = document.querySelector("[data-sig]");
+  if (!sig) return;
+  const live = sig.querySelector(".sig-live");
+  const pen = sig.querySelector(".sig-pen");
+  const start = async () => {
+    await fitSignature(sig);
+    const cycle = gsap.timeline({ repeat: -1, delay: 1.35 });
+    SIG_FACES.forEach((face, i) => {
+      if (i === 0) return;
+      cycle.add(drawFace(live, pen, face));
+      cycle.to({}, { duration: 1.2 });
+    });
+    cycle.add(drawFace(live, pen, SIG_FACES[0]));
+    cycle.to({}, { duration: 1.35 });
+  };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
+  else start();
+}
+
