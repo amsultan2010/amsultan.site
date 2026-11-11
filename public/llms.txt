@@ -65,15 +65,16 @@ Canonical site: https://abdullahsultan.tech/
 
 ## Pages
 
-- [Home](https://abdullahsultan.tech/): About and contact.
-- [Work](https://abdullahsultan.tech/work): Built (internships and projects), lead, and record.
-- [Life](https://abdullahsultan.tech/life): The personal stack, a few facts, small games, and the watchlist.
+- [Home](https://abdullahsultan.tech/): Intro, internships, projects, lead, record, life, and contact.
+  /work redirects here. /life redirects to the life tab.
 - [Resume](https://abdullahsultan.tech/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
+- [Links](https://abdullahsultan.tech/links): Coffee chat, this website, LinkedIn, GitHub, X, Instagram, and the resume.
 
 ## Elsewhere
 
 - GitHub: https://github.com/amsultan2010
 - LinkedIn: https://www.linkedin.com/in/amsultan2010
 - X: https://x.com/amsultan2010
+- Instagram: https://instagram.com/sultanlearnsml
 - npm: https://www.npmjs.com/package/crosscode-cli

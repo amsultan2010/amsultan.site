@@ -1,8 +1,8 @@
 # amsultan.site
 
-Abdullah Sultan's portfolio, live at https://abdullahsultan.tech. One hand-written page in HTML, CSS
-and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8.1 builds it, GSAP
-3.15 and Lenis 1.3 move it, Vercel hosts it. Node 24 (`.nvmrc`). The repo is public, MIT licensed.
+Abdullah Sultan's portfolio, live at https://abdullahsultan.tech. Hand-written HTML, CSS
+and a little vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8.1
+builds it and Vercel hosts it. Node 24 (`.nvmrc`). The repo is public, MIT licensed.
 
 ## Commands
 
@@ -11,50 +11,24 @@ and vanilla JavaScript: no framework, no TypeScript, no tests, no linter. Vite 8
 
 ## Code map
 
-- `index.html` the whole site: every word, the meta tags and the JSON-LD. It holds three views,
-  one shown at a time (ADR 0001): me at `/` (`#top`, the marquee, `#about`), work at `/work`
-  (`#work` headed "built", in two `.work-group`s: internships then projects; `#proof` headed
-  "lead", `#record`) and life at `/life` (the stack, stupid stuff and watchlist rails).
-  `#contact` and the footer end every view. An inline head script sets `html[data-view]` from the
-  path before first paint, and css shows only that `.view[data-view-name]`.
-- `404.html` the second Vite entry. Its styles are inline; it does not load `src/styles.css`.
-- `resume.html` the third Vite entry. `src/resume.js` loads `styles.css` and `resume.css` and
-  drifts the hero's shapes behind the doc. Its header and shapes are copied from `index.html`.
-- `src/main.js` all page motion, as `init*` functions called in order at the bottom of the file.
-  `initRouter` swaps views in place (`requestView`, `swapView`, `showView`). `buildView` puts one
-  view's motion (`buildMe`, `buildWork` or `buildRails`, plus `buildContact` and `buildCounters`)
-  in a `gsap.context` that is reverted when the view is left. `initMotion` runs the header intro
-  and the first view's motion once the loader is done.
-- `src/scroll.js` Lenis setup and `lockScroll(owner, locked)`.
-- `src/rail.js` the three draggable rails, built from the `OBJECTS`, `STUFF` and `WATCHING` arrays and
-  mounted into the life view. Their markup is not in `index.html`. `buildRails()` builds their
-  motion and returns its cleanup.
-- `src/styles.css` tokens in `:root`, then one block per section. Each module imports its own css.
-- `src/network.js` `createNetwork(canvas, { ground, ahead })`, the 8-12-12-8 neural network drawn
-  on a canvas in `.loader` and behind `.about-statement`. `network.css` places each canvas.
-- `public/` served as is. `robots.txt`, `sitemap.xml` and `llms.txt` are maintained by hand.
+- `index.html` the homepage: wordmark, intro, tabs for internships, projects, lead and record, the contact ask, and the footer. The lists are in the HTML. `src/site.js` only switches the visible tab and the theme.
+- `life.html` places, food, games, small games, and the watchlist. Vercel rewrites `/life` to it. Vite does the same in dev and preview.
+- `resume.html` the Google Doc embed and the PDF link. Vercel rewrites `/resume` to it.
+- `404.html` the styled missing page. It loads the same stylesheet.
+- `src/styles.css` tokens in `:root`, then the column, the intro, the tabs, the lists, life, the resume frame, and the footer.
+- `src/fonts.css` Geist Serif and Host Grotesk, self-hosted.
+- `src/site.js` theme persistence and the tab keyboard behaviour. It also loads `@vercel/analytics`.
+- `vite.config.js` the four HTML entries, the `/work` redirect, the `/life` and `/resume` rewrites, and the generated sitemap.
+- `public/` images, icons, fonts, `robots.txt`, and `llms.txt`. `sitemap.xml` is generated at build, not stored here.
 
 ## Conventions
 
-- All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`;
-  `button` and `input` need it set on them. Meta tags, JSON-LD and `llms.txt` keep case.
-- Colour is ice signal. `--ink` (`#073b4c`, the dark main and the page ground), `--cream` and `--white` (`#d5eef2`, the light main, the paper and the type on ink), and `--orange` (`#f54937`, the signal accent: buttons, the hero's filled sultan, the accent line). `--orange-deep` is only the pressed and shadow red. Fonts are Geist Serif (`.display` and `.serif`) and Host Grotesk Light (`.mono`), self-hosted in `public/fonts`. Geist Serif ships regular only, so a weight request still paints that cut. Host Grotesk is the light cut for every weight. Cabinet Grotesk and Satoshi are the z combinator and downforce wordmarks. `--type-min` (1.15rem) is the smallest type.
-- Radii are 0, or fully round on dots. Shadows are hard offsets with zero blur. Rules are 2px
-  `--ink`. Hover lifts an element off its shadow and `:active` sinks it back.
-- Rows about another product wear that product's own colours: `--cy-*`, `--fs-*`, `--cc-*`, `--df-*`, `--zc`.
-- Motion is bound in `main.js` by class selector. Markup hooks: `data-split`, `data-count` with
-  `data-pad`, `data-cursor`, `data-tag`, `data-shape`, `data-view-link`,
-  `data-back-to-top`, `.magnetic`.
-- There are no `#` links. A link to a view is a real `<a href>` to `/`, `/work` or `/life` with
-  `data-view-link`, so it works without JS and in a new tab.
-- Durations come from `D` (fast 0.35, base 0.7, slow 1.1, epic 1.6), eases are `"out"` and
-  `"inOut"`. A plain hover is a CSS transition; GSAP takes it only when it is choreographed.
-- One owner per property. Where a `quickTo` or a hover owns `x`, `y` or `scale`, the entrance uses
-  `yPercent`, a clip-path or a fade, and ends with `clearProps`.
-- Every `repeat: -1` tween is paused off screen by a ScrollTrigger `onToggle`. Each effect checks
-  `finePointer()` and `reducedMotion()` itself.
-- Run the `anti-ai-site` and `gsap-max` skills before shipping visual changes.
-- Each concern is its own commit, written when that concern is done. The rail, the closer, a card colour, and the favicon are four commits. Do not fold finished slices into one commit at the end.
+- All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`; `button` sets it too. Meta tags, JSON-LD and `llms.txt` keep case.
+- Ice `#d5eef2` is the light ground. Ink `#073b4c` is the type, and the dark ground. Orange `#f54937` is the active tab, the focus ring, and the hover underline. `#c73828` is the pressed underline. Two families only: Geist Serif for the name and the sentences, Host Grotesk for the bar, the tabs, and the dates.
+- The column is 40rem of text, centred, with the words left aligned. Radius is 0 except the round portrait. Motion is a 150ms colour and underline change, and a 150ms tab crossfade, both removed when `prefers-reduced-motion` is set.
+- A link to another page is a real `<a href>`. `/work` redirects to `/`.
+- Theme is `data-theme` on `<html>`, set by an inline script before paint. A stored choice wins. Otherwise the script follows `prefers-color-scheme`. The toggle writes `localStorage` key `theme`.
+- Run the `anti-ai-site` skill before shipping visual changes.
 
 ## Deploy
 
@@ -64,31 +38,12 @@ login. `abdullahsultan.tech` is the canonical host. `www.abdullahsultan.tech`, `
 
 ## Gotchas
 
-- `D` and `E` are redeclared in `main.js` and `rail.js`. The eases are
-  CustomEases created in the body of `main.js`, so other modules use them only inside `init*`.
-- With Lenis running, `overflow: hidden` on `body` holds nothing. Use `lockScroll`, and put
-  `data-lenis-prevent` on anything that scrolls inside an overlay. `lenis` is undefined on touch.
-- The loader shows once per tab (`sessionStorage` key `loader-seen`).
-- JS breakpoints mirror CSS ones: 900px hero pin, 820px and 700px scroll drifts.
-- A view's path lives in three places: the head script in `index.html`, `PATHS` in `main.js` and
-  the rewrites in `vercel.json`. Vite serves `index.html` at any path locally, but Vercel
-  rewrites only `/work` and `/life`, so a new view needs all three or it 404s in production.
-  `NEXT` in `main.js` also lists the views in order, for the nav link that bounces at the bottom.
-- Motion for anything inside a view is created in that view's `build*` function, or through
-  `ctx.add` when it starts later, so the context's revert kills it. Built anywhere else, it keeps
-  running in a hidden view. Pointer behaviours are bound once in `init*` and must not be rebuilt.
-- Facts are repeated by hand. A changed number means the body copy, its `data-count`, the meta and
-  social descriptions, the JSON-LD, `public/llms.txt` and `lastmod` in `public/sitemap.xml`.
-- Colour values are copied into `404.html` and `theme-color`.
-- The resume is a Google Doc, embedded by `resume.html` and linked there as a PDF export. Edit
-  the doc, not the repo. `/resume` is a rewrite in `vercel.json`, which also redirects
-  `/resume.pdf` and `/resume.html` there. Vite skips `vercel.json`, so locally the page is at
-  `/resume.html`. The doc must stay viewable by anyone
-  with the link.
-- Images are absolute `/images/...` strings, so Vite never checks them. A `data-tag="x"` chip needs
-  `public/images/tags/x.jpg`, and a new rail object needs a measured `trim` box.
-- Stale, safe to ignore: `.env.example` and the Vercel dashboard's Astro preset (`vercel.json`
-  overrides it).
+- Facts are repeated by hand. A changed number means the body copy, the meta and social descriptions, the JSON-LD, and `public/llms.txt`.
+- The theme script is copied into each HTML file. It has to stay first, before the stylesheet, or the first paint flashes the wrong ground.
+- `/life` and `/resume` are rewrites to `life.html` and `resume.html` in `vercel.json` and in `vite.config.js`. A new page needs both, plus a route in the sitemap list in `vite.config.js`.
+- The resume is a Google Doc, embedded by `resume.html` and linked there as a PDF export. Edit the doc, not the repo. `/resume.pdf` and `/resume.html` redirect to `/resume`. The doc must stay viewable by anyone with the link.
+- Images are absolute `/images/...` strings, so Vite never checks them.
+- Stale, safe to ignore: `.env.example` and the Vercel dashboard's Astro preset (`vercel.json` overrides it).
 
 ## Agent skills
 
@@ -103,5 +58,5 @@ The five defaults, each label named after its role: `needs-triage`, `needs-info`
 
 ### Domain docs
 
-Single-context: one `GLOSSARY.md` (the view and section names) and `docs/adr/` at the repo root.
+Single-context: one `GLOSSARY.md` (the page and section names) and `docs/adr/` at the repo root.
 See `docs/agents/domain.md`.

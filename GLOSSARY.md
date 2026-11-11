@@ -1,56 +1,36 @@
-# amsultan.site
+# abdullahsultan.tech
 
-Abdullah Sultan's portfolio: one page that shows one view at a time.
+Abdullah Sultan's portfolio: a homepage, a life page, and a resume.
 
-## Views
+## Pages
 
-**View**:
-One of the three parts of the page a visitor switches between: me, work or life. Only one shows at a time.
-_Avoid_: page, tab, section
-
-**Me**:
-The home view: the hero, the marquee and about.
-_Avoid_: home, personal, about
-
-**Work**:
-The view holding built, lead and record, in that order.
-_Avoid_: projects, experience, proof
+**Home**:
+The page at `/`. Intro, then internships, projects, lead, and record as tabs, then the contact ask.
+`/work` redirects here.
+_Avoid_: me, work view
 
 **Life**:
-The view holding the personal stack, stupid stuff and the watchlist, in that order.
-_Avoid_: personal, hobbies, flicks
+The page at `/life`. Places, food, games, small games, and the watchlist.
+_Avoid_: rail, favorites
 
-## Inside a view
+**Resume**:
+The page at `/resume`. The Google Doc and the PDF link.
 
-**Section**:
-A headed block inside a view, such as about, built, lead or record.
-_Avoid_: view, page
+## On the homepage
 
-**Built**:
-The section on what Abdullah made, in two groups: internships (one row per company) and
-projects (the products he made himself).
-_Avoid_: work, experience
+**Intro**:
+The portrait, the name, the one sentence, and the bio paragraph.
 
-**Group**:
-One of the two labelled halves of built: internships or projects.
-_Avoid_: subsection, category
+**Tabs**:
+Internships, projects, lead, and record. One list shows at a time. The others are in the HTML, hidden.
 
 **Lead**:
-The section on the groups Abdullah leads or has led.
-_Avoid_: experience, proof
+The groups Abdullah leads or has led.
+_Avoid_: proof
 
 **Record**:
-The section of awards, academics and certifications.
-_Avoid_: achievements
-
-**Rail**:
-A draggable row of pictures. The personal stack and the watchlist are the two rails.
-_Avoid_: carousel, slider
-
-**Stupid stuff**:
-The section in life of small things Abdullah made as claude artifacts, each a looping clip that opens it.
-_Avoid_: artifacts, experiments, side projects
+Awards, the IB, the AP exams, and certifications.
 
 **Contact**:
-The block that ends every view, with the ways to reach Abdullah.
+The ask at the bottom of the homepage, before the footer.
 _Avoid_: footer

@@ -1,18 +1,17 @@
 # abdullah sultan portfolio
 
-Static, motion-led portfolio built with:
+Static portfolio built with:
 
-- **HTML**, **CSS**, and vanilla **JavaScript**
-- **GSAP** + ScrollTrigger
+- **HTML**, **CSS**, and a little vanilla **JavaScript**
 - **Vite** for local development and production builds
 
 Live: [abdullahsultan.tech](https://abdullahsultan.tech)
 
 ## Layout
 
-- `index.html`, `404.html`: the two pages Vite builds
-- `src/`: styles and scripts (`main.js` for page motion, `scroll.js` for Lenis and the scroll lock, `rail` for the draggable rails, `network` for the neural network in the loader and behind the about statement)
-- `public/`: images, icons, the resume, and crawler files, served as they are
+- `index.html`, `life.html`, `resume.html`, `404.html`: the pages Vite builds
+- `src/`: `styles.css`, `fonts.css`, and `site.js` (tabs and the theme toggle)
+- `public/`: images, icons, fonts, and crawler files, served as they are
 
 ## Develop
 

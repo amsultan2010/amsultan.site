@@ -1,188 +1,79 @@
 ---
-name: amsultan.site
-description: abdullah sultan's portfolio, one lowercase page in three views
+name: abdullahsultan.tech
+description: a quiet column in matt palmer's warm paper palette
 colors:
-  signal-orange: "#f54937"
-  signal-orange-deep: "#c73828"
-  warm-cream: "#d5eef2"
-  paper-white: "#d5eef2"
-  ink: "#073b4c"
-  ink-soft: "rgba(7, 59, 76, 0.62)"
-  line: "rgba(7, 59, 76, 0.55)"
-  line-soft: "rgba(7, 59, 76, 0.2)"
-  zc-purple: "#5a0fe8"
-  fs-white: "#ffffff"
-  fs-ink: "#1d1d1f"
-  fs-blue: "#0071e3"
-  cc-black: "#0a0b0e"
-  cc-white: "#edeef2"
-  df-teal: "#0a3940"
-  df-paper: "#f2ecdf"
-  df-lime: "#c6e33a"
-  cy-black: "#000000"
-  cy-white: "#ffffff"
+  bg: "#f5f2ee"
+  bg-secondary: "#ede9e3"
+  text: "#2c2825"
+  text-secondary: "#5c554e"
+  muted: "#656d79"
+  heading: "#1a1714"
+  line: "#ddd8d1"
+  accent: "#6d5db5"
+  accent-hover: "#5a4d9a"
+  bg-dark: "#1a1714"
+  text-dark: "#ede9e3"
+  heading-dark: "#f5f2ee"
+  accent-dark: "#8b7dd4"
 typography:
   display:
     fontFamily: "Geist Serif, Georgia, serif"
-    fontSize: "clamp(2.2rem, 7vw, 5.5rem)"
-    fontWeight: 800
-    lineHeight: 0.95
-    letterSpacing: "0"
-  title:
-    fontFamily: "Geist Serif, Georgia, serif"
-    fontSize: "clamp(1.15rem, 2.2vw, 1.85rem)"
-    fontWeight: 800
-    lineHeight: 1.05
+    fontSize: "3.75rem"
+    fontWeight: 500
+    lineHeight: 1
     letterSpacing: "0"
   body:
     fontFamily: "Geist Serif, Georgia, serif"
+    fontSize: "1.125rem"
+    fontWeight: 500
+    lineHeight: 2
+    letterSpacing: "0"
   label:
     fontFamily: "Host Grotesk, Helvetica Neue, Arial, sans-serif"
-    fontSize: "1.15rem"
+    fontSize: "0.875rem"
     fontWeight: 300
     letterSpacing: "0"
 rounded:
-  none: "0"
-  dot: "999px"
+  portrait: "50%"
+  mark: "0.375rem"
 spacing:
-  gutter: "clamp(1.55rem, 3.6vw, 4rem)"
-  header-h: "5.1rem"
+  column: "38rem"
+  stack: "2.5rem"
+  list: "1rem"
 components:
-  section-head:
-    backgroundColor: "{colors.warm-cream}"
-    textColor: "{colors.ink}"
-    typography: "{typography.display}"
-    rounded: "{rounded.none}"
-  contact-card:
-    backgroundColor: "{colors.signal-orange}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-    padding: "1rem"
-  work-row:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.warm-cream}"
-    rounded: "{rounded.none}"
-    padding: "1.75rem {spacing.gutter}"
-  tag:
-    textColor: "{colors.ink}"
-    rounded: "{rounded.none}"
-  tag-hover:
-    backgroundColor: "{colors.ink}"
-    textColor: "{colors.warm-cream}"
+  plate:
+    backgroundColor: "{colors.bg-secondary}"
+  portrait:
+    rounded: "{rounded.portrait}"
+  tab:
+    textColor: "{colors.muted}"
+    typography: "{typography.label}"
+  tab-active:
+    textColor: "{colors.heading}"
 ---
 
-# Design System: amsultan.site
+# Design System: abdullahsultan.tech
 
 ## Overview
 
-**Creative North Star: "The Lowercase Poster"**
-
-A flat printed-poster page: an amber ground, ink rules 2px thick, cream paper, and shadows that are hard offsets with no blur. Everything is lowercase, brand names included, so the voice reads as one person talking rather than a company. Type does the heavy lifting: a heavy display face for headings, a high-contrast serif for what was done, a pixel mono for the facts (dates, roles, counts).
-
-The page is sectioned like a broadsheet, with air inside each band. Each section opens on a full-width head band (big word, an echo strip, a counted meta cell) and then a stack of ruled rows. Motion is choreographed with GSAP but never decorative: things rise out of masks, counters count, rows enter in order.
-
-Anything that points at another product wears that product's own colours inside the site, so the portfolio becomes a frame for real work.
-
-**Key Characteristics:**
-- amber ground, cream paper, ink for type and rules
-- 2px ink rules between everything, zero radius
-- hard offset shadows, zero blur; hover lifts off the shadow, press sinks into it
-- all text lowercase
-- three-face type system: display, serif, mono
-- brand-wearing rows for other products
+One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. Light mode is warm paper. Dark mode is the same hues, inverted.
 
 ## Colors
 
-Four colours run the site; every other colour belongs to someone else's product.
+Taken from mattpalmer.io.
 
-### Primary
-- **Signal** (signal-orange): `#f54937`, the accent. Buttons, the filled hero name "sultan", the accent line, the orbit, and the pressable orange card. Its deep variant is only for pressed and shadow states. It is not the page ground.
+Light ground `#f5f2ee`, secondary `#ede9e3`, text `#2c2825`, secondary text `#5c554e`, muted `#656d79`, heading `#1a1714`, line `#ddd8d1`, accent `#6d5db5`, pressed accent `#5a4d9a`.
 
-### Neutral
-- **Ink** (ink): `#073b4c`, the dark main. The page ground, the hero, text on ice, every rule, and the work section.
-- **Ice** (warm-cream and paper-white): `#d5eef2`, the light main. The header, the hero rail and kicker, the marquee, the about field, type on the dark ground, and the outlines.
-- **Ink Soft / Line / Line Soft**: secondary text and thinner dividers inside panels.
-
-### Borrowed brand colours
-- **cycls** (cy-black, cy-white), **fschoolai** (fs-white, fs-ink, fs-blue), **crosscode** (cc-black, cc-white), **the downforce blog** (df-teal, df-paper, df-lime), **z combinator** (zc-purple). Each is read from that product's shipped css and used only on rows about it.
-
-### Named Rules
-**The Four Colour Rule.** The site's own surfaces use only orange, cream, white, and ink. A new colour enters only as another product's brand, on that product's row.
-
-**The Borrowed Brand Rule.** A row about a product sets `--row-bg`, `--row-fg` and `--row-accent` from that product's palette; layout rules never name a colour.
+Dark ground `#1a1714`, secondary `#242019`, text `#ede9e3` at 85% opacity, secondary text `#b5afa7`, muted `#9ca3af`, heading `#f5f2ee`, line `#3a3530`, accent `#8b7dd4`, pressed accent `#a99ae0`.
 
 ## Typography
 
-**Display Font:** Geist Serif (Georgia fallback), the same face as the body, at display sizes. One regular cut. Bold is not released, so a request from 700 to 900 paints that regular cut and `font-synthesis` stays off. Letter-spacing on display is 0. Masks around the hero name and the about statement keep a little padding so the serifs are not clipped.
-**Body Font:** Geist Serif (Georgia fallback). One regular cut. The family has no italic, so ledes stay roman.
-**Label/Mono Font:** Host Grotesk Light. The thinnest cut the family ships (300), and a weight range so a bolder request still paints that cut. Nothing on the site is set under 1.15rem (`--type-min`). It carries dates, roles, counts, the nav, the hero rail, rail kinds, and the tag preview caption.
-
-**Guest wordmarks:** Cabinet Grotesk on z combinator (the marquee name and the lead row). Satoshi on the downforce marquee name. Both are Fontshare faces, used only there.
-
-**Character:** a heavy display face shouting the section word, a high-contrast serif for the substance, and a thin grotesk for metadata. The contrast between the three is the hierarchy.
-
-### Hierarchy
-- **Display** (regular cut requested at 800, clamp(2.2rem, 7vw, 5.5rem), 0.95, no tracking): section words in head bands ("built", "lead").
-- **Title** (regular cut requested at 800, clamp(1.15rem, 2.2vw, 1.85rem), 1.05): row and item names.
-- **Body** (Geist Serif, regular): bullet points and ledes.
-- **Label** (Host Grotesk Light, 1.15rem, no tracking): dates, roles, counts, link labels ("visit ↗").
-
-### Named Rules
-**The Lowercase Rule.** All visible text is lowercase. `body` sets it; `button` and `input` set it themselves. Only meta tags, JSON-LD and llms.txt keep case.
-
-**The Type Floor.** No text is set under 1.15rem. On a phone, long lines use `text-wrap: pretty` so a word stays on the line it fits and the last line is not one word alone.
+Geist Serif at medium for the statement, section titles, and sentences. The family ships one roman cut, so a 400 to 500 range paints that cut for a medium request. Host Grotesk at 300 for tabs, dates, roles, the nav, and the footer. The statement is 3rem, and 3.75rem from 768px, with line-height 1 and no tracking. Body is 1rem, and 1.125rem from 640px. Meta is 0.875rem.
 
 ## Layout
 
-Full-bleed sections, each a head band over a stack of rows separated by 2px ink rules. Horizontal padding is the fluid gutter. Below 900px rows stack: index, icon and name on one line, then bullets, then the clip, then meta. From 900px a work row puts the clip in its own column beside the copy. Other breakpoints in use: 1240, 1100, 960, 820, 700, 620 to 899, and 430px. js mirrors the 900, 820 and 700px ones.
+The column is 40rem, and 38rem from 1024px, centred. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 4px ring in the page ground, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
 
-## Elevation & Depth
+## Motion
 
-Flat surfaces with hard offset shadows. A shadow is a solid block of ink (or orange on ink, or a brand accent on a brand row) offset down and right, never blurred. Shadows mark things you can press or open.
-
-### Shadow Vocabulary
-- **Chip** (`0.22rem` to `0.28rem` offset, ink): small icons and chips.
-- **Card** (`0.5rem 0.5rem 0 ink`): contact cards at rest.
-- **Shot** (`0.4rem 0.4rem 0 var(--row-accent)`): clip frames in work rows; grows to 0.6rem on hover.
-
-### Named Rules
-**The Hard Shadow Rule.** Every shadow has zero blur. Hover lifts an element off its shadow (translate up-left, shadow grows); `:active` sinks it back.
-
-## Shapes
-
-Square corners everywhere (0). The only round shapes are dots, which are fully round. Borders are 2px ink, or a brand colour mixed down to 30% on brand rows.
-
-## Components
-
-### Section head
-A full-width band: the display word on the left with a mask it rises out of, an echo strip repeating the word, and a meta cell on the right with a counted number (`data-count`, `data-pad`) above a mono caption. Each section sets `--head-bg`, `--head-ink`, `--head-rule` and `--head-accent`.
-
-### Work row
-A full-width link: mono index, square brand icon with a hard shadow, display name as a hover-preview tag, serif bullets, mono date-and-role line, a "visit ↗" label, and a looping muted clip in a framed box. It wears its product's brand colours and has an accent edge on its leading side that widens on hover.
-
-### Lead item
-A ruled row with a big display number in its own left column and a body of mono meta, display title and serif bullets. Hover flips it to white with ink text. z combinator wears its own purple and Cabinet Grotesk.
-
-### Tag
-Inline text with a 1px underline. On hover it inverts (ink ground, cream text) and shows a preview image from `public/images/tags/`.
-
-### Contact card
-Orange card, 2px ink border, ink card shadow at rest; magnetic on fine pointers.
-
-### Navigation
-A fixed cream pill header with a 2px ink border, centred at the top. View links are real `<a href>`s to `/`, `/work` and `/life`.
-
-## Do's and Don'ts
-
-### Do:
-- **Do** keep every rule 2px ink and every corner square.
-- **Do** give a row about another product that product's own colours, read from its shipped css.
-- **Do** put dates and roles in mono, what was done in serif, names in display.
-- **Do** count every number in a section meta with `data-count`.
-
-### Don't:
-- **Don't** blur a shadow or round a corner.
-- **Don't** add a fifth site colour; new colour comes only from a product's brand.
-- **Don't** set orange type on white or cream. Orange is a field, and the type on it is ink.
-- **Don't** capitalise anything on the page.
-- **Don't** hide content behind hover; hover only adds emphasis.
+Links and tabs change colour in 150ms. The open tab fades in over 150ms. `prefers-reduced-motion` removes both.
