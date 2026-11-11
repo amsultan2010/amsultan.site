@@ -575,3 +575,50 @@
               </ul>
             </section>
           </div>
+
+        </section>
+        <script>
+          (function () {
+            var hash = location.hash.replace(/^#/, "");
+            if (!hash) return;
+            var target = document.getElementById(hash);
+            if (!target) return;
+            var panel = target.getAttribute("role") === "tabpanel" ? target : target.closest("[role='tabpanel']");
+            if (!panel || !panel.hasAttribute("hidden")) return;
+            document.querySelectorAll("[role='tabpanel']").forEach(function (item) {
+              if (item === panel) item.removeAttribute("hidden");
+              else item.setAttribute("hidden", "");
+            });
+            document.querySelectorAll("[role='tab']").forEach(function (tab) {
+              var on = tab.getAttribute("aria-controls") === panel.id;
+              tab.setAttribute("aria-selected", on ? "true" : "false");
+              if (on) tab.removeAttribute("tabindex");
+              else tab.setAttribute("tabindex", "-1");
+            });
+          })();
+        </script>
+
+        <section class="contact" id="contact" aria-labelledby="contact-title" data-reveal>
+          <h2 id="contact-title">say hello</h2>
+          <a class="hello" href="https://cal.com/amsultan2010" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" d="M8 3.5v3M16 3.5v3M4 10h16"/></svg>
+            book a coffee chat
+          </a>
+          <p>grab coffee, talk startups, or larp being technical.</p>
+        </section>
+        <footer class="colophon">
+          <nav aria-label="elsewhere">
+            <a href="/resume"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M7 3h7l5 5v13H7zM14 3v5h5"/></svg>resume</a>
+            <a href="https://www.linkedin.com/in/amsultan2010" target="_blank" rel="noopener noreferrer"><img src="/images/contact/linkedin.png" alt="" width="192" height="192">linkedin</a>
+            <a href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer"><img src="/images/contact/github.png" alt="" width="192" height="192">github</a>
+            <a href="https://x.com/amsultan2010" target="_blank" rel="noopener noreferrer"><img src="/images/contact/x.png" alt="" width="192" height="192">x</a>
+            <a href="https://instagram.com/sultanlearnsml" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.15" cy="6.85" r="0.9" fill="currentColor"/></svg>instagram</a>
+            <a href="/links"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M10 13a5 5 0 0 0 7.07.07l2.12-2.12a5 5 0 0 0-7.07-7.07L10.5 5.5"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M14 11a5 5 0 0 0-7.07-.07L4.8 13.05a5 5 0 0 0 7.07 7.07l1.62-1.62"/></svg>links</a>
+            <span class="year">© 2026</span>
+          </nav>
+        </footer>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
