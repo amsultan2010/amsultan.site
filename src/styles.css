@@ -325,3 +325,16 @@ h1 {
   white-space: nowrap;
 }
 
+.bio {
+  max-width: 40em;
+  color: var(--text-2);
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+
+.bio strong {
+  color: var(--heading);
+  font-weight: 500;
+}
+
