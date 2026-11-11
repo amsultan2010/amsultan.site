@@ -1,38 +1,44 @@
-/* self-hosted. geist serif is one regular cut (bold is not released yet),
-   so a weight range stops a request for 800 from painting a fake bold.
-   host grotesk light is the thin cut used everywhere the mono face was.
-   cabinet grotesk and satoshi are variable: the range drives the wght axis,
-   because the file itself defaults to black. swap keeps the words readable
-   before the file arrives. */
+/* geist serif ships one roman cut. a 400-500 range lets a medium
+   request paint that cut instead of a synthesized heavier stroke.
+   host grotesk is the light cut, weight 300. */
 
 @font-face {
   font-family: "Geist Serif";
   src: url("/fonts/geist-serif-regular.woff2") format("woff2");
-  font-weight: 400 900;
+  font-weight: 400 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: "Host Grotesk";
-  src: url("/fonts/host-grotesk-light.woff2") format("woff2");
-  font-weight: 100 900;
+  src: url("/fonts/host-grotesk-300.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* italic only for the sultan signature. 500 sits next to geist serif medium. */
+@font-face {
+  font-family: "Host Grotesk";
+  src: url("/fonts/host-grotesk-500-italic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/caveat-500.woff2") format("woff2");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Cabinet Grotesk";
-  src: url("/fonts/cabinet-grotesk-variable.woff2") format("woff2");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/satoshi-variable.woff2") format("woff2");
-  font-weight: 300 900;
-  font-style: normal;
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
   font-display: swap;
 }
