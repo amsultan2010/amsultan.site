@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#f5f2ee" />
+    <script>
+      (function () {
+        var theme = "light";
+        try {
+          var stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") theme = stored;
+        } catch (e) {}
+        var root = document.documentElement;
+        root.dataset.theme = theme;
+        root.classList.add("js");
+        root.style.colorScheme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", theme === "dark" ? "#1a1714" : "#f5f2ee");
+      })();
+    </script>
+    <meta
+      name="description"
+      content="Abdullah Sultan's links: a coffee chat, this website, LinkedIn, GitHub, X, Instagram, and his resume."
+    />
+    <meta name="author" content="Abdullah Sultan" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta property="og:title" content="Links | Abdullah Sultan" />
+    <meta
+      property="og:description"
+      content="Abdullah Sultan's links: a coffee chat, this website, LinkedIn, GitHub, X, Instagram, and his resume."
+    />
+    <meta property="og:image" content="https://abdullahsultan.tech/og-v3.jpg" />
+    <meta property="og:image:alt" content="Abdullah Sultan, student founder" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://abdullahsultan.tech/links" />
+    <meta property="og:site_name" content="Abdullah Sultan" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Links | Abdullah Sultan" />
+    <meta
+      name="twitter:description"
+      content="Abdullah Sultan's links: a coffee chat, this website, LinkedIn, GitHub, X, Instagram, and his resume."
+    />
+    <meta name="twitter:image" content="https://abdullahsultan.tech/og-v3.jpg" />
+    <link rel="canonical" href="https://abdullahsultan.tech/links" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/site-32-v7.png" />
+    <link rel="apple-touch-icon" href="/icons/apple-v7.png" />
+    <link rel="preload" href="/fonts/geist-serif-regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/host-grotesk-300.woff2" as="font" type="font/woff2" crossorigin />
+    <title>Links | Abdullah Sultan</title>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://abdullahsultan.tech/#website",
+            "name": "Abdullah Sultan",
+            "url": "https://abdullahsultan.tech/",
+            "alternateName": ["amsultan", "abdullahsultan.tech", "Abdullah Sultan Riyadh"]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://abdullahsultan.tech/links#page",
+            "url": "https://abdullahsultan.tech/links",
+            "name": "Links | Abdullah Sultan",
+            "description": "Abdullah Sultan's links: a coffee chat, this website, LinkedIn, GitHub, X, Instagram, and his resume.",
+            "isPartOf": { "@id": "https://abdullahsultan.tech/#website" },
+            "inLanguage": "en"
+          }
+        ]
+      }
+    </script>
+    <script type="module" src="/src/site.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">skip to content</a>
+    <div class="gutters" aria-hidden="true">
+      <div class="lane lane-left">
+        <svg class="waves" viewBox="0 0 400 1440" preserveAspectRatio="none"><path d="M6 0c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180"/><path d="M28 0c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180"/><path d="M50 0c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180"/><path d="M72 0c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180"/><path d="M94 0c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180"/><path d="M116 0c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180"/><path d="M138 0c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180"/><path d="M160 0c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180"/><path d="M182 0c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180"/><path d="M204 0c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180"/><path d="M226 0c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180"/><path d="M248 0c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180"/><path d="M270 0c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180"/><path d="M292 0c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180"/><path d="M314 0c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180"/><path d="M336 0c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180"/><path d="M358 0c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180"/><path d="M380 0c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180"/></svg>
+      <span class="shape ring" style="top:4%;left:-12%;width:16rem;height:16rem"></span>
+      <span class="shape ring" style="top:30%;left:22%;width:9rem;height:9rem"></span>
+      <span class="shape block" style="top:52%;left:-6%;width:12rem;height:12rem"></span>
+      <span class="shape pill" style="top:16%;left:8%;width:14rem;height:2.8rem"></span>
+      <span class="shape slash" data-tilt="-26" style="top:66%;left:6%;width:13rem"></span>
+      <span class="shape dot" style="top:74%;left:34%;width:2.4rem;height:2.4rem"></span>
+      <span class="shape ring" style="top:82%;left:-8%;width:14rem;height:14rem"></span>
+      <span class="shape block" style="top:8%;left:48%;width:7rem;height:7rem"></span>
+      <span class="shape pill" style="top:90%;left:18%;width:10rem;height:2.2rem"></span>
+      </div>
+      <div class="lane lane-right">
+        <svg class="waves" viewBox="0 0 400 1440" preserveAspectRatio="none"><path d="M6 0c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180"/><path d="M28 0c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180"/><path d="M50 0c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180"/><path d="M72 0c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180"/><path d="M94 0c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180"/><path d="M116 0c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180"/><path d="M138 0c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180"/><path d="M160 0c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180"/><path d="M182 0c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180"/><path d="M204 0c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180"/><path d="M226 0c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180"/><path d="M248 0c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180"/><path d="M270 0c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180"/><path d="M292 0c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180c-37 70 -37 110 0 180c37 70 37 110 0 180"/><path d="M314 0c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180c44 70 44 110 0 180c-44 70 -44 110 0 180"/><path d="M336 0c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180c-16 70 -16 110 0 180c16 70 16 110 0 180"/><path d="M358 0c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180c23 70 23 110 0 180c-23 70 -23 110 0 180"/><path d="M380 0c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180c-30 70 -30 110 0 180c30 70 30 110 0 180"/></svg>
+      <span class="shape ring" style="top:10%;right:-10%;width:15rem;height:15rem"></span>
+      <span class="shape block" style="top:26%;right:8%;width:10rem;height:10rem"></span>
+      <span class="shape pill" style="top:42%;right:-4%;width:13rem;height:2.6rem"></span>
+      <span class="shape ring" style="top:50%;right:28%;width:8rem;height:8rem"></span>
+      <span class="shape slash" data-tilt="22" style="top:64%;right:4%;width:12rem"></span>
+      <span class="shape dot" style="top:72%;right:30%;width:2.6rem;height:2.6rem"></span>
+      <span class="shape ring" style="top:80%;right:-14%;width:17rem;height:17rem"></span>
+      <span class="shape block" style="top:6%;right:36%;width:6.5rem;height:6.5rem"></span>
+      <span class="shape pill" style="top:92%;right:12%;width:11rem;height:2.4rem"></span>
+      </div>
+    </div>
+    <main id="content">
+      <div class="page links-page">
+        <div class="page-top">
+          <a class="wordmark" href="/">abdullahsultan.tech</a>
+          <button type="button" class="theme-toggle" data-theme-toggle aria-pressed="false">
+            <svg class="theme-icon when-light" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M16.7 15A6.7 6.7 0 0 1 9 4.5 6.7 6.7 0 1 0 16.7 15z"/></svg>
+            <span class="when-light">dark</span>
+            <svg class="theme-icon when-dark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.15" fill="none" stroke="currentColor" stroke-width="1.6"/><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" d="M12 3.2v2M12 18.8v2M4.7 4.7l1.4 1.4M17.9 17.9l1.4 1.4M3.2 12h2M18.8 12h2M4.7 19.3l1.4-1.4M17.9 6.1l1.4-1.4"/></svg>
+            <span class="when-dark">light</span>
+          </button>
+        </div>
+        <img
+          class="pfp links-pfp"
+          src="/images/portraits/portrait-night.jpg"
+          alt="abdullah sultan seated outside at night, looking across a lit plaza"
+          width="900"
+          height="1600"
+        />
+        <nav class="link-stack" aria-label="links">
+          <a class="link-btn" href="https://cal.com/amsultan2010" target="_blank" rel="noopener noreferrer">coffee chat</a>
+          <a class="link-btn" href="https://abdullahsultan.tech">website</a>
+          <a class="link-btn" href="https://www.linkedin.com/in/amsultan2010" target="_blank" rel="noopener noreferrer">linkedin</a>
+          <a class="link-btn" href="https://github.com/amsultan2010" target="_blank" rel="noopener noreferrer">github</a>
+          <a class="link-btn" href="https://x.com/amsultan2010" target="_blank" rel="noopener noreferrer">x</a>
+          <a class="link-btn" href="https://instagram.com/sultanlearnsml" target="_blank" rel="noopener noreferrer">instagram</a>
+          <a class="link-btn" href="/resume">resume</a>
+        </nav>
+      </div>
+    </main>
+  </body>
+</html>
