@@ -50,3 +50,10 @@ function initTheme() {
   });
 }
 
+function initTitle() {
+  const base = document.title;
+  document.addEventListener("visibilitychange", () => {
+    document.title = document.hidden ? "please come back 😭" : base;
+  });
+}
+
