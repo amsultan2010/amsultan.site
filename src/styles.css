@@ -60,3 +60,155 @@
   --roy-violet: #6d28a8;
   color-scheme: light;
 }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+  scrollbar-color: var(--line) transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-size: 1.3125rem;
+  font-weight: 500;
+  font-synthesis: none;
+  line-height: 1.65;
+  text-transform: lowercase;
+  caret-color: var(--heading);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--heading);
+  color: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.15s linear, text-decoration-color 0.15s linear;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--heading);
+  text-decoration-color: currentcolor;
+}
+
+a:active {
+  color: var(--accent-hover);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-transform: lowercase;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a,
+  button,
+  [role="tab"] {
+    cursor: pointer;
+  }
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 3;
+  background: var(--bg);
+  color: var(--heading);
+  padding: 0.5rem 0.75rem;
+}
+
+.skip:focus {
+  top: max(0.75rem, env(safe-area-inset-top));
+}
+
+.when-dark {
+  display: none;
+}
+
+:root[data-theme="dark"] .when-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .when-dark {
+  display: inline;
+}
+
+:root[data-theme="light"] .when-light {
+  display: inline;
+}
+
+:root[data-theme="light"] .when-dark {
+  display: none;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.stage {
+  padding-top: 0.75rem;
+}
+
+.stage-bar,
+.plate,
+.stage-info {
+  width: min(50rem, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.stage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
