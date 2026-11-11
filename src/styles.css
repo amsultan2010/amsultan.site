@@ -827,3 +827,165 @@ h1 {
   }
 }
 
+.name-accent {
+  color: var(--heading);
+  font-family: "Host Grotesk", "Helvetica Neue", sans-serif;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.sig {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.14em;
+  font-family: "Host Grotesk", "Helvetica Neue", sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 0.96em;
+  color: var(--roy-red);
+  vertical-align: baseline;
+}
+
+.sig-base,
+.sig-live {
+  white-space: nowrap;
+}
+
+.sig-base {
+  visibility: hidden;
+}
+
+.sig-live {
+  position: absolute;
+  left: 0;
+  bottom: 0.14em;
+  color: inherit;
+}
+
+.sig-live.is-script {
+  font-family: Caveat, cursive;
+  font-style: normal;
+  font-weight: 500;
+  font-size: calc(1em * var(--script-fit, 0.72));
+}
+
+.sig-live.is-serif {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(1em * var(--serif-fit, 1));
+}
+
+.sig-pen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.08em;
+  height: 2px;
+  background: currentcolor;
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.7rem;
+  margin-top: 0.4rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 1.22rem;
+  font-weight: 300;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.caption em {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.sep {
+  color: var(--muted);
+}
+
+.pin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.caption svg,
+.colophon svg,
+.hello svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: none;
+}
+
+.bio + .facts {
+  margin-top: -1rem;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: var(--text-2);
+  font-size: 1.32rem;
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.facts li {
+  padding-left: 1rem;
+  text-indent: -1rem;
+}
+
+.facts li::before {
+  content: "- ";
+  color: var(--muted);
+}
+
+.inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration-color: var(--line);
+  white-space: nowrap;
+}
+
+img[src$="fschoolai-icon.png"] {
+  object-fit: cover;
+  object-view-box: inset(22% 22% 26% 26%);
+}
+
+.inline img,
+.colophon img {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: none;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  background: var(--bg-2);
+}
+
+.colophon a {
+  gap: 0.4rem;
+}
+
+.mark,
+.inline img,
+.colophon img {
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.item:hover .mark,
+.inline:hover img,
+.colophon a:hover img,
+.tree:hover img {
+  transform: translateY(-2px);
+}
+
