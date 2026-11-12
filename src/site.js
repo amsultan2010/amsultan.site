@@ -269,10 +269,14 @@ function drawFace(live, pen, face) {
   tl.to(live, { clipPath: "inset(0 0 0 100%)", duration: 0.22, ease: "power2.in" }, 0)
     .to(pen, { scaleX: 0, transformOrigin: "right center", duration: 0.22, ease: "power2.in" }, 0)
     .add(() => {
-      live.classList.remove("is-base", "is-script", "is-serif");
+      live.classList.remove(...SIG_CLASS_NAMES);
       live.classList.add(face.cls);
       live.style.color = face.color;
-      if (sig) sig.style.color = face.color;
+      if (sig) {
+        sig.style.color = face.color;
+        sig.style.minWidth = "0px";
+        sig.style.width = `${Math.ceil(live.getBoundingClientRect().width)}px`;
+      }
     })
     .set(live, { clipPath: "inset(0 100% 0 0)" })
     .set(pen, { scaleX: 0, transformOrigin: "left center" })
