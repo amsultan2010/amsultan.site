@@ -1122,6 +1122,7 @@ img[src$="fschoolai-icon.png"] {
 
 .links-page .page-top {
   align-self: stretch;
+  justify-content: center;
 }
 
 .links-pfp {
