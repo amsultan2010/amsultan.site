@@ -8,7 +8,9 @@ Geist Serif Regular (`geist-serif-regular.woff2`), from the Vercel `geist` packa
 
 ## Host Grotesk
 
-Host Grotesk Light (`host-grotesk-light.woff2`) by Ivo Gabrowitsch, The Foundry Types, and contributors. SIL Open Font License 1.1. Full text: `OFL-host-grotesk.txt`. The site uses the light cut, the thinnest weight the family ships, everywhere a mono label used to be.
+Host Grotesk Light (`host-grotesk-light.woff2`) and the medium italic (`host-grotesk-500-italic.woff2`) by Ivo Gabrowitsch, The Foundry Types, and contributors. SIL Open Font License 1.1. Full text: `OFL-host-grotesk.txt`. The site uses the light cut everywhere a mono label used to be. The italic is only the word sultan.
+
+Caveat (`caveat-500.woff2`) and Instrument Serif italic (`instrument-serif-italic.woff2`) are SIL Open Font License 1.1 faces, used only while sultan redraws. Caveat is by Pablo Impallari. Instrument Serif is by Rodrigo Fuenzalida.
 
 ## Cabinet Grotesk and Satoshi
 

@@ -52,17 +52,27 @@
     },
     {
       "source": "/pictures",
-      "destination": "/life",
+      "destination": "/#life",
+      "permanent": true
+    },
+    {
+      "source": "/work",
+      "destination": "/",
       "permanent": true
     },
     {
       "source": "/work/",
-      "destination": "/work",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/life",
+      "destination": "/#life",
       "permanent": true
     },
     {
       "source": "/life/",
-      "destination": "/life",
+      "destination": "/#life",
       "permanent": true
     }
   ],
@@ -72,12 +82,8 @@
       "destination": "/resume.html"
     },
     {
-      "source": "/work",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/life",
-      "destination": "/index.html"
+      "source": "/links",
+      "destination": "/links.html"
     }
   ],
   "headers": [
@@ -107,15 +113,6 @@
     },
     {
       "source": "/index.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
-    },
-    {
-      "source": "/work",
       "headers": [
         {
           "key": "Cache-Control",
