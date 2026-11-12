@@ -1132,9 +1132,9 @@ img[src$="fschoolai-icon.png"] {
 .link-stack {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  width: min(28rem, 100%);
-  margin-top: 1.75rem;
+  gap: 0.5rem;
+  width: min(11.5rem, 86%);
+  margin-top: 1.35rem;
 }
 
 .link-btn {
