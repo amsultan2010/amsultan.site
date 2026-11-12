@@ -255,21 +255,33 @@ function drawFace(live, pen, face) {
   return tl;
 }
 
-function initSignature() {
+function initSignature(context) {
   const sig = document.querySelector("[data-sig]");
   if (!sig) return;
   const live = sig.querySelector(".sig-live");
   const pen = sig.querySelector(".sig-pen");
   const start = async () => {
+    if (context.isReverted) return;
     await fitSignature(sig);
-    const cycle = gsap.timeline({ repeat: -1, delay: 1.35 });
-    SIG_FACES.forEach((face, i) => {
-      if (i === 0) return;
-      cycle.add(drawFace(live, pen, face));
-      cycle.to({}, { duration: 1.2 });
+    if (context.isReverted) return;
+    context.add(() => {
+      const cycle = gsap.timeline({ repeat: -1, delay: 1.35 });
+      SIG_FACES.forEach((face, i) => {
+        if (i === 0) return;
+        cycle.add(drawFace(live, pen, face));
+        cycle.to({}, { duration: 1.2 });
+      });
+      cycle.add(drawFace(live, pen, SIG_FACES[0]));
+      cycle.to({}, { duration: 1.35 });
+      return () => {
+        live.classList.remove("is-script", "is-serif");
+        live.classList.add("is-base");
+        live.style.removeProperty("color");
+        sig.style.removeProperty("color");
+        gsap.set(live, { clearProps: "clipPath" });
+        gsap.set(pen, { clearProps: "scaleX,transformOrigin" });
+      };
     });
-    cycle.add(drawFace(live, pen, SIG_FACES[0]));
-    cycle.to({}, { duration: 1.35 });
   };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
   else start();
@@ -280,8 +292,8 @@ function initMotion() {
   mm.add("(prefers-reduced-motion: reduce)", () => {
     gsap.set("[data-enter], [data-reveal]", { y: 0, autoAlpha: 1 });
   });
-  mm.add("(prefers-reduced-motion: no-preference)", () => {
-    initSignature();
+  mm.add("(prefers-reduced-motion: no-preference)", (context) => {
+    initSignature(context);
 
     const enter = document.querySelectorAll("[data-enter]");
     if (enter.length) {
