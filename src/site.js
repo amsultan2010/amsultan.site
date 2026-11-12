@@ -10,14 +10,16 @@ gsap.registerPlugin(ScrollTrigger);
 const THEME_KEY = "theme";
 
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--roy-red)" },
-  { cls: "is-script", color: "var(--roy-orange)" },
-  { cls: "is-serif", color: "var(--roy-yellow)" },
-  { cls: "is-base", color: "var(--roy-green)" },
-  { cls: "is-script", color: "var(--roy-blue)" },
-  { cls: "is-serif", color: "var(--roy-indigo)" },
-  { cls: "is-base", color: "var(--roy-violet)" },
+  { cls: "is-base", color: "var(--roy-red)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
+  { cls: "is-script", color: "var(--roy-orange)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
+  { cls: "is-serif", color: "var(--roy-yellow)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
+  { cls: "is-playfair", color: "var(--roy-green)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
+  { cls: "is-mono", color: "var(--roy-blue)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
+  { cls: "is-vibes", color: "var(--roy-indigo)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
+  { cls: "is-syne", color: "var(--roy-violet)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
 ];
+
+const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
 
 function applyTheme(theme, persist) {
   const root = document.documentElement;
