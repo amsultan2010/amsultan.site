@@ -973,7 +973,8 @@ h1 {
 .inline {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.28rem;
+  vertical-align: middle;
   text-decoration-color: var(--line);
   white-space: nowrap;
 }
