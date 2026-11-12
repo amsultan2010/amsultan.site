@@ -269,12 +269,12 @@ async function fitSignature(sig) {
   faces.forEach((item) => {
     shown.classList.remove(...SIG_CLASS_NAMES);
     shown.classList.add(item.face.cls);
+    shown.style.transform = "none";
     const probe = mark.cloneNode();
     shown.appendChild(probe);
     const shift = line - probe.getBoundingClientRect().bottom;
     probe.remove();
     sig._shifts[item.face.cls] = shift;
-    shown.style.transform = `translateY(${shift}px)`;
     const width = Math.ceil(shown.getBoundingClientRect().width);
     sig._widths[item.face.cls] = width;
     if (width > widest) widest = width;
