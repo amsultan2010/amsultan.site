@@ -270,7 +270,8 @@ button {
 
 .identity {
   min-width: 0;
-  padding-bottom: 0.1rem;
+  align-self: start;
+  padding-top: calc(var(--overlap) + 0.55rem);
 }
 
 .stage-top {
