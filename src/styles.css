@@ -1243,9 +1243,7 @@ img[src$="fschoolai-icon.png"] {
     gap: 0.08rem;
   }
 
-  #name {
-    font-size: clamp(2.15rem, 8vw, 3.15rem);
-  }
+  .where .sep { display: none; }
 
   .caption {
     margin-top: 0.7rem;
