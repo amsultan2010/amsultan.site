@@ -239,7 +239,7 @@ button {
   width: var(--pfp);
   height: var(--pfp);
   flex: none;
-  border: 4px solid var(--bg);
+  border: 2px solid var(--signal-deep);
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
@@ -530,7 +530,7 @@ h1 {
 }
 
 @media (max-width: 520px) {
-  :root { --edge: 0.7rem; }
+  :root { --edge: 1.125rem; }
 
   [role="tab"] {
     min-height: 40px;
@@ -1169,7 +1169,12 @@ img[src$="fschoolai-icon.png"] {
 }
 
 .gutters {
-  display: none;
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .lane {
@@ -1178,6 +1183,7 @@ img[src$="fschoolai-icon.png"] {
   bottom: 0;
   width: calc((100% - min(50rem, 100% - var(--edge) * 2)) / 2);
   overflow: hidden;
+  background: var(--ink);
 }
 
 .lane-left { left: 0; }
@@ -1188,8 +1194,8 @@ img[src$="fschoolai-icon.png"] {
   top: -8%;
   width: 100vw;
   height: 116%;
-  color: var(--ink);
-  opacity: 0.9;
+  color: var(--ice);
+  opacity: 0.92;
   animation: field-fade 5s ease-in-out infinite alternate;
 }
 
@@ -1206,15 +1212,15 @@ img[src$="fschoolai-icon.png"] {
 
 .topo-layer,
 .topo-layer path {
-  stroke: var(--ink);
+  stroke: var(--ice);
 }
 
 .topo-layer-soft {
-  color: var(--cyan);
+  color: var(--ice);
   animation: layer-b 10.5s ease-in-out infinite alternate;
 }
 
-.topo-layer-soft path { stroke: var(--cyan); }
+.topo-layer-soft path { stroke: var(--ice); }
 
 .topo-layer path.wave-signal,
 .topo-layer-soft path.wave-signal { stroke: var(--signal); }
@@ -1225,14 +1231,14 @@ img[src$="fschoolai-icon.png"] {
 .gutter-shape {
   display: none;
   position: absolute;
-  border: 2px solid var(--ink);
+  border: 2px solid var(--ice);
   animation: shape-float 2.6s ease-in-out infinite alternate;
 }
 
-.gutter-shape.ring { border-color: var(--cyan); border-radius: 50%; opacity: 0.9; }
+.gutter-shape.ring { border-color: var(--ice); border-radius: 50%; opacity: 0.9; }
 
 .gutter-shape.block {
-  background: color-mix(in srgb, var(--cyan) 35%, var(--ice));
+  background: color-mix(in srgb, var(--ice) 24%, transparent);
   box-shadow: 0.3rem 0.3rem 0 var(--signal);
   opacity: 0.95;
 }
@@ -1240,7 +1246,7 @@ img[src$="fschoolai-icon.png"] {
 .gutter-shape.pill {
   border: 0;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--cyan) 28%, var(--ice));
+  background: color-mix(in srgb, var(--ice) 40%, transparent);
   opacity: 0.95;
 }
 
@@ -1262,18 +1268,7 @@ img[src$="fschoolai-icon.png"] {
   border: 0;
   border-radius: 50%;
   background: var(--signal);
-  box-shadow: 0.18rem 0.18rem 0 var(--ink);
-}
-
-@media (min-width: 960px) {
-  .gutters {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-  }
+  box-shadow: 0.18rem 0.18rem 0 var(--ice);
 }
 
 @media (min-width: 1100px) {

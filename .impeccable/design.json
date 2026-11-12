@@ -24,7 +24,7 @@
       "refersTo": "pfp",
       "description": "Round night portrait overlapping the bottom edge of the Riyadh plate.",
       "html": "<img class=\"pfp\" alt=\"\" src=\"/images/portraits/portrait-night.jpg\">",
-      "css": ".pfp{width:12rem;height:12rem;border:4px solid #d5eef2;border-radius:50%;object-fit:cover}"
+      "css": ".pfp{width:12rem;height:12rem;border:2px solid #c73828;border-radius:50%;object-fit:cover}"
     },
     {
       "name": "Tab",

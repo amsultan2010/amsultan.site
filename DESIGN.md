@@ -64,7 +64,7 @@ One reading column under a photograph. The portrait sits on the bottom edge of t
 
 Ice signal, from the palette in `00c4685`. Ice is now the ground and ink is the type. The cyan in that commit is the ink band `#073b4c`.
 
-Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Secondary text `#145e72` (6.0:1) is the same hue, lifted. Muted `#4a6d76` (4.6:1) is the inactive tab and the meta line. Cyan `#0e5c70` (6.2:1) is that band lifted to the lightest step that still clears 4.5:1 on ice. It is the tab hover, the borders, the plate well's stronger edge, and the gutter's second contour. The well and the link buttons use a light mix, `#c5e4ea`.
+Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Secondary text `#145e72` (6.0:1) is the same hue, lifted. Muted `#4a6d76` (4.6:1) is the inactive tab and the meta line. Cyan `#0e5c70` (6.2:1) is that band lifted to the lightest step that still clears 4.5:1 on ice. It is the tab hover, the borders, and the plate well's stronger edge. The gutter ground is the band itself, `#073b4c`, and the contours on it are ice and signal red. The well and the link buttons use a light mix, `#c5e4ea`.
 
 Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: sultan, the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
 
@@ -76,7 +76,7 @@ Geist Serif at medium for the statement, section titles, and sentences. The fami
 
 ## Layout
 
-The column is 40rem, and 38rem from 1024px, centred. From 960px the empty sides hold the old horizontal contour field and, from 1100px, the floating shapes. Both are clipped to those gutters. Below that the gutters are hidden. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 4px ring in the page ground, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
+The column is 40rem, and 38rem from 1024px, centred. The side gutters are the cyan band `#073b4c`, with the old horizontal contours in ice and signal red, and the floating shapes from 1100px. On a phone the column inset is 1.125rem, so each gutter is about 18px and the waves still show. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 2px `#c73828` ring, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
 
 ## Motion
 
