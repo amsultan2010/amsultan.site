@@ -8,13 +8,14 @@
   --line: #ddd8d1;
   --accent: #1a1714;
   --accent-hover: #2c2825;
-  --roy-red: #a61b1b;
-  --roy-orange: #9a3d00;
-  --roy-yellow: #7a5600;
-  --roy-green: #1c6b32;
-  --roy-blue: #1a4f91;
-  --roy-indigo: #3a2e9a;
-  --roy-violet: #6d28a8;
+  --roy-red: #d02a1c;
+  --roy-orange: #ec5a29;
+  --roy-yellow: #9f8400;
+  --roy-green: #479b2c;
+  --roy-blue: #2e8ded;
+  --roy-indigo: #00007b;
+  --roy-violet: #2d0798;
+  --edge: 1rem;
   --serif: "Geist Serif", Georgia, serif;
   --sans: "Host Grotesk", "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
@@ -31,13 +32,13 @@
   --line: #3a3530;
   --accent: #f5f2ee;
   --accent-hover: #ede9e3;
-  --roy-red: #ff8f86;
-  --roy-orange: #ffb07a;
-  --roy-yellow: #ffd56a;
-  --roy-green: #7ee0a0;
-  --roy-blue: #8ec4ff;
-  --roy-indigo: #b7b3ff;
-  --roy-violet: #e2b6ff;
+  --roy-red: #d02a1c;
+  --roy-orange: #ee6b3f;
+  --roy-yellow: #ffe35e;
+  --roy-green: #54b834;
+  --roy-blue: #4599ef;
+  --roy-indigo: #4c4cff;
+  --roy-violet: #6d3cf6;
   color-scheme: dark;
 }
 
@@ -51,13 +52,13 @@
   --line: #ddd8d1;
   --accent: #1a1714;
   --accent-hover: #2c2825;
-  --roy-red: #a61b1b;
-  --roy-orange: #9a3d00;
-  --roy-yellow: #7a5600;
-  --roy-green: #1c6b32;
-  --roy-blue: #1a4f91;
-  --roy-indigo: #3a2e9a;
-  --roy-violet: #6d28a8;
+  --roy-red: #d02a1c;
+  --roy-orange: #ec5a29;
+  --roy-yellow: #9f8400;
+  --roy-green: #479b2c;
+  --roy-blue: #2e8ded;
+  --roy-indigo: #00007b;
+  --roy-violet: #2d0798;
   color-scheme: light;
 }
 
@@ -201,7 +202,7 @@ button {
 .stage-bar,
 .plate,
 .stage-info {
-  width: min(50rem, calc(100% - 2rem));
+  width: min(50rem, calc(100% - var(--edge) * 2));
   margin-inline: auto;
 }
 
