@@ -365,8 +365,8 @@ h1 {
 [role="tablist"] {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 0.5rem;
+  flex-wrap: nowrap;
+  gap: 0.4rem;
   padding-bottom: 0.85rem;
 }
 
