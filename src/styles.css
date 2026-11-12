@@ -233,9 +233,10 @@ button {
   --overlap: calc(var(--pfp) * 0.26);
   position: relative;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1.4rem;
+  align-items: start;
   margin-top: calc(var(--overlap) * -1);
   padding-bottom: max(5rem, env(safe-area-inset-bottom));
 }
