@@ -229,8 +229,8 @@ button {
 }
 
 .stage-info {
-  --pfp: 10rem;
-  --overlap: calc(var(--pfp) / 2);
+  --pfp: 8.75rem;
+  --overlap: calc(var(--pfp) * 0.26);
   position: relative;
   z-index: 2;
   display: flex;
