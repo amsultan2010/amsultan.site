@@ -1236,8 +1236,8 @@ img[src$="fschoolai-icon.png"] {
     line-height: 1.25;
   }
 
-@media (max-width: 760px) {
-  .stage-info > header {
+  .where {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 1.35rem;
