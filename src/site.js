@@ -263,20 +263,32 @@ async function fitSignature(sig) {
   const line = mark.getBoundingClientRect().bottom;
   mark.remove();
   sig._shifts = {};
+  sig._widths = {};
   shown.style.transform = "none";
+  widest = 0;
   faces.forEach((item) => {
     shown.classList.remove(...SIG_CLASS_NAMES);
     shown.classList.add(item.face.cls);
     const probe = mark.cloneNode();
     shown.appendChild(probe);
-    sig._shifts[item.face.cls] = line - probe.getBoundingClientRect().bottom;
+    const shift = line - probe.getBoundingClientRect().bottom;
     probe.remove();
+    sig._shifts[item.face.cls] = shift;
+    shown.style.transform = `translateY(${shift}px)`;
+    const width = Math.ceil(shown.getBoundingClientRect().width);
+    sig._widths[item.face.cls] = width;
+    if (width > widest) widest = width;
   });
   shown.classList.remove(...SIG_CLASS_NAMES);
   shown.classList.add("is-base");
-  sig.style.minWidth = "0px";
-  sig.style.width = `${Math.ceil(shown.getBoundingClientRect().width)}px`;
   shown.style.transform = `translateY(${sig._shifts["is-base"] || 0}px)`;
+  sig.style.minWidth = `${widest}px`;
+  sig.style.width = `${widest}px`;
+  const pen = sig.querySelector(".sig-pen");
+  if (pen && sig._widths["is-base"]) {
+    pen.style.width = `${sig._widths["is-base"]}px`;
+    pen.style.right = "auto";
+  }
 }
 
 function drawFace(live, pen, face) {
@@ -290,10 +302,13 @@ function drawFace(live, pen, face) {
       live.style.color = face.color;
       if (sig) {
         sig.style.color = face.color;
-        sig.style.minWidth = "0px";
         const shift = sig._shifts?.[face.cls] || 0;
         live.style.transform = `translateY(${shift}px)`;
-        sig.style.width = `${Math.ceil(live.getBoundingClientRect().width)}px`;
+        const word = sig._widths?.[face.cls];
+        if (pen && word) {
+          pen.style.width = `${word}px`;
+          pen.style.right = "auto";
+        }
       }
     })
     .set(live, { clipPath: "inset(0 100% 0 0)" })

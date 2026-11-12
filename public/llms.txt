@@ -65,11 +65,11 @@ Canonical site: https://abdullahsultan.tech/
 
 ## Pages
 
-- [Home](https://abdullahsultan.tech/): Intro, internships, projects, lead, record, life, and contact.
-  /work redirects here. /life redirects to the life tab.
+- [Home](https://abdullahsultan.tech/): Intro, internships, projects, lead, record, extra, and contact.
+  /work redirects here. /life redirects to the extra tab.
 - [Resume](https://abdullahsultan.tech/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
-- [Links](https://abdullahsultan.tech/links): Coffee chat, this website, LinkedIn, GitHub, X, Instagram, and the resume.
+- [Links](https://abdullahsultan.tech/links): Coffee chat, this website, LinkedIn, GitHub, X, and Instagram.
 
 ## Elsewhere
 
