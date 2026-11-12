@@ -632,7 +632,7 @@ h1 {
   line-height: 1.4rem;
 }
 
-.colophon nav .year {
+.colophon-row .year {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
