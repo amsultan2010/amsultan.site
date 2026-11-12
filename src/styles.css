@@ -917,7 +917,8 @@ h1 {
   text-wrap: pretty;
 }
 
-.caption em {
+.caption em,
+.facts em {
   font-family: "Instrument Serif", Georgia, serif;
   font-style: italic;
   font-weight: 400;
