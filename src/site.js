@@ -257,10 +257,26 @@ async function fitSignature(sig) {
     if (end > limit) shrink = Math.min(shrink, (limit - name.getBoundingClientRect().left) / (end - name.getBoundingClientRect().left));
   });
   if (shrink < 0.999) name.style.fontSize = `${parseFloat(name.style.fontSize) * shrink}px`;
+  const mark = document.createElement("span");
+  mark.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
+  name.insertBefore(mark, sig);
+  const line = mark.getBoundingClientRect().bottom;
+  mark.remove();
+  sig._shifts = {};
+  shown.style.transform = "none";
+  faces.forEach((item) => {
+    shown.classList.remove(...SIG_CLASS_NAMES);
+    shown.classList.add(item.face.cls);
+    const probe = mark.cloneNode();
+    shown.appendChild(probe);
+    sig._shifts[item.face.cls] = line - probe.getBoundingClientRect().bottom;
+    probe.remove();
+  });
   shown.classList.remove(...SIG_CLASS_NAMES);
   shown.classList.add("is-base");
   sig.style.minWidth = "0px";
   sig.style.width = `${Math.ceil(shown.getBoundingClientRect().width)}px`;
+  shown.style.transform = `translateY(${sig._shifts["is-base"] || 0}px)`;
 }
 
 function drawFace(live, pen, face) {
@@ -275,6 +291,8 @@ function drawFace(live, pen, face) {
       if (sig) {
         sig.style.color = face.color;
         sig.style.minWidth = "0px";
+        const shift = sig._shifts?.[face.cls] || 0;
+        live.style.transform = `translateY(${shift}px)`;
         sig.style.width = `${Math.ceil(live.getBoundingClientRect().width)}px`;
       }
     })
@@ -315,6 +333,7 @@ function initSignature(context) {
         live.classList.remove(...SIG_CLASS_NAMES);
         live.classList.add("is-base");
         live.style.removeProperty("color");
+        live.style.removeProperty("transform");
         sig.style.removeProperty("color");
         sig.style.removeProperty("width");
         sig.style.removeProperty("min-width");

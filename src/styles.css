@@ -299,8 +299,7 @@ button {
   border: 4px solid var(--bg);
   border-radius: 50%;
   object-fit: cover;
-  object-position: center 52%;
-  object-view-box: inset(31% 16% 14% 14%);
+  object-position: center;
   background: var(--bg-2);
 }
 
@@ -696,23 +695,28 @@ h1 {
   line-height: 1.45rem;
 }
 
-.rows {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.rows,
+.play {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 8rem));
+  gap: 0.7rem 0.85rem;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: 3.5rem minmax(0, 1fr);
-  gap: 0.9rem;
-  align-items: center;
-  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.3rem;
+  min-height: 0;
+  min-width: 0;
 }
 
 .row img {
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   object-fit: cover;
   border-radius: 0.375rem;
   background: var(--bg-2);
@@ -1020,62 +1024,25 @@ img[src$="fschoolai-icon.png"] {
   transform: translateY(-2px);
 }
 
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-  gap: 1rem 0.85rem;
-}
-
-.game-grid a {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  min-height: 44px;
+.points a {
   color: var(--heading);
-  text-decoration: none;
-}
-
-.game-grid img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  border-radius: 0.375rem;
-  background: var(--bg-2);
-}
-
-.game-grid strong {
-  font-size: 1.25rem;
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-.game-grid span {
-  color: var(--text-2);
-  font-family: var(--sans);
-  font-size: 1.08rem;
-  font-weight: 300;
-  line-height: 1.35;
-  text-wrap: pretty;
-}
-
-.game-grid a:hover strong {
-  text-decoration: underline;
-  text-decoration-color: currentcolor;
-  text-underline-offset: 0.16em;
+  text-decoration-color: var(--line);
 }
 
 .lived,
 .visit {
   display: grid;
-  gap: 0.85rem;
+  gap: 0.65rem 0.75rem;
+  width: fit-content;
+  max-width: 100%;
 }
 
 .lived {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(2, minmax(0, 7.75rem));
 }
 
 .visit {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 6.25rem));
 }
 
 .lived li,
@@ -1087,7 +1054,8 @@ img[src$="fschoolai-icon.png"] {
 .lived img,
 .visit img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: auto;
+  aspect-ratio: 1;
   object-fit: cover;
   border-radius: 0.375rem;
   background: var(--bg-2);
@@ -1095,34 +1063,29 @@ img[src$="fschoolai-icon.png"] {
 
 .lived .when {
   position: absolute;
-  top: 0.55rem;
-  left: 0.55rem;
-  padding: 0.15rem 0.45rem;
+  top: 0.35rem;
+  left: 0.35rem;
+  padding: 0.08rem 0.35rem;
   background: var(--bg);
   color: var(--heading);
   font-family: var(--sans);
-  font-size: 1.05rem;
+  font-size: 0.78rem;
   font-weight: 300;
   line-height: 1.3;
 }
 
 .tile-name {
   display: block;
-  margin-top: 0.4rem;
+  margin-top: 0.28rem;
   color: var(--heading);
-  font-size: 1.3rem;
-  line-height: 1.3;
+  font-size: 0.95rem;
+  line-height: 1.25;
 }
 
 .links-page {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.links-page .page-top {
-  align-self: stretch;
-  justify-content: center;
 }
 
 .links-pfp {
@@ -1176,15 +1139,35 @@ img[src$="fschoolai-icon.png"] {
   transform: translateY(1px);
 }
 
-@media (min-width: 640px) {
-  .lived {
-    grid-template-columns: 1fr 1fr;
-  }
+.play .row h3 {
+  font-size: 1.05rem;
 }
 
-@media (min-width: 760px) {
-  .visit {
-    grid-template-columns: repeat(3, 1fr);
+@media (min-width: 900px) {
+  .links-pfp { --pfp: 16rem; }
+
+  .links-name {
+    width: min(36rem, 78%);
+    margin-top: 1.5rem;
+  }
+
+  .links-page .link-stack {
+    width: min(32rem, 70%);
+    gap: 0.9rem;
+    margin-top: 2rem;
+  }
+
+  .links-page .link-btn {
+    min-height: 4.6rem;
+    padding: 0.85rem 1.5rem;
+    font-size: 1.8rem;
+    gap: 0.8rem;
+  }
+
+  .links-page .link-btn img,
+  .links-page .link-btn svg {
+    width: 2.05rem;
+    height: 2.05rem;
   }
 }
 
