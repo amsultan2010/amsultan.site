@@ -614,25 +614,8 @@ h1 {
   min-height: 44px;
 }
 
-@media (max-width: 720px) {
-  .item h3 .meta {
-    flex-basis: 100%;
-    margin-left: 0;
-  }
-}
-
 @media (max-width: 520px) {
-  .stage-bar,
-  .plate,
-  .stage-info,
-  .page {
-    width: calc(100% - 1.25rem);
-  }
-
-  .colophon nav {
-    gap: 0.2rem 0.4rem;
-    font-size: 0.84rem;
-  }
+  :root { --edge: 0.7rem; }
 
   .colophon img,
   .colophon svg {
