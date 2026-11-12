@@ -12,6 +12,8 @@ Host Grotesk Light (`host-grotesk-light.woff2`) and the medium italic (`host-gro
 
 Caveat (`caveat-500.woff2`) and Instrument Serif italic (`instrument-serif-italic.woff2`) are SIL Open Font License 1.1 faces, used only while sultan redraws. Caveat is by Pablo Impallari. Instrument Serif is by Rodrigo Fuenzalida.
 
+The same redraw also uses Playfair Display italic (`playfair-display-italic.woff2`, Claus Eggers Sorensen), IBM Plex Mono (`ibm-plex-mono.woff2`, Mike Abbink), Great Vibes (`great-vibes.woff2`, Robert Leuschke), and Syne (`syne-700.woff2`, Bonjour Monde). Each is SIL Open Font License 1.1, subset to the letters in sultan.
+
 ## Cabinet Grotesk and Satoshi
 
 Cabinet Grotesk (`cabinet-grotesk-variable.woff2`) and Satoshi (`satoshi-variable.woff2`) are from Fontshare, designed by Indian Type Foundry, under the ITF Free Font License 2.0. Full text: `FFL.txt`.
