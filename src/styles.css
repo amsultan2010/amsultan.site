@@ -1259,11 +1259,6 @@ img[src$="fschoolai-icon.png"] {
   z-index: 1;
 }
 
-@keyframes sway {
-  from { transform: translateY(0); }
-  to { transform: translateY(-42px); }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .sig,
   .sig-live {
