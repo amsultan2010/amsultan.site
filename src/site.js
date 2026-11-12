@@ -288,6 +288,14 @@ function drawFace(live, pen, face) {
 function initSignature(context) {
   const sig = document.querySelector("[data-sig]");
   if (!sig) return;
+  if (!sig.dataset.fitBound) {
+    sig.dataset.fitBound = "1";
+    let frame = 0;
+    window.addEventListener("resize", () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => fitSignature(sig));
+    });
+  }
   const live = sig.querySelector(".sig-live");
   const pen = sig.querySelector(".sig-pen");
   const start = async () => {
