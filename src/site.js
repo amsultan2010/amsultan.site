@@ -212,31 +212,55 @@ async function loadFace(spec) {
 }
 
 async function fitSignature(sig) {
-  const live = sig.querySelector(".sig-live");
-  const size = getComputedStyle(live).fontSize;
-  const [baseReady, scriptReady, serifReady] = await Promise.all([
-    loadFace(`italic 500 ${size} "Host Grotesk"`),
-    loadFace(`500 ${size} Caveat`),
-    loadFace(`italic 400 ${size} "Instrument Serif"`),
-  ]);
-  const probe = document.createElement("span");
-  probe.textContent = "sultan";
-  probe.style.cssText = `position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;font-size:${size};line-height:1`;
-  document.body.appendChild(probe);
-  const widthOf = (family, style, weight) => {
-    probe.style.fontFamily = family;
-    probe.style.fontStyle = style;
-    probe.style.fontWeight = weight;
-    return probe.getBoundingClientRect().width || 1;
+  const name = sig.closest("h1");
+  if (name) name.style.fontSize = "";
+  const size = getComputedStyle(name || sig).fontSize;
+  const ready = await Promise.all(SIG_FACES.map((face) => loadFace(face.spec(size))));
+  if (!ready[0]) return;
+  const ctx = document.createElement("canvas").getContext("2d");
+  const ink = (text, family, style, weight) => {
+    ctx.font = `${style} ${weight} ${size} ${family}`;
+    const measured = ctx.measureText(text);
+    return {
+      h: (measured.actualBoundingBoxAscent || 0) + (measured.actualBoundingBoxDescent || 0) || 1,
+      w: measured.width || 1,
+    };
   };
-  const base = widthOf('"Host Grotesk", "Helvetica Neue", sans-serif', "italic", "500");
-  if (baseReady && scriptReady) {
-    sig.style.setProperty("--script-fit", String(base / widthOf("Caveat, cursive", "normal", "500")));
-  }
-  if (baseReady && serifReady) {
-    sig.style.setProperty("--serif-fit", String(base / widthOf('"Instrument Serif", Georgia, serif', "italic", "400")));
-  }
-  probe.remove();
+  const target = ink("abdullah", '"Host Grotesk", sans-serif', "normal", "500");
+  const gap = ink(" ", '"Host Grotesk", sans-serif', "normal", "500").w;
+  const faces = SIG_FACES.flatMap((face, index) => (ready[index] ? [{ face, ink: ink("sultan", face.family, face.style, face.weight) }] : []));
+  if (!faces.length) return;
+  const baseScale = target.h / faces[0].ink.h;
+  const widthCap = faces[0].ink.w * baseScale * 1.22;
+  sig.style.fontSize = `${baseScale}em`;
+  let widest = 0;
+  faces.forEach((item) => {
+    let scale = target.h / item.ink.h;
+    if (item.ink.w * scale > widthCap) scale = widthCap / item.ink.w;
+    widest = Math.max(widest, item.ink.w * scale);
+    if (item.face.cls !== "is-base") sig.style.setProperty(`--${item.face.cls}-fit`, String(scale / baseScale));
+  });
+  const box = name?.parentElement;
+  if (!name || !box) return;
+  const avail = box.clientWidth - 8;
+  const used = target.w + gap + widest;
+  if (!avail || !used) return;
+  name.style.fontSize = `${parseFloat(size) * (avail / used)}px`;
+  const shown = sig.querySelector(".sig-live");
+  if (!shown) return;
+  let shrink = 1;
+  faces.forEach((item) => {
+    shown.classList.remove(...SIG_CLASS_NAMES);
+    shown.classList.add(item.face.cls);
+    const end = shown.getBoundingClientRect().right;
+    const limit = box.getBoundingClientRect().right - 4;
+    if (end > limit) shrink = Math.min(shrink, (limit - name.getBoundingClientRect().left) / (end - name.getBoundingClientRect().left));
+  });
+  if (shrink < 0.999) name.style.fontSize = `${parseFloat(name.style.fontSize) * shrink}px`;
+  shown.classList.remove(...SIG_CLASS_NAMES);
+  shown.classList.add("is-base");
+  sig.style.minWidth = "0px";
+  sig.style.width = `${Math.ceil(shown.getBoundingClientRect().width)}px`;
 }
 
 function drawFace(live, pen, face) {
