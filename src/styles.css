@@ -286,6 +286,12 @@ button {
   margin-top: 1.5rem;
 }
 
+.links-name {
+  width: min(17rem, 92%);
+  margin-top: 0.85rem;
+  text-align: center;
+}
+
 .pfp {
   width: var(--pfp);
   height: var(--pfp);
