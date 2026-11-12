@@ -241,6 +241,20 @@ button {
   padding-bottom: max(5rem, env(safe-area-inset-bottom));
 }
 
+.stage-info > header { display: contents; }
+
+.stage-info .pfp { grid-column: 1; grid-row: 1 / span 2; }
+
+.stage-info .identity { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
+
+.stage-info > :not(header) { grid-column: 1 / -1; }
+
+.stage-info > .bio,
+.stage-info > .facts,
+.stage-info > .work,
+.stage-info > .contact,
+.stage-info > .colophon { margin-top: 2.5rem; }
+
 .stage-info::before {
   content: "";
   position: absolute;
@@ -252,12 +266,7 @@ button {
   background: var(--bg);
 }
 
-.stage-info > header {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 1.15rem 1.4rem;
-}
+.stage-info > header { display: contents; }
 
 .identity {
   min-width: 0;
