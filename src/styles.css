@@ -854,14 +854,42 @@ h1 {
   font-family: Caveat, cursive;
   font-style: normal;
   font-weight: 500;
-  font-size: calc(1em * var(--script-fit, 0.72));
+  font-size: calc(1em * var(--is-script-fit, 0.72));
 }
 
 .sig-live.is-serif {
   font-family: "Instrument Serif", Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: calc(1em * var(--serif-fit, 1));
+  font-size: calc(1em * var(--is-serif-fit, 1));
+}
+
+.sig-live.is-playfair {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: calc(1em * var(--is-playfair-fit, 1));
+}
+
+.sig-live.is-mono {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-style: normal;
+  font-weight: 400;
+  font-size: calc(1em * var(--is-mono-fit, 0.92));
+}
+
+.sig-live.is-vibes {
+  font-family: "Great Vibes", cursive;
+  font-style: normal;
+  font-weight: 400;
+  font-size: calc(1em * var(--is-vibes-fit, 1));
+}
+
+.sig-live.is-syne {
+  font-family: Syne, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: calc(1em * var(--is-syne-fit, 0.9));
 }
 
 .sig-pen {
