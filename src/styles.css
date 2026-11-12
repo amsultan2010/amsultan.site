@@ -149,6 +149,11 @@ button {
   margin-inline: auto;
 }
 
+.stage-bar,
+.stage-info {
+  padding-inline: 1.75rem;
+}
+
 .stage-bar {
   display: flex;
   align-items: center;
@@ -539,6 +544,10 @@ h1 {
   }
 }
 
+@media (max-width: 380px) {
+  [role="tab"] { padding-inline: 0.25rem; }
+}
+
 .year {
   color: var(--muted);
   font-family: var(--sans);
@@ -557,7 +566,7 @@ h1 {
 .page {
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin: 0 auto;
-  padding: max(2.5rem, env(safe-area-inset-top)) 0 max(4rem, env(safe-area-inset-bottom));
+  padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(4rem, env(safe-area-inset-bottom));
 }
 
 .page-top {
@@ -1129,6 +1138,12 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (max-width: 760px) {
+  .stage-bar,
+  .stage-info,
+  .page {
+    padding-inline: 1rem;
+  }
+
   .stage-info { --pfp: 7.5rem; column-gap: 0.85rem; }
 
   .stage-info .identity {
