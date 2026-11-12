@@ -1,20 +1,19 @@
 ---
 name: abdullahsultan.tech
-description: a quiet column in matt palmer's warm paper palette
+description: a quiet column on the ice signal palette
 colors:
-  bg: "#f5f2ee"
-  bg-secondary: "#ede9e3"
-  text: "#2c2825"
-  text-secondary: "#5c554e"
-  muted: "#656d79"
-  heading: "#1a1714"
-  line: "#ddd8d1"
-  accent: "#6d5db5"
-  accent-hover: "#5a4d9a"
-  bg-dark: "#1a1714"
-  text-dark: "#ede9e3"
-  heading-dark: "#f5f2ee"
-  accent-dark: "#8b7dd4"
+  ink: "#073b4c"
+  ice: "#d5eef2"
+  signal: "#f54937"
+  signal-deep: "#c73828"
+  bg: "#073b4c"
+  bg-secondary: "#174959"
+  text: "#d5eef2"
+  text-secondary: "#b4d1d7"
+  muted: "#8baeb6"
+  heading: "#d5eef2"
+  line: "#5e8692"
+  accent: "#f54937"
 typography:
   display:
     fontFamily: "Geist Serif, Georgia, serif"
@@ -50,21 +49,24 @@ components:
     typography: "{typography.label}"
   tab-active:
     textColor: "{colors.heading}"
+    underline: "{colors.signal}"
 ---
 
 # Design System: abdullahsultan.tech
 
 ## Overview
 
-One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. Light mode is warm paper. Dark mode is the same hues, inverted.
+One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. One scheme: ink ground, ice type, signal red for the active tab line and for link underlines. No light mode, no dark mode, no toggle.
 
 ## Colors
 
-Taken from mattpalmer.io.
+Ice signal, from the palette in `00c4685`. The cyan band in that commit is the ink ground itself.
 
-Light ground `#f5f2ee`, secondary `#ede9e3`, text `#2c2825`, secondary text `#5c554e`, muted `#656d79`, heading `#1a1714`, line `#ddd8d1`, accent `#6d5db5`, pressed accent `#5a4d9a`.
+Ink `#073b4c` is the page ground. Ice `#d5eef2` is the type on that ground (9.97:1). Secondary text `#b4d1d7` (7.5:1). Muted `#8baeb6` (5.1:1) is the inactive tab and the meta line, a grey tinted from ice and ink. Line `#5e8692` (3.1:1) is the control border. `#174959` is the only lighter cyan, used on the plate well and the link buttons.
 
-Dark ground `#1a1714`, secondary `#242019`, text `#ede9e3` at 85% opacity, secondary text `#b5afa7`, muted `#9ca3af`, heading `#f5f2ee`, line `#3a3530`, accent `#8b7dd4`, pressed accent `#a99ae0`.
+Signal `#f54937` is the accent: the active tab line, the link underline, and the arrow on hover. It is 3.4:1 on ink, enough for that line and for large text, and not for body type, so link words stay ice. Pressed red `#c73828` is 2.3:1 on ink, so it is not painted as type or as the only state mark. A press sinks the control 1px and the signal line stays.
+
+The word sultan cycles red `#ff7460`, orange `#ff8a4a`, yellow `#ffe35e`, green `#5ec43a`, blue `#5eb0ff`, indigo `#9aa0ff`, violet `#b794ff`. Each clears 4.5:1 on the ink ground.
 
 ## Typography
 

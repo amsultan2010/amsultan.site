@@ -7,8 +7,6 @@ import "./styles.css";
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
 gsap.registerPlugin(ScrollTrigger);
 
-const THEME_KEY = "theme";
-
 const SIG_FACES = [
   { cls: "is-base", color: "var(--roy-red)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
   { cls: "is-script", color: "var(--roy-orange)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
@@ -20,37 +18,6 @@ const SIG_FACES = [
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
-
-function applyTheme(theme, persist) {
-  const root = document.documentElement;
-  root.dataset.theme = theme;
-  root.style.colorScheme = theme;
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "dark" ? "#1a1714" : "#f5f2ee");
-  const button = document.querySelector("[data-theme-toggle]");
-  if (button) {
-    const dark = theme === "dark";
-    button.setAttribute("aria-pressed", dark ? "true" : "false");
-    button.setAttribute("aria-label", dark ? "switch to light" : "switch to dark");
-  }
-  if (persist) {
-    try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch {
-      /* private mode can refuse storage. the choice still applies this visit. */
-    }
-  }
-}
-
-function initTheme() {
-  const button = document.querySelector("[data-theme-toggle]");
-  if (!button) return;
-  applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light", false);
-  button.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    applyTheme(next, true);
-  });
-}
 
 function initTitle() {
   const base = document.title;
@@ -410,7 +377,6 @@ function initMotion() {
   });
 }
 
-initTheme();
 initTitle();
 initTabs();
 initMotion();

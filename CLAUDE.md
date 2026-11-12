@@ -11,23 +11,22 @@ builds it and Vercel hosts it. Node 24 (`.nvmrc`). The repo is public, MIT licen
 
 ## Code map
 
-- `index.html` the homepage: wordmark, intro, tabs for internships, projects, lead and record, the contact ask, and the footer. The lists are in the HTML. `src/site.js` only switches the visible tab and the theme.
+- `index.html` the homepage: wordmark, intro, tabs for internships, projects, lead, record and extra, the contact ask, and the footer. The lists are in the HTML. `src/site.js` switches the visible tab.
 - `life.html` places, food, games, small games, and the watchlist. Vercel rewrites `/life` to it. Vite does the same in dev and preview.
 - `resume.html` the Google Doc embed and the PDF link. Vercel rewrites `/resume` to it.
 - `404.html` the styled missing page. It loads the same stylesheet.
 - `src/styles.css` tokens in `:root`, then the column, the intro, the tabs, the lists, life, the resume frame, and the footer.
 - `src/fonts.css` Geist Serif and Host Grotesk, self-hosted.
-- `src/site.js` theme persistence and the tab keyboard behaviour. It also loads `@vercel/analytics`.
+- `src/site.js` the tab keyboard behaviour and the signature cycle. It also loads `@vercel/analytics`.
 - `vite.config.js` the four HTML entries, the `/work` redirect, the `/life` and `/resume` rewrites, and the generated sitemap.
 - `public/` images, icons, fonts, `robots.txt`, and `llms.txt`. `sitemap.xml` is generated at build, not stored here.
 
 ## Conventions
 
 - All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`; `button` sets it too. Meta tags, JSON-LD and `llms.txt` keep case.
-- Ice `#d5eef2` is the light ground. Ink `#073b4c` is the type, and the dark ground. Orange `#f54937` is the active tab, the focus ring, and the hover underline. `#c73828` is the pressed underline. Two families only: Geist Serif for the name and the sentences, Host Grotesk for the bar, the tabs, and the dates.
+- Colour is one ice signal scheme. Ink `#073b4c` is the page ground (the old cyan band). Ice `#d5eef2` is the type. Signal `#f54937` is the active tab line, the link underline, and the arrow on hover. `#c73828` is the pressed red. It is 2.3:1 on ink, so a press sinks 1px and the signal line stays. `#174959` is the only lighter cyan, on the plate well and the link buttons. The word sultan cycles ROYGBIV in shades that clear AA on the ink ground. There is no theme toggle and no `prefers-color-scheme` switch. Two families only: Geist Serif for the name and the sentences, Host Grotesk for the bar, the tabs, and the dates.
 - The column is 40rem of text, centred, with the words left aligned. Radius is 0 except the round portrait. Motion is a 150ms colour and underline change, and a 150ms tab crossfade, both removed when `prefers-reduced-motion` is set.
 - A link to another page is a real `<a href>`. `/work` redirects to `/`.
-- Theme is `data-theme` on `<html>`, set by an inline script before paint. A stored choice wins. Otherwise the script follows `prefers-color-scheme`. The toggle writes `localStorage` key `theme`.
 - Run the `anti-ai-site` skill before shipping visual changes.
 
 ## Deploy
@@ -39,7 +38,7 @@ login. `abdullahsultan.tech` is the canonical host. `www.abdullahsultan.tech`, `
 ## Gotchas
 
 - Facts are repeated by hand. A changed number means the body copy, the meta and social descriptions, the JSON-LD, and `public/llms.txt`.
-- The theme script is copied into each HTML file. It has to stay first, before the stylesheet, or the first paint flashes the wrong ground.
+- Each HTML file adds the `js` class in a head script, before the stylesheet, so the entrance can hide content before first paint. There is no theme script.
 - `/life` and `/resume` are rewrites to `life.html` and `resume.html` in `vercel.json` and in `vite.config.js`. A new page needs both, plus a route in the sitemap list in `vite.config.js`.
 - The resume is a Google Doc, embedded by `resume.html` and linked there as a PDF export. Edit the doc, not the repo. `/resume.pdf` and `/resume.html` redirect to `/resume`. The doc must stay viewable by anyone with the link.
 - Images are absolute `/images/...` strings, so Vite never checks them.
