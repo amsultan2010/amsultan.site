@@ -339,7 +339,7 @@ h1 {
 }
 
 #name {
-  font-size: clamp(1.85rem, 1.1vw + 1rem, 2.7rem);
+  font-size: clamp(2.05rem, 2.4vw + 1rem, 3.7rem);
   white-space: nowrap;
 }
 
