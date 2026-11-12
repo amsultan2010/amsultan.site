@@ -1141,14 +1141,15 @@ img[src$="fschoolai-icon.png"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 3.4rem;
-  padding: 0.8rem 1.25rem;
+  gap: 0.55rem;
+  min-height: 2.6rem;
+  padding: 0.4rem 0.85rem;
   border: 1px solid color-mix(in srgb, var(--heading) 32%, var(--line));
   border-radius: 0.5rem;
   background: color-mix(in srgb, var(--bg-2) 80%, transparent);
   color: var(--text);
   font-family: var(--sans);
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   font-weight: 300;
   line-height: 1.3;
   text-align: center;
