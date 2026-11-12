@@ -979,19 +979,28 @@ h1 {
   white-space: nowrap;
 }
 
+.inline img,
+.colophon img {
+  flex: none;
+  object-fit: contain;
+  border-radius: 0.25rem;
+  background: var(--bg-2);
+}
+
+.inline img {
+  width: 1.05em;
+  height: 1.05em;
+  border-radius: 0.2em;
+}
+
 img[src$="fschoolai-icon.png"] {
   object-fit: cover;
   object-view-box: inset(22% 22% 26% 26%);
 }
 
-.inline img,
 .colophon img {
   width: 1.35rem;
   height: 1.35rem;
-  flex: none;
-  object-fit: contain;
-  border-radius: 0.25rem;
-  background: var(--bg-2);
 }
 
 .colophon a {
