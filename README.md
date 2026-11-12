@@ -10,7 +10,7 @@ Live: [abdullahsultan.tech](https://abdullahsultan.tech)
 ## Layout
 
 - `index.html`, `life.html`, `resume.html`, `404.html`: the pages Vite builds
-- `src/`: `styles.css`, `fonts.css`, and `site.js` (tabs and the theme toggle)
+- `src/`: `styles.css`, `fonts.css`, and `site.js` (tabs and the signature)
 - `public/`: images, icons, fonts, and crawler files, served as they are
 
 ## Develop

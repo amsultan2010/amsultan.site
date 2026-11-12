@@ -7,50 +7,17 @@ import "./styles.css";
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
 gsap.registerPlugin(ScrollTrigger);
 
-const THEME_KEY = "theme";
-
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--roy-red)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
-  { cls: "is-script", color: "var(--roy-orange)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
-  { cls: "is-serif", color: "var(--roy-yellow)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
-  { cls: "is-playfair", color: "var(--roy-green)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
-  { cls: "is-mono", color: "var(--roy-blue)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
-  { cls: "is-vibes", color: "var(--roy-indigo)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
-  { cls: "is-syne", color: "var(--roy-violet)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
+  { cls: "is-base", color: "var(--signal-deep)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
+  { cls: "is-script", color: "var(--signal-deep)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
+  { cls: "is-serif", color: "var(--signal-deep)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
+  { cls: "is-playfair", color: "var(--signal-deep)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
+  { cls: "is-mono", color: "var(--signal-deep)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
+  { cls: "is-vibes", color: "var(--signal-deep)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
+  { cls: "is-syne", color: "var(--signal-deep)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
-
-function applyTheme(theme, persist) {
-  const root = document.documentElement;
-  root.dataset.theme = theme;
-  root.style.colorScheme = theme;
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "dark" ? "#1a1714" : "#f5f2ee");
-  const button = document.querySelector("[data-theme-toggle]");
-  if (button) {
-    const dark = theme === "dark";
-    button.setAttribute("aria-pressed", dark ? "true" : "false");
-    button.setAttribute("aria-label", dark ? "switch to light" : "switch to dark");
-  }
-  if (persist) {
-    try {
-      localStorage.setItem(THEME_KEY, theme);
-    } catch {
-      /* private mode can refuse storage. the choice still applies this visit. */
-    }
-  }
-}
-
-function initTheme() {
-  const button = document.querySelector("[data-theme-toggle]");
-  if (!button) return;
-  applyTheme(document.documentElement.dataset.theme === "dark" ? "dark" : "light", false);
-  button.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    applyTheme(next, true);
-  });
-}
 
 function initTitle() {
   const base = document.title;
@@ -318,17 +285,20 @@ function drawFace(live, pen, face) {
   return tl;
 }
 
+function bindSignatureFit(sig) {
+  if (!sig || sig.dataset.fitBound) return;
+  sig.dataset.fitBound = "1";
+  let frame = 0;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => fitSignature(sig));
+  });
+}
+
 function initSignature(context) {
   const sig = document.querySelector("[data-sig]");
   if (!sig) return;
-  if (!sig.dataset.fitBound) {
-    sig.dataset.fitBound = "1";
-    let frame = 0;
-    window.addEventListener("resize", () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => fitSignature(sig));
-    });
-  }
+  bindSignatureFit(sig);
   const live = sig.querySelector(".sig-live");
   const pen = sig.querySelector(".sig-pen");
   const start = async () => {
@@ -366,7 +336,9 @@ function initMotion() {
   mm.add("(prefers-reduced-motion: reduce)", () => {
     gsap.set("[data-enter], [data-reveal]", { y: 0, autoAlpha: 1 });
     const sig = document.querySelector("[data-sig]");
+    bindSignatureFit(sig);
     if (sig && document.fonts?.ready) document.fonts.ready.then(() => fitSignature(sig));
+    else if (sig) fitSignature(sig);
   });
   mm.add("(prefers-reduced-motion: no-preference)", (context) => {
     initSignature(context);
@@ -410,7 +382,6 @@ function initMotion() {
   });
 }
 
-initTheme();
 initTitle();
 initTabs();
 initMotion();

@@ -1,20 +1,21 @@
 ---
 name: abdullahsultan.tech
-description: a quiet column in matt palmer's warm paper palette
+description: a quiet column on the ice signal palette
 colors:
-  bg: "#f5f2ee"
-  bg-secondary: "#ede9e3"
-  text: "#2c2825"
-  text-secondary: "#5c554e"
-  muted: "#656d79"
-  heading: "#1a1714"
-  line: "#ddd8d1"
-  accent: "#6d5db5"
-  accent-hover: "#5a4d9a"
-  bg-dark: "#1a1714"
-  text-dark: "#ede9e3"
-  heading-dark: "#f5f2ee"
-  accent-dark: "#8b7dd4"
+  ink: "#073b4c"
+  ice: "#d5eef2"
+  signal: "#f54937"
+  signal-deep: "#c73828"
+  signal-text: "#c13627"
+  cyan: "#0e5c70"
+  bg: "#d5eef2"
+  bg-secondary: "#c5e4ea"
+  text: "#073b4c"
+  text-secondary: "#145e72"
+  muted: "#4a6d76"
+  heading: "#073b4c"
+  line: "#0e5c70"
+  accent: "#c73828"
 typography:
   display:
     fontFamily: "Geist Serif, Georgia, serif"
@@ -49,22 +50,25 @@ components:
     textColor: "{colors.muted}"
     typography: "{typography.label}"
   tab-active:
-    textColor: "{colors.heading}"
+    textColor: "{colors.signal-text}"
+    underline: "{colors.accent}"
 ---
 
 # Design System: abdullahsultan.tech
 
 ## Overview
 
-One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. Light mode is warm paper. Dark mode is the same hues, inverted.
+One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. One scheme: ice ground, ink type, cyan for the secondary accent, signal red for the marks. No light mode, no dark mode, no toggle.
 
 ## Colors
 
-Taken from mattpalmer.io.
+Ice signal, from the palette in `00c4685`. Ice is now the ground and ink is the type. The cyan in that commit is the ink band `#073b4c`.
 
-Light ground `#f5f2ee`, secondary `#ede9e3`, text `#2c2825`, secondary text `#5c554e`, muted `#656d79`, heading `#1a1714`, line `#ddd8d1`, accent `#6d5db5`, pressed accent `#5a4d9a`.
+Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Secondary text `#145e72` (6.0:1) is the same hue, lifted. Muted `#4a6d76` (4.6:1) is the inactive tab and the meta line. Cyan `#0e5c70` (6.2:1) is that band lifted to the lightest step that still clears 4.5:1 on ice. It is the tab hover, the borders, and the plate well's stronger edge. The gutter ground is the band itself, `#073b4c`, and the contours on it are ice and signal red. The well and the link buttons use a light mix, `#c5e4ea`.
 
-Dark ground `#1a1714`, secondary `#242019`, text `#ede9e3` at 85% opacity, secondary text `#b5afa7`, muted `#9ca3af`, heading `#f5f2ee`, line `#3a3530`, accent `#8b7dd4`, pressed accent `#a99ae0`.
+Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: sultan, the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
+
+Sultan stays one red. The writing wipe and the underline still cycle through the faces. The ROYGBIV colours are gone.
 
 ## Typography
 
@@ -72,8 +76,8 @@ Geist Serif at medium for the statement, section titles, and sentences. The fami
 
 ## Layout
 
-The column is 40rem, and 38rem from 1024px, centred. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 4px ring in the page ground, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
+The column is 40rem, and 38rem from 1024px, centred. The side gutters are the cyan band `#073b4c`, with the old horizontal contours in ice and signal red, and the floating shapes from 1100px. On a phone the column inset is 1.125rem, so each gutter is about 18px and the waves still show. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 2px `#c73828` ring, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
 
 ## Motion
 
-Links and tabs change colour in 150ms. The open tab fades in over 150ms. `prefers-reduced-motion` removes both.
+Links and tabs change colour in 150ms. The open tab fades in over 150ms. The gutter contours drift on the same timing as the old field, and the shapes float. `prefers-reduced-motion` removes the motion and leaves the drawing still.
