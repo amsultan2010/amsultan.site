@@ -285,17 +285,20 @@ function drawFace(live, pen, face) {
   return tl;
 }
 
+function bindSignatureFit(sig) {
+  if (!sig || sig.dataset.fitBound) return;
+  sig.dataset.fitBound = "1";
+  let frame = 0;
+  window.addEventListener("resize", () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => fitSignature(sig));
+  });
+}
+
 function initSignature(context) {
   const sig = document.querySelector("[data-sig]");
   if (!sig) return;
-  if (!sig.dataset.fitBound) {
-    sig.dataset.fitBound = "1";
-    let frame = 0;
-    window.addEventListener("resize", () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => fitSignature(sig));
-    });
-  }
+  bindSignatureFit(sig);
   const live = sig.querySelector(".sig-live");
   const pen = sig.querySelector(".sig-pen");
   const start = async () => {
@@ -333,7 +336,9 @@ function initMotion() {
   mm.add("(prefers-reduced-motion: reduce)", () => {
     gsap.set("[data-enter], [data-reveal]", { y: 0, autoAlpha: 1 });
     const sig = document.querySelector("[data-sig]");
+    bindSignatureFit(sig);
     if (sig && document.fonts?.ready) document.fonts.ready.then(() => fitSignature(sig));
+    else if (sig) fitSignature(sig);
   });
   mm.add("(prefers-reduced-motion: no-preference)", (context) => {
     initSignature(context);
