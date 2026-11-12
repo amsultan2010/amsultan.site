@@ -1219,14 +1219,13 @@ img[src$="fschoolai-icon.png"] {
   color: var(--accent);
 }
 
-@media (min-width: 900px) {
-  .gutters {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    color: var(--heading);
+@media (max-width: 760px) {
+  .stage-info { --pfp: 7.5rem; column-gap: 0.85rem; }
+
+  .stage-info .identity {
+    grid-row: 1 / span 2;
+    align-self: start;
+    padding-top: calc(var(--overlap) + 0.4rem);
   }
 
   .shape { display: none; }
