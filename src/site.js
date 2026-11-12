@@ -359,23 +359,12 @@ function initMotion() {
     });
 
     const plate = document.querySelector(".plate img");
-    const shapes = document.querySelectorAll(".shape");
-    if (plate) gsap.set(plate, { scale: 1.08 });
-    if (plate || shapes.length) {
-      const parallax = gsap.timeline({
+    if (plate) {
+      gsap.set(plate, { scale: 1.08 });
+      gsap.to(plate, {
+        yPercent: 10,
+        ease: "none",
         scrollTrigger: { trigger: "body", start: "top top", end: "bottom bottom", scrub: 0.7 },
-      });
-      if (plate) parallax.to(plate, { yPercent: 10, ease: "none" }, 0);
-      if (shapes.length) parallax.to(shapes, { y: (i) => 28 + i * 14, ease: "none" }, 0);
-    }
-    if (shapes.length) {
-      gsap.set(shapes, { rotation: (i, el) => Number(el.dataset.tilt || 0) });
-      gsap.to(shapes, {
-        x: (i) => (i % 2 ? 16 : -18),
-        duration: (i) => 8 + (i % 6) * 0.7,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
       });
     }
 
