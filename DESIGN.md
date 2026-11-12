@@ -6,14 +6,16 @@ colors:
   ice: "#d5eef2"
   signal: "#f54937"
   signal-deep: "#c73828"
-  bg: "#073b4c"
-  bg-secondary: "#174959"
-  text: "#d5eef2"
-  text-secondary: "#b4d1d7"
-  muted: "#8baeb6"
-  heading: "#d5eef2"
-  line: "#5e8692"
-  accent: "#f54937"
+  signal-text: "#c13627"
+  cyan: "#0e5c70"
+  bg: "#d5eef2"
+  bg-secondary: "#c5e4ea"
+  text: "#073b4c"
+  text-secondary: "#145e72"
+  muted: "#4a6d76"
+  heading: "#073b4c"
+  line: "#0e5c70"
+  accent: "#c73828"
 typography:
   display:
     fontFamily: "Geist Serif, Georgia, serif"
@@ -48,25 +50,25 @@ components:
     textColor: "{colors.muted}"
     typography: "{typography.label}"
   tab-active:
-    textColor: "{colors.heading}"
-    underline: "{colors.signal}"
+    textColor: "{colors.signal-text}"
+    underline: "{colors.accent}"
 ---
 
 # Design System: abdullahsultan.tech
 
 ## Overview
 
-One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. One scheme: ink ground, ice type, signal red for the active tab line and for link underlines. No light mode, no dark mode, no toggle.
+One reading column under a photograph. The portrait sits on the bottom edge of that photograph. The name is a short serif statement. Lists are a title and a light grotesk line. One scheme: ice ground, ink type, cyan for the secondary accent, signal red for the marks. No light mode, no dark mode, no toggle.
 
 ## Colors
 
-Ice signal, from the palette in `00c4685`. The cyan band in that commit is the ink ground itself.
+Ice signal, from the palette in `00c4685`. Ice is now the ground and ink is the type. The cyan in that commit is the ink band `#073b4c`.
 
-Ink `#073b4c` is the page ground. Ice `#d5eef2` is the type on that ground (9.97:1). Secondary text `#b4d1d7` (7.5:1). Muted `#8baeb6` (5.1:1) is the inactive tab and the meta line, a grey tinted from ice and ink. Line `#5e8692` (3.1:1) is the control border. `#174959` is the plate well and the link buttons. Cyan `#7dcedc` is only the gutter contours and a shape fill, not type.
+Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Secondary text `#145e72` (6.0:1) is the same hue, lifted. Muted `#4a6d76` (4.6:1) is the inactive tab and the meta line. Cyan `#0e5c70` (6.2:1) is that band lifted to the lightest step that still clears 4.5:1 on ice. It is the tab hover, the borders, the plate well's stronger edge, and the gutter's second contour. The well and the link buttons use a light mix, `#c5e4ea`.
 
-Signal `#f54937` is the accent: the active tab line, the link underline, and the arrow on hover. It is 3.4:1 on ink, enough for that line and for large text, and not for body type, so link words stay ice. Pressed red `#c73828` is 2.3:1 on ink, so it is not painted as type or as the only state mark. A press sinks the control 1px and the signal line stays.
+Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: sultan, the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
 
-The word sultan cycles red `#ff7460`, orange `#ff8a4a`, yellow `#ffe35e`, green `#5ec43a`, blue `#5eb0ff`, indigo `#9aa0ff`, violet `#b794ff`. Each clears 4.5:1 on the ink ground.
+Sultan stays one red. The writing wipe and the underline still cycle through the faces. The ROYGBIV colours are gone.
 
 ## Typography
 
