@@ -1156,6 +1156,15 @@ img[src$="fschoolai-icon.png"] {
   text-decoration: none;
 }
 
+.link-btn img,
+.link-btn svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: none;
+  object-fit: contain;
+  border-radius: 0.2rem;
+}
+
 .link-btn:hover,
 .link-btn:focus-visible {
   border-color: var(--heading);
