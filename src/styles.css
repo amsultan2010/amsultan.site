@@ -1249,8 +1249,8 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (min-width: 1024px) {
-  #name { font-size: 2.85rem; }
-  .caption { font-size: 1.35rem; }
+  #name { font-size: 3.15rem; }
+  .caption { font-size: 1.6rem; }
 }
 
 .stage,
