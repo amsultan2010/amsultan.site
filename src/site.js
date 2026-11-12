@@ -316,6 +316,8 @@ function initSignature(context) {
         live.classList.add("is-base");
         live.style.removeProperty("color");
         sig.style.removeProperty("color");
+        sig.style.removeProperty("width");
+        sig.style.removeProperty("min-width");
         gsap.set(live, { clearProps: "clipPath" });
         gsap.set(pen, { clearProps: "scaleX,transformOrigin" });
       };
@@ -329,6 +331,8 @@ function initMotion() {
   const mm = gsap.matchMedia();
   mm.add("(prefers-reduced-motion: reduce)", () => {
     gsap.set("[data-enter], [data-reveal]", { y: 0, autoAlpha: 1 });
+    const sig = document.querySelector("[data-sig]");
+    if (sig && document.fonts?.ready) document.fonts.ready.then(() => fitSignature(sig));
   });
   mm.add("(prefers-reduced-motion: no-preference)", (context) => {
     initSignature(context);
