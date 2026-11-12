@@ -216,7 +216,7 @@ button {
 .plate {
   position: relative;
   z-index: 0;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 2.45 / 1;
   overflow: hidden;
   background: var(--bg-2);
 }
