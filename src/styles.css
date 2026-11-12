@@ -956,6 +956,10 @@ h1 {
   text-wrap: pretty;
 }
 
+.facts .cracked {
+  text-wrap: balance;
+}
+
 .facts li {
   padding-left: 1rem;
   text-indent: -1rem;
