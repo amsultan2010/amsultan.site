@@ -617,30 +617,10 @@ h1 {
 @media (max-width: 520px) {
   :root { --edge: 0.7rem; }
 
-  .colophon img,
-  .colophon svg {
-    width: 0.95rem;
-    height: 0.95rem;
-  }
-}
-
-@media (max-width: 490px) {
-  .colophon nav {
-    gap: 0.08rem;
-    font-size: 0.64rem;
-  }
-
-  .colophon img,
-  .colophon svg {
-    width: 0.8rem;
-    height: 0.8rem;
-  }
-}
-
-@media (max-width: 370px) {
-  .colophon nav {
-    gap: 0.06rem;
-    font-size: 0.54rem;
+  [role="tab"] {
+    min-height: 40px;
+    padding: 0.3rem 0.45rem;
+    font-size: 0.86rem;
   }
 }
 
