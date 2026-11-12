@@ -1245,11 +1245,7 @@ img[src$="fschoolai-icon.png"] {
 
   .where .sep { display: none; }
 
-  .caption {
-    margin-top: 0.7rem;
-    font-size: 1.4rem;
-    line-height: 1.4;
-  }
+  .stage-info > .bio { margin-top: 1.5rem; }
 }
 
 @media (min-width: 1024px) {
