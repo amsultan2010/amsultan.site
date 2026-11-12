@@ -124,7 +124,14 @@ function syncHiddenTriggers() {
   ScrollTrigger.refresh();
 }
 
-function selectTab(tabs, index, animate) {
+function syncTabHash(panel) {
+  const next = panel.id === "panel-internships" ? "" : `#${panel.id}`;
+  if (location.hash === next) return;
+  history.replaceState(null, "", `${location.pathname}${location.search}${next}`);
+}
+
+function selectTab(tabs, index, animate, fromHash) {
+  const previous = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
   let opened = null;
   tabs.forEach((tab, i) => {
     const on = i === index;
@@ -139,6 +146,7 @@ function selectTab(tabs, index, animate) {
   placeIndicator(opened.tab, animate);
   syncHiddenTriggers();
   revealPanel(opened.panel, animate);
+  if (!fromHash && index !== previous) syncTabHash(opened.panel);
 }
 
 function initTabs() {
@@ -182,7 +190,7 @@ function initTabs() {
     const panel = target.closest("[role='tabpanel']");
     if (panel?.hidden) {
       const index = tabs.findIndex((tab) => tab.getAttribute("aria-controls") === panel.id);
-      if (index >= 0) selectTab(tabs, index, motionOk());
+      if (index >= 0) selectTab(tabs, index, motionOk(), true);
     }
     requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
   };
