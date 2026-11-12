@@ -458,7 +458,7 @@ h1 {
 }
 
 .item h3 .meta {
-  margin-left: auto;
+  margin-left: 0.15rem;
 }
 
 .item h3 a {
