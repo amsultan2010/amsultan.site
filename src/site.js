@@ -312,7 +312,7 @@ function initSignature(context) {
       cycle.add(drawFace(live, pen, SIG_FACES[0]));
       cycle.to({}, { duration: 1.35 });
       return () => {
-        live.classList.remove("is-script", "is-serif");
+        live.classList.remove(...SIG_CLASS_NAMES);
         live.classList.add("is-base");
         live.style.removeProperty("color");
         sig.style.removeProperty("color");
