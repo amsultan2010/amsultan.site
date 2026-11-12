@@ -62,7 +62,7 @@ One reading column under a photograph. The portrait sits on the bottom edge of t
 
 Ice signal, from the palette in `00c4685`. The cyan band in that commit is the ink ground itself.
 
-Ink `#073b4c` is the page ground. Ice `#d5eef2` is the type on that ground (9.97:1). Secondary text `#b4d1d7` (7.5:1). Muted `#8baeb6` (5.1:1) is the inactive tab and the meta line, a grey tinted from ice and ink. Line `#5e8692` (3.1:1) is the control border. `#174959` is the only lighter cyan, used on the plate well and the link buttons.
+Ink `#073b4c` is the page ground. Ice `#d5eef2` is the type on that ground (9.97:1). Secondary text `#b4d1d7` (7.5:1). Muted `#8baeb6` (5.1:1) is the inactive tab and the meta line, a grey tinted from ice and ink. Line `#5e8692` (3.1:1) is the control border. `#174959` is the plate well and the link buttons. Cyan `#7dcedc` is only the gutter contours and a shape fill, not type.
 
 Signal `#f54937` is the accent: the active tab line, the link underline, and the arrow on hover. It is 3.4:1 on ink, enough for that line and for large text, and not for body type, so link words stay ice. Pressed red `#c73828` is 2.3:1 on ink, so it is not painted as type or as the only state mark. A press sinks the control 1px and the signal line stays.
 
@@ -74,8 +74,8 @@ Geist Serif at medium for the statement, section titles, and sentences. The fami
 
 ## Layout
 
-The column is 40rem, and 38rem from 1024px, centred. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 4px ring in the page ground, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
+The column is 40rem, and 38rem from 1024px, centred. From 960px the empty sides hold the old horizontal contour field and, from 1100px, the floating shapes. Both are clipped to those gutters. Below that the gutters are hidden. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 4px ring in the page ground, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
 
 ## Motion
 
-Links and tabs change colour in 150ms. The open tab fades in over 150ms. `prefers-reduced-motion` removes both.
+Links and tabs change colour in 150ms. The open tab fades in over 150ms. The gutter contours drift on the same timing as the old field, and the shapes float. `prefers-reduced-motion` removes the motion and leaves the drawing still.

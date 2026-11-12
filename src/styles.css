@@ -7,6 +7,8 @@
   --signal-deep: #c73828;
   --bg: var(--ink);
   --bg-2: #174959;
+  /* lighter cyan for the gutter contours. not type. */
+  --cyan: #7dcedc;
   --text: var(--ice);
   --text-2: #b4d1d7;
   --muted: #8baeb6;
@@ -1164,6 +1166,145 @@ img[src$="fschoolai-icon.png"] {
 .page {
   position: relative;
   z-index: 1;
+}
+
+.gutters {
+  display: none;
+}
+
+.lane {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc((100% - min(50rem, 100% - var(--edge) * 2)) / 2);
+  overflow: hidden;
+}
+
+.lane-left { left: 0; }
+.lane-right { right: 0; }
+
+.lane .waves {
+  position: absolute;
+  top: -8%;
+  width: 100vw;
+  height: 116%;
+  color: var(--ice);
+  opacity: 0.62;
+  animation: field-fade 5s ease-in-out infinite alternate;
+}
+
+.lane-left .waves { left: 0; }
+.lane-right .waves { right: 0; }
+
+.topo-drift {
+  animation: field-drift 12s ease-in-out infinite alternate;
+}
+
+.topo-layer {
+  animation: layer-a 8s ease-in-out infinite alternate;
+}
+
+.topo-layer,
+.topo-layer path {
+  stroke: currentColor;
+}
+
+.topo-layer-soft {
+  color: var(--cyan);
+  animation: layer-b 10.5s ease-in-out infinite alternate;
+}
+
+.topo-layer-soft path { stroke: var(--cyan); }
+
+.topo-layer-soft path.wave-signal { stroke: var(--signal); }
+
+.gutter-shape {
+  display: none;
+  position: absolute;
+  border: 2px solid var(--ice);
+  animation: shape-float 2.6s ease-in-out infinite alternate;
+}
+
+.gutter-shape.ring { border-radius: 50%; opacity: 0.7; }
+
+.gutter-shape.block {
+  background: color-mix(in srgb, var(--cyan) 42%, transparent);
+  box-shadow: 0.3rem 0.3rem 0 var(--signal);
+  opacity: 0.92;
+}
+
+.gutter-shape.pill {
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ice) 32%, transparent);
+  opacity: 0.8;
+}
+
+.gutter-shape.slash {
+  height: 2px;
+  border: 0;
+  background: var(--ice);
+  opacity: 0.7;
+  transform: rotate(-28deg);
+  animation-name: slash-float;
+}
+
+.gutter-shape.slash.flip {
+  transform: rotate(22deg);
+  animation-name: slash-float-flip;
+}
+
+.gutter-shape.dot {
+  border: 0;
+  border-radius: 50%;
+  background: var(--signal);
+  box-shadow: 0.18rem 0.18rem 0 var(--ice);
+}
+
+@media (min-width: 960px) {
+  .gutters {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 1100px) {
+  .gutter-shape { display: block; }
+}
+
+@keyframes field-drift {
+  to { transform: translate(36px, -18px); }
+}
+
+@keyframes layer-a {
+  to { transform: translate(-22px, 14px); }
+}
+
+@keyframes layer-b {
+  to { transform: translate(26px, -16px); }
+}
+
+@keyframes field-fade {
+  from { opacity: 0.5; }
+  to { opacity: 0.78; }
+}
+
+@keyframes shape-float {
+  to { transform: translate(8px, -26px) rotate(6deg); }
+}
+
+@keyframes slash-float {
+  from { transform: rotate(-28deg); }
+  to { transform: translate(-8px, -22px) rotate(-34deg); }
+}
+
+@keyframes slash-float-flip {
+  from { transform: rotate(22deg); }
+  to { transform: translate(8px, -20px) rotate(30deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {
