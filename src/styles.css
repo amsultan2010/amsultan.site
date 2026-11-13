@@ -33,6 +33,7 @@
 html {
   background: var(--ink);
   scrollbar-color: var(--line) transparent;
+  font-size: 106.25%;
 }
 
 body {
@@ -144,14 +145,18 @@ button {
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin-inline: auto;
   padding-top: 0.2rem;
-  border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
+  border: 1px solid color-mix(in srgb, white 74%, var(--ice));
   border-radius: 0;
-  background: var(--glass-tint);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 36%, transparent), transparent 16%),
+    linear-gradient(180deg, transparent 80%, color-mix(in srgb, var(--ink) 16%, transparent)),
+    var(--glass-tint);
   -webkit-backdrop-filter: blur(5px) saturate(1.15);
   backdrop-filter: blur(5px) saturate(1.15);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ice) 55%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
+    inset 0 1px 0 color-mix(in srgb, white 86%, var(--ice)),
+    inset 0 22px 18px -20px color-mix(in srgb, white 65%, transparent),
+    0 14px 28px -10px color-mix(in srgb, var(--ink) 38%, transparent);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -335,7 +340,7 @@ h1 {
   border: 0;
   border-radius: 0;
   background: none;
-  color: var(--muted);
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 1.25rem;
   font-weight: 300;
@@ -352,6 +357,8 @@ h1 {
 [role="tab"][aria-selected="true"]:hover {
   background: none;
   color: var(--signal-text);
+  -webkit-text-stroke: 2px var(--ice);
+  paint-order: stroke fill;
 }
 
 [role="tab"]:active {
@@ -360,7 +367,7 @@ h1 {
 
 .panel-label {
   margin-bottom: 0.75rem;
-  color: var(--muted);
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 1.25rem;
   font-weight: 300;
@@ -450,17 +457,24 @@ h1 {
 }
 
 .points li {
-  padding-left: 0.95rem;
-  text-indent: -0.95rem;
+  position: relative;
+  padding-left: 1.35rem;
 }
 
-.points li::before {
-  content: "- ";
-  color: var(--signal-deep);
+.points li::before,
+.facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 0.92em;
+  height: 0.24em;
+  background: var(--signal);
+  box-shadow: 0 0 0 1px color-mix(in srgb, white 78%, var(--ice));
 }
 
 .meta {
-  color: var(--muted);
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 1.28rem;
   font-weight: 300;
@@ -513,6 +527,8 @@ h1 {
   line-height: 1.2;
   text-decoration: none;
   white-space: nowrap;
+  -webkit-text-stroke: 4px var(--ice);
+  paint-order: stroke fill;
   box-shadow: inset 0 -2px 0 var(--signal);
 }
 
@@ -568,34 +584,31 @@ h1 {
 
 .colophon nav {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.1rem;
-  color: var(--muted);
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem 1.15rem;
+  color: var(--ink);
   font-family: var(--sans);
   font-size: 1.05rem;
   font-weight: 300;
   line-height: 1.3rem;
-}
-
-.colophon-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.15rem 1rem;
+  text-align: center;
 }
 
 .colophon a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
   min-height: 44px;
+  white-space: nowrap;
 }
 
 @media (max-width: 520px) {
   [role="tab"] {
-    min-height: 44px;
-    padding: 0.3rem 0.45rem;
-    font-size: 0.86rem;
+    padding-inline: 0.2rem;
   }
 }
 
@@ -604,18 +617,13 @@ h1 {
 }
 
 .year {
-  color: var(--muted);
+  flex: none;
+  color: var(--ink);
   font-family: var(--sans);
-  font-size: inherit;
+  font-size: 1rem;
   font-weight: 300;
-  line-height: 1.4rem;
-}
-
-.colophon-row .year {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  margin-left: auto;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .page {
@@ -623,13 +631,17 @@ h1 {
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin: 0 auto;
   padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(4rem, env(safe-area-inset-bottom));
-  border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
-  background: var(--glass-tint);
+  border: 1px solid color-mix(in srgb, white 74%, var(--ice));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 36%, transparent), transparent 16%),
+    linear-gradient(180deg, transparent 80%, color-mix(in srgb, var(--ink) 16%, transparent)),
+    var(--glass-tint);
   -webkit-backdrop-filter: blur(5px) saturate(1.15);
   backdrop-filter: blur(5px) saturate(1.15);
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ice) 55%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
+    inset 0 1px 0 color-mix(in srgb, white 86%, var(--ice)),
+    inset 0 22px 18px -20px color-mix(in srgb, white 65%, transparent),
+    0 14px 28px -10px color-mix(in srgb, var(--ink) 38%, transparent);
 }
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -650,7 +662,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   min-height: 2rem;
-  color: var(--muted);
+  color: var(--ink);
   font-family: var(--sans);
   font-size: clamp(1.05rem, 1.2vw + 0.7rem, 1.35rem);
   font-weight: 300;
@@ -684,12 +696,14 @@ h1 {
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0;
+  -webkit-text-stroke: 3px var(--ice);
+  paint-order: stroke fill;
 }
 
 .block h3 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  color: var(--muted);
+  color: var(--ink);
   font-family: var(--serif);
   font-size: 1.4rem;
   font-weight: 500;
@@ -977,13 +991,8 @@ h1 {
 }
 
 .facts li {
-  padding-left: 1rem;
-  text-indent: -1rem;
-}
-
-.facts li::before {
-  content: "- ";
-  color: var(--signal-deep);
+  position: relative;
+  padding-left: 1.35rem;
 }
 
 .inline {
@@ -1162,12 +1171,8 @@ img[src$="fschoolai-icon.png"] {
   font-weight: 300;
 }
 
-.block h3:has(+ .games-made) {
-  width: 100%;
-  text-align: left;
-}
-
 .games {
+  color: var(--ink);
   font-size: 1.08rem;
   line-height: 1.35;
 }
@@ -1182,7 +1187,11 @@ img[src$="fschoolai-icon.png"] {
 }
 
 .games li::before {
-  content: "-";
+  position: static;
+  display: block;
+  top: auto;
+  align-self: center;
+  margin-top: 0.35rem;
 }
 
 .games a {
@@ -1259,15 +1268,18 @@ img[src$="fschoolai-icon.png"] {
 
 @media (min-width: 900px) {
   .games-made {
-    grid-template-columns: minmax(12.5rem, max-content) minmax(0, 1fr);
-    gap: 1.25rem 1.75rem;
-    align-items: start;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.9fr);
+    gap: 1rem 1.35rem;
+    align-items: stretch;
   }
 
   .games-grid {
     width: 100%;
+    height: 100%;
     justify-self: end;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-self: stretch;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
 
   .games-grid a,
@@ -1277,7 +1289,16 @@ img[src$="fschoolai-icon.png"] {
   .games-grid a[data-phone="3"],
   .games-grid a[data-phone="4"] {
     display: block;
+    height: 100%;
+    min-height: 0;
     order: 0;
+  }
+
+  .games-grid img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    object-fit: cover;
   }
 }
 
@@ -1342,7 +1363,7 @@ img[src$="fschoolai-icon.png"] {
 
 @media (max-width: 760px) {
   html {
-    font-size: 93.75%;
+    font-size: 87.5%;
   }
 
   :root { --edge: 0.4rem; }
@@ -1407,6 +1428,38 @@ img[src$="fschoolai-icon.png"] {
   .hello {
     font-size: 1.45rem;
   }
+
+  [role="tablist"] {
+    gap: 0.12rem;
+    padding-bottom: 0.4rem;
+  }
+
+  [role="tab"] {
+    display: inline-flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0.12rem 0.22rem 0;
+    font-size: 1.12rem;
+    line-height: 1.12;
+  }
+
+  .colophon nav {
+    gap: 0.15rem 0.45rem;
+    font-size: 0.98rem;
+  }
+
+  .colophon svg,
+  .colophon img {
+    width: 0.95rem;
+    height: 0.95rem;
+  }
+
+  .lived .when,
+  .tile-name,
+  .year,
+  .play .row h3 {
+    font-size: 1rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1418,6 +1471,32 @@ img[src$="fschoolai-icon.png"] {
 .page {
   position: relative;
   z-index: 1;
+}
+
+.stage::before,
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.34;
+  background-image: url("/images/frost-grain.png");
+  background-size: 160px 160px;
+  mix-blend-mode: overlay;
+}
+
+.stage::after,
+.page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 1px;
+  pointer-events: none;
+  background: color-mix(in srgb, white 80%, var(--ice));
 }
 
 .gutters {
