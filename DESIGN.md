@@ -68,7 +68,7 @@ Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Seco
 
 Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
 
-Sultan stays one cyan, `#0e5c70`. The writing wipe and the underline still cycle through the faces. The colour does not cycle. The ROYGBIV colours are gone.
+Sultan stays one cyan, `#0e5c70`, in the base face, with its underline. It does not cycle faces or colours. The ROYGBIV colours are gone.
 
 ## Typography
 
