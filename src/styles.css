@@ -1223,7 +1223,12 @@ img[src$="fschoolai-icon.png"] {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .games-grid a {
+  .games-grid a,
+  .games-grid a[data-phone],
+  .games-grid a[data-phone="1"],
+  .games-grid a[data-phone="2"],
+  .games-grid a[data-phone="3"],
+  .games-grid a[data-phone="4"] {
     display: block;
     order: 0;
   }
