@@ -1271,6 +1271,10 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (max-width: 760px) {
+  html {
+    font-size: 93.75%;
+  }
+
   :root { --edge: 0.4rem; }
 
   .stage-bar,
