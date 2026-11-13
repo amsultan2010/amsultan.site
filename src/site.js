@@ -24,9 +24,10 @@ function placeIndicator(tab, animate) {
   const indicator = document.querySelector(".tab-indicator");
   if (!indicator || !tab) return;
   const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const near = window.matchMedia("(max-width: 760px)").matches;
   gsap.to(indicator, {
     x: tab.offsetLeft,
-    y: tab.offsetTop + tab.offsetHeight + 0.28 * rem,
+    y: tab.offsetTop + tab.offsetHeight + (near ? 0.05 : 0.28) * rem,
     width: tab.offsetWidth,
     duration: animate ? 0.5 : 0,
     ease: "power3.out",
