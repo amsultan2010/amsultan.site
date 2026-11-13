@@ -8,13 +8,13 @@ inject({ mode: import.meta.env.DEV ? "development" : "production" });
 gsap.registerPlugin(ScrollTrigger);
 
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--signal-deep)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
-  { cls: "is-script", color: "var(--signal-deep)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
-  { cls: "is-serif", color: "var(--signal-deep)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
-  { cls: "is-playfair", color: "var(--signal-deep)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
-  { cls: "is-mono", color: "var(--signal-deep)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
-  { cls: "is-vibes", color: "var(--signal-deep)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
-  { cls: "is-syne", color: "var(--signal-deep)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
+  { cls: "is-base", color: "var(--cyan)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
+  { cls: "is-script", color: "var(--cyan)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
+  { cls: "is-serif", color: "var(--cyan)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
+  { cls: "is-playfair", color: "var(--cyan)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
+  { cls: "is-mono", color: "var(--cyan)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
+  { cls: "is-vibes", color: "var(--cyan)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
+  { cls: "is-syne", color: "var(--cyan)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
@@ -260,7 +260,7 @@ async function fitSignature(sig) {
 
 function drawFace(live, pen, face) {
   const sig = live.closest("[data-sig]");
-  const color = sig?.closest(".profile-card") ? "var(--ice)" : face.color;
+  const color = face.color;
   const tl = gsap.timeline();
   tl.to(live, { clipPath: "inset(0 0 0 100%)", duration: 0.22, ease: "power2.in" }, 0)
     .to(pen, { scaleX: 0, transformOrigin: "right center", duration: 0.22, ease: "power2.in" }, 0)

@@ -36,6 +36,7 @@ html {
 }
 
 body {
+  position: relative;
   margin: 0;
   min-height: 100svh;
   background: var(--ink);
@@ -139,15 +140,15 @@ button {
 }
 
 .stage {
-  --glass-tint: color-mix(in srgb, var(--ice) 70%, transparent);
+  --glass-tint: color-mix(in srgb, var(--ice) 60%, transparent);
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin-inline: auto;
   padding-top: 0.2rem;
   border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
   border-radius: 0;
   background: var(--glass-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(5px) saturate(1.15);
+  backdrop-filter: blur(5px) saturate(1.15);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ice) 55%, transparent),
     0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
@@ -619,14 +620,14 @@ h1 {
 }
 
 .page {
-  --glass-tint: color-mix(in srgb, var(--ice) 70%, transparent);
+  --glass-tint: color-mix(in srgb, var(--ice) 60%, transparent);
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin: 0 auto;
   padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(4rem, env(safe-area-inset-bottom));
   border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
   background: var(--glass-tint);
-  -webkit-backdrop-filter: blur(14px) saturate(1.1);
-  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(5px) saturate(1.15);
+  backdrop-filter: blur(5px) saturate(1.15);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ice) 55%, transparent),
     0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
@@ -825,12 +826,12 @@ h1 {
   font-style: italic;
   font-weight: 500;
   font-size: 1em;
-  color: var(--signal-deep);
+  color: var(--cyan);
   vertical-align: baseline;
 }
 
 .profile-card .sig {
-  color: var(--ice);
+  color: var(--cyan);
 }
 
 .sig-base,
@@ -1303,8 +1304,8 @@ img[src$="fschoolai-icon.png"] {
   .stage,
   .page {
     --glass-tint: color-mix(in srgb, var(--ice) 62%, transparent);
-    -webkit-backdrop-filter: blur(12px) saturate(1.05);
-    backdrop-filter: blur(12px) saturate(1.05);
+    -webkit-backdrop-filter: blur(4px) saturate(1.12);
+    backdrop-filter: blur(4px) saturate(1.12);
   }
 
   .stage-bar,
@@ -1375,21 +1376,26 @@ img[src$="fschoolai-icon.png"] {
 
 .gutters {
   display: block;
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 0;
-  overflow: hidden;
   pointer-events: none;
   background: var(--ink);
 }
 
 .lane {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 50%;
   overflow: hidden;
   background: transparent;
+}
+
+.shape-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
 }
 
 .lane-left { left: 0; }
@@ -1401,7 +1407,7 @@ img[src$="fschoolai-icon.png"] {
   width: 100vw;
   height: 116%;
   color: var(--ice);
-  opacity: 0.92;
+  opacity: 1;
   animation: field-fade 5s ease-in-out infinite alternate;
 }
 
@@ -1441,26 +1447,26 @@ img[src$="fschoolai-icon.png"] {
   animation: shape-float 2.6s ease-in-out infinite alternate;
 }
 
-.gutter-shape.ring { border-color: var(--ice); border-radius: 50%; opacity: 0.5; }
+.gutter-shape.ring { border-color: var(--ice); border-radius: 50%; opacity: 0.72; }
 
 .gutter-shape.block {
   background: color-mix(in srgb, var(--ice) 24%, transparent);
   box-shadow: 0.3rem 0.3rem 0 var(--signal);
-  opacity: 0.5;
+  opacity: 0.72;
 }
 
 .gutter-shape.pill {
   border: 0;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ice) 40%, transparent);
-  opacity: 0.5;
+  opacity: 0.72;
 }
 
 .gutter-shape.slash {
   height: 2px;
   border: 0;
   background: var(--signal);
-  opacity: 0.5;
+  opacity: 0.72;
   transform: rotate(-28deg);
   animation-name: slash-float;
 }
@@ -1475,7 +1481,7 @@ img[src$="fschoolai-icon.png"] {
   border-radius: 50%;
   background: var(--signal);
   box-shadow: 0.18rem 0.18rem 0 var(--ice);
-  opacity: 0.5;
+  opacity: 0.72;
 }
 
 @media (min-width: 1100px) {
@@ -1484,10 +1490,10 @@ img[src$="fschoolai-icon.png"] {
   .gutter-shape.pill,
   .gutter-shape.slash,
   .gutter-shape.dot {
-    opacity: 0.95;
+    opacity: 0.88;
   }
 
-  .gutter-shape.ring { opacity: 0.9; }
+  .gutter-shape.ring { opacity: 0.82; }
 }
 
 @keyframes field-drift {
@@ -1503,8 +1509,8 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @keyframes field-fade {
-  from { opacity: 0.5; }
-  to { opacity: 0.78; }
+  from { opacity: 0.78; }
+  to { opacity: 1; }
 }
 
 @keyframes shape-float {
@@ -1524,7 +1530,7 @@ img[src$="fschoolai-icon.png"] {
 @media (prefers-reduced-motion: reduce) {
   .profile-card .sig,
   .profile-card .sig-live {
-    color: var(--ice);
+    color: var(--cyan);
   }
 
   .stage,
