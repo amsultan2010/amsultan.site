@@ -260,15 +260,16 @@ async function fitSignature(sig) {
 
 function drawFace(live, pen, face) {
   const sig = live.closest("[data-sig]");
+  const color = sig?.closest(".profile-card") ? "var(--ice)" : face.color;
   const tl = gsap.timeline();
   tl.to(live, { clipPath: "inset(0 0 0 100%)", duration: 0.22, ease: "power2.in" }, 0)
     .to(pen, { scaleX: 0, transformOrigin: "right center", duration: 0.22, ease: "power2.in" }, 0)
     .add(() => {
       live.classList.remove(...SIG_CLASS_NAMES);
       live.classList.add(face.cls);
-      live.style.color = face.color;
+      live.style.color = color;
       if (sig) {
-        sig.style.color = face.color;
+        sig.style.color = color;
         const shift = sig._shifts?.[face.cls] || 0;
         live.style.transform = `translateY(${shift}px)`;
         const word = sig._widths?.[face.cls];
