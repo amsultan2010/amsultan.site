@@ -8,13 +8,7 @@ inject({ mode: import.meta.env.DEV ? "development" : "production" });
 gsap.registerPlugin(ScrollTrigger);
 
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--signal-deep)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
-  { cls: "is-script", color: "var(--signal-deep)", family: "Caveat, cursive", style: "normal", weight: "500", spec: (size) => `500 ${size} Caveat` },
-  { cls: "is-serif", color: "var(--signal-deep)", family: '"Instrument Serif", serif', style: "italic", weight: "400", spec: (size) => `italic 400 ${size} "Instrument Serif"` },
-  { cls: "is-playfair", color: "var(--signal-deep)", family: '"Playfair Display", serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Playfair Display"` },
-  { cls: "is-mono", color: "var(--signal-deep)", family: '"IBM Plex Mono", monospace', style: "normal", weight: "400", spec: (size) => `400 ${size} "IBM Plex Mono"` },
-  { cls: "is-vibes", color: "var(--signal-deep)", family: '"Great Vibes", cursive', style: "normal", weight: "400", spec: (size) => `400 ${size} "Great Vibes"` },
-  { cls: "is-syne", color: "var(--signal-deep)", family: "Syne, sans-serif", style: "normal", weight: "700", spec: (size) => `700 ${size} Syne` },
+  { cls: "is-base", color: "var(--cyan)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
@@ -258,34 +252,6 @@ async function fitSignature(sig) {
   }
 }
 
-function drawFace(live, pen, face) {
-  const sig = live.closest("[data-sig]");
-  const color = sig?.closest(".profile-card") ? "var(--ice)" : face.color;
-  const tl = gsap.timeline();
-  tl.to(live, { clipPath: "inset(0 0 0 100%)", duration: 0.22, ease: "power2.in" }, 0)
-    .to(pen, { scaleX: 0, transformOrigin: "right center", duration: 0.22, ease: "power2.in" }, 0)
-    .add(() => {
-      live.classList.remove(...SIG_CLASS_NAMES);
-      live.classList.add(face.cls);
-      live.style.color = color;
-      if (sig) {
-        sig.style.color = color;
-        const shift = sig._shifts?.[face.cls] || 0;
-        live.style.transform = `translateY(${shift}px)`;
-        const word = sig._widths?.[face.cls];
-        if (pen && word) {
-          pen.style.width = `${word}px`;
-          pen.style.right = "auto";
-        }
-      }
-    })
-    .set(live, { clipPath: "inset(0 100% 0 0)" })
-    .set(pen, { scaleX: 0, transformOrigin: "left center" })
-    .to(live, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.62, ease: "power2.out" })
-    .to(pen, { scaleX: 1, duration: 0.62, ease: "power2.out" }, "<");
-  return tl;
-}
-
 function bindSignatureFit(sig) {
   if (!sig || sig.dataset.fitBound) return;
   sig.dataset.fitBound = "1";
@@ -300,33 +266,9 @@ function initSignature(context) {
   const sig = document.querySelector("[data-sig]");
   if (!sig) return;
   bindSignatureFit(sig);
-  const live = sig.querySelector(".sig-live");
-  const pen = sig.querySelector(".sig-pen");
   const start = async () => {
     if (context.isReverted) return;
     await fitSignature(sig);
-    if (context.isReverted) return;
-    context.add(() => {
-      const cycle = gsap.timeline({ repeat: -1, delay: 1.35 });
-      SIG_FACES.forEach((face, i) => {
-        if (i === 0) return;
-        cycle.add(drawFace(live, pen, face));
-        cycle.to({}, { duration: 1.2 });
-      });
-      cycle.add(drawFace(live, pen, SIG_FACES[0]));
-      cycle.to({}, { duration: 1.35 });
-      return () => {
-        live.classList.remove(...SIG_CLASS_NAMES);
-        live.classList.add("is-base");
-        live.style.removeProperty("color");
-        live.style.removeProperty("transform");
-        sig.style.removeProperty("color");
-        sig.style.removeProperty("width");
-        sig.style.removeProperty("min-width");
-        gsap.set(live, { clearProps: "clipPath" });
-        gsap.set(pen, { clearProps: "scaleX,transformOrigin" });
-      };
-    });
   };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
   else start();

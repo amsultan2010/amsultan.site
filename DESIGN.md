@@ -66,9 +66,9 @@ Ice signal, from the palette in `00c4685`. Ice is now the ground and ink is the 
 
 Ice `#d5eef2` is the page ground. Ink `#073b4c` is the type on it (9.97:1). Secondary text `#145e72` (6.0:1) is the same hue, lifted. Muted `#4a6d76` (4.6:1) is the inactive tab and the meta line. Cyan `#0e5c70` (6.2:1) is that band lifted to the lightest step that still clears 4.5:1 on ice. It is the tab hover, the borders, and the plate well's stronger edge. The gutter ground is the band itself, `#073b4c`, and the contours on it are ice and signal red. The well and the link buttons use a light mix, `#c5e4ea`.
 
-Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: sultan, the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
+Signal `#f54937` is 2.94:1 on ice, so it is the decorative red: gutter lines, shape fills, and the link-button hover wash. It is not text and not the only mark on a control. `#c73828` is 4.31:1, enough for large text and for UI marks: the section headings, the coffee chat line, the active tab underline, link underlines, arrows, and the focus ring. A press sinks 1px and the red darkens. Body-size red text, including the active tab, uses `#c13627` (4.53:1), the same hue darkened until it clears 4.5:1.
 
-Sultan stays one red. The writing wipe and the underline still cycle through the faces. The ROYGBIV colours are gone.
+Sultan stays one cyan, `#0e5c70`, in the base face, with its underline. It does not cycle faces or colours. The ROYGBIV colours are gone.
 
 ## Typography
 
@@ -76,7 +76,7 @@ Geist Serif at medium for the statement, section titles, and sentences. The fami
 
 ## Layout
 
-The column is 40rem, and 38rem from 1024px, centred. The side gutters are the cyan band `#073b4c`, with the old horizontal contours in ice and signal red, and the floating shapes from 1100px. On a phone the column inset is 1.125rem, so each gutter is about 18px and the waves still show. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 2px `#c73828` ring, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
+The column is 40rem, and 38rem from 1024px, centred. It is frosted ice: the tint is ice at `color-mix` 60% (62% under 760px) with a short blur (5px, 4px on a phone) so the drawing behind it stays visible and the ink body text still clears 4.5:1. Text on that panel stays ink. The side gutters are the cyan band `#073b4c`, with the horizontal contours in ice and signal red. Floating shapes sit across the whole background, full width and the full scroll height, in the gutters and behind the column, at every width. On a phone the column inset is 0.4rem and the same frost lets the waves and shapes through. The plate matches that width from 1024px and is 16:9. The portrait is 8.5rem, 10rem from 640px, and 12rem from 1024px, with a 2px `#c73828` ring, overlapping the plate by half its height. Text is left aligned. List items are 1rem apart. The intro, the tabs, the ask, and the footer are 2.5rem apart.
 
 ## Motion
 
