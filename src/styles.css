@@ -144,7 +144,7 @@ button {
   padding-top: 0.2rem;
   border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
   border-radius: 0;
-  background: color-mix(in srgb, var(--ice) 82%, transparent);
+  background: color-mix(in srgb, var(--ice) 88%, transparent);
   -webkit-backdrop-filter: blur(18px) saturate(1.15);
   backdrop-filter: blur(18px) saturate(1.15);
   box-shadow:
@@ -582,6 +582,16 @@ h1 {
 
 @media (max-width: 380px) {
   [role="tab"] { padding-inline: 0.25rem; }
+
+  .contact-line {
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+
+  .contact h2,
+  .hello {
+    font-size: 1.28rem;
+  }
 }
 
 .year {
@@ -604,7 +614,7 @@ h1 {
   margin: 0 auto;
   padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(4rem, env(safe-area-inset-bottom));
   border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
-  background: color-mix(in srgb, var(--ice) 82%, transparent);
+  background: color-mix(in srgb, var(--ice) 88%, transparent);
   -webkit-backdrop-filter: blur(18px) saturate(1.15);
   backdrop-filter: blur(18px) saturate(1.15);
   box-shadow:
