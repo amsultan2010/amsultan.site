@@ -21,7 +21,7 @@
   --serif: "Geist Serif", Georgia, serif;
   --sans: "Host Grotesk", "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
-  background: var(--bg);
+  background: var(--ink);
 }
 
 *,
@@ -31,14 +31,14 @@
 }
 
 html {
-  background: var(--bg);
+  background: var(--ink);
   scrollbar-color: var(--line) transparent;
 }
 
 body {
   margin: 0;
   min-height: 100svh;
-  background: var(--bg);
+  background: var(--ink);
   color: var(--text);
   font-family: var(--serif);
   font-size: 1.3125rem;
@@ -139,14 +139,30 @@ button {
 }
 
 .stage {
-  padding-top: 0.75rem;
+  width: min(50rem, calc(100% - var(--edge) * 2));
+  margin-inline: auto;
+  padding-top: 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
+  border-radius: 0;
+  background: color-mix(in srgb, var(--ice) 82%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ice) 70%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .stage {
+    background: var(--ice);
+  }
 }
 
 .stage-bar,
 .plate,
 .stage-info {
-  width: min(50rem, calc(100% - var(--edge) * 2));
-  margin-inline: auto;
+  width: 100%;
+  margin-inline: 0;
 }
 
 .stage-bar,
@@ -158,7 +174,9 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  min-height: 2.25rem;
+  margin-bottom: 0.35rem;
+  padding-block: 0.15rem;
 }
 
 .plate {
@@ -181,46 +199,41 @@ button {
   --overlap: calc(var(--pfp) * 0.26);
   position: relative;
   z-index: 2;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  column-gap: 1.4rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
   margin-top: calc(var(--overlap) * -1);
   padding-bottom: max(5rem, env(safe-area-inset-bottom));
 }
 
-.stage-info > header { display: contents; }
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 2px solid var(--cyan);
+  background: var(--signal);
+  color: var(--ice);
+}
 
-.stage-info .pfp { grid-column: 1; grid-row: 1 / span 2; }
+.stage-info .pfp {
+  position: relative;
+  z-index: 1;
+  margin-top: calc(var(--overlap) * -0.55);
+  flex: none;
+}
 
-.stage-info .identity { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
-
-.stage-info > :not(header) { grid-column: 1 / -1; }
+.identity {
+  min-width: 0;
+  align-self: center;
+  padding-top: 0;
+}
 
 .stage-info > .bio,
 .stage-info > .facts,
 .stage-info > .work,
 .stage-info > .contact,
 .stage-info > .colophon { margin-top: 2.5rem; }
-
-.stage-info::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: var(--overlap);
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: var(--bg);
-}
-
-.stage-info > header { display: contents; }
-
-.identity {
-  min-width: 0;
-  align-self: start;
-  padding-top: calc(var(--overlap) + 0.55rem);
-}
 
 .stage-top {
   display: flex;
@@ -251,12 +264,21 @@ button {
   background: var(--bg-2);
 }
 
+.profile-card .pfp {
+  border-color: var(--ice);
+}
+
 h1 {
   color: var(--heading);
   font-size: clamp(1.9rem, 4.6vw + 0.7rem, 4.9rem);
   font-weight: 500;
   line-height: 1.05;
   letter-spacing: 0;
+}
+
+.profile-card h1,
+.profile-card #name {
+  color: var(--ice);
 }
 
 #name {
@@ -456,9 +478,17 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+.contact-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.85rem;
+  margin-bottom: 0.65rem;
+}
+
 .contact h2 {
-  margin-bottom: 0.85rem;
-  color: var(--signal-deep);
+  margin-bottom: 0;
+  color: var(--cyan);
   font-size: 2rem;
   font-weight: 500;
   line-height: 1.15;
@@ -468,20 +498,28 @@ h1 {
 .hello {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 0.65rem;
-  color: var(--signal-deep);
+  gap: 0.35rem;
+  color: var(--signal);
   font-family: var(--serif);
   font-size: 1.7rem;
   font-weight: 500;
   line-height: 1.2;
   text-decoration: none;
-  box-shadow: inset 0 -2px 0 var(--signal-deep);
+}
+
+.hello .arrow {
+  color: inherit;
 }
 
 .hello:hover,
 .hello:focus-visible {
   color: var(--signal-text);
+}
+
+.hello:hover .arrow,
+.hello:focus-visible .arrow {
+  color: inherit;
+  transform: translate(3px, -3px);
 }
 
 .hello:active {
@@ -535,8 +573,6 @@ h1 {
 }
 
 @media (max-width: 520px) {
-  :root { --edge: 1.125rem; }
-
   [role="tab"] {
     min-height: 40px;
     padding: 0.3rem 0.45rem;
@@ -567,6 +603,19 @@ h1 {
   width: min(50rem, calc(100% - var(--edge) * 2));
   margin: 0 auto;
   padding: max(2.5rem, env(safe-area-inset-top)) 1.75rem max(4rem, env(safe-area-inset-bottom));
+  border: 1px solid color-mix(in srgb, var(--ice) 55%, var(--cyan));
+  background: color-mix(in srgb, var(--ice) 82%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ice) 70%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .page {
+    background: var(--ice);
+  }
 }
 
 .page-top {
@@ -579,12 +628,12 @@ h1 {
 .wordmark {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 2rem;
   color: var(--muted);
   font-family: var(--sans);
-  font-size: clamp(1.25rem, 1.6vw + 0.7rem, 1.7rem);
+  font-size: clamp(1.05rem, 1.2vw + 0.7rem, 1.35rem);
   font-weight: 300;
-  line-height: 1.3rem;
+  line-height: 1.2rem;
 }
 
 .page h1 {
@@ -614,10 +663,11 @@ h1 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   color: var(--muted);
-  font-family: var(--sans);
+  font-family: var(--serif);
   font-size: 1.4rem;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 1.45rem;
+  text-align: center;
 }
 
 .rows,
@@ -701,16 +751,12 @@ h1 {
 
 @media (min-width: 640px) {
   .stage {
-    padding-top: 1.5rem;
+    padding-top: 0.35rem;
   }
 
   .stage-info {
     --pfp: 11rem;
     padding-bottom: 6rem;
-  }
-
-  .stage-info::before {
-    display: none;
   }
 
   .bio {
@@ -731,7 +777,7 @@ h1 {
 
 @media (min-width: 1024px) {
   .stage {
-    padding-top: 2rem;
+    padding-top: 0.45rem;
   }
 
   .stage-info {
@@ -761,6 +807,10 @@ h1 {
   font-size: 1em;
   color: var(--signal-deep);
   vertical-align: baseline;
+}
+
+.profile-card .sig {
+  color: var(--ice);
 }
 
 .sig-base,
@@ -846,6 +896,12 @@ h1 {
   text-wrap: pretty;
 }
 
+.profile-card .caption,
+.profile-card .sep,
+.profile-card .pin {
+  color: var(--ice);
+}
+
 .caption em,
 .facts em {
   font-family: "Instrument Serif", Georgia, serif;
@@ -864,11 +920,15 @@ h1 {
 }
 
 .caption svg,
-.colophon svg,
-.hello svg {
+.colophon svg {
   width: 1.2rem;
   height: 1.2rem;
   flex: none;
+}
+
+.hello .arrow {
+  width: 1rem;
+  height: 1rem;
 }
 
 .bio + .facts {
@@ -1004,7 +1064,9 @@ img[src$="fschoolai-icon.png"] {
   display: block;
   margin-top: 0.28rem;
   color: var(--heading);
+  font-family: var(--sans);
   font-size: 0.95rem;
+  font-weight: 300;
   line-height: 1.25;
 }
 
@@ -1068,7 +1130,9 @@ img[src$="fschoolai-icon.png"] {
 }
 
 .play .row h3 {
+  font-family: var(--sans);
   font-size: 1.05rem;
+  font-weight: 300;
 }
 
 .games a {
@@ -1076,6 +1140,65 @@ img[src$="fschoolai-icon.png"] {
   align-items: center;
   gap: 0.3rem;
   min-height: 44px;
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+.games-made {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  width: 100%;
+  justify-self: stretch;
+}
+
+.games-grid a {
+  display: block;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+  background: var(--bg-2);
+  text-decoration: none;
+}
+
+.games-grid img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.games-grid a:hover,
+.games-grid a:focus-visible {
+  outline: 2px solid var(--signal-deep);
+  outline-offset: 2px;
+}
+
+@media (min-width: 640px) {
+  .games-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .games-made {
+    grid-template-columns: minmax(11rem, 0.9fr) minmax(0, 1.6fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .games-grid {
+    width: 100%;
+    justify-self: end;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 900px) {
@@ -1138,25 +1261,30 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (max-width: 760px) {
+  :root { --edge: 0.4rem; }
+
   .stage-bar,
   .stage-info,
   .page {
-    padding-inline: 1rem;
+    padding-inline: 0.85rem;
   }
 
-  .stage-info { --pfp: 7.5rem; column-gap: 0.85rem; }
+  .stage-info { --pfp: 6.75rem; }
 
-  .stage-info .identity {
-    grid-row: 1 / span 2;
-    align-self: start;
-    padding-top: calc(var(--overlap) + 0.4rem);
+  .profile-card {
+    gap: 0.75rem;
+    padding: 0.65rem 0.7rem;
   }
 
-  #name { font-size: clamp(1.55rem, 6.4vw, 2.05rem); }
+  .stage-info .pfp {
+    margin-top: calc(var(--overlap) * -0.4);
+  }
+
+  #name { font-size: clamp(1.45rem, 6vw, 1.95rem); }
 
   .caption {
-    margin-top: 0.2rem;
-    font-size: 1.16rem;
+    margin-top: 0.15rem;
+    font-size: 1.02rem;
     line-height: 1.25;
   }
 
@@ -1170,6 +1298,22 @@ img[src$="fschoolai-icon.png"] {
   .where .sep { display: none; }
 
   .stage-info > .bio { margin-top: 1.5rem; }
+
+  .lede,
+  .points,
+  .facts {
+    font-size: 1.12rem;
+    line-height: 1.5;
+  }
+
+  .contact-line {
+    gap: 0.25rem 0.65rem;
+  }
+
+  .contact h2,
+  .hello {
+    font-size: 1.45rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1190,15 +1334,16 @@ img[src$="fschoolai-icon.png"] {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  background: var(--ink);
 }
 
 .lane {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: calc((100% - min(50rem, 100% - var(--edge) * 2)) / 2);
+  width: 50%;
   overflow: hidden;
-  background: var(--ink);
+  background: transparent;
 }
 
 .lane-left { left: 0; }
@@ -1322,9 +1467,16 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sig,
-  .sig-live {
-    color: var(--signal-deep);
+  .profile-card .sig,
+  .profile-card .sig-live {
+    color: var(--ice);
+  }
+
+  .stage,
+  .page {
+    background: var(--ice);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
@@ -1344,4 +1496,5 @@ img[src$="fschoolai-icon.png"] {
     transition: none !important;
   }
 }
+
 
