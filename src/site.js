@@ -22,17 +22,18 @@ function initTitle() {
 
 function placeIndicator(tab, animate) {
   const indicator = document.querySelector(".tab-indicator");
+  const list = tab?.closest("[role='tablist']");
   if (!indicator || !tab) return;
-  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  const near = window.matchMedia("(max-width: 760px)").matches;
-  gsap.to(indicator, {
+  const box = {
     x: tab.offsetLeft,
-    y: tab.offsetTop + tab.offsetHeight + (near ? 0.05 : 0.28) * rem,
+    y: tab.offsetTop,
     width: tab.offsetWidth,
-    duration: animate ? 0.5 : 0,
-    ease: "power3.out",
+    height: tab.offsetHeight,
     overwrite: true,
-  });
+  };
+  if (animate) gsap.to(indicator, { ...box, duration: 0.5, ease: "power3.out" });
+  else gsap.set(indicator, box);
+  list?.classList.add("tabs-ready");
 }
 
 function revealPanel(panel, animate) {
@@ -206,8 +207,9 @@ async function fitSignature(sig) {
   if (!name || !box) return;
   const avail = box.clientWidth - 8;
   const used = target.w + gap + widest;
-  if (!avail || !used) return;
-  name.style.fontSize = `${parseFloat(size) * (avail / used)}px`;
+  let next = parseFloat(size);
+  if (avail && used && used > avail) next = parseFloat(size) * (avail / used);
+  if (next < parseFloat(size)) name.style.fontSize = `${next}px`;
   const shown = sig.querySelector(".sig-live");
   if (!shown) return;
   let shrink = 1;
@@ -218,7 +220,7 @@ async function fitSignature(sig) {
     const limit = box.getBoundingClientRect().right - 4;
     if (end > limit) shrink = Math.min(shrink, (limit - name.getBoundingClientRect().left) / (end - name.getBoundingClientRect().left));
   });
-  if (shrink < 0.999) name.style.fontSize = `${parseFloat(name.style.fontSize) * shrink}px`;
+  if (shrink < 0.999) name.style.fontSize = `${(parseFloat(name.style.fontSize) || next) * shrink}px`;
   const mark = document.createElement("span");
   mark.style.cssText = "display:inline-block;width:0;height:0;vertical-align:baseline";
   name.insertBefore(mark, sig);
