@@ -13,10 +13,12 @@ const SIG_FACES = [
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
 
+const PAGE_TITLE = "Abdullah Sultan - ML/RL";
+
 function initTitle() {
-  const base = document.title;
+  document.title = PAGE_TITLE;
   document.addEventListener("visibilitychange", () => {
-    document.title = document.hidden ? "please come back 😭" : base;
+    document.title = document.hidden ? "please come back 😭" : PAGE_TITLE;
   });
 }
 
@@ -111,6 +113,7 @@ function selectTab(tabs, index, animate, fromHash) {
   placeIndicator(opened.tab, animate);
   syncHiddenTriggers();
   revealPanel(opened.panel, animate);
+  if (!document.hidden) document.title = PAGE_TITLE;
   if (!fromHash && index !== previous) syncTabHash(opened.panel);
 }
 
