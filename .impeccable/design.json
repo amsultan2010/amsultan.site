@@ -1,20 +1,65 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-11T21:40:00Z",
+  "generatedAt": "2026-11-16T21:45:00Z",
   "title": "Design System: abdullahsultan.tech",
   "extensions": {
     "colorMeta": {
-      "bg": { "role": "neutral", "displayName": "Ice", "canonical": "#d5eef2" },
-      "heading": { "role": "neutral", "displayName": "Ink", "canonical": "#073b4c" },
-      "accent": { "role": "primary", "displayName": "Signal", "canonical": "#c73828" }
+      "bg": {
+        "role": "neutral",
+        "displayName": "Ice",
+        "canonical": "#d5eef2"
+      },
+      "heading": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#073b4c"
+      },
+      "accent": {
+        "role": "primary",
+        "displayName": "Signal",
+        "canonical": "#c73828"
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Cyan",
+        "canonical": "#0e5c70"
+      },
+      "signal": {
+        "role": "accent",
+        "displayName": "Signal (decorative, active tab ground)",
+        "canonical": "#f54937"
+      }
     },
     "motion": [
-      { "name": "hover", "value": "150ms linear", "purpose": "Link and tab colour." },
-      { "name": "tab", "value": "150ms ease-out", "purpose": "Opacity when a tab opens. Removed under prefers-reduced-motion." }
+      {
+        "name": "hover",
+        "value": "150ms linear",
+        "purpose": "Link and tab colour."
+      },
+      {
+        "name": "tab",
+        "value": "150ms ease-out",
+        "purpose": "Opacity when a tab opens. Removed under prefers-reduced-motion."
+      },
+      {
+        "name": "tab-indicator",
+        "value": "slide between tabs",
+        "purpose": "The signal rectangle behind the active tab. Snaps under prefers-reduced-motion."
+      }
     ],
     "breakpoints": [
-      { "name": "phone", "value": "640px" },
-      { "name": "desktop", "value": "1024px" }
+      {
+        "name": "phone",
+        "value": "760px"
+      },
+      {
+        "name": "tablet",
+        "value": "640px"
+      },
+      {
+        "name": "desktop",
+        "value": "1024px"
+      }
     ]
   },
   "components": [
@@ -22,30 +67,46 @@
       "name": "Portrait",
       "kind": "custom",
       "refersTo": "pfp",
-      "description": "Round night portrait overlapping the bottom edge of the Riyadh plate.",
+      "description": "Round night portrait overlapping the Riyadh plate. 8.75rem, 11rem from 640px, 13rem from 1024px, 6.75rem on a phone.",
       "html": "<img class=\"pfp\" alt=\"\" src=\"/images/portraits/portrait-night.jpg\">",
-      "css": ".pfp{width:12rem;height:12rem;border:2px solid #c73828;border-radius:50%;object-fit:cover}"
+      "css": ".pfp{width:13rem;height:13rem;border:2px solid #c73828;border-radius:50%;object-fit:cover}.profile-card .pfp{border-color:#d5eef2}"
     },
     {
       "name": "Tab",
       "kind": "custom",
       "refersTo": "tab",
-      "description": "Text tab. The selected one uses the accent underline.",
+      "description": "Text tab. Inactive tabs are cyan. The selected tab is ice type in a signal rectangle with a 0.375rem radius that slides between tabs.",
       "html": "<button type=\"button\" role=\"tab\">internships</button>",
-      "css": "[role=tab]{font:300 1.25rem/1.4rem 'Host Grotesk',sans-serif;color:#4a6d76}[role=tab][aria-selected=true]{color:#c13627}"
+      "css": "[role=tab]{min-height:48px;padding:.48rem .62rem;border-radius:.375rem;font:300 1.4rem/1.2 'Host Grotesk',sans-serif;color:#0e5c70}[role=tab][aria-selected=true]{color:#d5eef2;background:#f54937}"
+    },
+    {
+      "name": "Glass panel",
+      "kind": "custom",
+      "refersTo": "stage",
+      "description": "Frosted ice panel that holds the page, over the cyan-band gutters with contours and floating shapes.",
+      "html": "<div class=\"stage\"></div>",
+      "css": ".stage{width:min(50rem,calc(100% - 2rem));margin-inline:auto;background:color-mix(in srgb,#d5eef2 60%,transparent);backdrop-filter:blur(5px)}"
     }
   ],
   "narrative": {
-    "northStar": "One reading column",
+    "northStar": "One frosted reading panel",
     "keyCharacteristics": [
-      "ice ground, ink type, cyan secondary, signal red on the marks, horizontal contours in the gutters",
+      "ice glass panel over cyan-band gutters, ink type, cyan secondary, signal red on the marks",
       "portrait overlapping a photograph",
-      "geist serif for the statement, host grotesk light for the meta",
-      "one column, left aligned, shared by the plate and the text"
+      "geist serif for the name and sentences, host grotesk for tabs, meta and panel titles",
+      "one panel, left aligned text, centred titles and short rows"
     ],
     "rules": [
-      { "name": "One column", "body": "The plate, the portrait, the statement, and the lists share one width.", "section": "layout" },
-      { "name": "Lowercase", "body": "Visible copy is lowercase. Meta tags and JSON-LD keep case.", "section": "typography" }
+      {
+        "name": "One panel",
+        "body": "The plate, the portrait, the statement, and the lists share the glass panel width.",
+        "section": "layout"
+      },
+      {
+        "name": "Lowercase",
+        "body": "Visible copy is lowercase. Meta tags and JSON-LD keep case.",
+        "section": "typography"
+      }
     ]
   }
 }

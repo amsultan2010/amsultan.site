@@ -30,7 +30,7 @@ The canonical site for this person. It is the page that both names Abdullah Muha
 
 He is an 11th-grade student at the American International School Riyadh, in the full IB Diploma Programme, class of 2028, based in Riyadh. The live site is https://abdullahsultan.tech. `www.abdullahsultan.tech`, `amsultan.site`, and `www.amsultan.site` redirect there.
 
-The homepage at `/` holds the intro and the work lists (internships, projects, leadership, record) plus the contact ask. `/work` redirects to `/`. `/life` is places, food, games, small games, and the watchlist. `/resume` is the full résumé. The footer on every page links GitHub, LinkedIn, X, the résumé, and life. The published contact line on the page is "grab coffee, talk startups, or larp being technical."
+The homepage at `/` holds the intro and the work lists (internships, projects, leadership, record) plus the contact ask. `/work` redirects to `/`. The life section (`/#life`, and `/life` redirects there) is places, food, games, small games, and the watchlist. `/links` is a link card page. `/resume` is the full résumé. The footer is one centred row with icons: résumé, links, LinkedIn, GitHub, X, and Instagram. The published contact line on the page is "grab coffee, talk startups, or larp being technical."
 
 The résumé source is a Google Doc, embedded by `resume.html`. Edit the doc, not the repo.
 
