@@ -331,6 +331,86 @@ function initMotion() {
   });
 }
 
+function initClock() {
+  const nodes = document.querySelectorAll("[data-clock]");
+  if (!nodes.length) return;
+  const format = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Riyadh",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  const update = () => {
+    const now = new Date();
+    const text = format.format(now);
+    nodes.forEach((node) => {
+      node.textContent = text;
+      if ("dateTime" in node) node.dateTime = now.toISOString();
+    });
+  };
+  update();
+  window.setInterval(update, 30000);
+}
+
+function initShapes() {
+  const fields = document.querySelectorAll(".shape-field");
+  if (!fields.length) return;
+  const shapes = [
+    ["dot", "1%", "18%", "0.7rem", "0.7rem", "2.4s"],
+    ["slash", "2%", "63%", "5.2rem", "", "2.8s"],
+    ["pill", "6%", "28%", "4.4rem", "0.85rem", "3.1s"],
+    ["ring", "7%", "88%", "4.6rem", "4.6rem", "2.6s"],
+    ["block", "11%", "8%", "2.8rem", "2.8rem", "3.4s"],
+    ["dot", "14%", "54%", "0.85rem", "0.85rem", "2.2s"],
+    ["slash flip", "16%", "76%", "4.8rem", "", "2.5s"],
+    ["ring", "20%", "40%", "3.4rem", "3.4rem", "2.9s"],
+    ["pill", "22%", "6%", "5.6rem", "1rem", "3.2s"],
+    ["dot", "26%", "92%", "1rem", "1rem", "2.1s"],
+    ["block", "28%", "22%", "3.6rem", "3.6rem", "2.7s"],
+    ["slash", "33%", "68%", "6.4rem", "", "3s"],
+    ["ring", "35%", "14%", "5.2rem", "5.2rem", "2.4s"],
+    ["dot", "39%", "48%", "0.75rem", "0.75rem", "2.6s"],
+    ["pill", "42%", "90%", "4.2rem", "0.8rem", "2.3s"],
+    ["slash flip", "46%", "6%", "5.5rem", "", "2.8s"],
+    ["block", "48%", "58%", "2.6rem", "2.6rem", "3.3s"],
+    ["dot", "52%", "33%", "1.05rem", "1.05rem", "2.2s"],
+    ["ring", "55%", "78%", "6.4rem", "6.4rem", "2.7s"],
+    ["slash", "57%", "24%", "4.6rem", "", "2.4s"],
+    ["pill", "61%", "46%", "6.2rem", "1.05rem", "3.1s"],
+    ["dot", "66%", "8%", "0.8rem", "0.8rem", "2.5s"],
+    ["block", "68%", "70%", "4.2rem", "4.2rem", "2.9s"],
+    ["slash flip", "72%", "40%", "5.8rem", "", "2.3s"],
+    ["ring", "74%", "16%", "3.8rem", "3.8rem", "2.6s"],
+    ["dot", "79%", "56%", "0.7rem", "0.7rem", "2.1s"],
+    ["pill", "81%", "88%", "5rem", "0.9rem", "2.8s"],
+    ["slash", "85%", "28%", "6rem", "", "3.2s"],
+    ["block", "87%", "48%", "3.1rem", "3.1rem", "2.4s"],
+    ["dot", "91%", "74%", "1.1rem", "1.1rem", "2.7s"],
+    ["ring", "93%", "10%", "4.8rem", "4.8rem", "2.5s"],
+    ["slash flip", "96%", "82%", "4.4rem", "", "2.2s"],
+    ["pill", "98%", "36%", "5.4rem", "0.95rem", "3s"],
+    ["dot", "5%", "42%", "0.65rem", "0.65rem", "2.9s"],
+    ["block", "19%", "60%", "2.2rem", "2.2rem", "2.6s"],
+    ["ring", "63%", "92%", "3.2rem", "3.2rem", "3.3s"],
+  ];
+  fields.forEach((field) => {
+    const frag = document.createDocumentFragment();
+    shapes.forEach(([cls, top, left, width, height, duration]) => {
+      const el = document.createElement("span");
+      el.className = `gutter-shape ${cls}`;
+      el.style.top = top;
+      el.style.left = left;
+      el.style.width = width;
+      if (height) el.style.height = height;
+      el.style.animationDuration = duration;
+      frag.append(el);
+    });
+    field.append(frag);
+  });
+}
+
+initClock();
+initShapes();
 initTitle();
 initTabs();
 initMotion();
