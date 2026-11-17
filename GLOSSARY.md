@@ -1,6 +1,6 @@
 # abdullahsultan.tech
 
-Abdullah Sultan's portfolio: a homepage, a life page, and a resume.
+Abdullah Sultan's portfolio: a homepage (with a life tab), a links page, and a resume.
 
 ## Pages
 
@@ -10,7 +10,7 @@ The page at `/`. Intro, then internships, projects, lead, and record as tabs, th
 _Avoid_: me, work view
 
 **Life**:
-The page at `/life`. Places, food, games, small games, and the watchlist.
+The section at `/#life` on the homepage (`/life` redirects there). Places, food, games, small games, and the watchlist.
 _Avoid_: rail, favorites
 
 **Resume**:
