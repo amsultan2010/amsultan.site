@@ -29,7 +29,7 @@ builds it and Vercel hosts it. Node 24 (`.nvmrc`). The repo is public, MIT licen
 - All page text is lowercase, brand names included. `body` sets `text-transform: lowercase`; `button` sets it too. Meta tags, JSON-LD and `llms.txt` keep case.
 - Visual design (palette, type scale, layout, radius, glass, motion) is in `DESIGN.md` and nowhere else. Tokens live in `:root` in `src/styles.css`. Two families only: Geist Serif and Host Grotesk.
 - A link to another page is a real `<a href>`. `/work` redirects to `/`.
-- Run ship-check (`.cursor/skills/ship-check`) before shipping.
+- Run `/site-finish` (`.cursor/skills/site-finish`) before shipping.
 
 ## Deploy
 

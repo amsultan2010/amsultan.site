@@ -21,13 +21,15 @@ UI work means any change to a file that renders or styles the interface: `.css`,
 - `DESIGN.md` is the only source of visual truth: palette, type, spacing, radius, depth, motion. Where any other file (CLAUDE.md, a brief, an old comment) disagrees, DESIGN.md wins. If the task changes the design, update DESIGN.md in the same PR.
 - Run `/impeccable critique` on the affected surface before any polish or refinement pass, and act on what it finds.
 - Use the Impeccable command that fits the task (`polish`, `layout`, `typeset`, `colorize`, `quieter`, `bolder`, `animate`, `adapt`, `distill`, `harden`, or a new-work flow for a redesign). Read its reference file before using it.
-- For motion and interaction detail, also use `.agents/skills/emil-design-eng` and `.agents/skills/animation-vocabulary`.
 - Treat a brief's exact values as intent. If a literal value would break the design or DESIGN.md, say so in the PR and propose the better value.
 
 ## Before you open the PR
 
 1. Run the Impeccable finish review (the `impeccable-finish-reviewer` agent in `.cursor/agents/`, or `reference/degraded/finish-reviewer.md` when subagents are unavailable).
 2. Run the detector on the changed UI files: `npx -y impeccable detect <files>`, and on the built HTML or the dev server URL when the site can run. Fix every error and explain any warning you keep.
-3. Run the web-design-guidelines review (`.agents/skills/web-design-guidelines/SKILL.md`) on the changed files and fix what it finds.
-4. Run `.cursor/skills/ship-check/SKILL.md` before shipping anything public.
-5. The PR body must contain the `## Impeccable` section from `.github/pull_request_template.md`, filled in: the commands that ran, the critique summary, and the detector and finish-review results. The `impeccable-check` workflow, where installed, fails a UI PR without it. A missing section is a failed task either way.
+3. Run `/site-finish` (`.cursor/skills/site-finish/SKILL.md`): interface and accessibility, motion and polish, and launch checks. Fix what it finds and put its report in the PR under `## Site finish`.
+4. The PR body must contain the `## Impeccable` section from `.github/pull_request_template.md`, filled in: the commands that ran, the critique summary, and the detector and finish-review results. A missing section is a failed task.
+
+## Skills in this repo
+
+Only two: `.cursor/skills/impeccable` (how it looks) and `.cursor/skills/site-finish` (correct, accessible, polished, launch-ready). Impeccable and DESIGN.md win any disagreement.
