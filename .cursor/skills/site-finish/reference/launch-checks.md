@@ -1,20 +1,9 @@
----
-name: ship-check
-description: >-
-  Technical pre-ship checklist for a public website: sitemap, favicon, titles,
-  404, robots.txt and AI crawlers, lang, alt text, source maps, canonical,
-  bundle size, one H1, server-rendered HTML, og:image, structured data, console
-  errors, search titles and descriptions, indexing, hreflang, page speed, and
-  semantic HTML. Use before shipping or deploying web pages, or when asked
-  about SEO, search, sitemaps, or agent and LLM access. It does not cover
-  visual design: that is Impeccable and DESIGN.md.
----
 
-# Ship check
+# Launch checks
 
 Technical bar for any public site. It sets no visual rules: visual design is owned by the Impeccable skill and the repo's `DESIGN.md`.
 
-Run `scripts/audit.sh <url>` for the static checks against a preview or production URL. Do the browser checks (console, alt text, rendered DOM) in a browser. Report a table: item, pass or fail, evidence. A check that could not run is reported as not run, never as a pass. An item that does not apply is reported as not applicable.
+Run `.cursor/skills/site-finish/scripts/audit.sh <url>` for the static checks against a preview or production URL. Do the browser checks (console, alt text, rendered DOM) in a browser. Report a table: item, pass or fail, evidence. A check that could not run is reported as not run, never as a pass. An item that does not apply is reported as not applicable.
 
 ## Crawl and build
 

@@ -16,4 +16,4 @@ Detector / finish review: <!-- `impeccable detect` result and the finish-review 
 
 - [ ] Build passes
 - [ ] DESIGN.md updated if the design changed
-- [ ] ship-check run for public pages
+- [ ] `/site-finish` run, report under `## Site finish`
