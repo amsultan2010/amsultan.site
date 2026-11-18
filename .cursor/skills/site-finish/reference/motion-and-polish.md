@@ -35,3 +35,16 @@ Name changes in the report with these terms: fade, slide, scale-in, pop, stagger
 
 ## Report format
 Motion and polish changes go in a table: | Before | After | Why |.
+
+## Premium details (defaults; DESIGN.md wins)
+- Numbers: `font-variant-numeric: tabular-nums` on stats, prices, timers, tables.
+- Headings `text-wrap: balance`; body `text-wrap: pretty`.
+- Concentric radius: inner radius = outer radius - padding.
+- Squircle corners (Apple-style ~60% smoothing): `border-radius: 24px; corner-shape: squircle;` (or `superellipse()`). Chromium only; others fall back to plain radius, so it is safe.
+- Alpha borders: `1px solid rgb(0 0 0 / 0.08)` or `color-mix()`, not solid grey.
+- Layered shadows: 2-3 soft tinted shadows, not one hard one.
+- Optical centering: nudge icons/play glyphs 1-2px so they look centred.
+- Popovers scale from their trigger (`transform-origin` at the anchor).
+- Strong ease-out `cubic-bezier(0.23, 1, 0.32, 1)` for anything reacting to input.
+- Masked scroll edges: `mask-image: linear-gradient(to right, transparent, #000 24px, #000 calc(100% - 24px), transparent)` on scrolling rows.
+- Tactile buttons: `:active { transform: scale(0.97) }`; hover styles only inside `@media (hover: hover)`.
