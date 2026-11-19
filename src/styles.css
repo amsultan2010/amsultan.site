@@ -1265,7 +1265,7 @@ img[src$="fschoolai-icon.png"] {
 }
 
 .link-btn.is-z img {
-  box-shadow: 0 0 0 2px var(--white);
+  box-shadow: 0 0 0 1px var(--white);
 }
 
 .link-btn.is-z:hover,
@@ -1284,15 +1284,16 @@ img[src$="fschoolai-icon.png"] {
 .link-icons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.15rem 1.35rem;
-  width: 9.5rem;
-  margin: 0.2rem auto 0;
+  gap: 0.55rem 0.7rem;
+  width: 100%;
+  margin: 0.35rem 0 0;
 }
 
 .link-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  aspect-ratio: 1;
   min-height: 44px;
   border-radius: 0.5rem;
   text-decoration: none;
@@ -1300,10 +1301,10 @@ img[src$="fschoolai-icon.png"] {
 }
 
 .link-icon img {
-  width: 1.85rem;
-  height: 1.85rem;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  border-radius: 0.25rem;
+  border-radius: 0.45rem;
 }
 
 .link-icon:hover,
@@ -1398,15 +1399,7 @@ img[src$="fschoolai-icon.png"] {
     height: 1.9rem;
   }
 
-  .link-icons {
-    gap: 0.2rem 1.6rem;
-    width: 11rem;
-  }
-
-  .link-icon img {
-    width: 2.05rem;
-    height: 2.05rem;
-  }
+  .link-icons { gap: 0.7rem 0.9rem; }
 }
 
 .tree-list {
