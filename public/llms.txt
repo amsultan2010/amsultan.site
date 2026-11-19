@@ -69,7 +69,7 @@ Canonical site: https://abdullahsultan.tech/
   /work redirects here. /life redirects to the extra tab.
 - [Resume](https://abdullahsultan.tech/resume): Full resume, with a PDF download: education,
   experience, awards, skills.
-- [Links](https://abdullahsultan.tech/links): Coffee chat, this website, LinkedIn, GitHub, X, and Instagram.
+- [Links](https://abdullahsultan.tech/links): This website, a coffee chat, Z Combinator, LinkedIn, GitHub, X, and Instagram.
 
 ## Elsewhere
 
