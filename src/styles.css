@@ -279,7 +279,7 @@ button {
 }
 
 .links-pfp {
-  --pfp: 8.75rem;
+  --pfp: 9.5rem;
 }
 
 .links-name {
@@ -1148,9 +1148,11 @@ img[src$="fschoolai-icon.png"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(19rem, calc(100vw - 1.25rem));
-  padding: 1.05rem 1rem 1.1rem;
+  width: min(21.25rem, calc(100vw - 1.25rem));
+  padding: 1.2rem 1.15rem 1.25rem;
   border: 1px solid color-mix(in srgb, white 74%, var(--ice));
+  border-radius: 0.375rem;
+  overflow: hidden;
   background:
     linear-gradient(180deg, color-mix(in srgb, white 36%, transparent), transparent 18%),
     var(--glass-tint);
@@ -1195,14 +1197,14 @@ img[src$="fschoolai-icon.png"] {
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 2.75rem;
-  padding: 0.45rem 0.9rem;
+  min-height: 3rem;
+  padding: 0.5rem 0.95rem;
   border: 1px solid var(--cyan);
   border-radius: 0.5rem;
   background: var(--bg-2);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: 1.08rem;
+  font-size: 1.14rem;
   font-weight: 300;
   line-height: 1.3;
   text-align: center;
@@ -1212,25 +1214,25 @@ img[src$="fschoolai-icon.png"] {
 
 .link-btn img,
 .link-btn svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1.4rem;
+  height: 1.4rem;
   flex: none;
   object-fit: contain;
   border-radius: 0.2rem;
 }
 
 .link-btn.is-site {
-  min-height: 3.45rem;
+  min-height: 3.75rem;
   border: 2px solid var(--cyan);
   background: var(--signal);
   color: var(--ice);
-  font-size: 1.28rem;
+  font-size: 1.36rem;
   font-weight: 500;
 }
 
 .link-btn.is-site img {
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .link-btn:hover,
@@ -1279,41 +1281,6 @@ img[src$="fschoolai-icon.png"] {
   border-color: var(--white);
   background: var(--z-press);
   color: var(--white);
-}
-
-.link-icons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.55rem 0.7rem;
-  width: 100%;
-  margin: 0.35rem 0 0;
-}
-
-.link-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  aspect-ratio: 1;
-  min-height: 44px;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  transition: background-color 0.15s linear, transform 0.15s linear;
-}
-
-.link-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 0.45rem;
-}
-
-.link-icon:hover,
-.link-icon:focus-visible {
-  background: color-mix(in srgb, var(--ink) 8%, transparent);
-}
-
-.link-icon:active {
-  transform: translateY(1px);
 }
 
 .play .row img {
@@ -1365,13 +1332,13 @@ img[src$="fschoolai-icon.png"] {
 
 @media (min-width: 900px) {
   .links-card {
-    width: min(23.5rem, calc(100vw - 4rem));
-    padding: 1.35rem 1.35rem 1.45rem;
+    width: min(26.5rem, calc(100vw - 4rem));
+    padding: 1.55rem 1.5rem 1.65rem;
   }
 
-  .links-pfp { --pfp: 12rem; }
+  .links-pfp { --pfp: 13rem; }
 
-  .links-card #name { font-size: 2.7rem; }
+  .links-card #name { font-size: 2.95rem; }
 
   .link-stack {
     gap: 0.55rem;
@@ -1379,27 +1346,25 @@ img[src$="fschoolai-icon.png"] {
   }
 
   .link-btn {
-    min-height: 3.05rem;
-    font-size: 1.2rem;
+    min-height: 3.35rem;
+    font-size: 1.28rem;
   }
 
   .link-btn img,
   .link-btn svg {
-    width: 1.4rem;
-    height: 1.4rem;
+    width: 1.55rem;
+    height: 1.55rem;
   }
 
   .link-btn.is-site {
-    min-height: 4rem;
-    font-size: 1.5rem;
+    min-height: 4.35rem;
+    font-size: 1.62rem;
   }
 
   .link-btn.is-site img {
-    width: 1.9rem;
-    height: 1.9rem;
+    width: 2.05rem;
+    height: 2.05rem;
   }
-
-  .link-icons { gap: 0.7rem 0.9rem; }
 }
 
 .tree-list {
@@ -1532,9 +1497,9 @@ img[src$="fschoolai-icon.png"] {
     height: 0.9em;
   }
 
-  .link-btn { min-height: 44px; }
+  .link-btn { min-height: 48px; }
 
-  .link-btn.is-site { min-height: 3.7rem; }
+  .link-btn.is-site { min-height: 4rem; }
 
   .stage .colophon nav {
     justify-content: center;
