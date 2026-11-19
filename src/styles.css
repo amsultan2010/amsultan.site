@@ -274,17 +274,23 @@ button {
 }
 
 .links-pfp {
-  --pfp: 8rem;
+  --pfp: 8.75rem;
 }
 
 .links-name {
   width: 100%;
-  margin-top: 0.65rem;
+  margin-top: 0.7rem;
   text-align: center;
 }
 
 .links-card #name {
-  font-size: clamp(1.65rem, 6.2vw, 2.15rem);
+  font-size: clamp(1.8rem, 6.8vw, 2.35rem);
+}
+
+.links-card .sig {
+  color: var(--signal);
+  -webkit-text-stroke: 1px var(--ice);
+  paint-order: stroke fill;
 }
 
 .pfp {
@@ -1137,8 +1143,8 @@ img[src$="fschoolai-icon.png"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(20.5rem, calc(100vw - 1.6rem));
-  padding: 0.95rem 0.95rem 1rem;
+  width: min(22.5rem, calc(100vw - 1.25rem));
+  padding: 1.05rem 1rem 1.1rem;
   border: 1px solid color-mix(in srgb, white 74%, var(--ice));
   background:
     linear-gradient(180deg, color-mix(in srgb, white 36%, transparent), transparent 18%),
@@ -1183,28 +1189,43 @@ img[src$="fschoolai-icon.png"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.55rem;
-  min-height: 2.6rem;
-  padding: 0.4rem 0.85rem;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.9rem;
   border: 1px solid var(--cyan);
   border-radius: 0.5rem;
   background: var(--bg-2);
   color: var(--ink);
   font-family: var(--sans);
-  font-size: var(--type-role);
+  font-size: 1.08rem;
   font-weight: 300;
   line-height: 1.3;
   text-align: center;
   text-decoration: none;
+  transition: color 0.15s linear, background-color 0.15s linear, border-color 0.15s linear, transform 0.15s linear;
 }
 
 .link-btn img,
 .link-btn svg {
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.25rem;
+  height: 1.25rem;
   flex: none;
   object-fit: contain;
   border-radius: 0.2rem;
+}
+
+.link-btn.is-site {
+  min-height: 3.45rem;
+  border: 2px solid var(--cyan);
+  background: var(--signal);
+  color: var(--ice);
+  font-size: 1.28rem;
+  font-weight: 500;
+}
+
+.link-btn.is-site img {
+  width: 1.6rem;
+  height: 1.6rem;
 }
 
 .link-btn:hover,
@@ -1218,6 +1239,18 @@ img[src$="fschoolai-icon.png"] {
   border-color: var(--signal-deep);
   color: var(--signal-text);
   transform: translateY(1px);
+}
+
+.link-btn.is-site:hover,
+.link-btn.is-site:focus-visible {
+  border-color: var(--ice);
+  background: var(--signal-deep);
+  color: var(--ice);
+}
+
+.link-btn.is-site:active {
+  border-color: var(--ice);
+  color: var(--ice);
 }
 
 .play .row img {
@@ -1269,11 +1302,39 @@ img[src$="fschoolai-icon.png"] {
 
 @media (min-width: 900px) {
   .links-card {
-    width: min(24.5rem, calc(100vw - 3rem));
-    padding: 1.05rem 1.1rem 1.1rem;
+    width: min(30.5rem, calc(100vw - 4rem));
+    padding: 1.35rem 1.35rem 1.45rem;
   }
 
-  .links-pfp { --pfp: 9.5rem; }
+  .links-pfp { --pfp: 12rem; }
+
+  .links-card #name { font-size: 2.7rem; }
+
+  .link-stack {
+    gap: 0.55rem;
+    margin-top: 1.05rem;
+  }
+
+  .link-btn {
+    min-height: 3.05rem;
+    font-size: 1.2rem;
+  }
+
+  .link-btn img,
+  .link-btn svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .link-btn.is-site {
+    min-height: 4rem;
+    font-size: 1.5rem;
+  }
+
+  .link-btn.is-site img {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
 }
 
 .tree-list {
@@ -1406,6 +1467,28 @@ img[src$="fschoolai-icon.png"] {
     height: 0.9em;
   }
 
+  .link-btn { min-height: 44px; }
+
+  .link-btn.is-site { min-height: 3.7rem; }
+
+  .stage .colophon nav {
+    justify-content: center;
+    gap: 0.04rem 0.1rem;
+    width: calc(100% + var(--stage-pad) * 2);
+    margin-inline: calc(var(--stage-pad) * -1);
+    font-size: clamp(0.86rem, 3.6vw, 1rem);
+  }
+
+  .stage .colophon a {
+    gap: 0.12rem;
+  }
+
+  .stage .colophon svg,
+  .stage .colophon img {
+    width: 1em;
+    height: 1em;
+  }
+
   .games-grid {
     gap: 0.4rem 0.3rem;
   }
@@ -1413,6 +1496,23 @@ img[src$="fschoolai-icon.png"] {
   .games-grid .tile-name {
     font-size: 0.68rem;
     line-height: 1.15;
+  }
+}
+
+@media (min-width: 761px) {
+  .stage .colophon nav {
+    gap: 0.2rem 0.85rem;
+    font-size: 1.08rem;
+  }
+
+  .stage .colophon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+  }
+
+  .stage .colophon img {
+    width: 1.5rem;
+    height: 1.5rem;
   }
 }
 
