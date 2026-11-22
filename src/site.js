@@ -1,14 +1,17 @@
 import { inject } from "@vercel/analytics";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
 import "./fonts.css";
 import "./styles.css";
 
 inject({ mode: import.meta.env.DEV ? "development" : "production" });
 gsap.registerPlugin(ScrollTrigger);
 
+let lenis = null;
+
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--cyan)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
+  { cls: "is-base", color: "var(--text-2)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
@@ -33,7 +36,7 @@ function placeIndicator(tab, animate) {
     height: tab.offsetHeight,
     overwrite: true,
   };
-  if (animate) gsap.to(indicator, { ...box, duration: 0.5, ease: "power3.out" });
+  if (animate) gsap.to(indicator, { ...box, duration: 0.45, ease: "power3.out" });
   else gsap.set(indicator, box);
   list?.classList.add("tabs-ready");
 }
@@ -55,7 +58,7 @@ function revealPanel(panel, animate) {
   if (now.length) {
     gsap.fromTo(
       now,
-      { y: 18, autoAlpha: 0 },
+      { y: 16, autoAlpha: 0 },
       { y: 0, autoAlpha: 1, duration: 0.6, stagger: 0.045, ease: "power3.out", overwrite: true },
     );
   }
@@ -64,7 +67,7 @@ function revealPanel(panel, animate) {
     el.dataset.armed = "1";
     gsap.fromTo(
       el,
-      { y: 18, autoAlpha: 0 },
+      { y: 16, autoAlpha: 0 },
       {
         y: 0,
         autoAlpha: 1,
@@ -81,6 +84,12 @@ function motionOk() {
   return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function scrollToElement(target) {
+  if (!target) return;
+  if (lenis) lenis.scrollTo(target, { offset: -24 });
+  else target.scrollIntoView({ block: "start" });
+}
+
 function syncHiddenTriggers() {
   ScrollTrigger.getAll().forEach((st) => {
     const el = st.trigger;
@@ -88,6 +97,7 @@ function syncHiddenTriggers() {
     if (el.closest("[hidden]")) st.disable(false);
     else st.enable(false);
   });
+  lenis?.resize();
   ScrollTrigger.refresh();
 }
 
@@ -160,7 +170,7 @@ function initTabs() {
       const index = tabs.findIndex((tab) => tab.getAttribute("aria-controls") === panel.id);
       if (index >= 0) selectTab(tabs, index, motionOk(), true);
     }
-    requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+    requestAnimationFrame(() => scrollToElement(target));
   };
 
   revealHash();
@@ -290,6 +300,19 @@ function initMotion() {
     else if (sig) fitSignature(sig);
   });
   mm.add("(prefers-reduced-motion: no-preference)", (context) => {
+    const smooth = new Lenis({
+      duration: 1.55,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 0.7,
+      touchMultiplier: 1.0,
+      smoothWheel: true,
+    });
+    lenis = smooth;
+    smooth.on("scroll", ScrollTrigger.update);
+    const tick = (time) => smooth.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+
     initSignature(context);
 
     const enter = document.querySelectorAll("[data-enter]");
@@ -301,7 +324,7 @@ function initMotion() {
     below.forEach((el) => {
       gsap.fromTo(
         el,
-        { y: 18, autoAlpha: 0 },
+        { y: 16, autoAlpha: 0 },
         {
           y: 0,
           autoAlpha: 1,
@@ -324,10 +347,22 @@ function initMotion() {
     }
 
     const pfp = document.querySelector(".stage-info .pfp");
+    const onEnter = () => gsap.to(pfp, { scale: 1.035, duration: 0.45, ease: "power2.out" });
+    const onLeave = () => gsap.to(pfp, { scale: 1, duration: 0.6, ease: "power2.out" });
     if (pfp) {
-      pfp.addEventListener("pointerenter", () => gsap.to(pfp, { scale: 1.045, duration: 0.45, ease: "power2.out" }));
-      pfp.addEventListener("pointerleave", () => gsap.to(pfp, { scale: 1, duration: 0.6, ease: "power2.out" }));
+      pfp.addEventListener("pointerenter", onEnter);
+      pfp.addEventListener("pointerleave", onLeave);
     }
+
+    return () => {
+      if (pfp) {
+        pfp.removeEventListener("pointerenter", onEnter);
+        pfp.removeEventListener("pointerleave", onLeave);
+      }
+      gsap.ticker.remove(tick);
+      smooth.destroy();
+      if (lenis === smooth) lenis = null;
+    };
   });
 }
 
@@ -352,65 +387,7 @@ function initClock() {
   window.setInterval(update, 30000);
 }
 
-function initShapes() {
-  const fields = document.querySelectorAll(".shape-field");
-  if (!fields.length) return;
-  const shapes = [
-    ["dot", "1%", "18%", "0.7rem", "0.7rem", "2.4s"],
-    ["slash", "2%", "63%", "5.2rem", "", "2.8s"],
-    ["pill", "6%", "28%", "4.4rem", "0.85rem", "3.1s"],
-    ["ring", "7%", "88%", "4.6rem", "4.6rem", "2.6s"],
-    ["block", "11%", "8%", "2.8rem", "2.8rem", "3.4s"],
-    ["dot", "14%", "54%", "0.85rem", "0.85rem", "2.2s"],
-    ["slash flip", "16%", "76%", "4.8rem", "", "2.5s"],
-    ["ring", "20%", "40%", "3.4rem", "3.4rem", "2.9s"],
-    ["pill", "22%", "6%", "5.6rem", "1rem", "3.2s"],
-    ["dot", "26%", "92%", "1rem", "1rem", "2.1s"],
-    ["block", "28%", "22%", "3.6rem", "3.6rem", "2.7s"],
-    ["slash", "33%", "68%", "6.4rem", "", "3s"],
-    ["ring", "35%", "14%", "5.2rem", "5.2rem", "2.4s"],
-    ["dot", "39%", "48%", "0.75rem", "0.75rem", "2.6s"],
-    ["pill", "42%", "90%", "4.2rem", "0.8rem", "2.3s"],
-    ["slash flip", "46%", "6%", "5.5rem", "", "2.8s"],
-    ["block", "48%", "58%", "2.6rem", "2.6rem", "3.3s"],
-    ["dot", "52%", "33%", "1.05rem", "1.05rem", "2.2s"],
-    ["ring", "55%", "78%", "6.4rem", "6.4rem", "2.7s"],
-    ["slash", "57%", "24%", "4.6rem", "", "2.4s"],
-    ["pill", "61%", "46%", "6.2rem", "1.05rem", "3.1s"],
-    ["dot", "66%", "8%", "0.8rem", "0.8rem", "2.5s"],
-    ["block", "68%", "70%", "4.2rem", "4.2rem", "2.9s"],
-    ["slash flip", "72%", "40%", "5.8rem", "", "2.3s"],
-    ["ring", "74%", "16%", "3.8rem", "3.8rem", "2.6s"],
-    ["dot", "79%", "56%", "0.7rem", "0.7rem", "2.1s"],
-    ["pill", "81%", "88%", "5rem", "0.9rem", "2.8s"],
-    ["slash", "85%", "28%", "6rem", "", "3.2s"],
-    ["block", "87%", "48%", "3.1rem", "3.1rem", "2.4s"],
-    ["dot", "91%", "74%", "1.1rem", "1.1rem", "2.7s"],
-    ["ring", "93%", "10%", "4.8rem", "4.8rem", "2.5s"],
-    ["slash flip", "96%", "82%", "4.4rem", "", "2.2s"],
-    ["pill", "98%", "36%", "5.4rem", "0.95rem", "3s"],
-    ["dot", "5%", "42%", "0.65rem", "0.65rem", "2.9s"],
-    ["block", "19%", "60%", "2.2rem", "2.2rem", "2.6s"],
-    ["ring", "63%", "92%", "3.2rem", "3.2rem", "3.3s"],
-  ];
-  fields.forEach((field) => {
-    const frag = document.createDocumentFragment();
-    shapes.forEach(([cls, top, left, width, height, duration]) => {
-      const el = document.createElement("span");
-      el.className = `gutter-shape ${cls}`;
-      el.style.top = top;
-      el.style.left = left;
-      el.style.width = width;
-      if (height) el.style.height = height;
-      el.style.animationDuration = duration;
-      frag.append(el);
-    });
-    field.append(frag);
-  });
-}
-
 initClock();
-initShapes();
 initTitle();
 initTabs();
 initMotion();
