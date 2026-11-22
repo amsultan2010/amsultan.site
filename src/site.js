@@ -11,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 let lenis = null;
 
 const SIG_FACES = [
-  { cls: "is-base", color: "var(--text-2)", family: '"Host Grotesk", sans-serif', style: "italic", weight: "500", spec: (size) => `italic 500 ${size} "Host Grotesk"` },
+  { cls: "is-base", color: "var(--starlight)", family: '"Geist Serif", Georgia, serif', style: "normal", weight: "500", spec: (size) => `normal 500 ${size} "Geist Serif"` },
 ];
 
 const SIG_CLASS_NAMES = SIG_FACES.map((face) => face.cls);
@@ -202,8 +202,8 @@ async function fitSignature(sig) {
       w: measured.width || 1,
     };
   };
-  const target = ink("abdullah", '"Host Grotesk", sans-serif', "normal", "500");
-  const gap = ink(" ", '"Host Grotesk", sans-serif', "normal", "500").w;
+  const target = ink("abdullah", '"Geist Serif", Georgia, serif', "normal", "500");
+  const gap = ink(" ", '"Geist Serif", Georgia, serif', "normal", "500").w;
   const faces = SIG_FACES.flatMap((face, index) => (ready[index] ? [{ face, ink: ink("sultan", face.family, face.style, face.weight) }] : []));
   if (!faces.length) return;
   const baseScale = target.h / faces[0].ink.h;
