@@ -266,6 +266,10 @@ async function fitSignature(sig) {
     pen.style.width = `${sig._widths["is-base"]}px`;
     pen.style.right = "auto";
   }
+  if (pen && motionOk() && !sig.dataset.drawn) {
+    sig.dataset.drawn = "1";
+    gsap.fromTo(pen, { scaleX: 0 }, { scaleX: 1, duration: 0.7, delay: 0.28, ease: "power3.out" });
+  }
 }
 
 function bindSignatureFit(sig) {

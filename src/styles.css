@@ -21,7 +21,7 @@
   /* one scale. desktop root is 17px; phones override the same names. */
   --type-hero: 3.6rem;
   --type-section: 2.2rem;
-  --type-item: 1.48rem;
+  --type-item: 1.6rem;
   --type-tab: 1.32rem;
   --type-body: 1.28rem;
   --type-role: 1.125rem;
@@ -452,6 +452,8 @@ h1 {
 
 .item {
   padding-block: 1.65rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.22s var(--ease-out);
 }
 
 .item:first-child {
@@ -589,7 +591,7 @@ h1 {
 
 .contact h2 {
   margin-bottom: 0;
-  color: var(--muted);
+  color: var(--text);
   font-size: var(--type-section);
   font-weight: 500;
   line-height: 1.15;
@@ -979,6 +981,10 @@ img[src$="fschoolai-icon.png"] {
 }
 
 @media (hover: hover) {
+  .item:hover {
+    background: color-mix(in srgb, var(--bg-2) 72%, transparent);
+  }
+
   .item:hover .mark,
   .colophon a:hover img {
     transform: translateY(-2px);
@@ -1430,7 +1436,7 @@ img[src$="fschoolai-icon.png"] {
     --edge: 0.75rem;
     --type-hero: 2.3rem;
     --type-section: 1.75rem;
-    --type-item: 1.32rem;
+    --type-item: 1.4rem;
     --type-tab: 1.14rem;
     --type-body: 1.2rem;
     --type-role: 1.08rem;
@@ -1493,16 +1499,30 @@ img[src$="fschoolai-icon.png"] {
   }
 
   [role="tablist"] {
+    display: flex;
     width: 100%;
-    justify-content: space-between;
-    gap: 0.08rem;
-    padding: 0.25rem;
+    flex-wrap: wrap;
+    justify-content: stretch;
+    gap: 0.2rem;
+    padding: 0.28rem;
   }
 
   [role="tab"] {
-    flex: 1 1 auto;
-    min-height: 46px;
-    padding: 0.45rem 0.3rem;
+    flex: 1 1 calc(33.33% - 0.2rem);
+    min-height: 44px;
+    padding: 0.4rem 0.45rem;
+  }
+
+  .item h3 .meta {
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+
+  .colophon nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-items: center;
+    gap: 0.15rem 0.5rem;
   }
 
   .contact {
@@ -1511,10 +1531,6 @@ img[src$="fschoolai-icon.png"] {
 
   .contact-line {
     gap: 0.25rem 0.65rem;
-  }
-
-  .colophon nav {
-    gap: 0.25rem 0.95rem;
   }
 
   .colophon svg,
