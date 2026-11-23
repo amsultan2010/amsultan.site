@@ -1,6 +1,6 @@
 ---
 name: abdullahsultan.tech
-description: a quiet liquid-glass column on starlight white with monochrome waves and charcoal ink
+description: a quiet solid column on starlight white with monochrome waves and charcoal ink
 colors:
   starlight: "#efece4"
   bg: "#efece4"
@@ -68,7 +68,7 @@ components:
 
 ## Overview
 
-One calm, spacious liquid-glass reading column framed in a visible rectangle over a warm starlight off-white canvas with drifting monochrome dark-gray and black contour waves and sparse floating geometric shapes. The portrait rests on the lower edge of the header photograph, `abdullah sultan` pairs solid serif ink with an outlined off-white `sultan` in the same `Geist Serif` face (with its underline kept), and every section is paced with `1.5px` dividers. One scheme: starlight off-white ground, dark-gray-to-pure-black ink. No light/dark toggle.
+One calm, spacious solid reading column framed in a visible rectangle over a warm starlight off-white canvas with drifting monochrome dark-gray and black contour waves and sparse floating geometric shapes. The portrait rests on the lower edge of the header photograph, `abdullah sultan` pairs solid serif ink with an outlined off-white `sultan` in the same `Geist Serif` face (with its underline kept), and every section is paced with `1.5px` dividers. One scheme: starlight off-white ground, dark-gray-to-pure-black ink. No light/dark toggle.
 
 ## Colors
 
@@ -93,12 +93,12 @@ Geist Serif at medium (`500`) for `abdullah sultan`, headings, and body prose. `
 
 ## Layout
 
-The liquid-glass reading column (`.stage` and `.page:not(.links-page)`) is `min(52rem, 100% - 3rem)` wide, framed by a visible `1.5px` charcoal-tinted rectangle border (`color-mix(in srgb, var(--ink) 32%, transparent)`), `22px` backdrop blur (`18px` on phones) over `42%` starlight (`rgb(239 236 228 / 42%)`, not a `color-mix` fill) and a specular top sheen, with `2.25rem` internal horizontal padding (`1rem` on phones). `.gutters` is in normal paint order, not `position: fixed`, and flattened to one layer: the waves and shapes are what the blur samples. A fixed layer behind the pane is skipped, so the filter only blurs flat starlight and looks like no blur. The field is dark-gray/black contour waves and sparse geometric shapes (`--starlight` fill, `--ink`/`--text-2` outline and offset drop shadow), sharp in the margins and frosted through the glass.
+The reading column (`.stage` and `.page:not(.links-page)`) is `min(52rem, 100% - 3rem)` wide, framed by a visible `1.5px` charcoal-tinted rectangle border (`color-mix(in srgb, var(--ink) 32%, transparent)`), filled with solid `--starlight`, and padded `2.25rem` on the sides (`1rem` on phones). There is no backdrop blur and no translucent fill, on desktop or on phones. Behind it, `.gutters` holds drifting dark-gray/black SVG contour waves and a sparse set of floating geometric shapes (`--starlight` fill, `--ink`/`--text-2` outline and offset drop shadow) in the side margins.
 
 The header photograph (`.plate`) is `2.35 / 1` with `0.5rem` corners. The portrait overlaps the plate with a `3px` starlight cutout ring. The intro block (`.bio` + `.facts`) is bracketed by `1.5px` `--line` dividers above and below. Work tabs sit in one centered recessed pill bar (`--type-tab: 1.32rem`, `50px` min-height, `46px` on phones) with a sliding `--accent` indicator, including at 760px and below. Work items separate with `1.65rem` vertical padding and `1.5px` `--line` dividers; titles and inline role captions align on one center line, and on phones the caption drops to its own line. A hovered item picks up a faint `--bg-2` wash. The footer stays one centred wrapping row. The contact question uses `--text`, still quieter than the ink `book a meeting` link.
 
-The `/links` card uses the same liquid-glass surface and visible border over the monochrome waves and shapes (`24rem` on phones, `27rem` from 900px). `website` leads as the primary dark charcoal button; the remaining links follow as recessed starlight buttons.
+The `/links` card uses the same solid starlight surface and visible border over the monochrome waves and shapes (`24rem` on phones, `27rem` from 900px). `website` leads as the primary dark charcoal button; the remaining links follow as recessed starlight buttons.
 
 ## Motion
 
-Smooth, unhurried scrolling is driven by Lenis (`duration: 1.55`, `wheelMultiplier: 0.7`) synchronized with GSAP `ScrollTrigger` via `gsap.ticker`, active only under `(prefers-reduced-motion: no-preference)`. The `sultan` underline draws once on load (`0.7s`, `power3.out`). Tab indicator slides with `0.45s power3.out`, panel items enter cleanly on switch and scroll, the header photograph shifts subtly with scroll scrub, and the background waves/shapes drift gently. `prefers-reduced-motion: reduce` disables Lenis, parallax, background drift, glass blur, entrances, and transitions.
+Smooth, unhurried scrolling is driven by Lenis (`duration: 1.55`, `wheelMultiplier: 0.7`) synchronized with GSAP `ScrollTrigger` via `gsap.ticker`, active only under `(prefers-reduced-motion: no-preference)`. The `sultan` underline draws once on load (`0.7s`, `power3.out`). Tab indicator slides with `0.45s power3.out`, panel items enter cleanly on switch and scroll, the header photograph shifts subtly with scroll scrub, and the background waves/shapes drift gently. `prefers-reduced-motion: reduce` disables Lenis, parallax, background drift, entrances, and transitions.
