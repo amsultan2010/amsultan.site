@@ -200,8 +200,8 @@ button,
     linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent 16%),
     linear-gradient(180deg, transparent 84%, color-mix(in srgb, var(--ink) 5%, transparent)),
     color-mix(in srgb, var(--starlight) 50%, transparent);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  backdrop-filter: blur(22px) saturate(1.35);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.78),
     inset 0 28px 28px -22px rgba(255, 255, 255, 0.5),
@@ -1118,8 +1118,8 @@ img[src$="fschoolai-icon.png"] {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.5), transparent 18%),
     color-mix(in srgb, var(--starlight) 50%, transparent);
-  -webkit-backdrop-filter: blur(12px) saturate(1.2);
-  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  backdrop-filter: blur(22px) saturate(1.35);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.78),
     0 20px 44px -26px color-mix(in srgb, var(--ink) 22%, transparent);
@@ -1298,7 +1298,7 @@ img[src$="fschoolai-icon.png"] {
   width: 100vw;
   height: 116%;
   color: var(--text-2);
-  opacity: 0.34;
+  opacity: 0.5;
   animation: field-fade 7s ease-in-out infinite alternate;
 }
 
@@ -1403,11 +1403,11 @@ img[src$="fschoolai-icon.png"] {
 
 @keyframes field-fade {
   from {
-    opacity: 0.26;
+    opacity: 0.42;
   }
 
   to {
-    opacity: 0.38;
+    opacity: 0.55;
   }
 }
 
@@ -1450,8 +1450,8 @@ img[src$="fschoolai-icon.png"] {
   .stage,
   .page:not(.links-page),
   .links-card {
-    -webkit-backdrop-filter: blur(10px) saturate(1.16);
-    backdrop-filter: blur(10px) saturate(1.16);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    backdrop-filter: blur(18px) saturate(1.3);
   }
 
   .stage,
